@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "793066119782",
+    "firebase_url": "https://lookinmeal-dcf41.firebaseio.com",
+    "project_id": "lookinmeal-dcf41",
+    "storage_bucket": "lookinmeal-dcf41.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:793066119782:android:c4f79e79cf9102dbb103a7",
+        "android_client_info": {
+          "package_name": "com.wt.lookinmeal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "793066119782-go4qoqrjeco334nr75mpqcpt0cb6hi7n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1PHls3mlHvVTzLBWKOaR_HvWVnlkzF8I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "793066119782-go4qoqrjeco334nr75mpqcpt0cb6hi7n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
