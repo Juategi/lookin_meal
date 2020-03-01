@@ -5,5 +5,11 @@
   "sugars": "azúcar",
   "brewcrew": "Mi Café",
   "passw": "Contraseña",
-  "back": "Volver"
+  "back": "Volver",
+  "enteremail": "Escribe tu email",
+  "email": "Email",
+  "enterpassw": "Escribe tu contraseña más de 6 caracteres",
+  "name": "Nombre",
+  "entername": "Escribe un nombre",
+  "validmail": "Escribe un email válido"
 }

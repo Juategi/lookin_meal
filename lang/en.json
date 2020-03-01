@@ -1,9 +1,16 @@
 {
-  "login": "Log inn",
+  "login": "Log in",
   "register": "Register",
   "signout": "Sign out",
   "sugars": "sugars",
   "brewcrew": "brew Crew",
   "passw": "Password",
-  "back": "Back"
+  "back": "Back",
+  "enteremail": "Enter email",
+  "email": "Email",
+  "enterpassw": "Enter password +6 characters",
+  "name": "Name",
+  "entername": "Enter Name",
+  "validmail": "Enter valid mail"
+
 }
