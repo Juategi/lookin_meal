@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/services/database.dart';
 
 
 class AuthService{
@@ -7,7 +8,7 @@ class AuthService{
 	final FirebaseAuth _auth = FirebaseAuth.instance;
 
 	User _userFromFirebaseUser(FirebaseUser user){
-		return user != null ? User(uid: user.uid) : null;
+		return user != null ? User(uid: user.uid, email: user.email) : null;
 	}
 
 	Stream<User> get user {
@@ -26,10 +27,11 @@ class AuthService{
 		}
 	}
 
-	Future registerEP(String email, String password) async{
+	Future registerEP(String email, String password, String name) async{
 		try{
 			AuthResult result =	await _auth.createUserWithEmailAndPassword(email: email, password: password);
 			FirebaseUser user = result.user;
+			await DBService(uid: user.uid).updateUserData(email,name);
 			return _userFromFirebaseUser(user);
 		} catch(e){
 			print(e);

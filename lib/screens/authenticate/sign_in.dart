@@ -12,7 +12,7 @@ class _SignInState extends State<SignIn> {
 
 	final AuthService _auth = AuthService();
 	final _formKey = GlobalKey<FormState>();
-	String email, password, error = " ";
+	String email, password, error, name = " ";
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,9 @@ class _SignInState extends State<SignIn> {
 		  ),
 		  body: Container(
 			  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-			  child: Column(
+			  child: Form(
+				  key: _formKey,
+			    child: Column(
 					  children: <Widget>[
 				  SizedBox(height: 20,),
 				  TextFormField(
@@ -45,7 +47,7 @@ class _SignInState extends State<SignIn> {
 					  validator: (val) => val.length < 6 ? "Enter password 6+" : null,
 					  decoration: textInputDeco.copyWith(hintText: "Password"),
 				  ),
-			 	 SizedBox(height: 50,),
+			 	 SizedBox(height: 20,),
 				  Row(
 				  	mainAxisAlignment: MainAxisAlignment.center,
 				  	children: <Widget>[
@@ -54,7 +56,7 @@ class _SignInState extends State<SignIn> {
 							  child: Text("Register", style: TextStyle(color: Colors.white),),
 							  onPressed: () async{
 								  if(_formKey.currentState.validate()){
-									  dynamic result = await _auth.registerEP(email, password);
+									  dynamic result = await _auth.registerEP(email, password, name);
 									  if(result == null)
 										  setState(() {
 											  error = "valid email";
@@ -78,7 +80,7 @@ class _SignInState extends State<SignIn> {
 								  }
 							  },
 						  ),
-						  ]),
+					]),
 						  SizedBox(height: 60,),
 						  FlatButton(
 							  padding: EdgeInsets.all(0),
@@ -92,6 +94,7 @@ class _SignInState extends State<SignIn> {
 							  onPressed: null,
 						  ),
 					  ]),
+			  ),
 		  ),
 	  );
   }
