@@ -1,7 +1,4 @@
-
 import 'package:lookinmeal/services/app_localizations.dart';
-
-import 'sign_in.dart';
 import 'package:flutter/material.dart';
 
 class Authenticate extends StatefulWidget {
@@ -29,13 +26,17 @@ class _AuthenticateState extends State<Authenticate> {
 						SizedBox(height: 20,),
 						RaisedButton(
 							color: Colors.pink[400],
-							onPressed: null,
+							onPressed: () async{
+								await Navigator.pushNamed(context, "/login");
+							},
 							child: Text(tr.translate("login"), style: TextStyle(color: Colors.white),),
 						),
 						SizedBox(height: 20,),
 						RaisedButton(
 							color: Colors.pink[400],
-							onPressed: null,
+							onPressed: () async{
+								await Navigator.pushNamed(context, "/signin");
+							},
 							child: Text(tr.translate("register"), style: TextStyle(color: Colors.white),),
 						),
 						SizedBox(height: 60,),

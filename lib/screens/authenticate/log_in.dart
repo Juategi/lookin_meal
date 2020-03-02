@@ -56,11 +56,18 @@ class _LogInState extends State<LogIn> {
 									  dynamic result = await _auth.signInEP(email, password);
 									  if(result == null)
 										  setState(() {
-											  error = tr.translate("validemail");
+											  error = tr.translate("validmail");
 										  });
+									  else
+										  Navigator.pop(context);
 								  }
 							  },
 						  ),
+						  SizedBox(height: 12),
+						  Text(
+							  error,
+							  style: TextStyle(color: Colors.red, fontSize: 14),
+						  )
 					  ]
 				  ),
 			  ),

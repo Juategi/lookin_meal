@@ -12,7 +12,8 @@ class _SignInState extends State<SignIn> {
 
 	final AuthService _auth = AuthService();
 	final _formKey = GlobalKey<FormState>();
-	String email, password, error, name = " ";
+	String email, password, name = " ";
+	String error = " ";
 
   @override
   Widget build(BuildContext context) {
@@ -64,11 +65,18 @@ class _SignInState extends State<SignIn> {
 									dynamic result = await _auth.registerEP(email, password, name);
 									if(result == null)
 										setState(() {
-											error = tr.translate("validemail");
+											error = tr.translate("validmail");
 										});
+									else
+										Navigator.pop(context);
 								}
 							 },
 						  ),
+						  SizedBox(height: 12),
+						  Text(
+							  error,
+							  style: TextStyle(color: Colors.red, fontSize: 14),
+						  )
 					  ]
 				),
 			  ),
