@@ -54,7 +54,9 @@ class _AuthenticateState extends State<Authenticate> {
 						FlatButton(
 							padding: EdgeInsets.all(0),
 							child: Image.asset("assets/google.PNG"),
-							onPressed: null,
+							onPressed: () async{
+								dynamic result = await _auth.loginGoogle();
+							}
 							),
 					],
 				)

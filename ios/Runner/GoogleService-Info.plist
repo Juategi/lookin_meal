@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>793066119782-o738ft9setmf2d6vhfehid3upvjot2pj.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.793066119782-o738ft9setmf2d6vhfehid3upvjot2pj</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCPeFozsg67C9sKvE_bQwXgg2DmK65G9zs</string>
+	<key>GCM_SENDER_ID</key>
+	<string>793066119782</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.wt.lookinmeal</string>
+	<key>PROJECT_ID</key>
+	<string>lookinmeal-dcf41</string>
+	<key>STORAGE_BUCKET</key>
+	<string>lookinmeal-dcf41.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:793066119782:ios:a0d2371fd126463eb103a7</string>
+	<key>DATABASE_URL</key>
+	<string>https://lookinmeal-dcf41.firebaseio.com</string>
+</dict>
+</plist>

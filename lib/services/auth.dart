@@ -5,11 +5,13 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService{
 
 	final FirebaseAuth _auth = FirebaseAuth.instance;
+	final CollectionReference userCollection = Firestore.instance.collection('users');
 
 	User _userFromFirebaseUser(FirebaseUser user){
 		return user != null ? User(uid: user.uid, email: user.email) : null;
@@ -18,7 +20,6 @@ class AuthService{
 
 	Stream<User> get user {
 		return _auth.onAuthStateChanged.map(_userFromFirebaseUser);
-		//return _auth.onAuthStateChanged.map((FirebaseUser user) => _userFromFirebaseUser(user));
 	}
 
 	Future signInEP(String email, String password) async{
@@ -62,15 +63,43 @@ class AuthService{
 
 		final token = result.accessToken.token;
 		final graphResponse = await http.get(
-			'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=$token');
+			'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=$token');
 		final profile = json.decode(graphResponse.body);
 		final facebookAuthCred = FacebookAuthProvider.getCredential(accessToken: token);
 		final credential = await _auth.signInWithCredential(facebookAuthCred);
 		User fuser = _userFromFirebaseUser(credential.user);
 		await DBService(uid: fuser.uid).updateUserData(fuser.email, profile["name"]);
+		print(profile);
 		return fuser;
 	}
 
+	Future loginGoogle()async{
+		final GoogleSignIn googleSignIn = GoogleSignIn(
+			scopes: [
+				'email',
+				'https://www.googleapis.com/auth/userinfo.profile',
+			],
+		);
+		final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+		final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+
+		final AuthCredential credential = GoogleAuthProvider.getCredential(
+			accessToken: googleSignInAuthentication.accessToken,
+			idToken: googleSignInAuthentication.idToken,
+		);
+
+		final AuthResult authResult = await _auth.signInWithCredential(credential);
+		final FirebaseUser user = authResult.user;
+		assert(!user.isAnonymous);
+		assert(await user.getIdToken() != null);
+
+		final FirebaseUser currentUser = await _auth.currentUser();
+		assert(user.uid == currentUser.uid);
+		User fuser = _userFromFirebaseUser(user);
+		print(authResult.additionalUserInfo.profile);
+		await DBService(uid: fuser.uid).updateUserData(fuser.email, authResult.additionalUserInfo.profile['name']);
+		return fuser;
+	}
 	Future signOut() async{
 		try{
 			return await _auth.signOut();
