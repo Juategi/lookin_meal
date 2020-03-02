@@ -1,5 +1,6 @@
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:lookinmeal/services/auth.dart';
 
 class Authenticate extends StatefulWidget {
 
@@ -8,6 +9,8 @@ class Authenticate extends StatefulWidget {
 }
 
 class _AuthenticateState extends State<Authenticate> {
+
+	final AuthService _auth = AuthService();
 
 	@override
 	Widget build(BuildContext context) {
@@ -43,7 +46,9 @@ class _AuthenticateState extends State<Authenticate> {
 						FlatButton(
 							padding: EdgeInsets.all(0),
 							child: Image.asset("assets/fb.bmp"),
-							onPressed: null,
+							onPressed: () async{
+								dynamic result = await _auth.loginFB();
+							}
 							),
 						SizedBox(height: 20,),
 						FlatButton(
