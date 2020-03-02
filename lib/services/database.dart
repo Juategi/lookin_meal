@@ -8,10 +8,11 @@ class DBService{
 
 	DBService({this.uid});
 
-	Future updateUserData(String email, String name ) async{
+	Future updateUserData(String email, String name, String picture ) async{
 		return await userCollection.document(uid).setData({
 			'email':email,
-			'name':name
+			'name':name,
+			'picture':picture
 		});
 	}
 
@@ -20,7 +21,8 @@ class DBService{
 		return User(
 			uid: uid,
 			name: snapshot.data['name'],
-			email: snapshot.data['email']
+			email: snapshot.data['email'],
+			picture: snapshot.data['picture']
 		);
 	}
 
