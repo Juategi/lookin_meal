@@ -12,18 +12,35 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with WidgetsBindingObserver {
 	final AuthService _auth = AuthService();
-
 	int _selectedIndex = 0;
-	TabController _tabController;
+
 	void _onItemTapped(int index) {
 		setState(() {
 			_selectedIndex = index;
 		});
 	}
 
-  @override
+	@override
+	void initState() {
+		super.initState();
+		WidgetsBinding.instance.addObserver(this);
+	}
+
+	@override
+	Future<bool> didPopRoute() async {
+		if(_selectedIndex == 0)
+			return false;
+		else {
+			setState(() {
+				_selectedIndex = 0;
+			});
+			return Future<bool>.value(true);
+		}
+	}
+
+	@override
   Widget build(BuildContext context) {
 	  final user = Provider.of<User>(context);
 	  AppLocalizations tr = AppLocalizations.of(context);
@@ -69,26 +86,26 @@ class _HomeState extends State<Home> {
 					bottomNavigationBar: BottomNavigationBar(
 						backgroundColor: Colors.brown[200],
 						type: BottomNavigationBarType.fixed,
-						items: const <BottomNavigationBarItem>[
+						items: <BottomNavigationBarItem>[
 							BottomNavigationBarItem(
 								icon: Icon(Icons.home),
-								title: Text('Home'),
+								title: Text(tr.translate("home")),
 							),
 							BottomNavigationBarItem(
 								icon: Icon(Icons.map),
-								title: Text('Map'),
+								title: Text(tr.translate("map")),
 							),
 							BottomNavigationBarItem(
 								icon: Icon(Icons.album),
-								title: Text('Add'),
+								title: Text(tr.translate("add")),
 							),
 							BottomNavigationBarItem(
 								icon: Icon(Icons.favorite),
-								title: Text('Favorites'),
+								title: Text(tr.translate("fav")),
 							),
 							BottomNavigationBarItem(
 								icon: Icon(Icons.person),
-								title: Text('Profile'),
+								title: Text(tr.translate("profile")),
 							),
 						],
 						currentIndex: _selectedIndex,

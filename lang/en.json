@@ -12,5 +12,9 @@
   "name": "Name",
   "entername": "Enter Name",
   "validmail": "Enter valid mail"
-
+  "home": "Home",
+  "map": "Map",
+  "add": "Add",
+  "fav": "Favorites",
+  "profile": "Profile"
 }

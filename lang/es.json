@@ -11,5 +11,10 @@
   "enterpassw": "Escribe tu contraseña más de 6 caracteres",
   "name": "Nombre",
   "entername": "Escribe un nombre",
-  "validmail": "Escribe un email válido"
+  "validmail": "Escribe un email válido",
+  "home": "Inicio",
+  "map": "Mapa",
+  "add": "Añadir",
+  "fav": "Favoritos",
+  "profile": "Perfil"
 }
