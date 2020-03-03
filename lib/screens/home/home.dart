@@ -60,7 +60,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 								onPressed: () async {
 									await _auth.signOut();
 								},
-								icon: Icon(Icons.people),
+								icon: Icon(Icons.exit_to_app),
 								label: Text(tr.translate("signout"))
 							),
 						],
@@ -71,16 +71,37 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 								offstage: _selectedIndex != 0,
 								child: TickerMode(
 									enabled: _selectedIndex == 0,
-									child: Container(child: Text("hola1"),),
+									child: Container(child: Text("HOME"),),
 								),
 							),
 							Offstage(
 								offstage: _selectedIndex != 1,
 								child: TickerMode(
 									enabled: _selectedIndex == 1,
-									child: Container(child: Text("hola2"),),
+									child: Container(child: Text("MAP"),),
 								),
-							)
+							),
+							Offstage(
+								offstage: _selectedIndex != 2,
+								child: TickerMode(
+									enabled: _selectedIndex == 2,
+									child: Container(child: Text("ADD"),),
+								),
+							),
+							Offstage(
+								offstage: _selectedIndex != 3,
+								child: TickerMode(
+									enabled: _selectedIndex == 3,
+									child: Container(child: Text("FAV"),),
+								),
+							),
+							Offstage(
+								offstage: _selectedIndex != 4,
+								child: TickerMode(
+									enabled: _selectedIndex == 4,
+									child: Container(child: Text("PROFILE"),),
+								),
+							),
 						],
 					),
 					bottomNavigationBar: BottomNavigationBar(
