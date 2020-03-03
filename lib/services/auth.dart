@@ -70,7 +70,6 @@ class AuthService{
 		User fuser = _userFromFirebaseUser(credential.user);
 		String picture = profile["picture"]["data"]["url"];
 		await DBService(uid: fuser.uid).updateUserData(fuser.email, profile["name"],picture);
-		print(profile);
 		return fuser;
 	}
 
@@ -97,7 +96,6 @@ class AuthService{
 		final FirebaseUser currentUser = await _auth.currentUser();
 		assert(user.uid == currentUser.uid);
 		User fuser = _userFromFirebaseUser(user);
-		print(authResult.additionalUserInfo.profile);
 		await DBService(uid: fuser.uid).updateUserData(fuser.email, authResult.additionalUserInfo.profile['name'],authResult.additionalUserInfo.profile['picture']);
 		return fuser;
 	}

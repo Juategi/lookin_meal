@@ -6,9 +6,22 @@ import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
 
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
 	final AuthService _auth = AuthService();
+
+	int _selectedIndex = 0;
+	TabController _tabController;
+	void _onItemTapped(int index) {
+		setState(() {
+			_selectedIndex = index;
+		});
+	}
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +48,53 @@ class Home extends StatelessWidget {
 							),
 						],
 					),
-					body: Container(
-						child: Column(
-							children: <Widget>[
-								Image.network(userData.picture),
-							],
-						),
+					body: Stack(
+						children: <Widget>[
+							Offstage(
+								offstage: _selectedIndex != 0,
+								child: TickerMode(
+									enabled: _selectedIndex == 0,
+									child: Container(child: Text("hola1"),),
+								),
+							),
+							Offstage(
+								offstage: _selectedIndex != 1,
+								child: TickerMode(
+									enabled: _selectedIndex == 1,
+									child: Container(child: Text("hola2"),),
+								),
+							)
+						],
 					),
+					bottomNavigationBar: BottomNavigationBar(
+						backgroundColor: Colors.brown[200],
+						type: BottomNavigationBarType.fixed,
+						items: const <BottomNavigationBarItem>[
+							BottomNavigationBarItem(
+								icon: Icon(Icons.home),
+								title: Text('Home'),
+							),
+							BottomNavigationBarItem(
+								icon: Icon(Icons.map),
+								title: Text('Map'),
+							),
+							BottomNavigationBarItem(
+								icon: Icon(Icons.album),
+								title: Text('Add'),
+							),
+							BottomNavigationBarItem(
+								icon: Icon(Icons.favorite),
+								title: Text('Favorites'),
+							),
+							BottomNavigationBarItem(
+								icon: Icon(Icons.person),
+								title: Text('Profile'),
+							),
+						],
+						currentIndex: _selectedIndex,
+						selectedItemColor: Colors.amber[800],
+						onTap: _onItemTapped,
+					)
 				);
 			}
 			else
