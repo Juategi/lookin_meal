@@ -5,6 +5,7 @@ import 'package:lookinmeal/services/auth.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
+import 'package:lookinmeal/screens/map/map.dart';
 
 class Home extends StatefulWidget {
 
@@ -78,14 +79,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 								offstage: _selectedIndex != 1,
 								child: TickerMode(
 									enabled: _selectedIndex == 1,
-									child: Container(child: Text("MAP"),),
+									child: Container(child: Text("STAR"),),
 								),
 							),
 							Offstage(
 								offstage: _selectedIndex != 2,
 								child: TickerMode(
 									enabled: _selectedIndex == 2,
-									child: Container(child: Text("ADD"),),
+									child: MapSample()
 								),
 							),
 							Offstage(
@@ -113,12 +114,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 								title: Text(tr.translate("home")),
 							),
 							BottomNavigationBarItem(
-								icon: Icon(Icons.map),
-								title: Text(tr.translate("map")),
+								icon: Icon(Icons.star),
+								title: Text("Stars"),
 							),
 							BottomNavigationBarItem(
-								icon: Icon(Icons.album),
-								title: Text(tr.translate("add")),
+								icon: Icon(Icons.map),
+								title: Text(tr.translate("map")),
 							),
 							BottomNavigationBarItem(
 								icon: Icon(Icons.favorite),

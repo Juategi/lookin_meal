@@ -30,6 +30,8 @@ dependencies:
   flutter_facebook_login: ^3.0.0
   google_sign_in: ^4.1.4
   http: ^0.12.0+4
+  google_maps_flutter: ^0.5.24+1
+  geolocator: ^5.3.0
 
 dev_dependencies:
   flutter_test:
