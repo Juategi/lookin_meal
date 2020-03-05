@@ -3,6 +3,7 @@ import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
 import 'package:lookinmeal/services/database.dart';
+import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:lookinmeal/screens/map/map.dart';
@@ -15,10 +16,10 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with WidgetsBindingObserver {
 	final AuthService _auth = AuthService();
+	final GeolocationService _geolocationService = GeolocationService();
 	int _selectedIndex = 0;
-
 	void _onItemTapped(int index) {
-		setState(() {
+		setState(()  {
 			_selectedIndex = index;
 		});
 	}
@@ -53,7 +54,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 				return Scaffold(
 					backgroundColor: Colors.brown[50],
 					appBar: AppBar(
-						title: Text("LookinMeal"),
+						title: Text(tr.translate("app")),
 						backgroundColor: Colors.brown[400],
 						elevation: 0.0,
 						actions: <Widget>[

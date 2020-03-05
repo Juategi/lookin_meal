@@ -23,7 +23,7 @@ class _SignInState extends State<SignIn> {
 		  appBar: AppBar(
 			  backgroundColor: Colors.brown[400],
 			  elevation: 0.0,
-			  title: Text("LookinMeal"),
+			  title: Text(tr.translate("app")),
 		  ),
 		  body: Container(
 			  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
