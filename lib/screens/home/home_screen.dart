@@ -2,6 +2,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:async';
+import 'package:http/http.dart' as http;
+import 'package:html/parser.dart' show parse;
+import 'package:html/dom.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -23,6 +26,12 @@ class _HomeScreenState extends State<HomeScreen> {
 			children: <Widget>[
 				RaisedButton(
 					onPressed: ()async{
+						var client = http.Client();
+						var url = 'https://www.google.com/search?q=honoo&safe=active&client=firefox-b-d&hl=es&sxsrf=ALeKk016Erw4DAkV7kl1yeCC52Cci_01YA:1583780051438&source=lnms&tbm=isch&sa=X&ved=2ahUKEwi22fi6iI7oAhWMVBUIHaChBBMQ_AUoA3oECCMQBQ&biw=1600&bih=786';
+						var response = await http.get(url);
+						var document = parse(response.body);
+						var priceElement = document.getElementsByTagName("div").first.outerHtml;
+						print(priceElement);
 						String jsonString = await rootBundle.loadString('dbjson/valencia_tripad.json');
 						List<dynamic> restaurants = json.decode(jsonString);
 						Map<String, dynamic> place = restaurants.elementAt(104);
