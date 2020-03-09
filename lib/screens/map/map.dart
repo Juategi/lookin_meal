@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 
+
 class MapSample extends StatefulWidget {
 	@override
 	State<MapSample> createState() => MapSampleState();
@@ -15,6 +16,7 @@ class MapSampleState extends State<MapSample> {
 	String _mapStyle;
 	Completer<GoogleMapController> _controller = Completer();
 	final GeolocationService _geolocationService = GeolocationService();
+
 
 	CameraPosition _cameraPosition = CameraPosition(
 		target: LatLng(GeolocationService.pos.latitude, GeolocationService.pos.longitude),
@@ -54,5 +56,7 @@ class MapSampleState extends State<MapSample> {
 			zoom: 14.4746,
 		);
 		controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
+
+
 	}
 }

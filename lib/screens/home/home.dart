@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/screens/home/home_screen.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
 import 'package:lookinmeal/services/database.dart';
@@ -7,6 +8,8 @@ import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:lookinmeal/screens/map/map.dart';
+
+
 
 class Home extends StatefulWidget {
 
@@ -73,7 +76,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 								offstage: _selectedIndex != 0,
 								child: TickerMode(
 									enabled: _selectedIndex == 0,
-									child: Container(child: Text("HOME"),),
+									child: HomeScreen(),
 								),
 							),
 							Offstage(
