@@ -13,7 +13,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-	String id, name, phone, website, address, email, city, country;
+	String id, name, phone, website, webUrl, address, email, city, country, image;
 	double latitude, longitude, rating;
 	int numberViews;
 	List<String> types;
@@ -26,12 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
 			children: <Widget>[
 				RaisedButton(
 					onPressed: ()async{
-						var client = http.Client();
-						var url = 'https://www.google.com/search?q=honoo&safe=active&client=firefox-b-d&hl=es&sxsrf=ALeKk016Erw4DAkV7kl1yeCC52Cci_01YA:1583780051438&source=lnms&tbm=isch&sa=X&ved=2ahUKEwi22fi6iI7oAhWMVBUIHaChBBMQ_AUoA3oECCMQBQ&biw=1600&bih=786';
-						var response = await http.get(url);
-						var document = parse(response.body);
-						var priceElement = document.getElementsByTagName("div").first.outerHtml;
-						print(priceElement);
 						String jsonString = await rootBundle.loadString('dbjson/valencia_tripad.json');
 						List<dynamic> restaurants = json.decode(jsonString);
 						Map<String, dynamic> place = restaurants.elementAt(104);
@@ -46,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
 						latitude = double.parse(place['latitude']);
 						longitude = double.parse(place['longitude']);
 						website = place['website'];
+						webUrl = place['webUrl'];
 						numberViews = int.parse(place['numberOfReviews']);
 						types = List<String>.from(place['cuisine']);
 						for(int i = 0; i < 7; i++){
@@ -63,10 +58,15 @@ class _HomeScreenState extends State<HomeScreen> {
 								schedule[i.toString()].add(formattedHour);
 							}
 						}
+						var client = http.Client();
+						var response = await http.get(webUrl);
+						var document = parse(response.body);
+						image = document.getElementsByClassName('basicImg').first.attributes['data-lazyurl']; //Se pueden buscar mas!!
 						print(name);
 						print(id);
 						print(phone);
 						print(website);
+						print(webUrl);
 						print(address);
 						print(country);
 						print(city);
@@ -77,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
 						print(numberViews);
 						print(types);
 						print(schedule);
+						print(image);
 						setState(() {
 
 						});
