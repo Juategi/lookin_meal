@@ -5,7 +5,7 @@ import 'package:html/parser.dart' show parse;
 import 'package:lookinmeal/services/database.dart';
 
 class JsonUpdate{
-	DBService _dbService = DBService();
+
 	String id, name, phone, website, webUrl, address, email, city, country,image;
 	double latitude, longitude, rating;
 	int numberViews;
@@ -15,8 +15,9 @@ class JsonUpdate{
 	Future updateFromJson(String jsonFile) async{
 		String jsonString = await rootBundle.loadString('dbjson/$jsonFile');
 		List<dynamic> restaurants = json.decode(jsonString);
-		Map<String, dynamic> place = restaurants.elementAt(103);
+		Map<String, dynamic> place = restaurants.elementAt(2594);
 		id = place['id'];
+		DBService _dbService = DBService(uid: id);
 		name = place['name'];
 		rating = double.parse(place['rating']);
 		phone = place['phone'];
@@ -48,6 +49,8 @@ class JsonUpdate{
 				}
 			}
 		}
+		else
+			schedule = null;
 		var response = await http.get(webUrl);
 		var document = parse(response.body);
 		images = new List<String>();
@@ -58,7 +61,7 @@ class JsonUpdate{
 			images.add(image);
 		}
 		images = images.toSet().toList();
-		dynamic result = await _dbService.updateRestaurantData(id, name, phone, website, webUrl, address, email, city, country, latitude, longitude, rating, numberViews, images, types, schedule);
+		dynamic result = await _dbService.updateRestaurantData(name, phone, website, webUrl, address, email, city, country, latitude, longitude, rating, numberViews, images, types, schedule);
 		print("Update completed ");
 	}
 }
