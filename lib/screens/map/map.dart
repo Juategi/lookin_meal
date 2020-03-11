@@ -19,6 +19,7 @@ class MapSampleState extends State<MapSample> {
 	String _mapStyle;
 	Completer<GoogleMapController> _controller = Completer();
 	final GeolocationService _geolocationService = GeolocationService();
+	BitmapDescriptor pinLocationIcon;
 	DBService _dbService = DBService();
 	List<Restaurant> _restaurants;
 	Set<Marker> _markers = Set<Marker>();
@@ -26,12 +27,18 @@ class MapSampleState extends State<MapSample> {
 
 	@override
 	initState(){
+		BitmapDescriptor.fromAssetImage(
+			ImageConfiguration(devicePixelRatio: 2.5),
+			'assets/marker.png').then((onValue) {
+			pinLocationIcon = onValue;
+		});
 		_getUserLocation();
 		_loadMarkers();
 		super.initState();
 		rootBundle.loadString('assets/map_style.txt').then((string) {
 			_mapStyle = string;
 		});
+
 
 	}
 
@@ -49,8 +56,9 @@ class MapSampleState extends State<MapSample> {
 			_markers.add(Marker(
 				markerId: MarkerId(restaurant.id),
 				position: LatLng(restaurant.latitude,restaurant.longitude),
+				icon: pinLocationIcon,
 				infoWindow: InfoWindow(
-					title: restaurant.name,
+					title: "${restaurant.name}   ${restaurant.rating}/5.0",
 					snippet: restaurant.address,
 				),
 			));
