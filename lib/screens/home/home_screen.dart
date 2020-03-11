@@ -29,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
 		myPos = await _geolocationService.getLocation();
 		for(Restaurant restaurant in restaurants){
 			distances.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));
+			print("ok");
 		}
 	}
 	@override
@@ -39,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
 				Card(
 				  child: ListTile(
 				  		title: Text(restaurants.elementAt(0).name),
-				  		subtitle: Text(distances.elementAt(0).toString()),
+				  		subtitle: Text(" 📍 ${distances.elementAt(0).toString()} Km"),
 				  		leading: Image.network(restaurants.elementAt(0).images.first, width: 100, height: 100,),
 				  		trailing: Icon(Icons.arrow_right),
 				  ),
@@ -47,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
 				Card(
 					child: ListTile(
 						title: Text(restaurants.elementAt(1).name),
-						subtitle: Text(distances.elementAt(1).toString()),
+						subtitle: Text(" 📍 ${distances.elementAt(1).toString()} Km"),
 						leading: Image.network(restaurants.elementAt(1).images.first, width: 100, height: 100,),
 						trailing: Icon(Icons.arrow_right),
 					),
@@ -55,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
 				Card(
 					child: ListTile(
 						title: Text(restaurants.elementAt(2).name),
-						subtitle: Text(distances.elementAt(2).toString()),
+						subtitle: Text(" 📍 ${distances.elementAt(2).toString()} Km"),
 						leading: Image.network(restaurants.elementAt(2).images.first, width: 100, height: 100,),
 						trailing: Icon(Icons.arrow_right),
 					),
@@ -63,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
 				Card(
 					child: ListTile(
 						title: Text(restaurants.elementAt(3).name),
-						subtitle: Text(distances.elementAt(3).toString()),
+						subtitle: Text(" 📍 ${distances.elementAt(3).toString()} Km"),
 						leading: Image.network(restaurants.elementAt(3).images.first, width: 100, height: 100,),
 						trailing: Icon(Icons.arrow_right),
 					),

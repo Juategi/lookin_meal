@@ -4,7 +4,7 @@ class GeolocationService{
 
 	Future<double> distanceBetween(double startLatitude, double startLongitude, double endLatitude, double endLongitude)async{ //optimizable
 		double distance = await Geolocator().distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude);
-		return num.parse((distance/1000).toStringAsFixed(2));
+		return num.parse((distance/1000).toStringAsFixed(1));
 	}
 
 	Future<Position> getLocation() async{
@@ -14,4 +14,5 @@ class GeolocationService{
 		else
 			return position;
 	}
+
 }
