@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
 						leading: Image.network(restaurants.elementAt(i).images.first, width: 100, height: 100,),
 						trailing: Icon(Icons.arrow_right),
 						onTap: () {
-							//Navigator.pushNamed(context, "restaurant");
+							Navigator.pushNamed(context, "/restaurant",arguments: restaurants.elementAt(i));
 						}
 					),
 				)
@@ -52,40 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Container(
 		child: ListView(
-			children: _initTiles()/* <Widget>[
-				Card(
-				  child: ListTile(
-				  		title: Text(restaurants.elementAt(0).name),
-				  		subtitle: Text(" 📍 ${distances.elementAt(0).toString()} Km"),
-				  		leading: Image.network(restaurants.elementAt(0).images.first, width: 100, height: 100,),
-				  		trailing: Icon(Icons.arrow_right),
-				  ),
-				),
-				Card(
-					child: ListTile(
-						title: Text(restaurants.elementAt(1).name),
-						subtitle: Text(" 📍 ${distances.elementAt(1).toString()} Km"),
-						leading: Image.network(restaurants.elementAt(1).images.first, width: 100, height: 100,),
-						trailing: Icon(Icons.arrow_right),
-					),
-				),
-				Card(
-					child: ListTile(
-						title: Text(restaurants.elementAt(2).name),
-						subtitle: Text(" 📍 ${distances.elementAt(2).toString()} Km"),
-						leading: Image.network(restaurants.elementAt(2).images.first, width: 100, height: 100,),
-						trailing: Icon(Icons.arrow_right),
-					),
-				),
-				Card(
-					child: ListTile(
-						title: Text(restaurants.elementAt(3).name),
-						subtitle: Text(" 📍 ${distances.elementAt(3).toString()} Km"),
-						leading: Image.network(restaurants.elementAt(3).images.first, width: 100, height: 100,),
-						trailing: Icon(Icons.arrow_right),
-					),
-				)
-			],*/
+			children: _initTiles()
 		),
 	);
   }
