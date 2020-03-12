@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/home/home_screen.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
@@ -19,18 +21,39 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with WidgetsBindingObserver {
 	final AuthService _auth = AuthService();
+	final DBService _dbService = DBService();
 	final GeolocationService _geolocationService = GeolocationService();
+	Position myPos;
+	List<Restaurant> restaurants;
+	List<double> distances = List<double>();
 	int _selectedIndex = 0;
+	bool flag = true;
+
+
 	void _onItemTapped(int index) {
 		setState(()  {
 			_selectedIndex = index;
 		});
 	}
 
-	@override
-	void initState() {
-		super.initState();
-		WidgetsBinding.instance.addObserver(this);
+	void _timer() {
+		if(flag) {
+			Future.delayed(Duration(seconds: 2)).then((_) {
+				setState(() {
+					print("2 second closer to NYE!");
+				});
+				_timer();
+			});
+		}
+	}
+
+
+	void _update()async{
+		restaurants = await _dbService.allrestaurantdata;
+		myPos = await _geolocationService.getLocation();
+		for(Restaurant restaurant in restaurants){
+			distances.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));
+		}
 	}
 
 	@override
@@ -46,14 +69,23 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	}
 
 	@override
+	void initState() {
+		super.initState();
+		WidgetsBinding.instance.addObserver(this);
+		_update();
+		_timer();
+	}
+
+	@override
   Widget build(BuildContext context) {
 	  final user = Provider.of<User>(context);
 	  AppLocalizations tr = AppLocalizations.of(context);
 	  return StreamBuilder<User>(
 		  stream: DBService(uid: user.uid).userdata,
 		  builder: (context, snapshot) {
-			if (snapshot.hasData) {
+			if (snapshot.hasData & (restaurants != null) & (distances.length >= 4)) {
 				User userData = snapshot.data;
+				flag = false;
 				return Scaffold(
 					backgroundColor: Colors.brown[50],
 					appBar: AppBar(
@@ -76,7 +108,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 								offstage: _selectedIndex != 0,
 								child: TickerMode(
 									enabled: _selectedIndex == 0,
-									child: HomeScreen(),
+									child: HomeScreen(myPos: myPos, restaurants: restaurants,distances: distances,),
 								),
 							),
 							Offstage(

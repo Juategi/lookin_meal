@@ -56,7 +56,7 @@ class DBService{
 			numberViews: snapshot.data['numberViews'],
 			images: List<String>.from(snapshot.data['images']),
 			types: List<String>.from(snapshot.data['types']),
-			//schedule: Map<String,List<dynamic>>.from(snapshot.data['schedule']), Pendiente de arreglar
+			//schedule: Map<String,List<int>>.from(snapshot.data['schedule']), //Pendiente de arreglar
 		);
 	}
 

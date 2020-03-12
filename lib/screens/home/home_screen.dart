@@ -3,40 +3,56 @@ import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/geolocation.dart';
-import 'package:lookinmeal/services/json_update.dart';
-import 'package:lookinmeal/shared/loading.dart';
+
 
 
 class HomeScreen extends StatefulWidget {
+	Position myPos;
+	List<Restaurant> restaurants;
+	List<double> distances = List<double>();
+	HomeScreen({this.myPos,this.distances,this.restaurants});
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState(myPos: myPos, restaurants: restaurants,distances: distances,);
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-	DBService _dbService = DBService();
-	GeolocationService _geolocationService = GeolocationService();
+	_HomeScreenState({this.myPos,this.distances,this.restaurants});
+	final DBService _dbService = DBService();
+	final GeolocationService _geolocationService = GeolocationService();
 	Position myPos;
 	List<Restaurant> restaurants;
 	List<double> distances = List<double>();
 
+
+	List<Widget> _initTiles(){
+		List<Widget> tiles = new List<Widget>();
+		for(int i = 0; i < restaurants.length; i ++){
+			tiles.add(
+				Card(
+					child: ListTile(
+						title: Text(restaurants.elementAt(i).name),
+						subtitle: Text(" 📍 ${distances.elementAt(i).toString()} Km"),
+						leading: Image.network(restaurants.elementAt(i).images.first, width: 100, height: 100,),
+						trailing: Icon(Icons.arrow_right),
+						onTap: () {
+							//Navigator.pushNamed(context, "restaurant");
+						}
+					),
+				)
+			);
+		}
+		return tiles;
+	}
 	@override
 	initState(){
-		_update();
 		super.initState();
 	}
-	void _update()async{
-		restaurants = await _dbService.allrestaurantdata;
-		myPos = await _geolocationService.getLocation();
-		for(Restaurant restaurant in restaurants){
-			distances.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));
-			print("ok");
-		}
-	}
+
 	@override
   Widget build(BuildContext context) {
-    return restaurants == null || distances.length < 4 ? Loading() : Container(
+    return Container(
 		child: ListView(
-			children: <Widget>[
+			children: _initTiles()/* <Widget>[
 				Card(
 				  child: ListTile(
 				  		title: Text(restaurants.elementAt(0).name),
@@ -69,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
 						trailing: Icon(Icons.arrow_right),
 					),
 				)
-			],
+			],*/
 		),
 	);
   }

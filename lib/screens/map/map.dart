@@ -20,7 +20,7 @@ class MapSampleState extends State<MapSample> {
 	Completer<GoogleMapController> _controller = Completer();
 	final GeolocationService _geolocationService = GeolocationService();
 	BitmapDescriptor pinLocationIcon;
-	DBService _dbService = DBService();
+	final DBService _dbService = DBService();
 	List<Restaurant> _restaurants;
 	Set<Marker> _markers = Set<Marker>();
 	CameraPosition _cameraPosition;
