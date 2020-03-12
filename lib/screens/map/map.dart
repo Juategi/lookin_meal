@@ -60,7 +60,11 @@ class MapSampleState extends State<MapSample> {
 				infoWindow: InfoWindow(
 					title: "${restaurant.name}   ${restaurant.rating}/5.0",
 					snippet: restaurant.address,
+					onTap: (){
+						Navigator.pushNamed(context, "/restaurant",arguments: restaurant);
+					}
 				),
+
 			));
 		}
 	}
