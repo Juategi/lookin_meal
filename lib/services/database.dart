@@ -40,6 +40,15 @@ class DBService{
 	}
 
 	Restaurant _restaurantDataFromSnapshot(DocumentSnapshot snapshot){
+		Map<String,List<int>> schedule = {'1': new List<int>(), '2': new List<int>(), '3': new List<int>(), '4': new List<int>(), '5': new List<int>(), '6': new List<int>(), '0': new List<int>()};
+		Map<String, dynamic> temp = (snapshot.data['schedule'] as Map<String, dynamic>);
+		if(temp != null){
+			for(String key in temp.keys){
+				for(int num in temp[key].toList()){
+					schedule[key].add(num);
+				}
+			}
+		}
 		return Restaurant(
 			id: snapshot.documentID,
 			name: snapshot.data['name'],
@@ -56,7 +65,7 @@ class DBService{
 			numberViews: snapshot.data['numberViews'],
 			images: List<String>.from(snapshot.data['images']),
 			types: List<String>.from(snapshot.data['types']),
-			//schedule: Map<String,List<int>>.from(snapshot.data['schedule']), //Pendiente de arreglar
+			schedule: schedule
 		);
 	}
 
