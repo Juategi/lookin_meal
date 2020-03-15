@@ -8,39 +8,118 @@ class ProfileRestaurant extends StatefulWidget {
 
 class _ProfileRestaurantState extends State<ProfileRestaurant> {
 	Restaurant restaurant;
+	double distance;
 
   @override
   Widget build(BuildContext context) {
-  	restaurant = ModalRoute.of(context).settings.arguments;
-    return Column(
-    	children: <Widget>[
-    		Stack(
-    			children: <Widget>[
-    				Container(
-						child: Center(
-							child: Text(
-								restaurant.schedule.toString(),
-								style: TextStyle(
-									color: Colors.grey[800],
-									fontWeight: FontWeight.w900,
-									fontStyle: FontStyle.italic,
-									fontFamily: 'Open Sans',
-									fontSize: 22
-								),
-							)
-						),
-						height: 230,
-						width: 400,
-						decoration: BoxDecoration(
-							image: DecorationImage(
-								image: NetworkImage(restaurant.images.elementAt(0)),
-								fit: BoxFit.fill,
-							),
-						),
-					)
-    			],
-    		),
-    	],
+  	var args = List<Object>.of(ModalRoute.of(context).settings.arguments);
+  	restaurant = args.first;
+  	distance = args.last;
+    return Scaffold(
+      body: Column(
+      	children: <Widget>[
+      		Container(
+				height: 230,
+				width: 400,
+				decoration: BoxDecoration(
+					image: DecorationImage(
+						image: NetworkImage(restaurant.images.elementAt(0)),
+						fit: BoxFit.fill,
+					),
+				),
+			),
+			SizedBox(height: 20,),
+			Text(
+				"${restaurant.name}    $distance Km",
+				style: TextStyle(
+					color: Colors.grey[800],
+					fontWeight: FontWeight.w900,
+					fontStyle: FontStyle.italic,
+					fontFamily: 'Open Sans',
+					fontSize: 15
+				),
+			),
+			SizedBox(height: 20,),
+			Text(
+				"Rating: ${restaurant.rating.toString()}",
+				style: TextStyle(
+					color: Colors.grey[800],
+					fontWeight: FontWeight.w900,
+					fontStyle: FontStyle.italic,
+					fontFamily: 'Open Sans',
+					fontSize: 15
+				),
+			),
+			SizedBox(height: 20,),
+			Text(
+				restaurant.address ?? " ",
+				style: TextStyle(
+					color: Colors.grey[800],
+					fontWeight: FontWeight.w900,
+					fontStyle: FontStyle.italic,
+					fontFamily: 'Open Sans',
+					fontSize: 15
+				),
+			),
+			SizedBox(height: 20,),
+			Text(
+				restaurant.email ?? " ",
+				style: TextStyle(
+					color: Colors.grey[800],
+					fontWeight: FontWeight.w900,
+					fontStyle: FontStyle.italic,
+					fontFamily: 'Open Sans',
+					fontSize: 15
+				),
+			),
+			SizedBox(height: 20,),
+			Text(
+				restaurant.phone ?? " ",
+				style: TextStyle(
+					color: Colors.grey[800],
+					fontWeight: FontWeight.w900,
+					fontStyle: FontStyle.italic,
+					fontFamily: 'Open Sans',
+					fontSize: 15
+				),
+			),
+			SizedBox(height: 20,),
+			Text(
+				restaurant.website ?? " ",
+				style: TextStyle(
+					color: Colors.grey[800],
+					fontWeight: FontWeight.w900,
+					fontStyle: FontStyle.italic,
+					fontFamily: 'Open Sans',
+					fontSize: 15
+				),
+			),
+			SizedBox(height: 20,),
+			Text(
+				restaurant.schedule == null ? " " : restaurant.schedule.toString(),
+				style: TextStyle(
+					color: Colors.grey[800],
+					fontWeight: FontWeight.w900,
+					fontStyle: FontStyle.italic,
+					fontFamily: 'Open Sans',
+					fontSize: 15
+				),
+			),
+			SizedBox(height: 20,),
+			SizedBox(height: 20,),
+			Text(
+				restaurant.types == null ? " " : restaurant.types.toString(),
+				style: TextStyle(
+					color: Colors.grey[800],
+					fontWeight: FontWeight.w900,
+					fontStyle: FontStyle.italic,
+					fontFamily: 'Open Sans',
+					fontSize: 15
+				),
+			),
+
+      	],
+      ),
     );
   }
 }

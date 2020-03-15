@@ -60,8 +60,12 @@ class MapSampleState extends State<MapSample> {
 				infoWindow: InfoWindow(
 					title: "${restaurant.name}   ${restaurant.rating}/5.0",
 					snippet: restaurant.address,
-					onTap: (){
-						Navigator.pushNamed(context, "/restaurant",arguments: restaurant);
+					onTap: ()async{
+						Position myPos = await _geolocationService.getLocation();
+						List<Object> args = List<Object>();
+						args.add(restaurant);
+						args.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));
+						Navigator.pushNamed(context, "/restaurant",arguments: args);
 					}
 				),
 

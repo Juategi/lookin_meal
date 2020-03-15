@@ -35,7 +35,10 @@ class _HomeScreenState extends State<HomeScreen> {
 						leading: Image.network(restaurants.elementAt(i).images.first, width: 100, height: 100,),
 						trailing: Icon(Icons.arrow_right),
 						onTap: () {
-							Navigator.pushNamed(context, "/restaurant",arguments: restaurants.elementAt(i));
+							List<Object> args = List<Object>();
+							args.add(restaurants.elementAt(i));
+							args.add(distances.elementAt(i));
+							Navigator.pushNamed(context, "/restaurant",arguments: args);
 						}
 					),
 				)
