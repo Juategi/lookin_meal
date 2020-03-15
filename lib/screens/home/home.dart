@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/screens/favorites/favorite.dart';
 import 'package:lookinmeal/screens/home/home_screen.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
@@ -129,7 +130,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 								offstage: _selectedIndex != 3,
 								child: TickerMode(
 									enabled: _selectedIndex == 3,
-									child: Container(child: Text("FAV"),),
+									child: Favorites(),
 								),
 							),
 							Offstage(

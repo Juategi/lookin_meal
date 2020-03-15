@@ -12,10 +12,10 @@ class JsonUpdate{
 	List<String> types, images;
 	Map<String,List<int>> schedule = {'1': new List<int>(), '2': new List<int>(), '3': new List<int>(), '4': new List<int>(), '5': new List<int>(), '6': new List<int>(), '0': new List<int>()};
 
-	Future updateFromJson(String jsonFile) async{
+	Future updateFromJson(String jsonFile, int index) async{
 		String jsonString = await rootBundle.loadString('dbjson/$jsonFile');
 		List<dynamic> restaurants = json.decode(jsonString);
-		Map<String, dynamic> place = restaurants.elementAt(2594);
+		Map<String, dynamic> place = restaurants.elementAt(index);
 		id = place['id'];
 		DBService _dbService = DBService(uid: id);
 		name = place['name'];
