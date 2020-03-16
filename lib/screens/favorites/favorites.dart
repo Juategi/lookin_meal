@@ -8,19 +8,20 @@ import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
 
 class Favorites extends StatefulWidget {
+	User user;
+	Favorites({this.user});
   @override
-  _FavoritesState createState() => _FavoritesState();
+  _FavoritesState createState() => _FavoritesState(user: user);
 }
 
 class _FavoritesState extends State<Favorites> {
+	_FavoritesState({this.user});
 	final DBService _dbService = DBService();
 	final GeolocationService _geolocationService = GeolocationService();
 	User user;
 	Position myPos;
 	List<Restaurant> restaurants;
 	List<double> distances = List<double>();
-
-	//User stream, cada vez que cambie los favs reconstruir restaurantes
 
 	List<Widget> _initTiles(User user){
 		List<Widget> tiles = new List<Widget>();
@@ -46,18 +47,19 @@ class _FavoritesState extends State<Favorites> {
 		return tiles;
 	}
 
-	void update()async{
-		if(user.favorites.length == 0){
+	void update()async {
+		if (user.favorites.length == 0) {
 			restaurants = List<Restaurant>();
 			distances = List<double>();
-			return;
 		}
-		restaurants = await _dbService.getFavorites(user.favorites);
-		void _update()async{
-			restaurants = await _dbService.allrestaurantdata;
+		else{
+			restaurants = await _dbService.getFavorites(user.favorites);
+			print(restaurants);
 			myPos = await _geolocationService.getLocation();
-			for(Restaurant restaurant in restaurants){
-				distances.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));
+			for (Restaurant restaurant in restaurants) {
+				distances.add(await _geolocationService.distanceBetween(
+					myPos.latitude, myPos.longitude, restaurant.latitude,
+					restaurant.longitude));
 			}
 		}
 	}
@@ -67,9 +69,9 @@ class _FavoritesState extends State<Favorites> {
     update();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
-		user = Provider.of<User>(context);
 	  return restaurants == null || distances.length < restaurants.length? Loading() : Container(
 		  child: ListView(
 			  children: _initTiles(user)
