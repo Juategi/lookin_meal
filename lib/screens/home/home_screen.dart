@@ -46,10 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
 		}
 		return tiles;
 	}
-	@override
-	initState(){
-		super.initState();
-	}
 
 	@override
   Widget build(BuildContext context) {

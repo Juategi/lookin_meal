@@ -8,22 +8,19 @@ import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
 
 class Favorites extends StatefulWidget {
-	User user;
-	Favorites({this.user});
   @override
-  _FavoritesState createState() => _FavoritesState(user: user);
+  _FavoritesState createState() => _FavoritesState();
 }
 
 class _FavoritesState extends State<Favorites> {
-	_FavoritesState({this.user});
 	final DBService _dbService = DBService();
 	final GeolocationService _geolocationService = GeolocationService();
-	User user;
 	Position myPos;
+	User user;
 	List<Restaurant> restaurants;
 	List<double> distances = List<double>();
 
-	List<Widget> _initTiles(User user){
+	List<Widget> _initTiles(){
 		List<Widget> tiles = new List<Widget>();
 		for(int i = 0; i < restaurants.length; i ++){
 			tiles.add(
@@ -54,7 +51,6 @@ class _FavoritesState extends State<Favorites> {
 		}
 		else{
 			restaurants = await _dbService.getFavorites(user.favorites);
-			print(restaurants);
 			myPos = await _geolocationService.getLocation();
 			for (Restaurant restaurant in restaurants) {
 				distances.add(await _geolocationService.distanceBetween(
@@ -64,18 +60,27 @@ class _FavoritesState extends State<Favorites> {
 		}
 	}
 
-	@override
-  void initState() {
-    update();
-    super.initState();
-  }
-
   @override
-  Widget build(BuildContext context) {
-	  return restaurants == null || distances.length < restaurants.length? Loading() : Container(
-		  child: ListView(
-			  children: _initTiles(user)
-		  ),
+  Widget build(BuildContext context) { //Hacer provider en home
+	  return StreamBuilder<User>(
+		  	stream: DBService(uid: user.uid).userdata,
+	  		builder: (context, snapshot) {
+		  		if(snapshot.hasData) {
+					user = snapshot.data;
+					update();
+					if(restaurants != null && distances.length == restaurants.length) {
+						return Container(
+							child: ListView(
+								children: _initTiles()
+							),
+						);
+					}
+					else
+						return Loading();
+				}
+		  		else
+		  			return Loading();
+  			}
 	  );
   }
 }

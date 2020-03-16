@@ -130,7 +130,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 								offstage: _selectedIndex != 3,
 								child: TickerMode(
 									enabled: _selectedIndex == 3,
-									child: Favorites(user: userData,),
+									child: Favorites(),
 								),
 							),
 							Offstage(
