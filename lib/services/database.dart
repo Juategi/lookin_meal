@@ -15,7 +15,19 @@ class DBService{
 			'email':email,
 			'name':name,
 			'picture':picture
-		});
+		}, merge: true);
+	}
+
+	Future updateUserFavorites(String id) async{
+		var snap = await userCollection.document(uid).get();
+		List<String> favorites = List<String>.from(snap.data['favorites']);
+		if(favorites.contains(id))
+			favorites.remove(id);
+		else
+			favorites.add(id);
+		return await userCollection.document(uid).setData({
+			'favorites': favorites
+		},merge: true);
 	}
 
 	Future updateRestaurantData(String name, String phone, String website, String webUrl, String address, String email, String city, String country, double latitude,
@@ -80,7 +92,8 @@ class DBService{
 			uid: uid,
 			name: snapshot.data['name'],
 			email: snapshot.data['email'],
-			picture: snapshot.data['picture']
+			picture: snapshot.data['picture'],
+			favorites: snapshot.data['favorites']
 		);
 	}
 

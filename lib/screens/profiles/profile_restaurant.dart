@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/services/database.dart';
 
 class ProfileRestaurant extends StatefulWidget {
   @override
@@ -14,7 +16,9 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   Widget build(BuildContext context) {
   	var args = List<Object>.of(ModalRoute.of(context).settings.arguments);
   	restaurant = args.first;
-  	distance = args.last;
+  	distance = args.elementAt(1);
+  	User user = args.last;
+	final DBService _dbService = DBService(uid: user.uid);
     return Scaffold(
       body: Column(
       	children: <Widget>[
@@ -106,7 +110,6 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 				),
 			),
 			SizedBox(height: 20,),
-			SizedBox(height: 20,),
 			Text(
 				restaurant.types == null ? " " : restaurant.types.toString(),
 				style: TextStyle(
@@ -117,7 +120,15 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 					fontSize: 15
 				),
 			),
-
+			SizedBox(height: 20,),
+			RaisedButton(
+				child: Text("Fav"),
+				onPressed: ()async{
+					print(user.name);
+					print(restaurant.id);
+					await _dbService.updateUserFavorites(restaurant.id);
+				},
+			)
       	],
       ),
     );

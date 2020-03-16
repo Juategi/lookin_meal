@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/models/restaurant.dart';
-import 'package:lookinmeal/services/database.dart';
-import 'package:lookinmeal/services/geolocation.dart';
+import 'package:lookinmeal/models/user.dart';
 
 
 
 class HomeScreen extends StatefulWidget {
 	Position myPos;
+	User user;
 	List<Restaurant> restaurants;
 	List<double> distances = List<double>();
-	HomeScreen({this.myPos,this.distances,this.restaurants});
+	HomeScreen({this.myPos,this.distances,this.restaurants, this.user});
   @override
-  _HomeScreenState createState() => _HomeScreenState(myPos: myPos, restaurants: restaurants,distances: distances,);
+  _HomeScreenState createState() => _HomeScreenState(myPos: myPos, restaurants: restaurants,distances: distances, user:user);
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-	_HomeScreenState({this.myPos,this.distances,this.restaurants});
-	final DBService _dbService = DBService();
-	final GeolocationService _geolocationService = GeolocationService();
+	_HomeScreenState({this.myPos,this.distances,this.restaurants, this.user});
 	Position myPos;
+	User user;
 	List<Restaurant> restaurants;
 	List<double> distances = List<double>();
 
 
-	List<Widget> _initTiles(){
+	List<Widget> _initTiles(User user){
 		List<Widget> tiles = new List<Widget>();
 		for(int i = 0; i < restaurants.length; i ++){
 			tiles.add(
@@ -38,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
 							List<Object> args = List<Object>();
 							args.add(restaurants.elementAt(i));
 							args.add(distances.elementAt(i));
+							args.add(user);
 							Navigator.pushNamed(context, "/restaurant",arguments: args);
 						}
 					),
@@ -53,10 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
 	@override
   Widget build(BuildContext context) {
-    return Container(
-		child: ListView(
-			children: _initTiles()
-		),
-	);
+		return Container(
+			child: ListView(
+				children: _initTiles(user)
+			),
+		);
   }
 }

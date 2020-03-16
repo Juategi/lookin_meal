@@ -109,7 +109,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 								offstage: _selectedIndex != 0,
 								child: TickerMode(
 									enabled: _selectedIndex == 0,
-									child: HomeScreen(myPos: myPos, restaurants: restaurants,distances: distances,),
+									child: HomeScreen(myPos: myPos, restaurants: restaurants,distances: distances, user: userData),
 								),
 							),
 							Offstage(
@@ -130,7 +130,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 								offstage: _selectedIndex != 3,
 								child: TickerMode(
 									enabled: _selectedIndex == 3,
-									child: Favorites(),
+									child: Favorites(user: userData),
 								),
 							),
 							Offstage(
