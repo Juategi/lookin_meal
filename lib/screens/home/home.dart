@@ -84,7 +84,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	  return StreamBuilder<User>(
 		  stream: DBService(uid: user.uid).userdata,
 		  builder: (context, snapshot) {
-			if (snapshot.hasData & (restaurants != null) & (distances.length >= 4)) { //snapshot has data falla al actualizar favs
+			if (snapshot.hasData & (restaurants != null) & (distances.length >= 4)) { //actualizar condiciones
 				User userData = snapshot.data;
 				flag = false;
 				return Scaffold(
@@ -123,15 +123,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 								offstage: _selectedIndex != 2,
 								child: TickerMode(
 									enabled: _selectedIndex == 2,
-									child: MapSample(user: userData)
+									child: MapSample()
 								),
 							),
 							Offstage(
 								offstage: _selectedIndex != 3,
 								child: TickerMode(
 									enabled: _selectedIndex == 3,
-									//child: Favorites(user: userData),
-									child: Container(),
+									child: Favorites(),
 								),
 							),
 							Offstage(

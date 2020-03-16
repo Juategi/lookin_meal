@@ -5,22 +5,20 @@ import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/shared/loading.dart';
+import 'package:provider/provider.dart';
 
 class Favorites extends StatefulWidget {
-	User user;
-	Favorites({this.user});
   @override
   _FavoritesState createState() => _FavoritesState();
 }
 
 class _FavoritesState extends State<Favorites> {
-	final User user;
 	final DBService _dbService = DBService();
 	final GeolocationService _geolocationService = GeolocationService();
+	User user;
 	Position myPos;
 	List<Restaurant> restaurants;
 	List<double> distances = List<double>();
-	_FavoritesState({this.user});
 
 	//User stream, cada vez que cambie los favs reconstruir restaurantes
 
@@ -71,6 +69,7 @@ class _FavoritesState extends State<Favorites> {
   }
   @override
   Widget build(BuildContext context) {
+		user = Provider.of<User>(context);
 	  return restaurants == null || distances.length < restaurants.length? Loading() : Container(
 		  child: ListView(
 			  children: _initTiles(user)

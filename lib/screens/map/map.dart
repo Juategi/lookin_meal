@@ -8,18 +8,16 @@ import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/shared/loading.dart';
+import 'package:provider/provider.dart';
 
 
 class MapSample extends StatefulWidget {
-	User user;
-	MapSample({this.user});
 	@override
 	State<MapSample> createState() => MapSampleState();
 }
 
 class MapSampleState extends State<MapSample> {
 	User user;
-	MapSampleState({this.user});
 	String _mapStyle;
 	Completer<GoogleMapController> _controller = Completer();
 	final GeolocationService _geolocationService = GeolocationService();
@@ -80,6 +78,7 @@ class MapSampleState extends State<MapSample> {
 
 	@override
 	Widget build(BuildContext context){
+		user = Provider.of<User>(context);
 		return _cameraPosition == null || _markers.length == 0 ? Loading() : Stack(
 		  children: <Widget>[
 				GoogleMap(
