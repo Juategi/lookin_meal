@@ -27,13 +27,14 @@ class _FavoritesState extends State<Favorites> {
 				Card(
 					child: ListTile(
 						title: Text(restaurants.elementAt(i).name),
-						subtitle: Text(" 📍 ${distances.elementAt(i).toString()} Km"),
+						//subtitle: Text(" 📍 ${distances.elementAt(i).toString()} Km"),
 						leading: Image.network(restaurants.elementAt(i).images.first, width: 100, height: 100,),
 						trailing: Icon(Icons.arrow_right),
 						onTap: () {
 							List<Object> args = List<Object>();
 							args.add(restaurants.elementAt(i));
-							args.add(distances.elementAt(i));
+							//args.add(distances.elementAt(i));
+							args.add(3.0);
 							args.add(user);
 							Navigator.pushNamed(context, "/restaurant",arguments: args);
 						}
@@ -44,7 +45,7 @@ class _FavoritesState extends State<Favorites> {
 		return tiles;
 	}
 
-	void update()async {
+	void _update()async {
 		if (user.favorites.length == 0) {
 			restaurants = List<Restaurant>();
 			distances = List<double>();
@@ -53,22 +54,22 @@ class _FavoritesState extends State<Favorites> {
 			restaurants = await _dbService.getFavorites(user.favorites);
 			myPos = await _geolocationService.getLocation();
 			for (Restaurant restaurant in restaurants) {
-				distances.add(await _geolocationService.distanceBetween(
-					myPos.latitude, myPos.longitude, restaurant.latitude,
-					restaurant.longitude));
+				double distance = await _geolocationService.distanceBetween(myPos.latitude, myPos.longitude, restaurant.latitude, restaurant.longitude);
+				distances.add(distance);
 			}
 		}
 	}
 
   @override
-  Widget build(BuildContext context) { //Hacer provider en home
+  Widget build(BuildContext context) { //PROBLEMA CON EL CÁLCULO DE DISTANCIAS, LO MEJOR SERÁ HACERLO EN OTRO SITIO
+	  user = Provider.of<User>(context);
 	  return StreamBuilder<User>(
 		  	stream: DBService(uid: user.uid).userdata,
 	  		builder: (context, snapshot) {
 		  		if(snapshot.hasData) {
 					user = snapshot.data;
-					update();
-					if(restaurants != null && distances.length == restaurants.length) {
+					_update();
+					if(restaurants != null) {
 						return Container(
 							child: ListView(
 								children: _initTiles()
