@@ -4,18 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/shared/loading.dart';
 
 
 class MapSample extends StatefulWidget {
+	User user;
+	MapSample({this.user});
 	@override
 	State<MapSample> createState() => MapSampleState();
 }
 
 class MapSampleState extends State<MapSample> {
-
+	User user;
+	MapSampleState({this.user});
 	String _mapStyle;
 	Completer<GoogleMapController> _controller = Completer();
 	final GeolocationService _geolocationService = GeolocationService();
@@ -65,6 +69,7 @@ class MapSampleState extends State<MapSample> {
 						List<Object> args = List<Object>();
 						args.add(restaurant);
 						args.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));
+						args.add(user);
 						Navigator.pushNamed(context, "/restaurant",arguments: args);
 					}
 				),

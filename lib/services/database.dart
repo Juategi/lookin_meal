@@ -10,16 +10,24 @@ class DBService{
 
 	DBService({this.uid});
 
-	Future updateUserData(String email, String name, String picture ) async{
+	Future updateUserData(String email, String name, String picture ) async {
 		return await userCollection.document(uid).setData({
-			'email':email,
-			'name':name,
-			'picture':picture
+			'email': email,
+			'name': name,
+			'picture': picture,
 		}, merge: true);
 	}
 
+
 	Future updateUserFavorites(String id) async{
 		var snap = await userCollection.document(uid).get();
+		if(snap.data['favorites'] == null){
+			List<String> favorites = List<String>();
+			favorites.add(id);
+			return await userCollection.document(uid).setData({
+				'favorites': favorites
+			},merge: true);
+		}
 		List<String> favorites = List<String>.from(snap.data['favorites']);
 		if(favorites.contains(id))
 			favorites.remove(id);
@@ -87,16 +95,24 @@ class DBService{
 		return querySnapshot.documents.map(_restaurantDataFromSnapshot).toList();
 	}
 
+	Future<List<Restaurant>> getFavorites(List<String> ids) async{
+		List<Restaurant> result = List<Restaurant>();
+		for(String id in ids){
+			DocumentSnapshot snapshot = await restaurantCollection.document(id).get();
+			result.add(_restaurantDataFromSnapshot(snapshot));
+		}
+		return result;
+	}
+
 	User _userDataFromSnapshot(DocumentSnapshot snapshot){
 		return User(
 			uid: uid,
 			name: snapshot.data['name'],
 			email: snapshot.data['email'],
 			picture: snapshot.data['picture'],
-			favorites: snapshot.data['favorites']
+			favorites: snapshot.data['favorites'] == null ? List<String>() : List<String>.from(snapshot.data['favorites']),
 		);
 	}
-
 
 	Stream<User> get userdata{
 		return userCollection.document(uid).snapshots().map(_userDataFromSnapshot);

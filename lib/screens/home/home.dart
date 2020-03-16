@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
-import 'package:lookinmeal/screens/favorites/favorite.dart';
+import 'package:lookinmeal/screens/favorites/favorites.dart';
 import 'package:lookinmeal/screens/home/home_screen.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
@@ -24,6 +24,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	final AuthService _auth = AuthService();
 	final DBService _dbService = DBService();
 	final GeolocationService _geolocationService = GeolocationService();
+	User user;
 	Position myPos;
 	List<Restaurant> restaurants;
 	List<double> distances = List<double>();
@@ -76,15 +77,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		_update();
 		_timer();
 	}
-
 	@override
   Widget build(BuildContext context) {
-	  final user = Provider.of<User>(context);
+	  user = Provider.of<User>(context);
 	  AppLocalizations tr = AppLocalizations.of(context);
 	  return StreamBuilder<User>(
 		  stream: DBService(uid: user.uid).userdata,
 		  builder: (context, snapshot) {
-			if (snapshot.hasData & (restaurants != null) & (distances.length >= 4)) {
+			if (snapshot.hasData & (restaurants != null) & (distances.length >= 4)) { //snapshot has data falla al actualizar favs
 				User userData = snapshot.data;
 				flag = false;
 				return Scaffold(
@@ -123,14 +123,15 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 								offstage: _selectedIndex != 2,
 								child: TickerMode(
 									enabled: _selectedIndex == 2,
-									child: MapSample()
+									child: MapSample(user: userData)
 								),
 							),
 							Offstage(
 								offstage: _selectedIndex != 3,
 								child: TickerMode(
 									enabled: _selectedIndex == 3,
-									child: Favorites(user: userData),
+									//child: Favorites(user: userData),
+									child: Container(),
 								),
 							),
 							Offstage(
