@@ -3,7 +3,7 @@ import 'package:lookinmeal/screens/authenticate/authenticate.dart';
 import 'package:lookinmeal/screens/authenticate/log_in.dart';
 import 'package:lookinmeal/screens/authenticate/sign_in.dart';
 import 'package:lookinmeal/screens/home/home.dart';
-import 'package:lookinmeal/screens/profiles/profile_restaurant.dart';
+import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'services/app_localizations.dart';
 import 'models/user.dart';
 import 'screens/authenticate/wrapper.dart';

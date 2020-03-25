@@ -4,6 +4,7 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/favorites/favorites.dart';
 import 'package:lookinmeal/screens/home/home_screen.dart';
+import 'package:lookinmeal/screens/profile/profile.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
 import 'package:lookinmeal/services/database.dart';
@@ -93,15 +94,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 						title: Text(tr.translate("app")),
 						backgroundColor: Colors.brown[400],
 						elevation: 0.0,
-						actions: <Widget>[
-							FlatButton.icon(
-								onPressed: () async {
-									await _auth.signOut();
-								},
-								icon: Icon(Icons.exit_to_app),
-								label: Text(tr.translate("signout"))
-							),
-						],
 					),
 					body: Stack(
 						children: <Widget>[
@@ -137,7 +129,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 								offstage: _selectedIndex != 4,
 								child: TickerMode(
 									enabled: _selectedIndex == 4,
-									child: Container(child: Text("PROFILE"),),
+									child: Profile()
 								),
 							),
 						],

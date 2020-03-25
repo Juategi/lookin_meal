@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "793066119782-m3q8o37pkc93h9u01i6crortlgtl2p5l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wt.lookinmeal",
+            "certificate_hash": "1f024376195bd065a19ceb34004d13cf727b2e75"
+          }
+        },
+        {
+          "client_id": "793066119782-2tfunep061v36teku78ml4ef9k5ohr9o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wt.lookinmeal",
+            "certificate_hash": "53bcfa7552eac64ba6dd6a2142f790d73992a3f5"
+          }
+        },
+        {
           "client_id": "793066119782-go4qoqrjeco334nr75mpqcpt0cb6hi7n.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -30,6 +46,13 @@
             {
               "client_id": "793066119782-go4qoqrjeco334nr75mpqcpt0cb6hi7n.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "793066119782-o738ft9setmf2d6vhfehid3upvjot2pj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wt.lookinmeal"
+              }
             }
           ]
         }
