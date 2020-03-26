@@ -17,5 +17,8 @@
   "add": "Añadir",
   "fav": "Favoritos",
   "profile": "Perfil",
-  "app": "Find eat"
+  "app": "Find eat",
+  "editinfo": "Editar perfil",
+  "save": "Guardar",
+  "norestaurants": "¡No tienes restaurantes, búscalos y añádelos a la lista!"
 }

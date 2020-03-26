@@ -10,11 +10,12 @@ class DBService{
 
 	DBService({this.uid});
 
-	Future updateUserData(String email, String name, String picture ) async {
+	Future updateUserData(String email, String name, String picture, String service ) async {
 		return await userCollection.document(uid).setData({
 			'email': email,
 			'name': name,
 			'picture': picture,
+			'service': service
 		}, merge: true);
 	}
 
@@ -110,6 +111,7 @@ class DBService{
 			name: snapshot.data['name'],
 			email: snapshot.data['email'],
 			picture: snapshot.data['picture'],
+			service: snapshot.data['service'],
 			favorites: snapshot.data['favorites'] == null ? List<String>() : List<String>.from(snapshot.data['favorites']),
 		);
 	}

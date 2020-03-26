@@ -26,8 +26,17 @@ class _ProfileState extends State<Profile> {
             return Column(
               children: <Widget>[
                 Container(
-                  child: Image.network(user.picture),
+                  child: Image.network(user.picture??"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR1KYdVbr_q9oPjjbBDx9se1reB9_DhUcpwwzGtkeLCSyp8v9dr"),
                 ),
+                SizedBox(height: 20,),
+                user.service == "EP" ? FlatButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/editprofile",arguments: user);
+                    },
+                    icon: Icon(Icons.edit),
+                    label: Text(tr.translate("editinfo"))
+                ): SizedBox(height: 0,),
+                SizedBox(height: 20,),
                 FlatButton.icon(
                     onPressed: () async {
                       await _auth.signOut();

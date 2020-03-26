@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/shared/loading.dart';
@@ -20,7 +21,7 @@ class _FavoritesState extends State<Favorites> {
 	List<Restaurant> restaurants;
 	List<double> distances = List<double>();
 
-	List<Widget> _initTiles(){
+	List<Widget> _initTiles(AppLocalizations tr){
 		List<Widget> tiles = new List<Widget>();
 		for(int i = 0; i < restaurants.length; i ++){
 			tiles.add(
@@ -42,6 +43,8 @@ class _FavoritesState extends State<Favorites> {
 				)
 			);
 		}
+		if(tiles.length == 0)
+			tiles.add(Text(tr.translate("norestaurants")));
 		return tiles;
 	}
 
@@ -63,6 +66,7 @@ class _FavoritesState extends State<Favorites> {
   @override
   Widget build(BuildContext context) { //PROBLEMA CON EL CÁLCULO DE DISTANCIAS, LO MEJOR SERÁ HACERLO EN OTRO SITIO
 	  user = Provider.of<User>(context);
+		AppLocalizations tr = AppLocalizations.of(context);
 	  return StreamBuilder<User>(
 		  	stream: DBService(uid: user.uid).userdata,
 	  		builder: (context, snapshot) {
@@ -72,7 +76,7 @@ class _FavoritesState extends State<Favorites> {
 					if(restaurants != null) {
 						return Container(
 							child: ListView(
-								children: _initTiles()
+								children: _initTiles(tr)
 							),
 						);
 					}

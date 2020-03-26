@@ -37,7 +37,7 @@ class AuthService{
 		try{
 			AuthResult result =	await _auth.createUserWithEmailAndPassword(email: email, password: password);
 			FirebaseUser user = result.user;
-			await DBService(uid: user.uid).updateUserData(email,name,null);
+			await DBService(uid: user.uid).updateUserData(email,name,null,"EP");
 			return _userFromFirebaseUser(user);
 		} catch(e){
 			print(e);
@@ -69,7 +69,7 @@ class AuthService{
 		final credential = await _auth.signInWithCredential(facebookAuthCred);
 		User fuser = _userFromFirebaseUser(credential.user);
 		String picture = profile["picture"]["data"]["url"];
-		await DBService(uid: fuser.uid).updateUserData(fuser.email, profile["name"],picture);
+		await DBService(uid: fuser.uid).updateUserData(fuser.email, profile["name"],picture,"FB");
 		return fuser;
 	}
 
@@ -96,7 +96,7 @@ class AuthService{
 		final FirebaseUser currentUser = await _auth.currentUser();
 		assert(user.uid == currentUser.uid);
 		User fuser = _userFromFirebaseUser(user);
-		await DBService(uid: fuser.uid).updateUserData(fuser.email, authResult.additionalUserInfo.profile['name'],authResult.additionalUserInfo.profile['picture']);
+		await DBService(uid: fuser.uid).updateUserData(fuser.email, authResult.additionalUserInfo.profile['name'],authResult.additionalUserInfo.profile['picture'],"GM");
 		return fuser;
 	}
 	Future signOut() async{
