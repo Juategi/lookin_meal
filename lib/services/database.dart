@@ -19,6 +19,12 @@ class DBService{
 		}, merge: true);
 	}
 
+	Future updateUserImage(String picture,String uid) async {
+		return await userCollection.document(uid).setData({
+			'picture': picture,
+		}, merge: true);
+	}
+
 
 	Future updateUserFavorites(String id) async{
 		var snap = await userCollection.document(uid).get();

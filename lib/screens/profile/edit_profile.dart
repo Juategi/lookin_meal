@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/database.dart';
+import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/decos.dart';
+import 'package:lookinmeal/shared/strings.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -12,6 +14,7 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   final _formKey = GlobalKey<FormState>();
   final DBService _dbService = DBService();
+  final StorageService _storageService = StorageService();
   String email, password, name = " ";
   String error = " ";
 
@@ -19,6 +22,8 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     User user = ModalRoute.of(context).settings.arguments;
     AppLocalizations tr = AppLocalizations.of(context);
+    String image = user.picture;
+    //
     return Scaffold(
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
@@ -26,6 +31,45 @@ class _EditProfileState extends State<EditProfile> {
           key: _formKey,
           child: Column(
               children: <Widget>[
+                SizedBox(height: 20,),
+                SizedBox(height: 20,),
+                Container(
+                      child: FlatButton(
+                          onPressed: () async{
+                            image = await _storageService.imagePicker(context);
+                            if(image != null){
+                              await _dbService.updateUserImage(image,user.uid); // deberia actualizarse cuando se apreta el boton save
+                              if(user.picture != StaticStrings.defaultImage)
+                                await _storageService.removeFile(user.picture); // deberia actualizarse cuando se apreta el boton save
+                              user.picture = image;
+                              setState((){
+                              });
+                            }
+                          },
+                          padding: EdgeInsets.all(0.0),
+                          child: Container(
+                              constraints: BoxConstraints.expand(
+                                height: 200.0,
+                              ),
+                              padding: EdgeInsets.only(left: 16.0, bottom: 8.0, right: 16.0),
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: Image.network(image).image,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: Stack(
+                                children: <Widget>[
+                                  Positioned(
+                                    right: 80,
+                                    bottom: 0.0,
+                                    child: Icon(Icons.collections, size: 60, color: Colors.grey[300],),
+                                  ),
+                                ],
+                              )
+                          )
+                      )
+                ),
                 SizedBox(height: 20,),
                 TextFormField(
                     onChanged: (value){

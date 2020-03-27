@@ -26,7 +26,7 @@ class _ProfileState extends State<Profile> {
             return Column(
               children: <Widget>[
                 Container(
-                  child: Image.network(user.picture??"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR1KYdVbr_q9oPjjbBDx9se1reB9_DhUcpwwzGtkeLCSyp8v9dr"),
+                  child: Image.network(user.picture, height: 150, width: 150,),
                 ),
                 SizedBox(height: 20,),
                 user.service == "EP" ? FlatButton.icon(
