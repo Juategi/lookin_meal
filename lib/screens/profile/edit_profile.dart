@@ -31,16 +31,15 @@ class _EditProfileState extends State<EditProfile> {
           key: _formKey,
           child: Column(
               children: <Widget>[
-                SizedBox(height: 20,),
-                SizedBox(height: 20,),
+                SizedBox(height: 40,),
                 Container(
                       child: FlatButton(
                           onPressed: () async{
-                            image = await _storageService.imagePicker(context);
+                            image = await _storageService.profileImagePicker(context);
                             if(image != null){
-                              await _dbService.updateUserImage(image,user.uid); // deberia actualizarse cuando se apreta el boton save
+                              await _dbService.updateUserImage(image,user.uid);
                               if(user.picture != StaticStrings.defaultImage)
-                                await _storageService.removeFile(user.picture); // deberia actualizarse cuando se apreta el boton save
+                                await _storageService.removeFile(user.picture);
                               user.picture = image;
                               setState((){
                               });
@@ -70,7 +69,7 @@ class _EditProfileState extends State<EditProfile> {
                           )
                       )
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height: 100,),
                 TextFormField(
                     onChanged: (value){
                       setState(() => name = value);

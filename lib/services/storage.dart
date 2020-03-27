@@ -7,7 +7,7 @@ import 'package:path/path.dart' as path;
 
 class StorageService{
 
-  Future<String> imagePicker(BuildContext context) async{
+  Future<String> profileImagePicker(BuildContext context) async{
     File file;
     String fileName = "";
     String url;
@@ -17,7 +17,7 @@ class StorageService{
         return null;
       fileName = path.basename(file.path);
       print(fileName);
-      url = await _uploadFile(file, fileName);
+      url = await _uploadProfileImage(file, fileName);
       print(url);
       return url;
     }
@@ -43,7 +43,7 @@ class StorageService{
     }
   }
 
-  Future<String> _uploadFile(File file, String filename) async {
+  Future<String> _uploadProfileImage(File file, String filename) async {
     StorageReference storageReference = FirebaseStorage.instance.ref().child("images/$filename");
     final StorageUploadTask uploadTask = storageReference.putFile(file);
     final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
