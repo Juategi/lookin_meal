@@ -5,6 +5,7 @@ import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/favorites/favorites.dart';
 import 'package:lookinmeal/screens/home/home_screen.dart';
 import 'package:lookinmeal/screens/profile/profile.dart';
+import 'package:lookinmeal/screens/stars/stars.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
 import 'package:lookinmeal/services/database.dart';
@@ -108,7 +109,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 								offstage: _selectedIndex != 1,
 								child: TickerMode(
 									enabled: _selectedIndex == 1,
-									child: Container(child: Text("STAR"),),
+									child: Stars(),
 								),
 							),
 							Offstage(

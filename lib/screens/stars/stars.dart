@@ -11,7 +11,7 @@ class _StarsState extends State<Stars> {
   Widget build(BuildContext context) {
     return Container(
       child: RaisedButton(
-        onPressed: ()async{JsonUpdate().updateFromJson("valencia_tripad.json",161);},
+        onPressed: ()async{JsonUpdate().updateFromJson("valencia_tripad.json",336);},
       ),
     );
   }
