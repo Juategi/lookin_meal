@@ -29,13 +29,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
-  buffer:
-    dependency: transitive
-    description:
-      name: buffer
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.6"
   charcode:
     dependency: transitive
     description:
@@ -364,13 +357,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
-  postgres:
-    dependency: "direct main"
-    description:
-      name: postgres
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
   provider:
     dependency: "direct main"
     description:

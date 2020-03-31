@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lookinmeal/services/json_update.dart';
+import 'package:lookinmeal/services/newdatabase.dart';
 import 'package:lookinmeal/services/search.dart';
 
 class Stars extends StatefulWidget {
