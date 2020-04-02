@@ -56,7 +56,7 @@ class MapSampleState extends State<MapSample> {
 		_restaurants = await _dbService.allrestaurantdata;
 		for(Restaurant restaurant in _restaurants){
 			_markers.add(Marker(
-				markerId: MarkerId(restaurant.id),
+				markerId: MarkerId(restaurant.restaurant_id),
 				position: LatLng(restaurant.latitude,restaurant.longitude),
 				icon: pinLocationIcon,
 				infoWindow: InfoWindow(

@@ -125,8 +125,8 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 				child: Text("Fav"),
 				onPressed: ()async{
 					print(user.name);
-					print(restaurant.id);
-					await _dbService.updateUserFavorites(restaurant.id);
+					print(restaurant.restaurant_id);
+					await _dbService.updateUserFavorites(restaurant.restaurant_id);
 				},
 			)
       	],

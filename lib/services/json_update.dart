@@ -16,8 +16,8 @@ class JsonUpdate{
 		String jsonString = await rootBundle.loadString('dbjson/$jsonFile');
 		List<dynamic> restaurants = json.decode(jsonString);
 		Map<String, dynamic> place = restaurants.elementAt(index);
+    DBServiceN _dbService = DBServiceN();
 		id = place['id'];
-		DBServiceN _dbService = DBServiceN();
 		name = place['name'];
 		rating = double.parse(place['rating']);
 		phone = place['phone'];

@@ -77,7 +77,7 @@ class DBService{
 			}
 		}
 		return Restaurant(
-			id: snapshot.documentID,
+			restaurant_id: snapshot.documentID,
 			name: snapshot.data['name'],
 			phone: snapshot.data['phone'],
 			website: snapshot.data['website'],
@@ -89,7 +89,7 @@ class DBService{
 			latitude: snapshot.data['latitude'],
 			longitude: snapshot.data['longitude'],
 			rating: snapshot.data['rating'],
-			numberViews: snapshot.data['numberViews'],
+			numrevta: snapshot.data['numberViews'],
 			images: List<String>.from(snapshot.data['images']),
 			types: List<String>.from(snapshot.data['types']),
 			schedule: schedule
