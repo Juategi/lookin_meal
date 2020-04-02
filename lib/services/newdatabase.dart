@@ -51,7 +51,7 @@ class DBServiceN{
 
 
 
-  Future<List<Restaurant>> getAllrestaurants() async{
+  Future<List<Restaurant>> getAllRestaurants() async{
     var response = await http.get("https://lookinmeal-dcf41.firebaseapp.com/allrestaurants");
     List<Restaurant> restaurants = List<Restaurant>();
     List<dynamic> result = json.decode(response.body);
@@ -59,13 +59,20 @@ class DBServiceN{
     for(dynamic element in result){
       schedule = {'1': new List<int>(), '2': new List<int>(), '3': new List<int>(), '4': new List<int>(), '5': new List<int>(), '6': new List<int>(), '0': new List<int>()};
       if(element['schedule'] != null) {
-        dynamic result = json.decode(element['schedule'].toString());
-        print(result);
-        /*for (int i = 0; i < 7; i++) {
-          for (dynamic hour in element['schedule'].elementAt(i)) {
-            schedule[i][hour] = element['schedule'][i][hour];
+        dynamic result = json.decode(element['schedule'].toString()
+            .replaceAll("0:", '"0":')
+            .replaceAll("1:", '"1":')
+            .replaceAll("2:", '"2":')
+            .replaceAll("3:", '"3":')
+            .replaceAll("4:", '"4":')
+            .replaceAll("5:", '"5":')
+            .replaceAll("6:", '"6":')
+        );
+        for (int i = 0; i < 7; i++) {
+          for (dynamic hour in result[i.toString()].toList()) {
+            schedule[i.toString()].add(hour);
           }
-        }*/
+        }
       }
       Restaurant restaurant = Restaurant(
         restaurant_id : element['restaurant_id'].toString(),
@@ -88,7 +95,6 @@ class DBServiceN{
         sections: element['sections'] == null ? null : List<String>.from(element['sections'])
       );
       restaurants.add(restaurant);
-      print(restaurant);
     }
     return restaurants;
   }
