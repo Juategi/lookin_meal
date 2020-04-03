@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/json_update.dart';
@@ -24,9 +25,15 @@ class _StarsState extends State<Stars> {
           child: RaisedButton(
             child: Text("Prueba"),
             //onPressed: ()async{JsonUpdate().updateFromJson("valencia_tripad.json",331);},
-            //onPressed: ()async{DBServiceN dbServiceN = DBServiceN(); dbServiceN.getAllRestaurants();},
+            //onPressed: ()async{DBServiceN dbServiceN = DBServiceN(); dbServiceN.getUserFavorites(user.uid);},
             //onPressed: () async {DBServiceN dbServiceN = DBServiceN();dbServiceN.createUser(user.uid, user.email, user.name, user.picture, user.service);},
-            onPressed: ()async{DBServiceN dbServiceN = DBServiceN(); dbServiceN.getUserData(user.uid);},
+            onPressed: ()async{
+              DBServiceN dbServiceN = DBServiceN();
+              List<Restaurant> restaurants = await dbServiceN.getAllRestaurants();
+              for(Restaurant res in restaurants){
+                await dbServiceN.updateUserFavorites(user.uid, res);
+              }
+            },
           ),
         );
       }

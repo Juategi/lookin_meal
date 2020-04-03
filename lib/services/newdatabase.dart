@@ -4,7 +4,22 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 
 class DBServiceN{
-  
+
+  Stream<User> getUserData(String id) async*{
+    var response = await http.get("https://lookinmeal-dcf41.firebaseapp.com/users", headers: {"id":id});
+    print(response.body);
+    List<dynamic> result = json.decode(response.body);
+    User user = User(
+      uid: result.first["user_id"],
+      name: result.first["name"],
+      email: result.first["email"],
+      service: result.first["service"],
+      picture: result.first["image"],
+    );
+    print("User obtained: ${result.first}");
+    yield user;
+  }
+
   Future createUser(String id, String email, String name, String picture, String service) async {
     Map body = {
       "id" :id,
@@ -30,13 +45,30 @@ class DBServiceN{
   }
 
 
-  Future<List<Restaurant>> updateUserFavorites(String userId, String restaurantId) async{
-
+  Future<List<Restaurant>> updateUserFavorites(String userId, Restaurant restaurant) async{
+    List<Restaurant> restaurants = await this.getUserFavorites(userId);
+    bool flag = false;
+    for (Restaurant res in restaurants){
+      if(res.restaurant_id == restaurant.restaurant_id){
+        var response = await http.delete("https://lookinmeal-dcf41.firebaseapp.com/userfavs", headers: {"user_id":userId,"restaurant_id":restaurant.restaurant_id});
+        restaurants.remove(res);
+        flag = true;
+        print(response.body);
+        break;
+      }
+    }
+    if(!flag){
+      var response = await http.post("https://lookinmeal-dcf41.firebaseapp.com/userfavs", body: {"user_id":userId,"restaurant_id":restaurant.restaurant_id});
+      restaurants.add(restaurant);
+      print(response.body);
+    }
+    return restaurants;
   }
 
   Future<List<Restaurant>> getUserFavorites(String id) async{
     var response = await http.get("https://lookinmeal-dcf41.firebaseapp.com/userfavs", headers: {"id":id});
     List<Restaurant> restaurants = List<Restaurant>();
+    print(response.body);
     List<dynamic> result = json.decode(response.body);
     Map<String,List<int>> schedule;
     for(dynamic element in result){
@@ -81,21 +113,6 @@ class DBServiceN{
     }
     print("Number of restaurants : ${restaurants.length}");
     return restaurants;
-  }
-
-
-  Stream<User> getUserData(String id) async*{
-    var response = await http.get("https://lookinmeal-dcf41.firebaseapp.com/users", headers: {"id":id});
-    List<dynamic> result = json.decode(response.body);
-    User user = User(
-      uid: result.first["user_id"],
-      name: result.first["name"],
-      email: result.first["email"],
-      service: result.first["service"],
-      picture: result.first["image"],
-    );
-    print("User obtained: ${result.first}");
-    yield user;
   }
 
   Future updateRestaurantData(String taId, String name, String phone, String website, String webUrl, String address, String email, String city, String country, double latitude,
