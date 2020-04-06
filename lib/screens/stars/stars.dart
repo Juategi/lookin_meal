@@ -26,14 +26,14 @@ class _StarsState extends State<Stars> {
             child: Text("Prueba"),
             //onPressed: ()async{JsonUpdate().updateFromJson("valencia_tripad.json",331);},
             //onPressed: ()async{DBServiceN dbServiceN = DBServiceN(); dbServiceN.getUserFavorites(user.uid);},
-            //onPressed: () async {DBServiceN dbServiceN = DBServiceN();dbServiceN.createUser(user.uid, user.email, user.name, user.picture, user.service);},
-            onPressed: ()async{
+            onPressed: () async {DBServiceN dbServiceN = DBServiceN();dbServiceN.updateUserData(user.uid, user.email, "juancho", user.picture, user.service);},
+            /*onPressed: ()async{
               DBServiceN dbServiceN = DBServiceN();
               List<Restaurant> restaurants = await dbServiceN.getAllRestaurants();
               for(Restaurant res in restaurants){
                 await dbServiceN.updateUserFavorites(user.uid, res);
               }
-            },
+            },*/
           ),
         );
       }
