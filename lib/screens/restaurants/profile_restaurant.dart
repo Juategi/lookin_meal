@@ -124,9 +124,14 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 				RaisedButton(
 					child: Text("Fav"),
 					onPressed: ()async{
-						print(user.name);
-						print(restaurant.restaurant_id);
-						user.favorites = await _dbService.updateUserFavorites(user.uid, restaurant);
+						if(user.favorites.contains(restaurant)) {
+							user.favorites.remove(restaurant);
+							await _dbService.deleteFromUserFavorites(user.uid, restaurant);
+						}
+						else {
+							user.favorites.add(restaurant);
+							await _dbService.addToUserFavorites(user.uid, restaurant);
+						}
 					},
 				)
       	],

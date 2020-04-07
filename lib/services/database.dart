@@ -52,33 +52,21 @@ class DBService {
 	}
 
 
-	Future<List<Restaurant>> updateUserFavorites(String userId,
+	Future deleteFromUserFavorites(String userId,
 			Restaurant restaurant) async {
-		List<Restaurant> restaurants = await this.getUserFavorites(userId);
-		bool flag = false;
-		for (Restaurant res in restaurants) {
-			if (res.restaurant_id == restaurant.restaurant_id) {
-				print(restaurant.restaurant_id);
-				print(userId);
-				var response = await http.delete(
-						"https://lookinmeal-dcf41.firebaseapp.com/userfavs", headers: {
-					"user_id": userId,
-					"restaurant_id": restaurant.restaurant_id
-				});
-				restaurants.remove(res);
-				flag = true;
-				print(response.body);
-				break;
-			}
-		}
-		if (!flag) {
-			var response = await http.post(
-					"https://lookinmeal-dcf41.firebaseapp.com/userfavs",
-					body: {"user_id": userId, "restaurant_id": restaurant.restaurant_id});
-			restaurants.add(restaurant);
-			print(response.body);
-		}
-		return restaurants;
+		var response = await http.delete(
+				"https://lookinmeal-dcf41.firebaseapp.com/userfavs", headers: {"user_id": userId,
+			"restaurant_id": restaurant.restaurant_id});
+		print(response.body);
+
+	}
+
+	Future addToUserFavorites(String userId,
+			Restaurant restaurant) async{
+		var response = await http.post(
+				"https://lookinmeal-dcf41.firebaseapp.com/userfavs",
+				body: {"user_id": userId, "restaurant_id": restaurant.restaurant_id});
+		print(response.body);
 	}
 
 	Future<List<Restaurant>> getUserFavorites(String id) async {

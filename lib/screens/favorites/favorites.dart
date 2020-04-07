@@ -19,7 +19,6 @@ class _FavoritesState extends State<Favorites> {
 	Position myPos;
 	User user;
 	List<double> distances = List<double>();
-
 	List<Widget> _initTiles(AppLocalizations tr){
 		List<Widget> tiles = new List<Widget>();
 		for(int i = 0; i < user.favorites.length; i ++){
@@ -47,7 +46,7 @@ class _FavoritesState extends State<Favorites> {
 		return tiles;
 	}
 
-	void _update()async {
+	void _distances()async {
 		if (user.favorites.length == 0) {
 			distances = List<double>();
 		}
@@ -64,7 +63,7 @@ class _FavoritesState extends State<Favorites> {
   Widget build(BuildContext context) { //PROBLEMA CON EL CÁLCULO DE DISTANCIAS, LO MEJOR SERÁ HACERLO EN OTRO SITIO
 	  user = Provider.of<User>(context);
 		AppLocalizations tr = AppLocalizations.of(context);
-		_update();
+		_distances();
 		if(user.favorites != null) {
 			return Container(
 				child: ListView(
