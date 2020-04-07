@@ -2,7 +2,8 @@ import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
-import 'package:lookinmeal/services/newdatabase.dart';
+import 'package:lookinmeal/services/database.dart';
+
 
 class JsonUpdate{
 
@@ -16,7 +17,7 @@ class JsonUpdate{
 		String jsonString = await rootBundle.loadString('dbjson/$jsonFile');
 		List<dynamic> restaurants = json.decode(jsonString);
 		Map<String, dynamic> place = restaurants.elementAt(index);
-    DBServiceN _dbService = DBServiceN();
+    DBService _dbService = DBService();
 		id = place['id'];
 		name = place['name'];
 		rating = double.parse(place['rating']);

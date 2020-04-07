@@ -27,12 +27,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	final DBService _dbService = DBService();
 	final GeolocationService _geolocationService = GeolocationService();
 	User user;
+	String id;
 	Position myPos;
 	List<Restaurant> restaurants;
 	List<double> distances = List<double>();
 	int _selectedIndex = 0;
 	bool flag = true;
-
 
 	void _onItemTapped(int index) {
 		setState(()  {
@@ -53,7 +53,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
 
 	void _update()async{
-		restaurants = await _dbService.allrestaurantdata;
+		restaurants = await _dbService.getAllRestaurants();
 		myPos = await _geolocationService.getLocation();
 		for(Restaurant restaurant in restaurants){
 			distances.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));
@@ -83,91 +83,88 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
 	  user = Provider.of<User>(context);
 	  AppLocalizations tr = AppLocalizations.of(context);
-	  return StreamBuilder<User>(
-		  stream: DBService(uid: user.uid).userdata,
-		  builder: (context, snapshot) {
-			if (snapshot.hasData & (restaurants != null) & (distances.length >= 4)) { //actualizar condiciones
-				User userData = snapshot.data;
-				flag = false;
-				return Scaffold(
-					backgroundColor: Colors.brown[50],
-					appBar: AppBar(
-						title: Text(tr.translate("app")),
-						backgroundColor: Colors.brown[400],
-						elevation: 0.0,
-					),
-					body: Stack(
-						children: <Widget>[
-							Offstage(
-								offstage: _selectedIndex != 0,
-								child: TickerMode(
-									enabled: _selectedIndex == 0,
-									child: HomeScreen(myPos: myPos, restaurants: restaurants,distances: distances, user: userData),
+	  if(restaurants != null && user != null) {
+	  	flag = false;
+			return Scaffold(
+						backgroundColor: Colors.brown[50],
+						appBar: AppBar(
+							title: Text(tr.translate("app")),
+							backgroundColor: Colors.brown[400],
+							elevation: 0.0,
+						),
+						body: Stack(
+							children: <Widget>[
+								Offstage(
+									offstage: _selectedIndex != 0,
+									child: TickerMode(
+										enabled: _selectedIndex == 0,
+										child: HomeScreen(myPos: myPos,
+												restaurants: restaurants,
+												distances: distances),
+									),
 								),
-							),
-							Offstage(
-								offstage: _selectedIndex != 1,
-								child: TickerMode(
-									enabled: _selectedIndex == 1,
-									child: Stars(),
+								Offstage(
+									offstage: _selectedIndex != 1,
+									child: TickerMode(
+										enabled: _selectedIndex == 1,
+										child: Stars(),
+									),
 								),
-							),
-							Offstage(
-								offstage: _selectedIndex != 2,
-								child: TickerMode(
-									enabled: _selectedIndex == 2,
-									child: MapSample()
+								Offstage(
+									offstage: _selectedIndex != 2,
+									child: TickerMode(
+											enabled: _selectedIndex == 2,
+											child: MapSample()
+									),
 								),
-							),
-							Offstage(
-								offstage: _selectedIndex != 3,
-								child: TickerMode(
-									enabled: _selectedIndex == 3,
-									child: Favorites(),
+								Offstage(
+									offstage: _selectedIndex != 3,
+									child: TickerMode(
+										enabled: _selectedIndex == 3,
+										child: Favorites(),
+									),
 								),
-							),
-							Offstage(
-								offstage: _selectedIndex != 4,
-								child: TickerMode(
-									enabled: _selectedIndex == 4,
-									child: Profile()
+								Offstage(
+									offstage: _selectedIndex != 4,
+									child: TickerMode(
+											enabled: _selectedIndex == 4,
+											child: Profile()
+									),
 								),
-							),
-						],
-					),
-					bottomNavigationBar: BottomNavigationBar(
-						backgroundColor: Colors.brown[200],
-						type: BottomNavigationBarType.fixed,
-						items: <BottomNavigationBarItem>[
-							BottomNavigationBarItem(
-								icon: Icon(Icons.home),
-								title: Text(tr.translate("home")),
-							),
-							BottomNavigationBarItem(
-								icon: Icon(Icons.star),
-								title: Text("Stars"),
-							),
-							BottomNavigationBarItem(
-								icon: Icon(Icons.map),
-								title: Text(tr.translate("map")),
-							),
-							BottomNavigationBarItem(
-								icon: Icon(Icons.favorite),
-								title: Text(tr.translate("fav")),
-							),
-							BottomNavigationBarItem(
-								icon: Icon(Icons.person),
-								title: Text(tr.translate("profile")),
-							),
-						],
-						currentIndex: _selectedIndex,
-						selectedItemColor: Colors.amber[800],
-						onTap: _onItemTapped,
-					)
-				);
-			}
-			else
-				return Loading();
-		});
+							],
+						),
+						bottomNavigationBar: BottomNavigationBar(
+							backgroundColor: Colors.brown[200],
+							type: BottomNavigationBarType.fixed,
+							items: <BottomNavigationBarItem>[
+								BottomNavigationBarItem(
+									icon: Icon(Icons.home),
+									title: Text(tr.translate("home")),
+								),
+								BottomNavigationBarItem(
+									icon: Icon(Icons.star),
+									title: Text("Stars"),
+								),
+								BottomNavigationBarItem(
+									icon: Icon(Icons.map),
+									title: Text(tr.translate("map")),
+								),
+								BottomNavigationBarItem(
+									icon: Icon(Icons.favorite),
+									title: Text(tr.translate("fav")),
+								),
+								BottomNavigationBarItem(
+									icon: Icon(Icons.person),
+									title: Text(tr.translate("profile")),
+								),
+							],
+							currentIndex: _selectedIndex,
+							selectedItemColor: Colors.amber[800],
+							onTap: _onItemTapped,
+						)
+					);
+		}
+	  else
+	  	return Loading();
   }
 }

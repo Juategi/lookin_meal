@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lookinmeal/services/database.dart';
 import 'authenticate.dart';
 import 'package:lookinmeal/screens/home/home.dart';
 import 'package:provider/provider.dart';
@@ -10,10 +11,13 @@ class Wrapper extends StatelessWidget {
 	@override
 	Widget build(BuildContext context) {
 
-		final user = Provider.of<User>(context);
+		final user = Provider.of<String>(context);
 		if(user == null)
 			return Authenticate();
 		else
-			return Home();
+			return FutureProvider<User>.value(
+					value: DBService().getUserData(user),
+					child: Home()
+			);
 	}
 }

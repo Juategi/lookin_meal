@@ -1,26 +1,26 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lookinmeal/shared/strings.dart';
 
 class AuthService{
 
 	final FirebaseAuth _auth = FirebaseAuth.instance;
-	final CollectionReference userCollection = Firestore.instance.collection('users');
 
 	User _userFromFirebaseUser(FirebaseUser user){
-		return user != null ? User(uid: user.uid, email: user.email) : null;
+		return user != null ? User(uid: user.uid) : null;
 	}
 
-
-	Stream<User> get user {
-		return _auth.onAuthStateChanged.map(_userFromFirebaseUser);
+	Stream<String> get user {
+		return _auth.onAuthStateChanged.map((user){
+			return user != null ? user.uid : null;
+		});
 	}
 
 	Future signInEP(String email, String password) async{
@@ -38,7 +38,7 @@ class AuthService{
 		try{
 			AuthResult result =	await _auth.createUserWithEmailAndPassword(email: email, password: password);
 			FirebaseUser user = result.user;
-			await DBService(uid: user.uid).updateUserData(email,name,StaticStrings.defaultImage,"EP");
+			await DBService().createUser(user.uid,email,name,StaticStrings.defaultImage,"EP");
 			return _userFromFirebaseUser(user);
 		} catch(e){
 			print(e);
@@ -70,7 +70,7 @@ class AuthService{
 		final credential = await _auth.signInWithCredential(facebookAuthCred);
 		User fuser = _userFromFirebaseUser(credential.user);
 		String picture = profile["picture"]["data"]["url"];
-		await DBService(uid: fuser.uid).updateUserData(fuser.email, profile["name"],picture,"FB");
+		await DBService().createUser(fuser.uid,fuser.email, profile["name"],picture,"FB");
 		return fuser;
 	}
 
@@ -97,7 +97,7 @@ class AuthService{
 		final FirebaseUser currentUser = await _auth.currentUser();
 		assert(user.uid == currentUser.uid);
 		User fuser = _userFromFirebaseUser(user);
-		await DBService(uid: fuser.uid).updateUserData(fuser.email, authResult.additionalUserInfo.profile['name'],authResult.additionalUserInfo.profile['picture'],"GM");
+		await DBService().createUser(fuser.uid,fuser.email, authResult.additionalUserInfo.profile['name'],authResult.additionalUserInfo.profile['picture'],"GM");
 		return fuser;
 	}
 	Future signOut() async{

@@ -17,26 +17,23 @@ class _StarsState extends State<Stars> {
   @override
   Widget build(BuildContext context) {
     user = Provider.of<User>(context);
-    return StreamBuilder<User>(
-      stream: DBService(uid: user.uid).userdata,
-      builder: (context, snapshot) {
-        user = snapshot.data;
-        return Container(
-          child: RaisedButton(
-            child: Text("Prueba"),
-            //onPressed: ()async{JsonUpdate().updateFromJson("valencia_tripad.json",331);},
-            //onPressed: ()async{DBServiceN dbServiceN = DBServiceN(); dbServiceN.getUserFavorites(user.uid);},
-            onPressed: () async {DBServiceN dbServiceN = DBServiceN();dbServiceN.updateUserData(user.uid, user.email, "juancho", user.picture, user.service);},
-            /*onPressed: ()async{
-              DBServiceN dbServiceN = DBServiceN();
-              List<Restaurant> restaurants = await dbServiceN.getAllRestaurants();
-              for(Restaurant res in restaurants){
-                await dbServiceN.updateUserFavorites(user.uid, res);
-              }
-            },*/
-          ),
-        );
-      }
+    return Container(
+      child: RaisedButton(
+        child: Text("Prueba"),
+        onPressed: ()async{
+          for(int i = 1; i < 10; i++)
+            await JsonUpdate().updateFromJson("valencia_tripad.json",i);
+          },
+        //onPressed: ()async{DBService dbService = DBService(); dbService.getUserFavorites(user.uid);},
+        //onPressed: () async {DBService dbService = DBService();dbService.updateUserData(user.uid, user.email, "juancho", user.picture, user.service);},
+        /*onPressed: ()async{
+          DBService dbService = DBService();
+          List<Restaurant> restaurants = await dbService.getAllRestaurants();
+          for(Restaurant res in restaurants){
+            await dbService.updateUserFavorites(user.uid, res);
+          }
+        },*/
+      ),
     );
   }
 }

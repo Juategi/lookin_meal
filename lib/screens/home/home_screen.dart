@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:provider/provider.dart';
 
 
 
 class HomeScreen extends StatefulWidget {
 	Position myPos;
-	User user;
 	List<Restaurant> restaurants;
 	List<double> distances = List<double>();
-	HomeScreen({this.myPos,this.distances,this.restaurants, this.user});
+	HomeScreen({this.myPos,this.distances,this.restaurants});
   @override
-  _HomeScreenState createState() => _HomeScreenState(myPos: myPos, restaurants: restaurants,distances: distances, user:user);
+  _HomeScreenState createState() => _HomeScreenState(myPos: myPos, restaurants: restaurants,distances: distances);
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-	_HomeScreenState({this.myPos,this.distances,this.restaurants, this.user});
+	_HomeScreenState({this.myPos,this.distances,this.restaurants});
 	Position myPos;
 	User user;
 	List<Restaurant> restaurants;
@@ -49,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 	@override
   Widget build(BuildContext context) {
+		user = Provider.of<User>(context);
 		return Container(
 			child: ListView(
 				children: _initTiles(user)

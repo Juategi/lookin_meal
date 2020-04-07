@@ -37,7 +37,7 @@ class _EditProfileState extends State<EditProfile> {
                           onPressed: () async{
                             image = await _storageService.profileImagePicker(context);
                             if(image != null){
-                              await _dbService.updateUserImage(image,user.uid);
+                              await _dbService.updateUserData(user.uid, user.email, user.name, image, user.service);
                               if(user.picture != StaticStrings.defaultImage)
                                 await _storageService.removeFile(user.picture);
                               user.picture = image;
