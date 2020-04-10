@@ -11,6 +11,8 @@ class ProfileRestaurant extends StatefulWidget {
 class _ProfileRestaurantState extends State<ProfileRestaurant> {
 	Restaurant restaurant;
 	double distance;
+	String plato, section;
+	double precio;
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +135,39 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							await _dbService.addToUserFavorites(user.uid, restaurant);
 						}
 					},
-				)
+				),
+					Row(
+						children: <Widget>[
+							TextFormField(
+									onChanged: (value){
+										setState(() => plato = value);
+									},
+								initialValue: "plato",
+							),
+							SizedBox(width: 10,),
+							TextFormField(
+								onChanged: (value){
+									setState(() => section = value);
+								},
+								initialValue: "section",
+							),
+							SizedBox(width: 10,),
+							TextFormField(
+								onChanged: (value){
+									setState(() => precio = double.parse(value));
+								},
+								initialValue: "precio",
+							),
+							SizedBox(width: 10,),
+							RaisedButton(
+								child: Text("add"),
+								onPressed: ()async{
+									var result = await _dbService.addMenuEntry(restaurant.restaurant_id, plato, section, precio);
+									print(result);
+								},
+							),
+						],
+					)
       	],
       ),
     );

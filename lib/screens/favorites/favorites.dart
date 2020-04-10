@@ -14,7 +14,6 @@ class Favorites extends StatefulWidget {
 }
 
 class _FavoritesState extends State<Favorites> {
-	final DBService _dbService = DBService();
 	final GeolocationService _geolocationService = GeolocationService();
 	Position myPos;
 	User user;

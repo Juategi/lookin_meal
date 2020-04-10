@@ -222,4 +222,18 @@ class DBService {
 		print("Number of restaurants : ${restaurants.length}");
 		return restaurants;
 	}
+
+	Future addMenuEntry(String restaurant_id, String name, String section, double price) async{
+		Map body = {
+			"restaurant_id": restaurant_id,
+			"name": name,
+			"section": section,
+			"rating": 0.0,
+			"numReviews": 0,
+			"price" : price
+		};
+		var response = await http.post(
+				"https://lookinmeal-dcf41.firebaseapp.com/menus", body: body);
+		print(response.body);
+	}
 }
