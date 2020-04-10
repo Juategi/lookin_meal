@@ -228,9 +228,9 @@ class DBService {
 			"restaurant_id": restaurant_id,
 			"name": name,
 			"section": section,
-			"rating": 0.0,
-			"numReviews": 0,
-			"price" : price
+			"rating": "0.0",
+			"numReviews": "0",
+			"price" : price.toString()
 		};
 		var response = await http.post(
 				"https://lookinmeal-dcf41.firebaseapp.com/menus", body: body);

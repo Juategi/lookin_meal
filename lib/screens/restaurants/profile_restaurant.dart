@@ -22,7 +22,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   	User user = args.last;
 	final DBService _dbService = DBService();
     return Scaffold(
-      body: Column(
+      body: ListView(
       	children: <Widget>[
       		Container(
 				height: 230,
@@ -136,37 +136,32 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 						}
 					},
 				),
-					Row(
-						children: <Widget>[
-							TextFormField(
-									onChanged: (value){
-										setState(() => plato = value);
-									},
-								initialValue: "plato",
-							),
-							SizedBox(width: 10,),
-							TextFormField(
-								onChanged: (value){
-									setState(() => section = value);
-								},
-								initialValue: "section",
-							),
-							SizedBox(width: 10,),
-							TextFormField(
-								onChanged: (value){
-									setState(() => precio = double.parse(value));
-								},
-								initialValue: "precio",
-							),
-							SizedBox(width: 10,),
-							RaisedButton(
-								child: Text("add"),
-								onPressed: ()async{
-									var result = await _dbService.addMenuEntry(restaurant.restaurant_id, plato, section, precio);
-									print(result);
-								},
-							),
-						],
+					TextFormField(
+							onChanged: (value){
+								setState(() => plato = value);
+							},
+						initialValue: "plato",
+					),
+					SizedBox(width: 10,),
+					TextFormField(
+						onChanged: (value){
+							setState(() => section = value);
+						},
+						initialValue: "section",
+					),
+					SizedBox(width: 10,),
+					TextFormField(
+						onChanged: (value){
+							setState(() => precio = double.parse(value));
+						},
+						initialValue: "precio",
+					),
+					SizedBox(width: 10,),
+					RaisedButton(
+						child: Text("add"),
+						onPressed: ()async{
+							await _dbService.addMenuEntry(restaurant.restaurant_id, plato, section, precio);
+						},
 					)
       	],
       ),

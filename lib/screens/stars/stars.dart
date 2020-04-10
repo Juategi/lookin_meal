@@ -3,7 +3,6 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/json_update.dart';
-import 'package:lookinmeal/services/newdatabase.dart';
 import 'package:lookinmeal/services/search.dart';
 import 'package:provider/provider.dart';
 
