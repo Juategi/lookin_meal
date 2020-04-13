@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 
@@ -236,4 +237,45 @@ class DBService {
 				"https://lookinmeal-dcf41.firebaseapp.com/menus", body: body);
 		print(response.body);
 	}
+
+	Future<List<MenuEntry>> getMenu(String restaurant_id) async {
+		List<MenuEntry> menu = List<MenuEntry>();
+		var response = await http.get(
+				"https://lookinmeal-dcf41.firebaseapp.com/menus",
+				headers: {"restaurant_id": restaurant_id});
+		List<dynamic> result = json.decode(response.body);
+		print(result);
+		for(var element in result){
+			MenuEntry me = MenuEntry(
+				id: element['entry_id'].toString(),
+				restaurant_id: element['restaurant_id'].toString(),
+				name: element['name'],
+				section: element['section'],
+				rating: element['rating'].toDouble(),
+				numReviews: element['numreviews'],
+				price: element['price']
+			);
+			menu.add(me);
+		}
+		return menu;
+	}
+
+
+	Future addSection(String restaurant_id, String section) async{
+		var response = await http.post(
+				"https://lookinmeal-dcf41.firebaseapp.com/sections", body: {"restaurant_id" : restaurant_id, "sections" : section});
+		print(response.body);
+	}
+
+
+	Future<List<String>> getSections(String restaurant_id) async{
+		var response = await http.get(
+				"https://lookinmeal-dcf41.firebaseapp.com/sections", headers: {"restaurant_id" : restaurant_id});
+		List<dynamic> result = json.decode(response.body);
+		List<String> sections =  List<String>.from(result.first['sections']);
+		print(sections);
+		return sections;
+	}
+
+
 }
