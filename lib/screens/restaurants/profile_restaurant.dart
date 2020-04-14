@@ -165,7 +165,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							await _dbService.addMenuEntry(restaurant.restaurant_id, plato, section, precio);
 						},
 					)*/
-					Menu(sections: restaurant.sections, menu: restaurant.menu, currency: restaurant.currency,)
+					Menu(sections: restaurant.sections, menu: restaurant.menu, currency: restaurant.currency, user: user)
       	],
       ),
     );

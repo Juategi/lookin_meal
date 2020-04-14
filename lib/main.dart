@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
           "/signin": (context) => SignIn(),
           "/restaurant": (context) => ProfileRestaurant(),
           "/editprofile": (context) => EditProfile(),
+
         },
         home: Wrapper(),
         //initialRoute:"/",
