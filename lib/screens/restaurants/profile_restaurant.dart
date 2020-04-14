@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/screens/restaurants/menu.dart';
 import 'package:lookinmeal/services/database.dart';
 
 class ProfileRestaurant extends StatefulWidget {
@@ -135,7 +137,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							await _dbService.addToUserFavorites(user.uid, restaurant);
 						}
 					},
-				),
+				),/*
 					TextFormField(
 							onChanged: (value){
 								setState(() => plato = value);
@@ -162,7 +164,8 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 						onPressed: ()async{
 							await _dbService.addMenuEntry(restaurant.restaurant_id, plato, section, precio);
 						},
-					)
+					)*/
+					Menu(sections: restaurant.sections, menu: restaurant.menu, currency: restaurant.currency,)
       	],
       ),
     );

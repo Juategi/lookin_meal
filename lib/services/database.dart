@@ -6,22 +6,30 @@ import 'package:lookinmeal/models/user.dart';
 
 class DBService {
 
+	static User _user;
+
 	Future<User> getUserData(String id) async{
-		var response = await http.get(
-				"https://lookinmeal-dcf41.firebaseapp.com/users", headers: {"id": id});
-		print(response.body);
-		List<dynamic> result = json.decode(response.body);
-		List<Restaurant> favorites = await this.getUserFavorites(id);
-		User user = User(
-			uid: result.first["user_id"],
-			name: result.first["name"],
-			email: result.first["email"],
-			service: result.first["service"],
-			picture: result.first["image"],
-			favorites: await this.getUserFavorites(id)
-		);
-		print("User obtained: ${result.first}");
-		return user;
+		if(_user == null){
+			var response = await http.get(
+					"https://lookinmeal-dcf41.firebaseapp.com/users", headers: {"id": id});
+			print(response.body);
+			List<dynamic> result = json.decode(response.body);
+			List<Restaurant> favorites = await this.getUserFavorites(id);
+			User user = User(
+					uid: result.first["user_id"],
+					name: result.first["name"],
+					email: result.first["email"],
+					service: result.first["service"],
+					picture: result.first["image"],
+					favorites: await this.getUserFavorites(id)
+			);
+			print("User obtained: ${result.first}");
+			_user = user;
+			return user;
+		}
+		else {
+      return _user;
+    }
 	}
 
 	Future createUser(String id, String email, String name, String picture,
@@ -109,6 +117,7 @@ class DBService {
 					ta_id: element['ta_id'].toString(),
 					name: element['name'],
 					phone: element['phone'],
+					email: element['email'],
 					website: element['website'],
 					webUrl: element['weburl'],
 					address: element['address'],
@@ -125,7 +134,8 @@ class DBService {
 					schedule: schedule,
 					currency: element['currency'],
 					sections: element['sections'] == null ? null : List<String>.from(
-							element['sections'])
+							element['sections']),
+          menu: await getMenu(element['restaurant_id'].toString())
 			);
 			restaurants.add(restaurant);
 		}
@@ -137,7 +147,7 @@ class DBService {
 			String website, String webUrl, String address, String email, String city,
 			String country, double latitude,
 			double longitude, double rating, int numberViews, List<String> images,
-			List<String> types, Map<String, List<int>> schedule) async {
+			List<String> types, Map<String, List<int>> schedule, String currency) async {
 		Map body = {
 			"taid": taId ?? "",
 			"name": name,
@@ -156,7 +166,8 @@ class DBService {
 					List<String>().toString(),
 			"types": types.toString().replaceAll("[", "{").replaceAll("]", "}") ??
 					List<String>().toString(),
-			"schedule": jsonEncode(schedule) ?? Map<String, List<int>>().toString()
+			"schedule": jsonEncode(schedule) ?? Map<String, List<int>>().toString(),
+      "currency": currency
 		};
 		var response = await http.post(
 				"https://lookinmeal-dcf41.firebaseapp.com/restaurants", body: body);
@@ -200,6 +211,7 @@ class DBService {
 					ta_id: element['ta_id'].toString(),
 					name: element['name'],
 					phone: element['phone'],
+					email: element['email'],
 					website: element['website'],
 					webUrl: element['weburl'],
 					address: element['address'],
@@ -216,7 +228,8 @@ class DBService {
 					schedule: schedule,
 					currency: element['currency'],
 					sections: element['sections'] == null ? null : List<String>.from(
-							element['sections'])
+							element['sections']),
+          menu: await getMenu(element['restaurant_id'].toString())
 			);
 			restaurants.add(restaurant);
 		}
@@ -224,14 +237,15 @@ class DBService {
 		return restaurants;
 	}
 
-	Future addMenuEntry(String restaurant_id, String name, String section, double price) async{
+	Future addMenuEntry(String restaurant_id, String name, String section, double price, String image) async{
 		Map body = {
 			"restaurant_id": restaurant_id,
 			"name": name,
 			"section": section,
 			"rating": "0.0",
 			"numReviews": "0",
-			"price" : price.toString()
+			"price" : price.toString(),
+      "image" : image
 		};
 		var response = await http.post(
 				"https://lookinmeal-dcf41.firebaseapp.com/menus", body: body);
@@ -253,7 +267,8 @@ class DBService {
 				section: element['section'],
 				rating: element['rating'].toDouble(),
 				numReviews: element['numreviews'],
-				price: element['price']
+				price: element['price'],
+          image: element['image']
 			);
 			menu.add(me);
 		}
