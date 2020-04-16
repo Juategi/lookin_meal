@@ -21,7 +21,8 @@ class DBService {
 					email: result.first["email"],
 					service: result.first["service"],
 					picture: result.first["image"],
-					favorites: await this.getUserFavorites(id)
+					favorites: await this.getUserFavorites(id),
+					ratings: await this.getAllRating(id)
 			);
 			print("User obtained: ${result.first}");
 			_user = user;
@@ -290,6 +291,29 @@ class DBService {
 		List<String> sections =  List<String>.from(result.first['sections']);
 		print(sections);
 		return sections;
+	}
+
+	Future<double> getRating(String user_id, String entry_id) async{
+		var response = await http.get(
+				"https://lookinmeal-dcf41.firebaseapp.com/rating", headers: {"user_id" : user_id, "entry_id" : entry_id});
+		List<dynamic> result = json.decode(response.body);
+		if(result.length == 0)
+			return null;
+		print(result.first['rating']);
+		return result.first['rating'];
+	}
+
+	Future<List<num>> getAllRating(String user_id) async{
+		List<num> ratings = List<num>();
+		var response = await http.get(
+				"https://lookinmeal-dcf41.firebaseapp.com/allrating", headers: {"user_id" : user_id});
+		List<dynamic> result = json.decode(response.body);
+		for(var element in result){
+			ratings.add(element["entry_id"]);
+			ratings.add(element["rating"]);
+		}
+		print(ratings);
+		return ratings;
 	}
 
 

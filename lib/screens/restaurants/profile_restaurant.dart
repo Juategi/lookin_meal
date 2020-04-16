@@ -15,14 +15,14 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 	double distance;
 	String plato, section;
 	double precio;
-
   @override
   Widget build(BuildContext context) {
   	var args = List<Object>.of(ModalRoute.of(context).settings.arguments);
   	restaurant = args.first;
   	distance = args.elementAt(1);
   	User user = args.last;
-	final DBService _dbService = DBService();
+  	restaurant.email = "lavita@gmail.com";
+	  final DBService _dbService = DBService();
     return Scaffold(
       body: ListView(
       	children: <Widget>[
@@ -125,19 +125,23 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 					),
 				),
 				SizedBox(height: 20,),
-				RaisedButton(
-					child: Text("Fav"),
+				IconButton(
+					icon: user.favorites.contains(restaurant) ? Icon(Icons.favorite) :Icon(Icons.favorite_border),
+					iconSize: 50,
 					onPressed: ()async{
 						if(user.favorites.contains(restaurant)) {
 							user.favorites.remove(restaurant);
-							await _dbService.deleteFromUserFavorites(user.uid, restaurant);
+							_dbService.deleteFromUserFavorites(user.uid, restaurant);
 						}
 						else {
 							user.favorites.add(restaurant);
-							await _dbService.addToUserFavorites(user.uid, restaurant);
+							_dbService.addToUserFavorites(user.uid, restaurant);
 						}
+						setState(() {});
 					},
-				),/*
+
+				),
+					SizedBox(height: 40,),/*
 					TextFormField(
 							onChanged: (value){
 								setState(() => plato = value);

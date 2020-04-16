@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
+import 'package:lookinmeal/services/database.dart';
+import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
@@ -16,9 +19,28 @@ class _EntryRatingState extends State<EntryRating> {
   _EntryRatingState(this.entry, this.user);
   User user;
   MenuEntry entry;
-  double rate = 0.0;
+  double rate;
+  bool hasRate;
+  int pos;
+
+  @override
+  void initState(){
+    super.initState();
+    for(int i = 0; i < user.ratings.length; i+=2){
+      if(user.ratings.elementAt(i).toString() == entry.id){
+          rate = user.ratings.elementAt(i+1);
+          hasRate = true;
+          pos = i;
+          return;
+      }
+    }
+    rate = 0.0;
+    hasRate = false;
+  }
+
   @override
   Widget build(BuildContext context) {
+    AppLocalizations tr = AppLocalizations.of(context);
     return Container(
       child: Column(
         children: <Widget>[
@@ -35,6 +57,8 @@ class _EntryRatingState extends State<EntryRating> {
           SizedBox(height: 20,),
           Text(entry.name),
           SizedBox(height: 20,),
+          Text(hasRate ? "" : "Valora el plato!"),
+          SizedBox(height: 20,),
           SmoothStarRating(
             allowHalfRating: true,
             rating: rate,
@@ -47,6 +71,19 @@ class _EntryRatingState extends State<EntryRating> {
               });
             },
           ),
+          SizedBox(height: 20,),
+          RaisedButton(
+            child: Text(tr.translate("rate")),
+            onPressed: (){
+              if(hasRate){
+                //borrar y añadir si no ha cambiado
+                print(rate);
+              }
+              else{
+                //solo añadir
+              }
+            },
+          )
         ],
       ),
     );

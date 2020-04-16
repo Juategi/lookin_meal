@@ -20,5 +20,6 @@
   "app": "Find eat",
   "editinfo": "Edit profile",
   "save": "Save",
-  "norestaurants": "You don't have favorites, look for some restaurants and add them to the list!"
+  "norestaurants": "You don't have favorites, look for some restaurants and add them to the list!",
+  "rate": "Rate"
 }

@@ -23,7 +23,7 @@ class _StarsState extends State<Stars> {
           for(int i = 1; i < 10; i++)
             await JsonUpdate().updateFromJson("valencia_tripad.json",i);
           },*/
-        onPressed: ()async{DBService dbService = DBService(); dbService.getSections('1');},
+        onPressed: ()async{DBService dbService = DBService(); dbService.getAllRating(user.uid);},
         //onPressed: () async {DBService dbService = DBService();dbService.updateUserData(user.uid, user.email, "juancho", user.picture, user.service);},
         /*onPressed: ()async{
           DBService dbService = DBService();
