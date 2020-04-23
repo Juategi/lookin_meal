@@ -316,5 +316,16 @@ class DBService {
 		return ratings;
 	}
 
+	Future deleteRate(String user_id, String entry_id) async{
+    var response = await http.delete(
+        "https://lookinmeal-dcf41.firebaseapp.com/rating", headers: {"user_id" : user_id, "entry_id" : entry_id});
+    print(response.body);
+  }
+
+  Future addRate(String user_id, String entry_id, num rating) async{
+    var response = await http.post(
+        "https://lookinmeal-dcf41.firebaseapp.com/rating", body: {"user_id" : user_id, "entry_id" : entry_id, "rating" : rating.toString()});
+    print(response.body);
+  }
 
 }

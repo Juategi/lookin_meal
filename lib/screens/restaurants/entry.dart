@@ -22,13 +22,14 @@ class _EntryRatingState extends State<EntryRating> {
   double rate;
   bool hasRate;
   int pos;
+  final DBService _dbService = DBService();
 
   @override
   void initState(){
     super.initState();
     for(int i = 0; i < user.ratings.length; i+=2){
       if(user.ratings.elementAt(i).toString() == entry.id){
-          rate = user.ratings.elementAt(i+1);
+          rate = user.ratings.elementAt(i+1).toDouble();
           hasRate = true;
           pos = i;
           return;
@@ -76,12 +77,19 @@ class _EntryRatingState extends State<EntryRating> {
             child: Text(tr.translate("rate")),
             onPressed: (){
               if(hasRate){
-                //borrar y añadir si no ha cambiado
+                //borrar y añadir si no ha cambiado tanto en BD como en local
                 print(rate);
+                print(entry.id);
+                user.ratings.replaceRange(pos, pos, [rate]);
+                _dbService.deleteRate(user.uid, entry.id);
+                _dbService.addRate(user.uid, entry.id, rate);
               }
               else{
-                //solo añadir
+                user.ratings.add(num.parse(entry.id));
+                user.ratings.add(rate);
+                _dbService.addRate(user.uid, entry.id, rate);
               }
+              Navigator.pop(context);
             },
           )
         ],
