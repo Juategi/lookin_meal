@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/restaurant.dart';
@@ -265,7 +266,7 @@ class DBService {
 				restaurant_id: element['restaurant_id'].toString(),
 				name: element['name'],
 				section: element['section'],
-				rating: element['rating'] == null ? 0.0 : element['rating'].toDouble(),
+				rating: element['rating'] == null ? 0.0 : double.parse(element['rating'].toStringAsFixed(2)),
 				numReviews: int.parse(element['numreviews']),
 				price: element['price'],
           image: element['image']
@@ -316,8 +317,9 @@ class DBService {
   }
 
   Future addRate(String user_id, String entry_id, num rating) async{
+		final formatter = new DateFormat('yyyy-MM-dd');
     var response = await http.post(
-        "https://lookinmeal-dcf41.firebaseapp.com/rating", body: {"user_id" : user_id, "entry_id" : entry_id, "rating" : rating.toString()});
+        "https://lookinmeal-dcf41.firebaseapp.com/rating", body: {"user_id" : user_id, "entry_id" : entry_id, "rating" : rating.toString(), "ratedate" : formatter.format(DateTime.now())});
     print(response.body);
   }
 

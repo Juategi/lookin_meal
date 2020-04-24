@@ -21,7 +21,7 @@ class _EntryRatingState extends State<EntryRating> {
   _EntryRatingState(this.entry, this.user);
   User user;
   MenuEntry entry;
-  double rate;
+  double rate, oldRate;
   bool hasRate;
   Rating actual;
   final DBService _dbService = DBService();
@@ -33,6 +33,7 @@ class _EntryRatingState extends State<EntryRating> {
     for(Rating r in user.ratings){
       if(r.entry_id == entry.id){
           rate = r.rating;
+          oldRate = rate;
           hasRate = true;
           actual = r;
           return;
@@ -84,6 +85,9 @@ class _EntryRatingState extends State<EntryRating> {
                 actual.date = formatter.format(DateTime.now());
                 _dbService.deleteRate(user.uid, entry.id);
                 _dbService.addRate(user.uid, entry.id, rate);
+                double aux = (entry.rating*entry.numReviews + rate - oldRate)/(entry.numReviews);
+                entry.rating = double.parse(aux.toStringAsFixed(2));
+                Navigator.pop(context);
               }
               else{
                 user.ratings.add(Rating(
@@ -92,11 +96,11 @@ class _EntryRatingState extends State<EntryRating> {
                   date: formatter.format(DateTime.now())
                 ));
                 _dbService.addRate(user.uid, entry.id, rate);
+                double aux = (entry.rating*entry.numReviews + rate)/(entry.numReviews+1);
+                entry.rating = double.parse(aux.toStringAsFixed(2));
+                entry.numReviews += 1;
+                Navigator.pop(context);
               }
-              //actualizar numreviews y rating del plato total
-              entry.rating = (entry.rating*entry.numReviews + rate)/entry.numReviews+1;
-              entry.numReviews += 1;
-              Navigator.pop(context);
             },
           )
         ],
