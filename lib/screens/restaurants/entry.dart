@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
+import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/database.dart';
@@ -21,17 +23,18 @@ class _EntryRatingState extends State<EntryRating> {
   MenuEntry entry;
   double rate;
   bool hasRate;
-  int pos;
+  Rating actual;
   final DBService _dbService = DBService();
+  final formatter = new DateFormat('yyyy-MM-dd');
 
   @override
   void initState(){
     super.initState();
-    for(int i = 0; i < user.ratings.length; i+=2){
-      if(user.ratings.elementAt(i).toString() == entry.id){
-          rate = user.ratings.elementAt(i+1).toDouble();
+    for(Rating r in user.ratings){
+      if(r.entry_id == entry.id){
+          rate = r.rating;
           hasRate = true;
-          pos = i;
+          actual = r;
           return;
       }
     }
@@ -58,7 +61,7 @@ class _EntryRatingState extends State<EntryRating> {
           SizedBox(height: 20,),
           Text(entry.name),
           SizedBox(height: 20,),
-          Text(hasRate ? "" : "Valora el plato!"),
+          Text(hasRate ? actual.date : "Valora el plato!"),
           SizedBox(height: 20,),
           SmoothStarRating(
             allowHalfRating: true,
@@ -77,18 +80,22 @@ class _EntryRatingState extends State<EntryRating> {
             child: Text(tr.translate("rate")),
             onPressed: (){
               if(hasRate){
-                //borrar y añadir si no ha cambiado tanto en BD como en local
-                print(rate);
-                print(entry.id);
-                user.ratings.replaceRange(pos, pos, [rate]);
+                actual.rating = rate;
+                actual.date = formatter.format(DateTime.now());
                 _dbService.deleteRate(user.uid, entry.id);
                 _dbService.addRate(user.uid, entry.id, rate);
               }
               else{
-                user.ratings.add(num.parse(entry.id));
-                user.ratings.add(rate);
+                user.ratings.add(Rating(
+                  entry_id: entry.id,
+                  rating: rate,
+                  date: formatter.format(DateTime.now())
+                ));
                 _dbService.addRate(user.uid, entry.id, rate);
               }
+              //actualizar numreviews y rating del plato total
+              entry.rating = (entry.rating*entry.numReviews + rate)/entry.numReviews+1;
+              entry.numReviews += 1;
               Navigator.pop(context);
             },
           )

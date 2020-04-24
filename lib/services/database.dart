@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:lookinmeal/models/menu_entry.dart';
+import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 
@@ -243,8 +244,6 @@ class DBService {
 			"restaurant_id": restaurant_id,
 			"name": name,
 			"section": section,
-			"rating": "0.0",
-			"numReviews": "0",
 			"price" : price.toString(),
       "image" : image
 		};
@@ -266,8 +265,8 @@ class DBService {
 				restaurant_id: element['restaurant_id'].toString(),
 				name: element['name'],
 				section: element['section'],
-				rating: element['rating'].toDouble(),
-				numReviews: element['numreviews'],
+				rating: element['rating'] == null ? 0.0 : element['rating'].toDouble(),
+				numReviews: int.parse(element['numreviews']),
 				price: element['price'],
           image: element['image']
 			);
@@ -293,24 +292,18 @@ class DBService {
 		return sections;
 	}
 
-	Future<double> getRating(String user_id, String entry_id) async{
-		var response = await http.get(
-				"https://lookinmeal-dcf41.firebaseapp.com/rating", headers: {"user_id" : user_id, "entry_id" : entry_id});
-		List<dynamic> result = json.decode(response.body);
-		if(result.length == 0)
-			return null;
-		print(result.first['rating']);
-		return result.first['rating'];
-	}
 
-	Future<List<num>> getAllRating(String user_id) async{
-		List<num> ratings = List<num>();
+	Future<List<Rating>> getAllRating(String user_id) async{
+		List<Rating> ratings = List<Rating>();
 		var response = await http.get(
 				"https://lookinmeal-dcf41.firebaseapp.com/allrating", headers: {"user_id" : user_id});
 		List<dynamic> result = json.decode(response.body);
 		for(var element in result){
-			ratings.add(element["entry_id"]);
-			ratings.add(element["rating"]);
+      ratings.add(Rating(
+        entry_id: element["entry_id"].toString(),
+        rating: element["rating"].toDouble(),
+        date: element["ratedate"].toString().substring(0,10)
+      ));
 		}
 		print(ratings);
 		return ratings;
