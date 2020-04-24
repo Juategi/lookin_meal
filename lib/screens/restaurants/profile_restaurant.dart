@@ -21,7 +21,6 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   	restaurant = args.first;
   	distance = args.elementAt(1);
   	User user = args.last;
-  	restaurant.email = "lavita@gmail.com";
 	  final DBService _dbService = DBService();
     return Scaffold(
       body: ListView(

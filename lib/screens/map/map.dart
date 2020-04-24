@@ -53,6 +53,7 @@ class MapSampleState extends State<MapSample> {
 	}
 
 	void _loadMarkers() async{
+		//PASAR MISMOS RESTAURANTES QUE EN HOME
 		_restaurants = await _dbService.getAllRestaurants();
 		for(Restaurant restaurant in _restaurants){
 			_markers.add(Marker(
