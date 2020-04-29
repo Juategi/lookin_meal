@@ -10,6 +10,7 @@ import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/geolocation.dart';
+import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:lookinmeal/screens/map/map.dart';
@@ -53,7 +54,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
 
 	void _update()async{
-		restaurants = await _dbService.getAllRestaurants();
+		List<Restaurant> aux;
+		aux = await _dbService.getAllRestaurants();
+		Pool.addRestaurants(aux);
+		restaurants = Pool.restaurants;
 		myPos = await _geolocationService.getLocation();
 		for(Restaurant restaurant in restaurants){
 			distances.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));

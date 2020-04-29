@@ -5,8 +5,6 @@ import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/database.dart';
-import 'package:lookinmeal/shared/loading.dart';
-import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class EntryRating extends StatefulWidget {

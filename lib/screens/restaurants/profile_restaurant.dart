@@ -23,6 +23,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   	User user = args.last;
 	  final DBService _dbService = DBService();
     return Scaffold(
+			appBar: AppBar(),
       body: ListView(
       	children: <Widget>[
       		Container(
@@ -140,34 +141,14 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 					},
 
 				),
-					SizedBox(height: 40,),/*
-					TextFormField(
-							onChanged: (value){
-								setState(() => plato = value);
-							},
-						initialValue: "plato",
-					),
-					SizedBox(width: 10,),
-					TextFormField(
-						onChanged: (value){
-							setState(() => section = value);
-						},
-						initialValue: "section",
-					),
-					SizedBox(width: 10,),
-					TextFormField(
-						onChanged: (value){
-							setState(() => precio = double.parse(value));
-						},
-						initialValue: "precio",
-					),
+					SizedBox(height: 40,),
 					SizedBox(width: 10,),
 					RaisedButton(
-						child: Text("add"),
+						child: Text("Edit Menu"),
 						onPressed: ()async{
-							await _dbService.addMenuEntry(restaurant.restaurant_id, plato, section, precio);
+							Navigator.pushNamed(context, "/editmenu",arguments: restaurant);
 						},
-					)*/
+					),
 					Menu(sections: restaurant.sections, menu: restaurant.menu, currency: restaurant.currency, user: user)
       	],
       ),

@@ -5,6 +5,7 @@ import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/services/pool.dart';
 
 class DBService {
 
@@ -26,6 +27,7 @@ class DBService {
 					favorites: await this.getUserFavorites(id),
 					ratings: await this.getAllRating(id)
 			);
+			Pool.addRestaurants(user.favorites);
 			print("User obtained: ${result.first}");
 			_user = user;
 			return user;

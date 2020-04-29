@@ -4,9 +4,9 @@ import 'package:lookinmeal/screens/authenticate/log_in.dart';
 import 'package:lookinmeal/screens/authenticate/sign_in.dart';
 import 'package:lookinmeal/screens/home/home.dart';
 import 'package:lookinmeal/screens/profile/edit_profile.dart';
+import 'package:lookinmeal/screens/restaurants/edit_menu.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'services/app_localizations.dart';
-import 'models/user.dart';
 import 'screens/authenticate/wrapper.dart';
 import 'services/auth.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           "/signin": (context) => SignIn(),
           "/restaurant": (context) => ProfileRestaurant(),
           "/editprofile": (context) => EditProfile(),
-
+          "/editmenu" : (context) => EditMenu()
         },
         home: Wrapper(),
         //initialRoute:"/",
