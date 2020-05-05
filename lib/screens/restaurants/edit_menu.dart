@@ -45,7 +45,6 @@ class _EditMenuState extends State<EditMenu> {
     }
   }
 
-  //EL INITIALVALUE NO SE RESETEA CON EL SETSTATE, HAY QUE USAR UN CONTROLLER https://stackoverflow.com/questions/51715534/textformfield-flutter-not-changing-appropriately
   List<Widget> _initMenu(){
     print(sections);
     List<Widget> entries = new List<Widget>();
@@ -53,8 +52,9 @@ class _EditMenuState extends State<EditMenu> {
       entries.add(Container(
         child: Row(children: <Widget>[
           Flexible(
-              child: TextFormField(initialValue: section, onChanged: (v) {
+              child: TextFormField(controller: TextEditingController()..text = section, onChanged: (v) {
                 section = v;
+                //HAY QUE EDITAR LA LISTA EN SI Y LA SECCION DE LAS ENTRYS
               },)),
           IconButton(icon: Icon(Icons.delete), onPressed: (){
             bool flag = false;
@@ -95,10 +95,10 @@ class _EditMenuState extends State<EditMenu> {
             child: Card(
               child: Row(children: <Widget>[
                 Flexible(child: TextFormField(
-                  initialValue: entry.name, onChanged: (v) {entry.name = v;},)),
+                  controller: TextEditingController()..text = entry.name, onChanged: (v) {entry.name = v;},)),
                 Flexible(child: TextFormField(
                   keyboardType: TextInputType.number,
-                  initialValue: entry.price.toString(), onChanged: (v) {
+                  controller: TextEditingController()..text = entry.price.toString(), onChanged: (v) {
                   entry.price = double.parse(v);
                 },)),
                 FlatButton(onPressed: () async{
