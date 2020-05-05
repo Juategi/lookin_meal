@@ -5,6 +5,7 @@ import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/database.dart';
+import 'package:lookinmeal/shared/strings.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class EntryRating extends StatefulWidget {
@@ -52,7 +53,7 @@ class _EntryRatingState extends State<EntryRating> {
             width: 400,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(entry.image ?? "https://sevilla.abc.es/gurme/wp-content/uploads/sites/24/2012/01/comida-rapida-casera.jpg"),
+                image: NetworkImage(entry.image ?? StaticStrings.defaultEntry),
                 fit: BoxFit.fill,
               ),
             ),

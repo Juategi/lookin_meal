@@ -31,7 +31,7 @@ class _MenuState extends State<Menu> {
               Text(" ${entry.rating}"),
               Text("   (${entry.numReviews})"),
             ],),
-            trailing: Image.network(entry.image ?? "https://sevilla.abc.es/gurme/wp-content/uploads/sites/24/2012/01/comida-rapida-casera.jpg"),
+            trailing: entry.image == null? null : Image.network(entry.image),
               onTap: () {
                 showModalBottomSheet(context: context, builder: (BuildContext bc){
                   return EntryRating(entry, widget.user);

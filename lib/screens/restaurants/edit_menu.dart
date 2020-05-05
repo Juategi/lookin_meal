@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/services/database.dart';
+import 'package:lookinmeal/services/storage.dart';
+import 'package:lookinmeal/shared/strings.dart';
 
 class EditMenu extends StatefulWidget {
   @override
@@ -13,6 +15,7 @@ class _EditMenuState extends State<EditMenu> {
   List<String> sections;
   Restaurant restaurant;
   bool init = false;
+  final StorageService _storageService = StorageService();
 
   void _initList(){
     menu = List<MenuEntry>();
@@ -80,13 +83,20 @@ class _EditMenuState extends State<EditMenu> {
                   initialValue: entry.price.toString(), onChanged: (v) {
                   entry.price = double.parse(v);
                 },)),
-                FlatButton(onPressed: () {},
+                FlatButton(onPressed: () async{
+                  String image = await _storageService.entryImagePicker(context);
+                  if(image != null){
+                    entry.image = image;
+                    setState((){
+                    });
+                  }
+                },
                   child: Container(padding: EdgeInsets.only(
                       left: 36.0, bottom: 52.0, right: 36.0),
                     decoration: BoxDecoration(image: DecorationImage(
-                      image: Image
+                      image:  Image
                           .network(entry.image ??
-                          "https://sevilla.abc.es/gurme/wp-content/uploads/sites/24/2012/01/comida-rapida-casera.jpg")
+                          StaticStrings.defaultEntry)
                           .image,),),),),
                 IconButton(icon: Icon(Icons.delete), onPressed: (){
                   menu.remove(entry);
@@ -115,7 +125,9 @@ class _EditMenuState extends State<EditMenu> {
       sections.add("New");
       setState(() {});
       },), Text("Añadir seccion")],));
-    entries.add(RaisedButton(child: Text("Save"),));
+    entries.add(RaisedButton(child: Text("Save"),onPressed: (){
+      //Guardar menu y recogerlo de nuevo de la BD para actualizar info
+    },));
     this.setState((){});
     return entries;
   }
