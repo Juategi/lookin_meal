@@ -45,7 +45,9 @@ class _EditMenuState extends State<EditMenu> {
     }
   }
 
+  //EL INITIALVALUE NO SE RESETEA CON EL SETSTATE, HAY QUE USAR UN CONTROLLER https://stackoverflow.com/questions/51715534/textformfield-flutter-not-changing-appropriately
   List<Widget> _initMenu(){
+    print(sections);
     List<Widget> entries = new List<Widget>();
     for (String section in sections) {
       entries.add(Container(
@@ -58,7 +60,23 @@ class _EditMenuState extends State<EditMenu> {
             bool flag = false;
             for(MenuEntry entry in menu){
               if(entry.section == section){
-                //error hay entries debajo
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Alert'),
+                        content: Text('You can not delete a section with entries'),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text('OK'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          )
+                        ],
+                      );
+                    }
+                );
                 flag = true;
                 break;
               }
