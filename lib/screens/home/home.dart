@@ -34,6 +34,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	List<double> distances = List<double>();
 	int _selectedIndex = 0;
 	bool flag = true;
+	bool ready = false;
 
 	void _onItemTapped(int index) {
 		setState(()  {
@@ -62,6 +63,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		for(Restaurant restaurant in restaurants){
 			distances.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));
 		}
+		ready = true;
 	}
 
 	@override
@@ -83,11 +85,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		_update();
 		_timer();
 	}
+
 	@override
   Widget build(BuildContext context) {
 	  user = Provider.of<User>(context);
 	  AppLocalizations tr = AppLocalizations.of(context);
-	  if(restaurants != null && user != null) {
+	  if(ready && user != null) {
 	  	flag = false;
 			return Scaffold(
 						backgroundColor: Colors.brown[50],
