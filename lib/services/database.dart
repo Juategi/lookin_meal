@@ -332,10 +332,8 @@ class DBService {
 		var response = await http.put("https://lookinmeal-dcf41.firebaseapp.com/sections", body: {"restaurant_id": restaurant.restaurant_id, "sections":sections.toString().replaceAll("[", "").replaceAll("]", "")});
 		print(response.body);
 		for(MenuEntry entry in menu){
-			checkDeletes.add(entry.id);
 			if(entry.id == null){
 				entry.id = await addMenuEntry(entry.restaurant_id, entry.name, entry.section, entry.price, entry.image);
-				print(entry.id);
 			}
 			else{
 				for(MenuEntry entryR in restaurant.menu){
@@ -347,17 +345,19 @@ class DBService {
 										"name": entry.name,
 										"section": entry.section,
 										"price": entry.price.toString(),
-										"image": entry.image
+										"image": entry.image ?? ""
 									});
 							print("${response.body}    ${entry.name}");
 						}
 					}
 				}
 			}
+			checkDeletes.add(entry.id);
 		}
 		for(MenuEntry entryR in restaurant.menu){
 			if(!checkDeletes.contains(entryR.id)){
-				http.delete("https://lookinmeal-dcf41.firebaseapp.com/menus", headers: {"entry_id": entryR.id});
+				var response = await http.delete("https://lookinmeal-dcf41.firebaseapp.com/menus", headers: {"entry_id": entryR.id});
+				print(response.body);
 			}
 		}
 		restaurant.menu = menu;
