@@ -156,12 +156,8 @@ class _EditMenuState extends State<EditMenu> {
       setState(() {});
       },), Text("Añadir seccion")],));
     entries.add(RaisedButton(child: Text("Save"),onPressed: ()async{
-      //Guardar menu y recogerlo de nuevo de la BD para actualizar info
       for(MenuEntry entry in menu){
-        if(entry.price == 0.0)
-          entry.price = null;
-        else
-          entry.price = entry.price.toDouble();
+        entry.price = entry.price.toDouble();
         print("${entry.section} / ${entry.name} / ${entry.price}");
       }
       await DBService().uploadMenu(sections, menu, restaurant);

@@ -243,17 +243,18 @@ class DBService {
 		return restaurants;
 	}
 
-	Future addMenuEntry(String restaurant_id, String name, String section, double price, String image) async{
+	Future<String> addMenuEntry(String restaurant_id, String name, String section, double price, String image) async{
 		Map body = {
 			"restaurant_id": restaurant_id,
 			"name": name,
 			"section": section,
 			"price" : price.toString(),
-      "image" : image
+      "image" : image ?? ""
 		};
 		var response = await http.post(
 				"https://lookinmeal-dcf41.firebaseapp.com/menus", body: body);
-		print(response.body);
+		List<dynamic> result = json.decode(response.body);
+		return result.first["entry_id"].toString();
 	}
 
 	Future<List<MenuEntry>> getMenu(String restaurant_id) async {
@@ -327,27 +328,36 @@ class DBService {
   }
 
   Future uploadMenu(List<String> sections, List<MenuEntry> menu, Restaurant restaurant)async{
+		List<String> checkDeletes = List<String>();
 		var response = await http.put("https://lookinmeal-dcf41.firebaseapp.com/sections", body: {"restaurant_id": restaurant.restaurant_id, "sections":sections.toString().replaceAll("[", "").replaceAll("]", "")});
 		print(response.body);
 		for(MenuEntry entry in menu){
+			checkDeletes.add(entry.id);
 			if(entry.id == null){
-				addMenuEntry(entry.restaurant_id, entry.name, entry.section, entry.price, entry.image ?? StaticStrings.defaultEntry);
+				entry.id = await addMenuEntry(entry.restaurant_id, entry.name, entry.section, entry.price, entry.image);
+				print(entry.id);
 			}
 			else{
 				for(MenuEntry entryR in restaurant.menu){
 					if(entry.id == entryR.id) {
-						if (!(entry.price == entryR.price && entry.name == entryR.name && entry.section == entryR.section)) {
+						if (!(entry.price == entryR.price && entry.name == entryR.name && entry.section == entryR.section && entry.image == entryR.image)) {
 							var response = await http.put("https://lookinmeal-dcf41.firebaseapp.com/menus",
 									body: {
 										"entry_id": entry.id,
 										"name": entry.name,
 										"section": entry.section,
-										"price": entry.price.toString()
+										"price": entry.price.toString(),
+										"image": entry.image
 									});
 							print("${response.body}    ${entry.name}");
 						}
 					}
 				}
+			}
+		}
+		for(MenuEntry entryR in restaurant.menu){
+			if(!checkDeletes.contains(entryR.id)){
+				http.delete("https://lookinmeal-dcf41.firebaseapp.com/menus", headers: {"entry_id": entryR.id});
 			}
 		}
 		restaurant.menu = menu;
