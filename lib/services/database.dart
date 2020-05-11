@@ -29,6 +29,7 @@ class DBService {
 					ratings: await this.getAllRating(id)
 			);
 			Pool.addRestaurants(user.favorites);
+			user.favorites = Pool.getSubList(user.favorites);
 			print("User obtained: ${result.first}");
 			_user = user;
 			return user;
