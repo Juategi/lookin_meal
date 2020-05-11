@@ -271,7 +271,7 @@ class DBService {
 				section: element['section'],
 				rating: element['rating'] == null ? 0.0 : double.parse(element['rating'].toStringAsFixed(2)),
 				numReviews: int.parse(element['numreviews']),
-				price: element['price'],
+				price: element['price'].toDouble(),
           image: element['image']
 			);
 			menu.add(me);
@@ -327,7 +327,7 @@ class DBService {
   }
 
   Future uploadMenu(List<String> sections, List<MenuEntry> menu, Restaurant restaurant)async{
-		var response = await http.put("https://lookinmeal-dcf41.firebaseapp.com/sections", body: {"restaurant_id": restaurant.restaurant_id, "sections":sections});
+		var response = await http.put("https://lookinmeal-dcf41.firebaseapp.com/sections", body: {"restaurant_id": restaurant.restaurant_id, "sections":sections.toString().replaceAll("[", "").replaceAll("]", "")});
 		print(response.body);
 		for(MenuEntry entry in menu){
 			if(entry.id == null){
@@ -336,14 +336,15 @@ class DBService {
 			else{
 				for(MenuEntry entryR in restaurant.menu){
 					if(entry.id == entryR.id) {
-						if (!(entry.price == entryR.price && entry.name == entryR.name)) {
-							await http.put("https://lookinmeal-dcf41.firebaseapp.com/menus",
+						if (!(entry.price == entryR.price && entry.name == entryR.name && entry.section == entryR.section)) {
+							var response = await http.put("https://lookinmeal-dcf41.firebaseapp.com/menus",
 									body: {
 										"entry_id": entry.id,
 										"name": entry.name,
 										"section": entry.section,
-										"price": entry.price
+										"price": entry.price.toString()
 									});
+							print("${response.body}    ${entry.name}");
 						}
 					}
 				}

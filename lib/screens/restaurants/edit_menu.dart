@@ -63,7 +63,6 @@ class _EditMenuState extends State<EditMenu> {
                   }
                 }
                 section = v;
-                print(menu.first.section);
               },)),
           IconButton(icon: Icon(Icons.delete), onPressed: (){
             bool flag = false;
@@ -143,6 +142,8 @@ class _EditMenuState extends State<EditMenu> {
             restaurant_id: restaurant.restaurant_id,
             name: "New",
             price: 0,
+            rating: 0,
+            numReviews: 0
           ));
           setState(() {});
         },),
@@ -154,13 +155,17 @@ class _EditMenuState extends State<EditMenu> {
       sections.add("New");
       setState(() {});
       },), Text("Añadir seccion")],));
-    entries.add(RaisedButton(child: Text("Save"),onPressed: (){
+    entries.add(RaisedButton(child: Text("Save"),onPressed: ()async{
       //Guardar menu y recogerlo de nuevo de la BD para actualizar info
       for(MenuEntry entry in menu){
         if(entry.price == 0.0)
           entry.price = null;
+        else
+          entry.price = entry.price.toDouble();
         print("${entry.section} / ${entry.name} / ${entry.price}");
       }
+      await DBService().uploadMenu(sections, menu, restaurant);
+      Navigator.pop(context);
     },));
     this.setState((){});
     return entries;
