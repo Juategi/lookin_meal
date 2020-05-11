@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/services/database.dart';
@@ -48,13 +49,21 @@ class _EditMenuState extends State<EditMenu> {
   List<Widget> _initMenu(){
     print(sections);
     List<Widget> entries = new List<Widget>();
-    for (String section in sections) {
+    entries.add(Text("Nota: dejar precio a 0 o 0.0 para que el plato no tenga precio"));
+    for (int i = 0; i < sections.length; i++) {
+      String section = sections.elementAt(i);
       entries.add(Container(
         child: Row(children: <Widget>[
           Flexible(
               child: TextFormField(controller: TextEditingController()..text = section, onChanged: (v) {
+                sections[i] = v;
+                for(MenuEntry entry in menu){
+                  if(entry.section == section) {
+                    entry.section = v;
+                  }
+                }
                 section = v;
-                //HAY QUE EDITAR LA LISTA EN SI Y LA SECCION DE LAS ENTRYS
+                print(menu.first.section);
               },)),
           IconButton(icon: Icon(Icons.delete), onPressed: (){
             bool flag = false;
@@ -91,6 +100,8 @@ class _EditMenuState extends State<EditMenu> {
       entries.add(SizedBox(height: 30,));
       for (MenuEntry entry in menu) {
         if (entry.section == section) {
+          if(entry.price == null)
+            entry.price = 0.0;
           entries.add(Container(
             child: Card(
               child: Row(children: <Widget>[
@@ -98,8 +109,8 @@ class _EditMenuState extends State<EditMenu> {
                   controller: TextEditingController()..text = entry.name, onChanged: (v) {entry.name = v;},)),
                 Flexible(child: TextFormField(
                   keyboardType: TextInputType.number,
-                  controller: TextEditingController()..text = entry.price.toString(), onChanged: (v) {
-                  entry.price = double.parse(v);
+                  controller: TextEditingController()..text = entry.price.toString() , onChanged: (v) {
+                     entry.price = double.parse(v);
                 },)),
                 FlatButton(onPressed: () async{
                   String image = await _storageService.entryImagePicker(context);
@@ -145,6 +156,11 @@ class _EditMenuState extends State<EditMenu> {
       },), Text("Añadir seccion")],));
     entries.add(RaisedButton(child: Text("Save"),onPressed: (){
       //Guardar menu y recogerlo de nuevo de la BD para actualizar info
+      for(MenuEntry entry in menu){
+        if(entry.price == 0.0)
+          entry.price = null;
+        print("${entry.section} / ${entry.name} / ${entry.price}");
+      }
     },));
     this.setState((){});
     return entries;

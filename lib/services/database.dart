@@ -6,6 +6,7 @@ import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/pool.dart';
+import 'package:lookinmeal/shared/strings.dart';
 
 class DBService {
 
@@ -324,5 +325,32 @@ class DBService {
         "https://lookinmeal-dcf41.firebaseapp.com/rating", body: {"user_id" : user_id, "entry_id" : entry_id, "rating" : rating.toString(), "ratedate" : formatter.format(DateTime.now())});
     print(response.body);
   }
+
+  Future uploadMenu(List<String> sections, List<MenuEntry> menu, Restaurant restaurant)async{
+		var response = await http.put("https://lookinmeal-dcf41.firebaseapp.com/sections", body: {"restaurant_id": restaurant.restaurant_id, "sections":sections});
+		print(response.body);
+		for(MenuEntry entry in menu){
+			if(entry.id == null){
+				addMenuEntry(entry.restaurant_id, entry.name, entry.section, entry.price, entry.image ?? StaticStrings.defaultEntry);
+			}
+			else{
+				for(MenuEntry entryR in restaurant.menu){
+					if(entry.id == entryR.id) {
+						if (!(entry.price == entryR.price && entry.name == entryR.name)) {
+							await http.put("https://lookinmeal-dcf41.firebaseapp.com/menus",
+									body: {
+										"entry_id": entry.id,
+										"name": entry.name,
+										"section": entry.section,
+										"price": entry.price
+									});
+						}
+					}
+				}
+			}
+		}
+		restaurant.menu = menu;
+		restaurant.sections = sections;
+	}
 
 }
