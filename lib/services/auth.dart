@@ -14,7 +14,7 @@ class AuthService{
 	final FirebaseAuth _auth = FirebaseAuth.instance;
 
 	User _userFromFirebaseUser(FirebaseUser user){
-		return user != null ? User(uid: user.uid) : null;
+		return user != null ? User(uid: user.uid, email: user.email) : null;
 	}
 
 	Stream<String> get user {
@@ -93,7 +93,6 @@ class AuthService{
 		final FirebaseUser user = authResult.user;
 		assert(!user.isAnonymous);
 		assert(await user.getIdToken() != null);
-
 		final FirebaseUser currentUser = await _auth.currentUser();
 		assert(user.uid == currentUser.uid);
 		User fuser = _userFromFirebaseUser(user);

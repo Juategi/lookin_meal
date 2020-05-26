@@ -244,13 +244,14 @@ class DBService {
 		return restaurants;
 	}
 
-	Future<String> addMenuEntry(String restaurant_id, String name, String section, double price, String image) async{
+	Future<String> addMenuEntry(String restaurant_id, String name, String section, double price, String image, int pos) async{
 		Map body = {
 			"restaurant_id": restaurant_id,
 			"name": name,
 			"section": section,
 			"price" : price.toString(),
-      "image" : image ?? ""
+      "image" : image ?? "",
+			"pos" : pos.toString(),
 		};
 		var response = await http.post(
 				"https://lookinmeal-dcf41.firebaseapp.com/menus", body: body);
@@ -274,7 +275,8 @@ class DBService {
 				rating: element['rating'] == null ? 0.0 : double.parse(element['rating'].toStringAsFixed(2)),
 				numReviews: int.parse(element['numreviews']),
 				price: element['price'].toDouble(),
-          image: element['image']
+				image: element['image'],
+				pos: element['pos']
 			);
 			menu.add(me);
 		}
@@ -334,7 +336,7 @@ class DBService {
 		print(response.body);
 		for(MenuEntry entry in menu){
 			if(entry.id == null){
-				entry.id = await addMenuEntry(entry.restaurant_id, entry.name, entry.section, entry.price, entry.image);
+				entry.id = await addMenuEntry(entry.restaurant_id, entry.name, entry.section, entry.price, entry.image, entry.pos);
 			}
 			else{
 				for(MenuEntry entryR in restaurant.menu){
@@ -346,7 +348,8 @@ class DBService {
 										"name": entry.name,
 										"section": entry.section,
 										"price": entry.price.toString(),
-										"image": entry.image ?? ""
+										"image": entry.image ?? "",
+										"pos": entry.pos.toString()
 									});
 							print("${response.body}    ${entry.name}");
 						}

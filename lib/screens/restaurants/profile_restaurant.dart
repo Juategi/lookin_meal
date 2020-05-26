@@ -146,7 +146,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 					RaisedButton(
 						child: Text("Edit Menu"),
 						onPressed: ()async{
-							Navigator.pushNamed(context, "/editmenu",arguments: restaurant);
+							Navigator.pushNamed(context, "/editmenu",arguments: restaurant).then((value) => setState(() {}));
 						},
 					),
 					Menu(sections: restaurant.sections, menu: restaurant.menu, currency: restaurant.currency, user: user)

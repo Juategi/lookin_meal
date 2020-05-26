@@ -18,7 +18,7 @@ class _EditMenuState extends State<EditMenu> {
   bool init = false;
   final StorageService _storageService = StorageService();
 
-  void _initList(){
+  void _copyLists(){
     menu = List<MenuEntry>();
     sections = List<String>();
     if(restaurant.sections == null){
@@ -38,7 +38,8 @@ class _EditMenuState extends State<EditMenu> {
                 price: entry.price,
                 numReviews: entry.numReviews,
                 section: entry.section,
-                image: entry.image
+                image: entry.image,
+                pos: entry.pos
             ));
           }
         }
@@ -143,7 +144,8 @@ class _EditMenuState extends State<EditMenu> {
             name: "New",
             price: 0,
             rating: 0,
-            numReviews: 0
+            numReviews: 0,
+            pos: menu.length == 0? 0 :  menu.last.pos + 1
           ));
           setState(() {});
         },),
@@ -155,7 +157,33 @@ class _EditMenuState extends State<EditMenu> {
       sections.add("New");
       setState(() {});
       },), Text("Añadir seccion")],));
+
+    entries.add(RaisedButton(child: Text("Edit order"),onPressed: (){
+      Navigator.pushNamed(context, "/editorder",arguments: restaurant).then((value) => setState((){}));
+    },));
+
     entries.add(RaisedButton(child: Text("Save"),onPressed: ()async{
+      List temp = sections.toSet().toList();
+      if(temp.length < sections.length){
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Alert'),
+                content: Text('You can not have sections with the same name'),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('OK'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              );
+            }
+        );
+        return;
+      }
       for(MenuEntry entry in menu){
         entry.price = entry.price.toDouble();
         print("${entry.section} / ${entry.name} / ${entry.price}");
@@ -163,6 +191,7 @@ class _EditMenuState extends State<EditMenu> {
       await DBService().uploadMenu(sections, menu, restaurant);
       Navigator.pop(context);
     },));
+
     this.setState((){});
     return entries;
   }
@@ -171,7 +200,7 @@ class _EditMenuState extends State<EditMenu> {
   Widget build(BuildContext context) {
     restaurant = ModalRoute.of(context).settings.arguments;
     if(!init){
-      _initList();
+      _copyLists();
       init = true;
     }
     return Scaffold(

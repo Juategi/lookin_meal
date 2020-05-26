@@ -69,7 +69,7 @@ class _EntryRatingState extends State<EntryRating> {
             filledIconData: Icons.star,
             halfFilledIconData: Icons.star_half,
             size: 50,
-            onRatingChanged: (v) {
+            onRated: (v) {
               rate = v;
               setState(() {
               });

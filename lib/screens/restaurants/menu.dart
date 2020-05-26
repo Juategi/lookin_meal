@@ -19,6 +19,7 @@ class _MenuState extends State<Menu> {
   double rate = 0.0;
 
   List<Widget> _initList(BuildContext context){
+    widget.menu.sort((f,s)=> f.pos.compareTo(s.pos));
     List<Widget> entries = new List<Widget>();
     for(String section in widget.sections){
       entries.add(Text(section));
