@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/entry.dart';
+import 'package:lookinmeal/shared/alert.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class Menu extends StatefulWidget {
@@ -36,7 +37,7 @@ class _MenuState extends State<Menu> {
               onTap: () {
                 showModalBottomSheet(context: context, builder: (BuildContext bc){
                   return EntryRating(entry, widget.user);
-                }).then((value){setState(() {});});
+                }).then((value){setState(() {Alerts.toast("Rating saved");});});
               }
           ));
         }

@@ -121,8 +121,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 									offstage: _selectedIndex != 2,
 									child: TickerMode(
 											enabled: _selectedIndex == 2,
-											//child: MapSample()
-										child: Container(),
+											child: MapSample()
 									),
 								),
 								Offstage(

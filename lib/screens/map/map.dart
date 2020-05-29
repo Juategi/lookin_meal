@@ -5,8 +5,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
-import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/geolocation.dart';
+import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +22,6 @@ class MapSampleState extends State<MapSample> {
 	Completer<GoogleMapController> _controller = Completer();
 	final GeolocationService _geolocationService = GeolocationService();
 	BitmapDescriptor pinLocationIcon;
-	final DBService _dbService = DBService();
 	List<Restaurant> _restaurants;
 	Set<Marker> _markers = Set<Marker>();
 	CameraPosition _cameraPosition;
@@ -40,8 +39,6 @@ class MapSampleState extends State<MapSample> {
 		rootBundle.loadString('assets/map_style.txt').then((string) {
 			_mapStyle = string;
 		});
-
-
 	}
 
 	void _getUserLocation() async{
@@ -52,9 +49,8 @@ class MapSampleState extends State<MapSample> {
 		);
 	}
 
-	void _loadMarkers() async{
-		//PASAR MISMOS RESTAURANTES QUE EN HOME
-		_restaurants = await _dbService.getAllRestaurants();
+	void _loadMarkers(){
+		_restaurants = Pool.restaurants;
 		for(Restaurant restaurant in _restaurants){
 			_markers.add(Marker(
 				markerId: MarkerId(restaurant.restaurant_id),
@@ -72,7 +68,6 @@ class MapSampleState extends State<MapSample> {
 						Navigator.pushNamed(context, "/restaurant",arguments: args);
 					}
 				),
-
 			));
 		}
 	}
@@ -82,7 +77,7 @@ class MapSampleState extends State<MapSample> {
 		user = Provider.of<User>(context);
 		return _cameraPosition == null || _markers.length == 0 ? Loading() : Stack(
 		  children: <Widget>[
-				GoogleMap(
+		  	GoogleMap(
 					markers: _markers,
 					myLocationButtonEnabled: true,
 					myLocationEnabled: true,
@@ -91,7 +86,6 @@ class MapSampleState extends State<MapSample> {
 					onMapCreated: (GoogleMapController controller) async{
 						_controller.complete(controller);
 						controller.setMapStyle(_mapStyle);
-
 					},
 			  ),
 			],
@@ -105,7 +99,5 @@ class MapSampleState extends State<MapSample> {
 			zoom: 14.5,
 		);
 		controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
-
-
 	}
 }
