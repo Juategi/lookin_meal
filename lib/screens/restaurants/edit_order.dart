@@ -45,10 +45,10 @@ class _EditOrderState extends State<EditOrder> {
   List<Widget> _init(){
     List<Widget> entries = new List<Widget>();
     for(String section in sections){
-      entries.add(Card(key: ValueKey(section) ,child: ListTile(title: Text(section,), leading: Text("Section"),),));
+      entries.add(Card(key: ValueKey(section) ,child: ListTile(title: Text(section,), leading: Text("Section"), trailing: Icon(Icons.menu),),));
       for(MenuEntry entry in menu){
         if (entry.section == section) {
-          entries.add(Card(key: ValueKey(entry.id) ,child: ListTile(title: Text(entry.name),),));
+          entries.add(Card(key: ValueKey(entry.id) ,child: ListTile(title: Text(entry.name), trailing: Icon(Icons.menu),),));
         }
       }
     }

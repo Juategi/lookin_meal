@@ -22,6 +22,7 @@ class _EntryRatingState extends State<EntryRating> {
   MenuEntry entry;
   double rate, oldRate;
   bool hasRate;
+  bool indicator = false;
   Rating actual;
   final DBService _dbService = DBService();
   final formatter = new DateFormat('yyyy-MM-dd');
@@ -77,8 +78,10 @@ class _EntryRatingState extends State<EntryRating> {
           ),
           SizedBox(height: 20,),
           RaisedButton(
-            child: Text(tr.translate("rate")),
+            child: indicator ? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white),) : Text(tr.translate("rate")),
             onPressed: (){
+              indicator = true;
+              setState(() {});
               if(hasRate){
                 actual.rating = rate;
                 actual.date = formatter.format(DateTime.now());

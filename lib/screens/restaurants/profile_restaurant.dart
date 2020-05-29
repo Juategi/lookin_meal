@@ -4,6 +4,7 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/menu.dart';
 import 'package:lookinmeal/services/database.dart';
+import 'package:lookinmeal/shared/alert.dart';
 
 class ProfileRestaurant extends StatefulWidget {
   @override
@@ -146,7 +147,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 					RaisedButton(
 						child: Text("Edit Menu"),
 						onPressed: ()async{
-							Navigator.pushNamed(context, "/editmenu",arguments: restaurant).then((value) => setState(() {}));
+							Navigator.pushNamed(context, "/editmenu",arguments: restaurant).then((value) => setState(() {Alerts.toast("Menu saved");}));
 						},
 					),
 					Menu(sections: restaurant.sections, menu: restaurant.menu, currency: restaurant.currency, user: user)

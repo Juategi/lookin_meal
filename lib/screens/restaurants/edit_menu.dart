@@ -7,6 +7,7 @@ import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/strings.dart';
 
+
 class EditMenu extends StatefulWidget {
   @override
   _EditMenuState createState() => _EditMenuState();
@@ -18,6 +19,7 @@ class _EditMenuState extends State<EditMenu> {
   List<int> ids;
   Restaurant restaurant;
   bool init = false;
+  bool indicator = false;
   final StorageService _storageService = StorageService();
 
   void _copyLists(){
@@ -159,12 +161,22 @@ class _EditMenuState extends State<EditMenu> {
       setState(() {});
     },));
 
-    entries.add(RaisedButton(child: Text("Save"),onPressed: ()async{
+    entries.add(RaisedButton(child: indicator ? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white),) :
+    Text("Save"),onPressed: ()async{
       List temp = sections.toSet().toList();
       if(temp.length < sections.length){
         Alerts.dialog('You can not have sections with the same name', context);
         return;
       }
+      for(String section in sections){
+        if(int.tryParse(section) != null){
+          Alerts.dialog('You can not have sections with just numbers', context);
+          return;
+        }
+      }
+      indicator = true;
+      setState(() {
+      });
       for(MenuEntry entry in menu){
         entry.price = entry.price.toDouble();
         print("${entry.section} / ${entry.name} / ${entry.price}");

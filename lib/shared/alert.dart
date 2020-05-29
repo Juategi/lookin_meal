@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Alerts{
   static void dialog(String message, BuildContext context){
@@ -18,6 +19,18 @@ class Alerts{
             ],
           );
         }
+    );
+  }
+
+  static void toast(String message){
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 3,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 16.0
     );
   }
 }
