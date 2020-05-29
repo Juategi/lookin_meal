@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
-import 'package:lookinmeal/models/restaurant.dart';
-import 'package:lookinmeal/services/database.dart';
-import 'package:lookinmeal/services/storage.dart';
-import 'package:lookinmeal/shared/strings.dart';
+import 'package:lookinmeal/shared/alert.dart';
 
 class EditOrder extends StatefulWidget {
   @override
@@ -12,23 +8,22 @@ class EditOrder extends StatefulWidget {
 }
 
 class _EditOrderState extends State<EditOrder> {
-  List<MenuEntry> menu;
-  List<String> sections;
+  List<MenuEntry> menu,originalMenu;
+  List<String> sections,originalSections;
   bool init = false;
-  Restaurant restaurant;
   List<Widget> elements;
 
   void _copyLists(){
     menu = List<MenuEntry>();
     sections = List<String>();
-    if(restaurant.sections == null){
-      restaurant.sections = List<String>();
-      restaurant.menu = List<MenuEntry>();
+    if(originalSections == null){
+      originalSections = List<String>();
+      originalMenu = List<MenuEntry>();
     }
     else{
-      for (String section in restaurant.sections) {
+      for (String section in originalSections) {
         sections.add(section);
-        for (MenuEntry entry in restaurant.menu) {
+        for (MenuEntry entry in originalMenu) {
           if (entry.section == section) {
             menu.add(MenuEntry(
                 id: entry.id,
@@ -53,7 +48,7 @@ class _EditOrderState extends State<EditOrder> {
       entries.add(Card(key: ValueKey(section) ,child: ListTile(title: Text(section,), leading: Text("Section"),),));
       for(MenuEntry entry in menu){
         if (entry.section == section) {
-          entries.add(Card(key: ValueKey(entry.pos) ,child: ListTile(title: Text(entry.name),),));
+          entries.add(Card(key: ValueKey(entry.id) ,child: ListTile(title: Text(entry.name),),));
         }
       }
     }
@@ -68,23 +63,7 @@ class _EditOrderState extends State<EditOrder> {
       String key = _keyToString(elements.elementAt(oldIndex).key);
       if(!sections.contains(key)){ //Its an entry
         if(newIndex == 0){
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('Alert'),
-                  content: Text('You can not have an entry without section'),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text('OK'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    )
-                  ],
-                );
-              }
-          );
+          Alerts.dialog('You can not have en entry without section', context);
           return;
         }
         else{
@@ -94,23 +73,46 @@ class _EditOrderState extends State<EditOrder> {
             String section = _keyToString(elements.elementAt(i).key);
             if(sections.contains(section)){
               for(MenuEntry entry in menu){
-                if(entry.pos == int.parse(key)){
+                if(entry.id == key){
                   entry.section = section;
-                  _sortMenuPos(); // FALLA
+                  _sortMenuPos();
                 }
               }
+              break;
             }
           }
         }
       }
       else{ //Its a section
-
+        if(newIndex == 1 && !sections.contains(elements.elementAt(0).key.toString())){
+          Alerts.dialog('You can not have en entry without section', context);
+        }
+        else{
+          String section;
+          List<String> sectionsAux = List<String>();
+          Widget element = elements.removeAt(oldIndex);
+          elements.insert(newIndex, element);
+          for(int i = 0; i < elements.length; i++){
+            String key = _keyToString(elements.elementAt(i).key);
+            if(sections.contains(key)){
+              section = key;
+              sectionsAux.add(section);
+            }
+            else{
+              MenuEntry entry = _fromKeyToMenuIndex(key);
+              entry.section = section;
+            }
+          }
+          sections = sectionsAux;
+        }
       }
+      print("--------");
       for(MenuEntry entry in menu){
         print(entry.name);
         print(entry.section);
         print(entry.pos);
       }
+      print(sections);
     });
   }
 
@@ -122,15 +124,15 @@ class _EditOrderState extends State<EditOrder> {
     for(int i = 0; i < elements.length; i++){
       int key = int.tryParse(_keyToString(elements.elementAt(i).key));
       if(key != null){
-        MenuEntry entry = _fromKeyToMenuIndex(key);
+        MenuEntry entry = _fromKeyToMenuIndex(key.toString());
         entry.pos = i;
       }
     }
   }
 
-  MenuEntry _fromKeyToMenuIndex(int key){
+  MenuEntry _fromKeyToMenuIndex(String key){
     for(int i = 0; i < menu.length; i++){
-      if(menu.elementAt(i).pos == key){ //la pos cambia entonces no se puede comparar a la key que es constante
+      if(menu.elementAt(i).id == key){
         return menu.elementAt(i);
       }
     }
@@ -139,7 +141,9 @@ class _EditOrderState extends State<EditOrder> {
 
   @override
   Widget build(BuildContext context) {
-    restaurant = ModalRoute.of(context).settings.arguments;
+    List<Object> result = ModalRoute.of(context).settings.arguments;
+    originalSections = result.first;
+    originalMenu = result.last;
     if(!init){
       _copyLists();
       elements = _init();
@@ -147,7 +151,14 @@ class _EditOrderState extends State<EditOrder> {
     }
     return Scaffold(
       appBar: AppBar(),
-      body: ReorderableListView(children: elements, onReorder: _onReorder),
+      body: Column(
+        children: <Widget>[
+          Expanded(child: ReorderableListView(children: elements, onReorder: _onReorder)),
+          RaisedButton(child: Text("Save"),onPressed: ()async{
+            Navigator.pop(context, [sections, menu]);
+          })
+        ],
+      ),
     );
   }
 }

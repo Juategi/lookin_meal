@@ -1,7 +1,6 @@
 # lookin_meal
 
 TODO
-Orden menu, usar pos en menuentry
 Edit menu las secciones no pueden ser numeros
 Pasar al edit order los menu y sections temporales no el restaurante.
 

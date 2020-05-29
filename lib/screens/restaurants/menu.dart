@@ -26,7 +26,7 @@ class _MenuState extends State<Menu> {
       for(MenuEntry entry in widget.menu){
         if(section == entry.section){
           entries.add(ListTile(
-            title: Text("${entry.name}   ${entry.price} ${widget.currency}"),
+            title: Text("${entry.name}   ${entry.price == 0.0 ? "" :entry.price } ${entry.price == 0.0 ? "" : widget.currency }"),
             subtitle: Row(children: <Widget>[
               SmoothStarRating(allowHalfRating: true, rating: entry.rating, filledIconData: Icons.star, halfFilledIconData: Icons.star_half),
               Text(" ${entry.rating}"),

@@ -332,10 +332,14 @@ class DBService {
 
   Future uploadMenu(List<String> sections, List<MenuEntry> menu, Restaurant restaurant)async{
 		List<String> checkDeletes = List<String>();
+		List<String> notNews = List<String>();
+		for(MenuEntry entryR in restaurant.menu){
+			notNews.add(entryR.id);
+		}
 		var response = await http.put("https://lookinmeal-dcf41.firebaseapp.com/sections", body: {"restaurant_id": restaurant.restaurant_id, "sections":sections.toString().replaceAll("[", "").replaceAll("]", "")});
 		print(response.body);
 		for(MenuEntry entry in menu){
-			if(entry.id == null){
+			if(!notNews.contains(entry.id)){
 				entry.id = await addMenuEntry(entry.restaurant_id, entry.name, entry.section, entry.price, entry.image, entry.pos);
 			}
 			else{

@@ -4,6 +4,7 @@ import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/storage.dart';
+import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/strings.dart';
 
 class EditMenu extends StatefulWidget {
@@ -14,6 +15,7 @@ class EditMenu extends StatefulWidget {
 class _EditMenuState extends State<EditMenu> {
   List<MenuEntry> menu;
   List<String> sections;
+  List<int> ids;
   Restaurant restaurant;
   bool init = false;
   final StorageService _storageService = StorageService();
@@ -21,6 +23,7 @@ class _EditMenuState extends State<EditMenu> {
   void _copyLists(){
     menu = List<MenuEntry>();
     sections = List<String>();
+    ids = List<int>();
     if(restaurant.sections == null){
       restaurant.sections = List<String>();
       restaurant.menu = List<MenuEntry>();
@@ -41,14 +44,16 @@ class _EditMenuState extends State<EditMenu> {
                 image: entry.image,
                 pos: entry.pos
             ));
+            ids.add(int.parse(entry.id));
           }
         }
       }
     }
+    ids.sort();
   }
 
   List<Widget> _initMenu(){
-    print(sections);
+    menu.sort((f,s)=> f.pos.compareTo(s.pos));
     List<Widget> entries = new List<Widget>();
     entries.add(Text("Nota: dejar precio a 0 o 0.0 para que el plato no tenga precio"));
     for (int i = 0; i < sections.length; i++) {
@@ -56,7 +61,7 @@ class _EditMenuState extends State<EditMenu> {
       entries.add(Container(
         child: Row(children: <Widget>[
           Flexible(
-              child: TextFormField(controller: TextEditingController()..text = section, onChanged: (v) {
+              child: TextFormField(keyboardType: TextInputType.text, controller: TextEditingController()..text = section, onChanged: (v) {
                 sections[i] = v;
                 for(MenuEntry entry in menu){
                   if(entry.section == section) {
@@ -64,28 +69,12 @@ class _EditMenuState extends State<EditMenu> {
                   }
                 }
                 section = v;
-              },)),
+            },)),
           IconButton(icon: Icon(Icons.delete), onPressed: (){
             bool flag = false;
             for(MenuEntry entry in menu){
               if(entry.section == section){
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Alert'),
-                        content: Text('You can not delete a section with entries'),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text('OK'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          )
-                        ],
-                      );
-                    }
-                );
+                Alerts.dialog('You can not delete a section with entries', context);
                 flag = true;
                 break;
               }
@@ -137,8 +126,9 @@ class _EditMenuState extends State<EditMenu> {
         }
       }
       entries.add(Row(children: <Widget>[
-        IconButton(icon: Icon(Icons.add_circle_outline), onPressed: (){
+        IconButton(icon: Icon(Icons.add_circle_outline), onPressed: (){ //HAY QUE CREAR UN ID UNICO TEMPORAL
           menu.add(MenuEntry(
+            id: (ids.last + 1).toString(),
             section: section,
             restaurant_id: restaurant.restaurant_id,
             name: "New",
@@ -147,6 +137,7 @@ class _EditMenuState extends State<EditMenu> {
             numReviews: 0,
             pos: menu.length == 0? 0 :  menu.last.pos + 1
           ));
+          ids.add(ids.last + 1);
           setState(() {});
         },),
         Text("Añadir plato")
@@ -158,30 +149,20 @@ class _EditMenuState extends State<EditMenu> {
       setState(() {});
       },), Text("Añadir seccion")],));
 
-    entries.add(RaisedButton(child: Text("Edit order"),onPressed: (){
-      Navigator.pushNamed(context, "/editorder",arguments: restaurant).then((value) => setState((){}));
+    entries.add(RaisedButton(child: Text("Edit order"),onPressed: () async{
+      dynamic result = await Navigator.pushNamed(context, "/editorder",arguments:[sections,menu]);
+      if(result != null){
+        result = List.from(result);
+        sections = result.first;
+        menu = result.last;
+      }
+      setState(() {});
     },));
 
     entries.add(RaisedButton(child: Text("Save"),onPressed: ()async{
       List temp = sections.toSet().toList();
       if(temp.length < sections.length){
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('Alert'),
-                content: Text('You can not have sections with the same name'),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text('OK'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
-              );
-            }
-        );
+        Alerts.dialog('You can not have sections with the same name', context);
         return;
       }
       for(MenuEntry entry in menu){
