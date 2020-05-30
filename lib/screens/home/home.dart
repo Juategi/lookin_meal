@@ -57,7 +57,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	void _update()async{
 		myPos = await _geolocationService.getLocation();
 		List<Restaurant> aux;
-		aux = await _dbService.getNearRestaurants(myPos.latitude, myPos.longitude, 0.4, "Valencia"); //Faltaria obtener la ciudad dada tu posicion
+		aux = await _dbService.getNearRestaurants(myPos.latitude, myPos.longitude, 0.9, "Valencia"); //Faltaria obtener la ciudad dada tu posicion
 		Pool.addRestaurants(aux);
 		restaurants = Pool.restaurants;
 		for(Restaurant restaurant in restaurants){

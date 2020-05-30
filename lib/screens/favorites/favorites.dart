@@ -25,7 +25,7 @@ class _FavoritesState extends State<Favorites> {
 				Card(
 					child: ListTile(
 						title: Text(user.favorites.elementAt(i).name),
-						subtitle: Text(" 📍 ${distances.elementAt(i).toString()} Km"),
+						//subtitle: Text(" 📍 ${distances.elementAt(i).toString()} Km"),
 						leading: Image.network(user.favorites.elementAt(i).images.first, width: 100, height: 100,),
 						trailing: Icon(Icons.arrow_right),
 						onTap: () {
@@ -62,8 +62,8 @@ class _FavoritesState extends State<Favorites> {
   Widget build(BuildContext context) { //PROBLEMA CON EL CÁLCULO DE DISTANCIAS, LO MEJOR SERÁ HACERLO EN OTRO SITIO
 	  user = Provider.of<User>(context);
 		AppLocalizations tr = AppLocalizations.of(context);
-		_distances();
-		if(user.favorites.length == distances.length) {
+		//_distances();
+		if(true) {
 			return Container(
 				child: ListView(
 					children: _initTiles(tr)
