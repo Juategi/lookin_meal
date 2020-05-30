@@ -25,13 +25,13 @@ class _FavoritesState extends State<Favorites> {
 				Card(
 					child: ListTile(
 						title: Text(user.favorites.elementAt(i).name),
-						//subtitle: Text(" 📍 ${distances.elementAt(i).toString()} Km"),
+						subtitle: Text(" 📍 ${distances.elementAt(i).toString()} Km"),
 						leading: Image.network(user.favorites.elementAt(i).images.first, width: 100, height: 100,),
 						trailing: Icon(Icons.arrow_right),
 						onTap: () {
 							List<Object> args = List<Object>();
 							args.add(user.favorites.elementAt(i));
-							//args.add(distances.elementAt(i));
+							args.add(distances.elementAt(i));
 							args.add(3.0);
 							args.add(user);
 							Navigator.pushNamed(context, "/restaurant",arguments: args);
@@ -63,7 +63,7 @@ class _FavoritesState extends State<Favorites> {
 	  user = Provider.of<User>(context);
 		AppLocalizations tr = AppLocalizations.of(context);
 		_distances();
-		if(user.favorites != null) {
+		if(user.favorites.length == distances.length) {
 			return Container(
 				child: ListView(
 					children: _initTiles(tr)

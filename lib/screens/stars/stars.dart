@@ -19,10 +19,10 @@ class _StarsState extends State<Stars> {
     return Container(
       child: RaisedButton(
         child: Text("Prueba"),
-        /*onPressed: ()async{
-          for(int i = 1; i < 10; i++)
+        onPressed: ()async{
+          for(int i = 10; i < 150; i++)
             await JsonUpdate().updateFromJson("valencia_tripad.json",i);
-          },*/
+          },
         //onPressed: ()async{DBService dbService = DBService(); dbService.getAllRating(user.uid);},
         //onPressed: () async {DBService dbService = DBService();dbService.updateUserData(user.uid, user.email, "juancho", user.picture, user.service);},
         /*onPressed: ()async{
