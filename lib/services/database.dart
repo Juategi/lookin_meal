@@ -89,65 +89,20 @@ class DBService {
 		var response = await http.get(
 				"https://lookinmeal-dcf41.firebaseapp.com/userfavs",
 				headers: {"id": id});
-		List<Restaurant> restaurants = List<Restaurant>();
-		print(response.body);
-		List<dynamic> result = json.decode(response.body);
-		Map<String, List<int>> schedule;
-		for (dynamic element in result) {
-			schedule = {
-				'1': new List<int>(),
-				'2': new List<int>(),
-				'3': new List<int>(),
-				'4': new List<int>(),
-				'5': new List<int>(),
-				'6': new List<int>(),
-				'0': new List<int>()
-			};
-			if (element['schedule'] != null) {
-				dynamic result = json.decode(element['schedule'].toString()
-						.replaceAll("0:", '"0":')
-						.replaceAll("1:", '"1":')
-						.replaceAll("2:", '"2":')
-						.replaceAll("3:", '"3":')
-						.replaceAll("4:", '"4":')
-						.replaceAll("5:", '"5":')
-						.replaceAll("6:", '"6":')
-				);
-				for (int i = 0; i < 7; i++) {
-					for (dynamic hour in result[i.toString()].toList()) {
-						schedule[i.toString()].add(hour);
-					}
-				}
-			}
-			Restaurant restaurant = Restaurant(
-					restaurant_id: element['restaurant_id'].toString(),
-					ta_id: element['ta_id'].toString(),
-					name: element['name'],
-					phone: element['phone'],
-					email: element['email'],
-					website: element['website'],
-					webUrl: element['weburl'],
-					address: element['address'],
-					city: element['city'],
-					country: element['country'],
-					latitude: element['latitude'],
-					longitude: element['longitude'],
-					rating: double.parse(element['rating'].toString()),
-					numrevta: element['numrevta'],
-					images: element['images'] == null ? null : List<String>.from(
-							element['images']),
-					types: element['types'] == null ? null : List<String>.from(
-							element['types']),
-					schedule: schedule,
-					currency: element['currency'],
-					sections: element['sections'] == null ? null : List<String>.from(
-							element['sections']),
-          menu: await getMenu(element['restaurant_id'].toString())
-			);
-			restaurants.add(restaurant);
-		}
-		print("Number of favorite restaurants : ${restaurants.length}");
-		return restaurants;
+		return _parseResponse(response);
+	}
+
+	Future<List<Restaurant>> getAllRestaurants() async {
+		var response = await http.get(
+				"https://lookinmeal-dcf41.firebaseapp.com/allrestaurants");
+		return _parseResponse(response);
+	}
+
+	Future<List<Restaurant>> getNearRestaurants(double latitude, double longitude, double distance, String city) async {
+		var response = await http.get(
+				"https://lookinmeal-dcf41.firebaseapp.com/restaurants",
+				headers: {"latitude": latitude.toString(), "longitude": longitude.toString(), "distance": distance.toString(), "city": city});
+		return _parseResponse(response);
 	}
 
 	Future updateRestaurantData(String taId, String name, String phone,
@@ -181,132 +136,6 @@ class DBService {
 		print(response.body);
 	}
 
-	Future<List<Restaurant>> getAllRestaurants() async {
-		var response = await http.get(
-				"https://lookinmeal-dcf41.firebaseapp.com/allrestaurants");
-		List<Restaurant> restaurants = List<Restaurant>();
-		List<dynamic> result = json.decode(response.body);
-		Map<String, List<int>> schedule;
-		for (dynamic element in result) {
-			schedule = {
-				'1': new List<int>(),
-				'2': new List<int>(),
-				'3': new List<int>(),
-				'4': new List<int>(),
-				'5': new List<int>(),
-				'6': new List<int>(),
-				'0': new List<int>()
-			};
-			if (element['schedule'] != null) {
-				dynamic result = json.decode(element['schedule'].toString()
-						.replaceAll("0:", '"0":')
-						.replaceAll("1:", '"1":')
-						.replaceAll("2:", '"2":')
-						.replaceAll("3:", '"3":')
-						.replaceAll("4:", '"4":')
-						.replaceAll("5:", '"5":')
-						.replaceAll("6:", '"6":')
-				);
-				for (int i = 0; i < 7; i++) {
-					for (dynamic hour in result[i.toString()].toList()) {
-						schedule[i.toString()].add(hour);
-					}
-				}
-			}
-			Restaurant restaurant = Restaurant(
-					restaurant_id: element['restaurant_id'].toString(),
-					ta_id: element['ta_id'].toString(),
-					name: element['name'],
-					phone: element['phone'],
-					email: element['email'],
-					website: element['website'],
-					webUrl: element['weburl'],
-					address: element['address'],
-					city: element['city'],
-					country: element['country'],
-					latitude: element['latitude'],
-					longitude: element['longitude'],
-					rating: double.parse(element['rating'].toString()),
-					numrevta: element['numrevta'],
-					images: element['images'] == null ? null : List<String>.from(
-							element['images']),
-					types: element['types'] == null ? null : List<String>.from(
-							element['types']),
-					schedule: schedule,
-					currency: element['currency'],
-					sections: element['sections'] == null ? null : List<String>.from(
-							element['sections']),
-          menu: await getMenu(element['restaurant_id'].toString())
-			);
-			restaurants.add(restaurant);
-		}
-		print("Number of restaurants : ${restaurants.length}");
-		return restaurants;
-	}
-
-	Future<List<Restaurant>> getNearRestaurants(double latitude, double longitude, double distance, String city) async {
-		var response = await http.get(
-				"https://lookinmeal-dcf41.firebaseapp.com/restaurants",
-				headers: {"latitude": latitude.toString(), "longitude": longitude.toString(), "distance": distance.toString(), "city": city});
-		List<Restaurant> restaurants = List<Restaurant>();
-		List<dynamic> result = json.decode(response.body);
-		Map<String, List<int>> schedule;
-		for (dynamic element in result) {
-			schedule = {
-				'1': new List<int>(),
-				'2': new List<int>(),
-				'3': new List<int>(),
-				'4': new List<int>(),
-				'5': new List<int>(),
-				'6': new List<int>(),
-				'0': new List<int>()
-			};
-			if (element['schedule'] != null) {
-				dynamic result = json.decode(element['schedule'].toString()
-						.replaceAll("0:", '"0":')
-						.replaceAll("1:", '"1":')
-						.replaceAll("2:", '"2":')
-						.replaceAll("3:", '"3":')
-						.replaceAll("4:", '"4":')
-						.replaceAll("5:", '"5":')
-						.replaceAll("6:", '"6":')
-				);
-				for (int i = 0; i < 7; i++) {
-					for (dynamic hour in result[i.toString()].toList()) {
-						schedule[i.toString()].add(hour);
-					}
-				}
-			}
-			Restaurant restaurant = Restaurant(
-					restaurant_id: element['restaurant_id'].toString(),
-					ta_id: element['ta_id'].toString(),
-					name: element['name'],
-					phone: element['phone'],
-					email: element['email'],
-					website: element['website'],
-					webUrl: element['weburl'],
-					address: element['address'],
-					city: element['city'],
-					country: element['country'],
-					latitude: element['latitude'],
-					longitude: element['longitude'],
-					rating: double.parse(element['rating'].toString()),
-					numrevta: element['numrevta'],
-					images: element['images'] == null ? null : List<String>.from(
-							element['images']),
-					types: element['types'] == null ? null : List<String>.from(
-							element['types']),
-					schedule: schedule,
-					currency: element['currency'],
-					sections: element['sections'] == null ? null : List<String>.from(
-							element['sections']),
-					menu: await getMenu(element['restaurant_id'].toString())
-			);
-			restaurants.add(restaurant);
-		}
-		print("Number of restaurants : ${restaurants.length}");
-		return restaurants;
-	}
 
 	Future<String> addMenuEntry(String restaurant_id, String name, String section, double price, String image, int pos) async{
 		Map body = {
@@ -434,6 +263,67 @@ class DBService {
 		}
 		restaurant.menu = menu;
 		restaurant.sections = sections;
+	}
+
+	Future<List<Restaurant>> _parseResponse(var response) async{
+		List<Restaurant> restaurants = List<Restaurant>();
+		List<dynamic> result = json.decode(response.body);
+		Map<String, List<int>> schedule;
+		for (dynamic element in result) {
+			schedule = {
+				'1': new List<int>(),
+				'2': new List<int>(),
+				'3': new List<int>(),
+				'4': new List<int>(),
+				'5': new List<int>(),
+				'6': new List<int>(),
+				'0': new List<int>()
+			};
+			if (element['schedule'] != null) {
+				dynamic result = json.decode(element['schedule'].toString()
+						.replaceAll("0:", '"0":')
+						.replaceAll("1:", '"1":')
+						.replaceAll("2:", '"2":')
+						.replaceAll("3:", '"3":')
+						.replaceAll("4:", '"4":')
+						.replaceAll("5:", '"5":')
+						.replaceAll("6:", '"6":')
+				);
+				for (int i = 0; i < 7; i++) {
+					for (dynamic hour in result[i.toString()].toList()) {
+						schedule[i.toString()].add(hour);
+					}
+				}
+			}
+			Restaurant restaurant = Restaurant(
+					restaurant_id: element['restaurant_id'].toString(),
+					ta_id: element['ta_id'].toString(),
+					name: element['name'],
+					phone: element['phone'],
+					email: element['email'],
+					website: element['website'],
+					webUrl: element['weburl'],
+					address: element['address'],
+					city: element['city'],
+					country: element['country'],
+					latitude: element['latitude'],
+					longitude: element['longitude'],
+					rating: double.parse(element['rating'].toString()),
+					numrevta: element['numrevta'],
+					images: element['images'] == null ? null : List<String>.from(
+							element['images']),
+					types: element['types'] == null ? null : List<String>.from(
+							element['types']),
+					schedule: schedule,
+					currency: element['currency'],
+					sections: element['sections'] == null ? null : List<String>.from(
+							element['sections']),
+					menu: await getMenu(element['restaurant_id'].toString())
+		);
+		restaurants.add(restaurant);
+		}
+		print("Number of restaurants : ${restaurants.length}");
+		return restaurants;
 	}
 
 }
