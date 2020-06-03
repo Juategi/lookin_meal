@@ -5,8 +5,9 @@ import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
-import 'package:lookinmeal/shared/strings.dart';
+import 'package:geolocator/geolocator.dart';
 
 class DBService {
 
@@ -18,14 +19,15 @@ class DBService {
 					"https://lookinmeal-dcf41.firebaseapp.com/users", headers: {"id": id});
 			print(response.body);
 			List<dynamic> result = json.decode(response.body);
-			List<Restaurant> favorites = await this.getUserFavorites(id);
+			GeolocationService _geolocationService = GeolocationService();
+			Position myPos = await _geolocationService.getLocation();
 			User user = User(
 					uid: result.first["user_id"],
 					name: result.first["name"],
 					email: result.first["email"],
 					service: result.first["service"],
 					picture: result.first["image"],
-					favorites: await this.getUserFavorites(id),
+					favorites: await this.getUserFavorites(id, myPos.latitude, myPos.longitude),
 					ratings: await this.getAllRating(id)
 			);
 			Pool.addRestaurants(user.favorites);
@@ -85,10 +87,10 @@ class DBService {
 		print(response.body);
 	}
 
-	Future<List<Restaurant>> getUserFavorites(String id) async {
+	Future<List<Restaurant>> getUserFavorites(String id, latitude, longitude) async {
 		var response = await http.get(
 				"https://lookinmeal-dcf41.firebaseapp.com/userfavs",
-				headers: {"id": id});
+				headers: {"latitude": latitude.toString(), "longitude": longitude.toString(),"id": id});
 		return _parseResponse(response);
 	}
 
@@ -98,10 +100,10 @@ class DBService {
 		return _parseResponse(response);
 	}
 
-	Future<List<Restaurant>> getNearRestaurants(double latitude, double longitude, double distance, String city) async {
+	Future<List<Restaurant>> getNearRestaurants(double latitude, double longitude, String city) async {
 		var response = await http.get(
 				"https://lookinmeal-dcf41.firebaseapp.com/restaurants",
-				headers: {"latitude": latitude.toString(), "longitude": longitude.toString(), "distance": distance.toString(), "city": city});
+				headers: {"latitude": latitude.toString(), "longitude": longitude.toString(), "city": city});
 		return _parseResponse(response);
 	}
 
@@ -308,6 +310,7 @@ class DBService {
 					country: element['country'],
 					latitude: element['latitude'],
 					longitude: element['longitude'],
+					distance: double.parse(element['distance'].toStringAsFixed(2)),
 					rating: double.parse(element['rating'].toString()),
 					numrevta: element['numrevta'],
 					images: element['images'] == null ? null : List<String>.from(

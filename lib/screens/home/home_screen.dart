@@ -30,13 +30,12 @@ class _HomeScreenState extends State<HomeScreen> {
 				Card(
 					child: ListTile(
 						title: Text(restaurants.elementAt(i).name),
-						subtitle: Text(" 📍 ${distances.elementAt(i).toString()} Km"),
+						subtitle: Text(" 📍 ${restaurants.elementAt(i).distance} Km"),
 						leading: Image.network(restaurants.elementAt(i).images.first, width: 100, height: 100,),
 						trailing: Icon(Icons.arrow_right),
 						onTap: () {
 							List<Object> args = List<Object>();
 							args.add(restaurants.elementAt(i));
-							args.add(distances.elementAt(i));
 							args.add(user);
 							Navigator.pushNamed(context, "/restaurant",arguments: args);
 						}

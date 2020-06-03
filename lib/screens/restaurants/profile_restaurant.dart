@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/menu.dart';
@@ -13,14 +12,10 @@ class ProfileRestaurant extends StatefulWidget {
 
 class _ProfileRestaurantState extends State<ProfileRestaurant> {
 	Restaurant restaurant;
-	double distance;
-	String plato, section;
-	double precio;
   @override
   Widget build(BuildContext context) {
   	var args = List<Object>.of(ModalRoute.of(context).settings.arguments);
   	restaurant = args.first;
-  	distance = args.elementAt(1);
   	User user = args.last;
 	  final DBService _dbService = DBService();
     return Scaffold(
@@ -39,7 +34,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 			),
 				SizedBox(height: 20,),
 				Text(
-					"${restaurant.name}    $distance Km",
+					"${restaurant.name}    ${restaurant.distance} Km",
 					style: TextStyle(
 						color: Colors.grey[800],
 						fontWeight: FontWeight.w900,

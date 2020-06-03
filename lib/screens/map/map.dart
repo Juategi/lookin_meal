@@ -63,7 +63,6 @@ class MapSampleState extends State<MapSample> {
 						Position myPos = await _geolocationService.getLocation();
 						List<Object> args = List<Object>();
 						args.add(restaurant);
-						args.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));
 						args.add(user);
 						Navigator.pushNamed(context, "/restaurant",arguments: args);
 					}
