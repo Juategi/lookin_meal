@@ -4,21 +4,20 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:provider/provider.dart';
 
-
-
 class HomeScreen extends StatefulWidget {
 	Position myPos;
 	List<Restaurant> restaurants;
-	List<double> distances = List<double>();
-	HomeScreen({this.myPos,this.distances,this.restaurants});
+	String locality;
+	HomeScreen({this.myPos,this.locality,this.restaurants});
   @override
-  _HomeScreenState createState() => _HomeScreenState(myPos: myPos, restaurants: restaurants,distances: distances);
+  _HomeScreenState createState() => _HomeScreenState(myPos: myPos, restaurants: restaurants,locality: locality);
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-	_HomeScreenState({this.myPos,this.distances,this.restaurants});
+	_HomeScreenState({this.myPos,this.locality,this.restaurants});
 	Position myPos;
 	User user;
+	String locality;
 	List<Restaurant> restaurants;
 	List<double> distances = List<double>();
 

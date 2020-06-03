@@ -5,6 +5,7 @@ import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/database.dart';
+import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/strings.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
@@ -101,6 +102,7 @@ class _EntryRatingState extends State<EntryRating> {
                 double aux = (entry.rating*entry.numReviews + rate)/(entry.numReviews+1);
                 entry.rating = double.parse(aux.toStringAsFixed(2));
                 entry.numReviews += 1;
+                Alerts.toast("Rating saved");
                 Navigator.pop(context);
               }
             },

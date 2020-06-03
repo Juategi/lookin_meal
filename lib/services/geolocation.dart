@@ -1,4 +1,6 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:diacritic/diacritic.dart';
 
 class GeolocationService{
 
@@ -15,4 +17,10 @@ class GeolocationService{
 			return position;
 	}
 
+	Future<String> getCity(double latitude, double longitude)async{
+		final coordinates = new Coordinates(latitude, longitude);
+		var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+		var first = addresses.first;
+		return removeDiacritics(first.locality);
+	}
 }

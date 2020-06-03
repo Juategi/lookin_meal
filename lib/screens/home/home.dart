@@ -28,7 +28,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	final DBService _dbService = DBService();
 	final GeolocationService _geolocationService = GeolocationService();
 	User user;
-	String id;
+	String id, locality;
 	Position myPos;
 	List<Restaurant> restaurants;
 	List<double> distances = List<double>();
@@ -56,8 +56,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
 	void _update()async{
 		myPos = await _geolocationService.getLocation();
+		locality = await _geolocationService.getCity(myPos.latitude, myPos.longitude);
 		List<Restaurant> aux;
-		aux = await _dbService.getNearRestaurants(myPos.latitude, myPos.longitude, "VALENCIA"); //Faltaria obtener la ciudad dada tu posicion
+		aux = await _dbService.getNearRestaurants(myPos.latitude, myPos.longitude, locality.toUpperCase()); //Faltaria obtener la ciudad dada tu posicion
 		Pool.addRestaurants(aux);
 		restaurants = Pool.restaurants;
 		/*for(Restaurant restaurant in restaurants){
@@ -95,7 +96,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 			return Scaffold(
 						backgroundColor: Colors.brown[50],
 						appBar: AppBar(
-							title: Text(tr.translate("app")),
+							//title: Text(tr.translate("app")),
+							title: Text(locality),
 							backgroundColor: Colors.brown[400],
 							elevation: 0.0,
 						),
@@ -107,7 +109,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 										enabled: _selectedIndex == 0,
 										child: HomeScreen(myPos: myPos,
 												restaurants: restaurants,
-												distances: distances),
+												locality: locality),
 									),
 								),
 								Offstage(

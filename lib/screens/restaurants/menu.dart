@@ -37,7 +37,7 @@ class _MenuState extends State<Menu> {
               onTap: () {
                 showModalBottomSheet(context: context, builder: (BuildContext bc){
                   return EntryRating(entry, widget.user);
-                }).then((value){setState(() {Alerts.toast("Rating saved");});});
+                }).then((value){setState(() {});});
               }
           ));
         }
