@@ -29,7 +29,7 @@ class _MenuState extends State<Menu> {
           entries.add(ListTile(
             title: Text("${entry.name}   ${entry.price == 0.0 ? "" :entry.price } ${entry.price == 0.0 ? "" : widget.currency }"),
             subtitle: Row(children: <Widget>[
-              SmoothStarRating(allowHalfRating: true, rating: entry.rating, filledIconData: Icons.star, halfFilledIconData: Icons.star_half),
+              SmoothStarRating(isReadOnly: true, allowHalfRating: true, rating: entry.rating, filledIconData: Icons.star, halfFilledIconData: Icons.star_half),
               Text(" ${entry.rating}"),
               Text("   (${entry.numReviews})"),
             ],),

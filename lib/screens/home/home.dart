@@ -28,7 +28,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	final DBService _dbService = DBService();
 	final GeolocationService _geolocationService = GeolocationService();
 	User user;
-	String id, locality;
+	String id;
+	String locality;
 	Position myPos;
 	List<Restaurant> restaurants;
 	List<double> distances = List<double>();
@@ -56,7 +57,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
 	void _update()async{
 		myPos = await _geolocationService.getLocation();
-		locality = await _geolocationService.getCity(myPos.latitude, myPos.longitude);
+		locality = await _geolocationService.getLocality(myPos.latitude, myPos.longitude);
 		List<Restaurant> aux;
 		aux = await _dbService.getNearRestaurants(myPos.latitude, myPos.longitude, locality.toUpperCase()); //Faltaria obtener la ciudad dada tu posicion
 		Pool.addRestaurants(aux);
@@ -100,6 +101,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 							title: Text(locality),
 							backgroundColor: Colors.brown[400],
 							elevation: 0.0,
+							//bottom: TabBar(tabs: <Widget>[IconButton(icon: Icon(Icons.search), onPressed: (){},)],),
 						),
 						body: Stack(
 							children: <Widget>[
@@ -116,7 +118,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 									offstage: _selectedIndex != 1,
 									child: TickerMode(
 										enabled: _selectedIndex == 1,
-										child: Stars(),
+										child: Stars(locality: locality, myPos: myPos,),
 									),
 								),
 								Offstage(
@@ -151,8 +153,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 									title: Text(tr.translate("home")),
 								),
 								BottomNavigationBarItem(
-									icon: Icon(Icons.star),
-									title: Text("Stars"),
+									icon: Icon(Icons.search),
+									title: Text("Search"),
 								),
 								BottomNavigationBarItem(
 									icon: Icon(Icons.map),

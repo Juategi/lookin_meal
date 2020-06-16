@@ -17,7 +17,7 @@ class GeolocationService{
 			return position;
 	}
 
-	Future<String> getCity(double latitude, double longitude)async{
+	Future<String> getLocality(double latitude, double longitude)async{
 		final coordinates = new Coordinates(latitude, longitude);
 		var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
 		var first = addresses.first;

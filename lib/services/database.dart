@@ -12,11 +12,13 @@ import 'package:geolocator/geolocator.dart';
 class DBService {
 
 	static User _user;
+	//String api = "https://lookinmeal-dcf41.firebaseapp.com";//"http://localhost:5001/lookinmeal-dcf41/us-central1/app";//
+	String api = "http://88.15.140.153:3000";
 
 	Future<User> getUserData(String id) async{
 		if(_user == null){
 			var response = await http.get(
-					"https://lookinmeal-dcf41.firebaseapp.com/users", headers: {"id": id});
+					"$api/users", headers: {"id": id});
 			print(response.body);
 			List<dynamic> result = json.decode(response.body);
 			GeolocationService _geolocationService = GeolocationService();
@@ -51,7 +53,7 @@ class DBService {
 			"image": picture
 		};
 		var response = await http.post(
-				"https://lookinmeal-dcf41.firebaseapp.com/users", body: body);
+				"$api/users", body: body);
 		print(response.body);
 	}
 
@@ -65,7 +67,7 @@ class DBService {
 			"image": picture
 		};
 		var response = await http.put(
-				"https://lookinmeal-dcf41.firebaseapp.com/users", body: body);
+				"$api/users", body: body);
 		print(response.body);
 	}
 
@@ -73,7 +75,7 @@ class DBService {
 	Future deleteFromUserFavorites(String userId,
 			Restaurant restaurant) async {
 		var response = await http.delete(
-				"https://lookinmeal-dcf41.firebaseapp.com/userfavs", headers: {"user_id": userId,
+				"$api/userfavs", headers: {"user_id": userId,
 			"restaurant_id": restaurant.restaurant_id});
 		print(response.body);
 
@@ -82,27 +84,27 @@ class DBService {
 	Future addToUserFavorites(String userId,
 			Restaurant restaurant) async{
 		var response = await http.post(
-				"https://lookinmeal-dcf41.firebaseapp.com/userfavs",
+				"$api/userfavs",
 				body: {"user_id": userId, "restaurant_id": restaurant.restaurant_id});
 		print(response.body);
 	}
 
 	Future<List<Restaurant>> getUserFavorites(String id, latitude, longitude) async {
 		var response = await http.get(
-				"https://lookinmeal-dcf41.firebaseapp.com/userfavs",
+				"$api/userfavs",
 				headers: {"latitude": latitude.toString(), "longitude": longitude.toString(),"id": id});
 		return _parseResponse(response);
 	}
 
 	Future<List<Restaurant>> getAllRestaurants() async {
 		var response = await http.get(
-				"https://lookinmeal-dcf41.firebaseapp.com/allrestaurants");
+				"$api/allrestaurants");
 		return _parseResponse(response);
 	}
 
 	Future<List<Restaurant>> getNearRestaurants(double latitude, double longitude, String city) async {
 		var response = await http.get(
-				"https://lookinmeal-dcf41.firebaseapp.com/restaurants",
+				"$api/restaurants",
 				headers: {"latitude": latitude.toString(), "longitude": longitude.toString(), "city": city});
 		return _parseResponse(response);
 	}
@@ -134,7 +136,7 @@ class DBService {
       "currency": currency
 		};
 		var response = await http.post(
-				"https://lookinmeal-dcf41.firebaseapp.com/restaurants", body: body);
+				"$api/restaurants", body: body);
 		print(response.body);
 	}
 
@@ -149,7 +151,7 @@ class DBService {
 			"pos" : pos.toString(),
 		};
 		var response = await http.post(
-				"https://lookinmeal-dcf41.firebaseapp.com/menus", body: body);
+				"$api/menus", body: body);
 		List<dynamic> result = json.decode(response.body);
 		return result.first["entry_id"].toString();
 	}
@@ -157,7 +159,7 @@ class DBService {
 	Future<List<MenuEntry>> getMenu(String restaurant_id) async {
 		List<MenuEntry> menu = List<MenuEntry>();
 		var response = await http.get(
-				"https://lookinmeal-dcf41.firebaseapp.com/menus",
+				"$api/menus",
 				headers: {"restaurant_id": restaurant_id});
 		List<dynamic> result = json.decode(response.body);
 		print(result);
@@ -181,14 +183,14 @@ class DBService {
 
 	Future addSection(String restaurant_id, String section) async{
 		var response = await http.post(
-				"https://lookinmeal-dcf41.firebaseapp.com/sections", body: {"restaurant_id" : restaurant_id, "sections" : section});
+				"$api/sections", body: {"restaurant_id" : restaurant_id, "sections" : section});
 		print(response.body);
 	}
 
 
 	Future<List<String>> getSections(String restaurant_id) async{
 		var response = await http.get(
-				"https://lookinmeal-dcf41.firebaseapp.com/sections", headers: {"restaurant_id" : restaurant_id});
+				"$api/sections", headers: {"restaurant_id" : restaurant_id});
 		List<dynamic> result = json.decode(response.body);
 		List<String> sections =  List<String>.from(result.first['sections']);
 		print(sections);
@@ -199,7 +201,7 @@ class DBService {
 	Future<List<Rating>> getAllRating(String user_id) async{
 		List<Rating> ratings = List<Rating>();
 		var response = await http.get(
-				"https://lookinmeal-dcf41.firebaseapp.com/allrating", headers: {"user_id" : user_id});
+				"$api/allrating", headers: {"user_id" : user_id});
 		List<dynamic> result = json.decode(response.body);
 		for(var element in result){
       ratings.add(Rating(
@@ -214,14 +216,14 @@ class DBService {
 
 	Future deleteRate(String user_id, String entry_id) async{
     var response = await http.delete(
-        "https://lookinmeal-dcf41.firebaseapp.com/rating", headers: {"user_id" : user_id, "entry_id" : entry_id});
+        "$api/rating", headers: {"user_id" : user_id, "entry_id" : entry_id});
     print(response.body);
   }
 
   Future addRate(String user_id, String entry_id, num rating) async{
 		final formatter = new DateFormat('yyyy-MM-dd');
     var response = await http.post(
-        "https://lookinmeal-dcf41.firebaseapp.com/rating", body: {"user_id" : user_id, "entry_id" : entry_id, "rating" : rating.toString(), "ratedate" : formatter.format(DateTime.now())});
+        "$api/rating", body: {"user_id" : user_id, "entry_id" : entry_id, "rating" : rating.toString(), "ratedate" : formatter.format(DateTime.now())});
     print(response.body);
   }
 
@@ -231,7 +233,7 @@ class DBService {
 		for(MenuEntry entryR in restaurant.menu){
 			notNews.add(entryR.id);
 		}
-		var response = await http.put("https://lookinmeal-dcf41.firebaseapp.com/sections", body: {"restaurant_id": restaurant.restaurant_id, "sections":sections.toString().replaceAll("[", "").replaceAll("]", "")});
+		var response = await http.put("$api/sections", body: {"restaurant_id": restaurant.restaurant_id, "sections":sections.toString().replaceAll("[", "").replaceAll("]", "")});
 		print(response.body);
 		for(MenuEntry entry in menu){
 			if(!notNews.contains(entry.id)){
@@ -241,7 +243,7 @@ class DBService {
 				for(MenuEntry entryR in restaurant.menu){
 					if(entry.id == entryR.id) {
 						if (!(entry.price == entryR.price && entry.name == entryR.name && entry.section == entryR.section && entry.image == entryR.image)) {
-							var response = await http.put("https://lookinmeal-dcf41.firebaseapp.com/menus",
+							var response = await http.put("$api/menus",
 									body: {
 										"entry_id": entry.id,
 										"name": entry.name,
@@ -259,7 +261,7 @@ class DBService {
 		}
 		for(MenuEntry entryR in restaurant.menu){
 			if(!checkDeletes.contains(entryR.id)){
-				var response = await http.delete("https://lookinmeal-dcf41.firebaseapp.com/menus", headers: {"entry_id": entryR.id});
+				var response = await http.delete("$api/menus", headers: {"entry_id": entryR.id});
 				print(response.body);
 			}
 		}
@@ -270,6 +272,7 @@ class DBService {
 	Future<List<Restaurant>> _parseResponse(var response) async{
 		List<Restaurant> restaurants = List<Restaurant>();
 		List<dynamic> result = json.decode(response.body);
+		print(response.body);
 		Map<String, List<int>> schedule;
 		for (dynamic element in result) {
 			schedule = {
