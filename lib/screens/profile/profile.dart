@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
+import 'package:lookinmeal/services/json_update.dart';
 import 'package:provider/provider.dart';
 
 class Profile extends StatefulWidget {
@@ -29,6 +30,17 @@ class _ProfileState extends State<Profile> {
             icon: Icon(Icons.edit),
             label: Text(tr.translate("editinfo"))
         ): SizedBox(height: 0,),
+        SizedBox(height: 20,),
+        FlatButton.icon(
+            onPressed: () async {
+              for(int i = 1000; i <= 2000; i++ ){
+                print("interation $i");
+                await JsonUpdate().updateFromJson("valencia_tripad.json", i);
+              }
+            },
+            icon: Icon(Icons.pan_tool),
+            label: Text("prueba")
+        ),
         SizedBox(height: 20,),
         FlatButton.icon(
             onPressed: () async {

@@ -140,6 +140,12 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 					SizedBox(height: 40,),
 					SizedBox(width: 10,),
 					RaisedButton(
+						child: Text("Edit Restaurant"),
+						onPressed: ()async{
+							Navigator.pushNamed(context, "/editrestaurant",arguments: restaurant).then((value) => setState(() {}));
+						},
+					),
+					RaisedButton(
 						child: Text("Edit Menu"),
 						onPressed: ()async{
 							Navigator.pushNamed(context, "/editmenu",arguments: restaurant).then((value) => setState(() {}));

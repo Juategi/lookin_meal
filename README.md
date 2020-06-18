@@ -6,6 +6,8 @@ Motor de búsquedas. Notas: añadir aviso de 3 letras, aviso de nada encontrado.
 Mapa hacer carga dinamica de datos segun posicion camara (USAR BOTON DE BUSCAR EN ESTA ZONA o USAR onCameraIdle)
 El star rating no es preciso, habria que cambiarlo
 Rating total del restaurante por calcular
+Pagina de edicion del restaurante
 Adobe XD y control de memoria
+share y aviso de conexion
 
  

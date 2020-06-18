@@ -8,7 +8,7 @@ import 'package:lookinmeal/services/database.dart';
 class SearchService{
 
   //String api = "https://lookinmeal-dcf41.firebaseapp.com";//"http://localhost:5001/lookinmeal-dcf41/us-central1/app";//
-  String api = "http://88.15.140.153:3000";
+  String api = "http://88.15.140.219:3000";
 
   Future<List<Restaurant>> query(double latitude, double longitude, String locality, String query) async {
     query = "%" + query + "%";
