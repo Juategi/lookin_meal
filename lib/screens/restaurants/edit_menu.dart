@@ -104,7 +104,7 @@ class _EditMenuState extends State<EditMenu> {
                      entry.price = double.parse(v);
                 },)),
                 FlatButton(onPressed: () async{
-                  String image = await _storageService.entryImagePicker(context);
+                  String image = await _storageService.uploadImage(context,"meals");
                   if(image != null){
                     entry.image = image;
                     setState((){

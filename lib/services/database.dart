@@ -13,7 +13,7 @@ class DBService {
 
 	static User _user;
 	//String api = "https://lookinmeal-dcf41.firebaseapp.com";//"http://localhost:5001/lookinmeal-dcf41/us-central1/app";//
-	String api = "http://88.15.140.219:3000";
+	String api = "http://37.14.57.15:3000";
 
 	Future<User> getUserData(String id) async{
 		if(_user == null){

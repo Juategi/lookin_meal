@@ -35,7 +35,7 @@ class _EditProfileState extends State<EditProfile> {
                 Container(
                       child: FlatButton(
                           onPressed: () async{
-                            image = await _storageService.profileImagePicker(context);
+                            image = await _storageService.uploadImage(context,"images");
                             if(image != null){
                               await _dbService.updateUserData(user.uid, user.email, user.name, image, user.service);
                               if(user.picture != StaticStrings.defaultImage)

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/screens/restaurants/edit_images.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/alert.dart';
@@ -326,7 +327,15 @@ class _EditRestaurantState extends State<EditRestaurant> {
               Row(children: _initRow(0),),
               SizedBox(height: 25,),
             ],),
-          ),)
+          ),),
+        RaisedButton(
+          child: Text("Edit photos"),
+          onPressed: ()async{
+            showModalBottomSheet(context: context, builder: (BuildContext bc){
+              return EditImages(restaurant: restaurant,);
+            }).then((value){setState(() {});});
+          },
+        ),
       ],)
     );
   }
@@ -370,43 +379,3 @@ class _EditRestaurantState extends State<EditRestaurant> {
     return items;
   }
 }
-
-/*
-          Expanded(child:
-          GridView.count(
-              crossAxisCount: 5,
-              childAspectRatio: 1.0,
-              padding: const EdgeInsets.all(4.0),
-              mainAxisSpacing: 2.0,
-              crossAxisSpacing: 2.0,
-              children: restaurant.images.map((String url) {
-                return GridTile(
-                    child: FlatButton(
-                      onPressed: (){},
-                      padding: EdgeInsets.all(0.0),
-                      child: Container(
-                          constraints: BoxConstraints.expand(
-                              height: 130.0,
-                              width: 130.0
-                          ),
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: Image.network(url).image,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          child: Stack(
-                            children: <Widget>[
-                              Positioned(
-                                right: 25,
-                                bottom: 3.0,
-                                child: Icon(Icons.delete, size: 20, color: Colors.black45,),
-                              ),
-                            ],
-                          )
-                      ),
-                    )
-                );
-              }).toList()),
-        ),
- */
