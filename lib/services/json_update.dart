@@ -62,7 +62,7 @@ class JsonUpdate{
 			images.add(image);
 		}
 		images = images.toSet().toList();
-		dynamic result = await _dbService.updateRestaurantData(id,name, phone, website, webUrl, address, email, city, country, latitude, longitude, rating, numberViews, images, types, schedule, "€");
+		dynamic result = await _dbService.uploadRestaurantData(id,name, phone, website, webUrl, address, email, city, country, latitude, longitude, rating, numberViews, images, types, schedule, "€");
 		print("Update completed ");
 	}
 }

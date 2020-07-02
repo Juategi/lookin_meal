@@ -29,7 +29,6 @@ class _StarsState extends State<Stars> {
   _StarsState({this.myPos,this.locality});
 
   Future<List<Restaurant>> _search(String query) async{
-    print(query);
     List<Restaurant> list = await SearchService().query(myPos.latitude, myPos.longitude, locality, query);
     if(list.length == 0)
       error = "No results";

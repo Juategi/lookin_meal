@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/screens/restaurants/edit_images.dart';
 import 'package:lookinmeal/screens/restaurants/menu.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/shared/alert.dart';
@@ -143,6 +144,14 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 						child: Text("Edit Restaurant"),
 						onPressed: ()async{
 							Navigator.pushNamed(context, "/editrestaurant",arguments: restaurant).then((value) => setState(() {}));
+						},
+					),
+					RaisedButton(
+						child: Text("Edit photos"),
+						onPressed: ()async{
+							showModalBottomSheet(context: context, builder: (BuildContext bc){
+								return EditImages(restaurant: restaurant,);
+							}).then((value){setState(() {});});
 						},
 					),
 					RaisedButton(

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 
 class StorageService{
+   final _uuid = Uuid();
 
   Future<String> uploadImage(BuildContext context, String folder) async{
     File file;
@@ -16,6 +18,7 @@ class StorageService{
       if(file == null)
         return null;
       fileName = path.basename(file.path);
+      fileName = fileName.split(".").first + _uuid.v4() + "." + fileName.split(".").last;
       print(fileName);
       url = await _uploadImage(file, fileName, folder);
       print(url);

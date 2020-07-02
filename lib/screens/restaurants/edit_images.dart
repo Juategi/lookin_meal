@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/storage.dart';
+import 'package:lookinmeal/shared/alert.dart';
 import 'package:reorderables/reorderables.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -15,8 +17,11 @@ class _EditImagesState extends State<EditImages> {
   _EditImagesState({this.restaurant});
   Restaurant restaurant;
   List<String> images;
+  bool loading;
+
   @override
   void initState() {
+    loading = false;
     images = List<String>();
     for(String image in restaurant.images){
       images.add(image);
@@ -61,7 +66,7 @@ class _EditImagesState extends State<EditImages> {
     }).toList();
     items.add(
       GridTile(
-        child: IconButton(
+        child: images.length >= 30? Container(height: 0,): IconButton(
           icon: Icon(Icons.add_circle_outline, color: Colors.grey[500],),
           iconSize: 73,
           onPressed: ()async{
@@ -94,13 +99,18 @@ class _EditImagesState extends State<EditImages> {
           children: _initItems()),
       ),
       //SizedBox(height: 20,),
-      Row(mainAxisAlignment: MainAxisAlignment.center,
+      loading? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),) :Row(mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
         IconButton(
           icon: FaIcon(FontAwesomeIcons.check, size: 50,),
           iconSize: 73,
-          onPressed: (){
+          onPressed: ()async{
+            setState(() {
+              loading = true;
+            });
             restaurant.images = images;
+            await DBService().updateRestaurantImages(restaurant.restaurant_id,restaurant.images);
+            Alerts.toast("images updated!");
             Navigator.pop(context);
           },
         ),
