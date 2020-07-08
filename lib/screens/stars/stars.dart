@@ -7,6 +7,7 @@ import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/home/home.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/json_update.dart';
+import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/services/search.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
@@ -67,6 +68,8 @@ class _StarsState extends State<Stars> {
                           trailing: Icon(Icons.arrow_right),
                           onTap: () {
                             List<Object> args = List<Object>();
+                            Pool.addRestaurants([restaurant]);
+                            restaurant = Pool.getSubList([restaurant]).first;
                             args.add(restaurant);
                             args.add(user);
                             Navigator.pushNamed(context, "/restaurant",arguments: args);

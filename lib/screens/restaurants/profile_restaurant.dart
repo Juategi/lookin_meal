@@ -13,11 +13,30 @@ class ProfileRestaurant extends StatefulWidget {
 
 class _ProfileRestaurantState extends State<ProfileRestaurant> {
 	Restaurant restaurant;
+
+	void _loadMenu()async{
+		restaurant.menu = await DBService().getMenu(restaurant.restaurant_id);
+	}
+
+	void _timer() {
+		if(restaurant.menu == null) {
+			Future.delayed(Duration(seconds: 2)).then((_) {
+				setState(() {
+					print("Loading menu...");
+				});
+				_timer();
+			});
+		}
+	}
+
   @override
   Widget build(BuildContext context) {
   	var args = List<Object>.of(ModalRoute.of(context).settings.arguments);
   	restaurant = args.first;
-  	User user = args.last;
+		_timer();
+  	if(restaurant.menu == null)
+  		_loadMenu();
+		User user = args.last;
 	  final DBService _dbService = DBService();
     return Scaffold(
 			appBar: AppBar(),
@@ -160,7 +179,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							Navigator.pushNamed(context, "/editmenu",arguments: restaurant).then((value) => setState(() {}));
 						},
 					),
-					Menu(sections: restaurant.sections, menu: restaurant.menu, currency: restaurant.currency, user: user)
+					restaurant.menu == null? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),) : Menu(sections: restaurant.sections, menu: restaurant.menu, currency: restaurant.currency, user: user)
       	],
       ),
     );

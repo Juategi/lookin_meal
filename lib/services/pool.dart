@@ -11,6 +11,7 @@ class Pool{
         ids.add(r.restaurant_id);
       }
     }
+    print(restaurants.length);
   }
 
   static List<Restaurant> getSubList(List<Restaurant> list){

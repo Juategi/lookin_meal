@@ -80,16 +80,17 @@ class _EntryRatingState extends State<EntryRating> {
           SizedBox(height: 20,),
           RaisedButton(
             child: indicator ? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white),) : Text(tr.translate("rate")),
-            onPressed: (){
+            onPressed: ()async{
               indicator = true;
               setState(() {});
               if(hasRate){
                 actual.rating = rate;
                 actual.date = formatter.format(DateTime.now());
-                _dbService.deleteRate(user.uid, entry.id);
+                await _dbService.deleteRate(user.uid, entry.id);
                 _dbService.addRate(user.uid, entry.id, rate);
                 double aux = (entry.rating*entry.numReviews + rate - oldRate)/(entry.numReviews);
                 entry.rating = double.parse(aux.toStringAsFixed(2));
+                Alerts.toast("Rating saved");
                 Navigator.pop(context);
               }
               else{

@@ -347,7 +347,7 @@ class DBService {
 					currency: element['currency'],
 					sections: element['sections'] == null ? null : List<String>.from(
 							element['sections']),
-					menu: await getMenu(element['restaurant_id'].toString())
+					//menu: await getMenu(element['restaurant_id'].toString())
 		);
 		restaurants.add(restaurant);
 		}
