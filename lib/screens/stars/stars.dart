@@ -4,12 +4,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
-import 'package:lookinmeal/screens/home/home.dart';
-import 'package:lookinmeal/services/database.dart';
-import 'package:lookinmeal/services/json_update.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/services/search.dart';
-import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
 
 class Stars extends StatefulWidget {
@@ -107,6 +103,13 @@ class _StarsState extends State<Stars> {
                     Text("Restaurante", style: TextStyle(color: restaurant ? Colors.blue : Colors.black),),
                     Text("Plato", style: TextStyle(color: !restaurant ? Colors.blue : Colors.black))
                   ],),
+                SizedBox(width: 30,),
+                IconButton(
+                  icon: Icon(Icons.settings),
+                  onPressed: (){
+                    Navigator.pushNamed(context, "/options", arguments: restaurant);
+                  },
+                )
               ],
             ),
           )
