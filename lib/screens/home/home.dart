@@ -47,7 +47,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		if(flag) {
 			Future.delayed(Duration(seconds: 2)).then((_) {
 				setState(() {
-					print("2 second closer to NYE!");
+					print("Loading..");
 				});
 				_timer();
 			});

@@ -68,10 +68,17 @@ class AuthService{
 		final profile = json.decode(graphResponse.body);
 		final facebookAuthCred = FacebookAuthProvider.getCredential(accessToken: token);
 		final credential = await _auth.signInWithCredential(facebookAuthCred);
-		User fuser = _userFromFirebaseUser(credential.user);
 		String picture = profile["picture"]["data"]["url"];
-		await DBService().createUser(fuser.uid,fuser.email, profile["name"],picture,"FB");
-		return fuser;
+		User finalUser = await DBService().getUserDataChecker(credential.user.uid);
+		if(finalUser == null) {
+			await DBService().createUser(credential.user.uid,credential.user.email, profile["name"],picture,"FB");
+			return _userFromFirebaseUser(credential.user);
+		}
+		else{
+			await DBService().updateUserData(credential.user.uid,credential.user.email, profile["name"],picture,"FB");
+			return _userFromFirebaseUser(credential.user);
+		}
+
 	}
 
 	Future loginGoogle()async{
@@ -95,9 +102,19 @@ class AuthService{
 		assert(await user.getIdToken() != null);
 		final FirebaseUser currentUser = await _auth.currentUser();
 		assert(user.uid == currentUser.uid);
-		User fuser = _userFromFirebaseUser(user);
-		await DBService().createUser(fuser.uid,fuser.email, authResult.additionalUserInfo.profile['name'],authResult.additionalUserInfo.profile['picture'],"GM");
-		return fuser;
+		User finalUser = await DBService().getUserDataChecker(user.uid);
+		if(finalUser == null) {
+			await DBService().createUser(
+					user.uid, user.email, authResult.additionalUserInfo.profile['name'],
+					authResult.additionalUserInfo.profile['picture'], "GM");
+			return _userFromFirebaseUser(user);
+		}
+		else{
+			await DBService().updateUserData(
+					user.uid, user.email, authResult.additionalUserInfo.profile['name'],
+					authResult.additionalUserInfo.profile['picture'], "GM");
+			return _userFromFirebaseUser(user);
+		}
 	}
 	Future signOut() async{
 		try{

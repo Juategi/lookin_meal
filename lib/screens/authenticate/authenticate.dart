@@ -1,6 +1,7 @@
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:lookinmeal/services/auth.dart';
+import 'package:location_permissions/location_permissions.dart';
 
 class Authenticate extends StatefulWidget {
 
@@ -30,7 +31,9 @@ class _AuthenticateState extends State<Authenticate> {
 						RaisedButton(
 							color: Colors.pink[400],
 							onPressed: () async{
-								await Navigator.pushNamed(context, "/login");
+								PermissionStatus permission = await LocationPermissions().requestPermissions();
+								if(permission == PermissionStatus.granted)
+									await Navigator.pushNamed(context, "/login");
 							},
 							child: Text(tr.translate("login"), style: TextStyle(color: Colors.white),),
 						),
@@ -38,7 +41,9 @@ class _AuthenticateState extends State<Authenticate> {
 						RaisedButton(
 							color: Colors.pink[400],
 							onPressed: () async{
-								await Navigator.pushNamed(context, "/signin");
+								PermissionStatus permission = await LocationPermissions().requestPermissions();
+								if(permission == PermissionStatus.granted)
+									await Navigator.pushNamed(context, "/signin");
 							},
 							child: Text(tr.translate("register"), style: TextStyle(color: Colors.white),),
 						),
@@ -47,7 +52,9 @@ class _AuthenticateState extends State<Authenticate> {
 							padding: EdgeInsets.all(0),
 							child: Image.asset("assets/fb.bmp"),
 							onPressed: () async{
-								dynamic result = await _auth.loginFB();
+								PermissionStatus permission = await LocationPermissions().requestPermissions();
+								if(permission == PermissionStatus.granted)
+									dynamic result = await _auth.loginFB();
 							}
 							),
 						SizedBox(height: 20,),
@@ -55,7 +62,9 @@ class _AuthenticateState extends State<Authenticate> {
 							padding: EdgeInsets.all(0),
 							child: Image.asset("assets/google.PNG"),
 							onPressed: () async{
-								dynamic result = await _auth.loginGoogle();
+								PermissionStatus permission = await LocationPermissions().requestPermissions();
+								if(permission == PermissionStatus.granted)
+									dynamic result = await _auth.loginGoogle();
 							}
 							),
 					],

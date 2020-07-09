@@ -46,6 +46,7 @@ dependencies:
   reorderables: ^0.3.2
   font_awesome_flutter: ^8.8.1
   uuid: ^2.1.0
+  location_permissions: ^3.0.0+1
 
 dev_dependencies:
   flutter_test:

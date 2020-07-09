@@ -41,6 +41,24 @@ class DBService {
     }
 	}
 
+	Future<User> getUserDataChecker(String id) async{
+		var response = await http.get(
+				"${StaticStrings.api}/users", headers: {"id": id});
+		if(response.body != "[]") {
+			List<dynamic> result = json.decode(response.body);
+			User user = User(
+				uid: result.first["user_id"],
+				name: result.first["name"],
+				email: result.first["email"],
+				service: result.first["service"],
+				picture: result.first["image"],
+			);
+			return user;
+		}
+		else
+			return null;
+	}
+
 	Future createUser(String id, String email, String name, String picture,
 			String service) async {
 		Map body = {
