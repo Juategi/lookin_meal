@@ -107,7 +107,10 @@ class _StarsState extends State<Stars> {
                 IconButton(
                   icon: Icon(Icons.settings),
                   onPressed: (){
-                    Navigator.pushNamed(context, "/options", arguments: restaurant);
+                    if(restaurant)
+                      Navigator.pushNamed(context, "/options");
+                    else
+                      Navigator.pushNamed(context, "/entryoptions");
                   },
                 )
               ],

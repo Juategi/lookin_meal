@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/screens/stars/search_options.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/services/search.dart';
 import 'package:provider/provider.dart';
@@ -15,9 +16,7 @@ class SearchOptions extends StatefulWidget {
 
 class _SearchOptionsState extends State<SearchOptions> {
   List<bool> _selections = List.generate(2, (index) => false);
-  double price = 0;
-  List<String> types;
-  bool distance = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -193,23 +192,24 @@ class _SearchOptionsState extends State<SearchOptions> {
             filterable: true,
             required: true,
             value: null,
+            initialValue: Parameters.types,
             maxLength: 20,
             change: (value) {
-              types = List<String>.from(value);
+              Parameters.types = List<String>.from(value);
             },
           ),),
           SizedBox(height: 50,),
-          Text("Precio máximo: $price €"),
+          Text("Precio máximo: ${Parameters.price} €"),
           SizedBox(height: 20,),
           Slider(
-            value: price,
+            value: Parameters.price,
             max: 100,
             min: 0,
             divisions: 10,
-            label: "$price €",
+            label: "${Parameters.price} €",
             onChanged: (value) {
               setState(() {
-                price = value;
+                Parameters.price = value;
               });
             },
           ),
@@ -226,19 +226,32 @@ class _SearchOptionsState extends State<SearchOptions> {
             onPressed: (int index){
               setState(() {
                 if(index == 0){
-                  distance = true;
+                  Parameters.distance = true;
                 }
                 else
-                  distance = false;
+                  Parameters.distance = false;
               });
-              print(distance);
+              print(Parameters.distance);
             },
             children: <Widget>[
-              Text("Menor distancia", style: TextStyle(color: distance ? Colors.blue : Colors.black),),
-              Text("Mejor nota", style: TextStyle(color: !distance ? Colors.blue : Colors.black))
+              Text("Menor distancia", style: TextStyle(color: Parameters.distance ? Colors.blue : Colors.black),),
+              Text("Mejor nota", style: TextStyle(color: !Parameters.distance ? Colors.blue : Colors.black))
             ],),
         ],
       ),
     );
   }
 }
+
+class SearchEntry extends StatefulWidget {
+  @override
+  _SearchEntryState createState() => _SearchEntryState();
+}
+
+class _SearchEntryState extends State<SearchEntry> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+

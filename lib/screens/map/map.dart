@@ -26,6 +26,17 @@ class MapSampleState extends State<MapSample> {
 	Set<Marker> _markers = Set<Marker>();
 	CameraPosition _cameraPosition;
 
+	void _timer() {
+		if(_cameraPosition == null && _markers == null) {
+			Future.delayed(Duration(seconds: 2)).then((_) {
+				setState(() {
+					print("Loading map...");
+				});
+				_timer();
+			});
+		}
+	}
+
 	@override
 	initState(){
 		BitmapDescriptor.fromAssetImage(
@@ -35,6 +46,7 @@ class MapSampleState extends State<MapSample> {
 		});
 		_getUserLocation();
 		_loadMarkers();
+		_timer();
 		super.initState();
 		rootBundle.loadString('assets/map_style.txt').then((string) {
 			_mapStyle = string;
@@ -74,20 +86,18 @@ class MapSampleState extends State<MapSample> {
 	@override
 	Widget build(BuildContext context){
 		user = Provider.of<User>(context);
-		return _cameraPosition == null || _markers.length == 0 ? Loading() : Stack(
-		  children: <Widget>[
-		  	GoogleMap(
-					markers: _markers,
-					myLocationButtonEnabled: true,
-					myLocationEnabled: true,
-					mapType: MapType.normal,
-					initialCameraPosition: _cameraPosition,
-					onMapCreated: (GoogleMapController controller) async{
-						_controller.complete(controller);
-						controller.setMapStyle(_mapStyle);
-					},
-			  ),
-			],
+		return _cameraPosition == null || _markers.length == 0 ? Loading() : Container(
+		  child: GoogleMap(
+		  			markers: _markers,
+		  			myLocationButtonEnabled: true,
+		  			myLocationEnabled: true,
+		  			mapType: MapType.normal,
+		  			initialCameraPosition: _cameraPosition,
+		  			onMapCreated: (GoogleMapController controller) async{
+		  				_controller.complete(controller);
+		  				controller.setMapStyle(_mapStyle);
+		  			},
+		  	  ),
 		);
 	}
 

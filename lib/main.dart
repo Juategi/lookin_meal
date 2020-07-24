@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
           "/editorder" : (context) => EditOrder(),
           "/editrestaurant" : (context) => EditRestaurant(),
           "/options" : (context) => SearchOptions(),
+          "/entryoptions" : (context) => SearchEntry(),
 
         },
         home: Wrapper(),

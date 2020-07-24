@@ -12,4 +12,7 @@ Pagina de edicion del restaurante
 Adobe XD y control de memoria
 share y aviso de conexion
 
+https://developers.google.com/maps/documentation/android-sdk/get-api-key#restrict_key
+
+
  
