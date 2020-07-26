@@ -16,7 +16,10 @@ class SearchService{
       return _parseResponseRestaurant(response);
     }
     else{
-
+      var response = await http.get(
+          "${StaticStrings.api}/searchentry",
+          headers: {"query": query, "locality":locality.toUpperCase() ,"latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": Parameters.valoration.toString(), "price":Parameters.price.toString()});
+      print(response.body);
     }
   }
 
