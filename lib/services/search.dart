@@ -16,6 +16,7 @@ class SearchService{
   }
 
   Future<Map<MenuEntry, Restaurant>> queryEntry(double latitude, double longitude, String locality, String query) async{
+    query = "%" + query + "%";
     var response = await http.get(
         "${StaticStrings.api}/searchentry",
         headers: {"query": query, "locality":locality.toUpperCase() ,"latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": Parameters.valoration.toString(), "price":Parameters.price.toString()});
@@ -82,7 +83,7 @@ class SearchService{
       MenuEntry entry = MenuEntry(
           id: element['entry_id'].toString(),
           restaurant_id: element['restaurant_id'].toString(),
-          name: element['name'],
+          name: element['mname'],
           section: element['section'],
           rating: element['rating'] == null ? 0.0 : double.parse(element['rating'].toStringAsFixed(2)),
           numReviews: int.parse(element['numreviews']),

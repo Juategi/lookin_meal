@@ -95,7 +95,7 @@ class _StarsState extends State<Stars> {
                     onItemFound: (MenuEntry entry, int index){
                       return Card(
                         child: ListTile(
-                            title: Text(entry.name),
+                            title: Text("${entry.name} ${entry.price}"),
                             subtitle: Text(" 📍 ${map[entry].distance} Km"),
                             leading: Image.network(entry.image, width: 100, height: 100,),
                             trailing: Icon(Icons.arrow_right),
