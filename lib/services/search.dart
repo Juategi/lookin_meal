@@ -85,7 +85,7 @@ class SearchService{
           restaurant_id: element['restaurant_id'].toString(),
           name: element['mname'],
           section: element['section'],
-          rating: element['rating'] == null ? 0.0 : double.parse(element['rating'].toStringAsFixed(2)),
+          rating: element['mrating'] == null ? 0.0 : double.parse(element['mrating'].toStringAsFixed(2)),
           numReviews: int.parse(element['numreviews']),
           price: element['price'].toDouble(),
           image: element['image'],
