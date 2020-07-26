@@ -9,6 +9,7 @@ import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
+import 'package:fluster/fluster.dart';
 import 'dart:math' as math;
 
 class MapSample extends StatefulWidget {
@@ -19,13 +20,17 @@ class MapSample extends StatefulWidget {
 class MapSampleState extends State<MapSample> {
 	User user;
 	String _mapStyle;
+	double latTo, latFrom, longTo, longFrom;
 	Completer<GoogleMapController> _controller = Completer();
 	final GeolocationService _geolocationService = GeolocationService();
 	final _key = GlobalKey();
 	BitmapDescriptor pinLocationIcon;
 	List<Restaurant> _restaurants;
-	Set<Marker> _markers = Set<Marker>();
+	List<RestaurantMarker> _markers = List<RestaurantMarker>();
 	CameraPosition _cameraPosition;
+	Fluster<RestaurantMarker> fluster;
+	List<Marker> googleMarkers;
+
 
 	void _timer() {
 		if(_cameraPosition == null && _markers == null) {
@@ -52,6 +57,28 @@ class MapSampleState extends State<MapSample> {
 		rootBundle.loadString('assets/map_style.txt').then((string) {
 			_mapStyle = string;
 		});
+		fluster = Fluster<RestaurantMarker>(
+			minZoom: 0, // The min zoom at clusters will show
+			maxZoom: 20, // The max zoom at clusters will show
+			radius: 150, // Cluster radius in pixels
+			extent: 2048, // Tile extent. Radius is calculated with it.
+			nodeSize: 64, // Size of the KD-tree leaf node.
+			points: _markers, // The list of markers created before
+			createCluster: ( // Create cluster marker
+					BaseCluster cluster,
+					double lng,
+					double lat,
+					) => RestaurantMarker(
+				id: cluster.id.toString(),
+				position: LatLng(lat, lng),
+				icon: pinLocationIcon,
+				isCluster: cluster.isCluster,
+				clusterId: cluster.id,
+				pointsSize: cluster.pointsSize,
+				childMarkerId: cluster.childMarkerId,
+			),
+		);
+		googleMarkers = fluster.clusters([-180, -85, 180, 85], 14).map((cluster) => cluster.toMarker()).toList();
 	}
 
 	void _getUserLocation() async{
@@ -65,8 +92,8 @@ class MapSampleState extends State<MapSample> {
 	void _loadMarkers()async{
 		_restaurants = Pool.restaurants;
 		for(Restaurant restaurant in _restaurants){
-			_markers.add(Marker(
-				markerId: MarkerId(restaurant.restaurant_id),
+			_markers.add(RestaurantMarker(
+				id: restaurant.restaurant_id,
 				position: LatLng(restaurant.latitude,restaurant.longitude),
 				icon: pinLocationIcon,
 				infoWindow: InfoWindow(
@@ -90,7 +117,7 @@ class MapSampleState extends State<MapSample> {
 		return _cameraPosition == null || (_markers.length == 0 && _restaurants.length != 0) ? Loading() : Container(
 		  child: GoogleMap(
 						key: _key,
-		  			markers: _markers,
+		  			markers: googleMarkers.toSet(),
 		  			myLocationButtonEnabled: true,
 		  			myLocationEnabled: true,
 		  			mapType: MapType.normal,
@@ -107,10 +134,10 @@ class MapSampleState extends State<MapSample> {
 							var _correctZoom = math.pow(2, _cameraPosition.zoom) * 2;
 							var _width = _widgetSize.width.toInt() / _correctZoom;
 							var _height = _widgetSize.height.toInt() / _correctZoom;
-							double latFrom = _cameraPosition.target.latitude - _width;
-							double latTo = _cameraPosition.target.latitude + _width;
-							double longFrom = _cameraPosition.target.longitude + _height;
-							double longTo = _cameraPosition.target.longitude - _height;
+							latFrom = _cameraPosition.target.latitude - _width;
+							latTo = _cameraPosition.target.latitude + _width;
+							longFrom = _cameraPosition.target.longitude + _height;
+							longTo = _cameraPosition.target.longitude - _height;
 						},
 		  	  ),
 		);
@@ -124,4 +151,37 @@ class MapSampleState extends State<MapSample> {
 		);
 		controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
 	}
+}
+
+class RestaurantMarker extends Clusterable {
+	final String id;
+	final LatLng position;
+	final BitmapDescriptor icon;
+	final InfoWindow infoWindow;
+	RestaurantMarker({
+		@required this.id,
+		@required this.position,
+		@required this.icon,
+		@required this.infoWindow,
+		isCluster = false,
+		clusterId,
+		pointsSize,
+		childMarkerId,
+	}) : super(
+		markerId: id,
+		latitude: position.latitude,
+		longitude: position.longitude,
+		isCluster: isCluster,
+		clusterId: clusterId,
+		pointsSize: pointsSize,
+		childMarkerId: childMarkerId,
+	);
+	Marker toMarker() => Marker(
+		markerId: MarkerId(id),
+		position: LatLng(
+			position.latitude,
+			position.longitude,
+		),
+		icon: icon,
+	);
 }
