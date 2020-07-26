@@ -2,6 +2,7 @@ import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/pool.dart';
@@ -19,6 +20,7 @@ class Stars extends StatefulWidget {
 class _StarsState extends State<Stars> {
   User user;
   List<bool> _selections = List.generate(2, (index) => false);
+  Map<MenuEntry, Restaurant> map;
   bool isRestaurant = true;
   Position myPos;
   String locality;
@@ -26,12 +28,21 @@ class _StarsState extends State<Stars> {
   _StarsState({this.myPos,this.locality});
 
   Future<List<Restaurant>> _search(String query) async{
-    List<Restaurant> list = await SearchService().query(myPos.latitude, myPos.longitude, locality, query, isRestaurant);
+    List<Restaurant> list = await SearchService().query(myPos.latitude, myPos.longitude, locality, query);
     if(list.length == 0)
       error = "No results";
     else
       error = "";
     return list;
+  }
+
+  Future<List<MenuEntry>> _searchEntry(String query) async{
+    map = await SearchService().queryEntry(myPos.latitude, myPos.longitude, locality, query);
+    if(map.length == 0)
+      error = "No results";
+    else
+      error = "";
+    return map.keys.toList();
   }
 
   @override
@@ -48,13 +59,13 @@ class _StarsState extends State<Stars> {
               width: 390,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: SearchBar(
+                child: isRestaurant? SearchBar(
                   emptyWidget: Text(error),
                   cancellationWidget: Text(" Cancel "),
                   debounceDuration: Duration(milliseconds: 800),
                   loader: Center(child: SpinKitChasingDots(color: Colors.brown, size: 50.0,),),
                   minimumChars: 1,
-                  onSearch: _search,
+                  onSearch: _search ,
                   onItemFound: (Restaurant restaurant, int index){
                     return Card(
                       child: ListTile(
@@ -72,8 +83,35 @@ class _StarsState extends State<Stars> {
                           }
                       ),
                     );
-                  },
-                ),
+                  }
+                ):
+                SearchBar(
+                    emptyWidget: Text(error),
+                    cancellationWidget: Text(" Cancel "),
+                    debounceDuration: Duration(milliseconds: 800),
+                    loader: Center(child: SpinKitChasingDots(color: Colors.brown, size: 50.0,),),
+                    minimumChars: 1,
+                    onSearch: _searchEntry ,
+                    onItemFound: (MenuEntry entry, int index){
+                      return Card(
+                        child: ListTile(
+                            title: Text(entry.name),
+                            subtitle: Text(" 📍 ${map[entry].distance} Km"),
+                            leading: Image.network(entry.image, width: 100, height: 100,),
+                            trailing: Icon(Icons.arrow_right),
+                            onTap: () {
+                              List<Object> args = List<Object>();
+                              Pool.addRestaurants([map[entry]]);
+                              map[entry] = Pool.getSubList([map[entry]]).first;
+                              args.add(map[entry]);
+                              args.add(user);
+                              Navigator.pushNamed(context, "/restaurant",arguments: args);
+                            }
+                        ),
+                      );
+                    }
+                )
+                ,
               ),
             ),
           ),
@@ -97,7 +135,6 @@ class _StarsState extends State<Stars> {
                       else
                         isRestaurant = false;
                     });
-                    print(isRestaurant);
                   },
                   children: <Widget>[
                     Text("Restaurante", style: TextStyle(color: isRestaurant ? Colors.blue : Colors.black),),
