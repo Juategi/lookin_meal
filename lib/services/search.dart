@@ -1,23 +1,26 @@
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lookinmeal/models/restaurant.dart';
-import 'package:lookinmeal/models/user.dart';
 import 'package:http/http.dart' as http;
-import 'package:lookinmeal/services/database.dart';
+import 'package:lookinmeal/screens/stars/parameters.dart';
 import 'package:lookinmeal/shared/strings.dart';
 
 class SearchService{
 
-  Future<List<Restaurant>> query(double latitude, double longitude, String locality, String query) async {
+  Future<List<Restaurant>> query(double latitude, double longitude, String locality, String query, bool isRestaurant) async {
     query = "%" + query + "%";
     print(query);
-    var response = await http.get(
-        "${StaticStrings.api}/search",
-        headers: {"query": query, "locality":locality.toUpperCase() ,"latitude": latitude.toString(), "longitude": longitude.toString()});
-    return _parseResponse(response);
+    if(isRestaurant){
+      var response = await http.get(
+          "${StaticStrings.api}/search",
+          headers: {"query": query, "locality":locality.toUpperCase() ,"latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": Parameters.valoration.toString(), "types":Parameters.types.toString().replaceAll("[", "{").replaceAll("]", "}")});
+      return _parseResponseRestaurant(response);
+    }
+    else{
+
+    }
   }
 
-  Future<List<Restaurant>> _parseResponse(var response) async{
+  Future<List<Restaurant>> _parseResponseRestaurant(var response) async{
     List<Restaurant> restaurants = List<Restaurant>();
     List<dynamic> result = json.decode(response.body);
     print(response.body);

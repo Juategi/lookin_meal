@@ -19,14 +19,14 @@ class Stars extends StatefulWidget {
 class _StarsState extends State<Stars> {
   User user;
   List<bool> _selections = List.generate(2, (index) => false);
-  bool restaurant = true;
+  bool isRestaurant = true;
   Position myPos;
   String locality;
   String error = "";
   _StarsState({this.myPos,this.locality});
 
   Future<List<Restaurant>> _search(String query) async{
-    List<Restaurant> list = await SearchService().query(myPos.latitude, myPos.longitude, locality, query);
+    List<Restaurant> list = await SearchService().query(myPos.latitude, myPos.longitude, locality, query, isRestaurant);
     if(list.length == 0)
       error = "No results";
     else
@@ -92,22 +92,22 @@ class _StarsState extends State<Stars> {
                   onPressed: (int index){
                     setState(() {
                       if(index == 0){
-                        restaurant = true;
+                        isRestaurant = true;
                       }
                       else
-                        restaurant = false;
+                        isRestaurant = false;
                     });
-                    print(restaurant);
+                    print(isRestaurant);
                   },
                   children: <Widget>[
-                    Text("Restaurante", style: TextStyle(color: restaurant ? Colors.blue : Colors.black),),
-                    Text("Plato", style: TextStyle(color: !restaurant ? Colors.blue : Colors.black))
+                    Text("Restaurante", style: TextStyle(color: isRestaurant ? Colors.blue : Colors.black),),
+                    Text("Plato", style: TextStyle(color: !isRestaurant ? Colors.blue : Colors.black))
                   ],),
                 SizedBox(width: 30,),
                 IconButton(
                   icon: Icon(Icons.settings),
                   onPressed: (){
-                    if(restaurant)
+                    if(isRestaurant)
                       Navigator.pushNamed(context, "/options");
                     else
                       Navigator.pushNamed(context, "/entryoptions");

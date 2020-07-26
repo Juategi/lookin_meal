@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
-import 'package:lookinmeal/screens/stars/search_options.dart';
+import 'package:lookinmeal/screens/stars/parameters.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/services/search.dart';
 import 'package:provider/provider.dart';
@@ -195,10 +195,56 @@ class _SearchOptionsState extends State<SearchOptions> {
             initialValue: Parameters.types,
             maxLength: 20,
             change: (value) {
+              if(value == null){
+                Parameters.types = null;
+              }
+              else
               Parameters.types = List<String>.from(value);
             },
           ),),
           SizedBox(height: 50,),
+          Text("Ordenar por:"),
+          SizedBox(height: 10,),
+          ToggleButtons(
+            focusColor: Colors.black,
+            selectedColor: Colors.blue,
+            selectedBorderColor: Colors.blue,
+            fillColor: Colors.blue,
+            constraints: BoxConstraints.tight(Size(100,40)),
+            isSelected: _selections,
+            onPressed: (int index){
+              setState(() {
+                if(index == 0){
+                  Parameters.valoration = false;
+                }
+                else
+                  Parameters.valoration = true;
+              });
+              print(Parameters.valoration);
+            },
+            children: <Widget>[
+              Text("Menor distancia", style: TextStyle(color: !Parameters.valoration ? Colors.blue : Colors.black),),
+              Text("Mejor nota", style: TextStyle(color: Parameters.valoration ? Colors.blue : Colors.black))
+            ],),
+        ],
+      ),
+    );
+  }
+}
+
+class SearchEntry extends StatefulWidget {
+  @override
+  _SearchEntryState createState() => _SearchEntryState();
+}
+
+class _SearchEntryState extends State<SearchEntry> {
+  List<bool> _selections = List.generate(2, (index) => false);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        children: <Widget>[
           Text("Precio máximo: ${Parameters.price} €"),
           SizedBox(height: 20,),
           Slider(
@@ -226,32 +272,20 @@ class _SearchOptionsState extends State<SearchOptions> {
             onPressed: (int index){
               setState(() {
                 if(index == 0){
-                  Parameters.distance = true;
+                  Parameters.valoration = false;
                 }
                 else
-                  Parameters.distance = false;
+                  Parameters.valoration = true;
               });
-              print(Parameters.distance);
+              print(Parameters.valoration);
             },
             children: <Widget>[
-              Text("Menor distancia", style: TextStyle(color: Parameters.distance ? Colors.blue : Colors.black),),
-              Text("Mejor nota", style: TextStyle(color: !Parameters.distance ? Colors.blue : Colors.black))
+              Text("Menor precio", style: TextStyle(color: !Parameters.valoration ? Colors.blue : Colors.black),),
+              Text("Mejor nota", style: TextStyle(color: Parameters.valoration ? Colors.blue : Colors.black))
             ],),
         ],
       ),
     );
-  }
-}
-
-class SearchEntry extends StatefulWidget {
-  @override
-  _SearchEntryState createState() => _SearchEntryState();
-}
-
-class _SearchEntryState extends State<SearchEntry> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }
 

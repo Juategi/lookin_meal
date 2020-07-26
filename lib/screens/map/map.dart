@@ -86,7 +86,7 @@ class MapSampleState extends State<MapSample> {
 	@override
 	Widget build(BuildContext context){
 		user = Provider.of<User>(context);
-		return _cameraPosition == null || _markers.length == 0 ? Loading() : Container(
+		return _cameraPosition == null || (_markers.length == 0 && _restaurants.length != 0) ? Loading() : Container(
 		  child: GoogleMap(
 		  			markers: _markers,
 		  			myLocationButtonEnabled: true,
