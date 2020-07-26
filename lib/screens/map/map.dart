@@ -57,8 +57,28 @@ class MapSampleState extends State<MapSample> {
 		rootBundle.loadString('assets/map_style.txt').then((string) {
 			_mapStyle = string;
 		});
-
-		googleMarkers = fluster.clusters([-180, -85, 180, 85], 14).map((cluster) => cluster.toMarker()).toList();
+		fluster = Fluster<RestaurantMarker>(
+			minZoom: 0, // The min zoom at clusters will show
+			maxZoom: 21, // The max zoom at clusters will show
+			radius: 150, // Cluster radius in pixels
+			extent: 2048, // Tile extent. Radius is calculated with it.
+			nodeSize: 64, // Size of the KD-tree leaf node.
+			points: _markers, // The list of markers created before
+			createCluster: ( // Create cluster marker
+					BaseCluster cluster,
+					double lng,
+					double lat,
+					) => RestaurantMarker(
+				id: cluster.id.toString(),
+				position: LatLng(lat, lng),
+				icon: pinLocationIcon,
+				isCluster: cluster.isCluster,
+				clusterId: cluster.id,
+				pointsSize: cluster.pointsSize,
+				childMarkerId: cluster.childMarkerId,
+			),
+		);
+		googleMarkers = fluster.clusters([-180, -85, 180, 85], 10).map((cluster) => cluster.toMarker()).toList();
 	}
 
 	void _getUserLocation() async{
@@ -69,7 +89,7 @@ class MapSampleState extends State<MapSample> {
 		);
 	}
 
-	void _loadMarkers()async{
+	void _loadMarkers(){
 		_restaurants = Pool.restaurants;
 		for(Restaurant restaurant in _restaurants){
 			_markers.add(RestaurantMarker(
@@ -80,7 +100,7 @@ class MapSampleState extends State<MapSample> {
 					title: "${restaurant.name}   ${restaurant.rating}/5.0",
 					snippet: restaurant.address,
 					onTap: ()async{
-						Position myPos = await _geolocationService.getLocation();
+						//Position myPos = await _geolocationService.getLocation();
 						List<Object> args = List<Object>();
 						args.add(restaurant);
 						args.add(user);
@@ -105,30 +125,11 @@ class MapSampleState extends State<MapSample> {
 		  			onMapCreated: (GoogleMapController controller) async{
 		  				_controller.complete(controller);
 		  				controller.setMapStyle(_mapStyle);
-							fluster = Fluster<RestaurantMarker>(
-								minZoom: 10, // The min zoom at clusters will show
-								maxZoom: 15, // The max zoom at clusters will show
-								radius: 150, // Cluster radius in pixels
-								extent: 2048, // Tile extent. Radius is calculated with it.
-								nodeSize: 64, // Size of the KD-tree leaf node.
-								points: _markers, // The list of markers created before
-								createCluster: ( // Create cluster marker
-										BaseCluster cluster,
-										double lng,
-										double lat,
-										) => RestaurantMarker(
-									id: cluster.id.toString(),
-									position: LatLng(lat, lng),
-									icon: pinLocationIcon,
-									isCluster: cluster.isCluster,
-									clusterId: cluster.id,
-									pointsSize: cluster.pointsSize,
-									childMarkerId: cluster.childMarkerId,
-								),
-							);
 		  			},
 						onCameraMove: (CameraPosition pos){
 		  				_cameraPosition = pos;
+		  				setState(() {
+		  				});
 						},
 						onCameraIdle: (){
 							Size _widgetSize = _key.currentContext.size;
