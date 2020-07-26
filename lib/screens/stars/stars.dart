@@ -25,6 +25,7 @@ class _StarsState extends State<Stars> {
   Position myPos;
   String locality;
   String error = "";
+  SearchBarController _controller = SearchBarController();
   _StarsState({this.myPos,this.locality});
 
   Future<List<Restaurant>> _search(String query) async{
@@ -60,6 +61,7 @@ class _StarsState extends State<Stars> {
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: isRestaurant? SearchBar(
+                  searchBarController: _controller,
                   emptyWidget: Text(error),
                   cancellationWidget: Text(" Cancel "),
                   debounceDuration: Duration(milliseconds: 800),
@@ -86,6 +88,7 @@ class _StarsState extends State<Stars> {
                   }
                 ):
                 SearchBar(
+                  searchBarController: _controller,
                     emptyWidget: Text(error),
                     cancellationWidget: Text(" Cancel "),
                     debounceDuration: Duration(milliseconds: 800),
@@ -110,8 +113,7 @@ class _StarsState extends State<Stars> {
                         ),
                       );
                     }
-                )
-                ,
+                ),
               ),
             ),
           ),
@@ -143,11 +145,17 @@ class _StarsState extends State<Stars> {
                 SizedBox(width: 30,),
                 IconButton(
                   icon: Icon(Icons.settings),
-                  onPressed: (){
-                    if(isRestaurant)
-                      Navigator.pushNamed(context, "/options");
-                    else
-                      Navigator.pushNamed(context, "/entryoptions");
+                  onPressed: ()async{
+                    if(isRestaurant){
+                      await Navigator.pushNamed(context, "/options");
+                      setState(() {
+                      });
+                    }
+                    else{
+                      await Navigator.pushNamed(context, "/entryoptions");
+                      setState(() {
+                      });
+                    }
                   },
                 )
               ],

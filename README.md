@@ -2,7 +2,7 @@
 
 TODO
 
-limpiar busqueda al cambiar ajustes, reordenar bien con ratings vacios
+limpiar busqueda al cambiar ajustes, reordenar bien con ratings vacios (deprecar flappy)
 volver al registro cuando no toca, actualizar el metodo del boton back
 revisar logins, comprobar que este en bd si hacemos gmail fb
 Motor de búsquedas. Notas: añadir aviso de 3 letras, aviso de nada encontrado

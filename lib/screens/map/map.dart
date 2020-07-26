@@ -9,7 +9,7 @@ import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
-
+import 'dart:math' as math;
 
 class MapSample extends StatefulWidget {
 	@override
@@ -21,6 +21,7 @@ class MapSampleState extends State<MapSample> {
 	String _mapStyle;
 	Completer<GoogleMapController> _controller = Completer();
 	final GeolocationService _geolocationService = GeolocationService();
+	final _key = GlobalKey();
 	BitmapDescriptor pinLocationIcon;
 	List<Restaurant> _restaurants;
 	Set<Marker> _markers = Set<Marker>();
@@ -61,7 +62,7 @@ class MapSampleState extends State<MapSample> {
 		);
 	}
 
-	void _loadMarkers(){
+	void _loadMarkers()async{
 		_restaurants = Pool.restaurants;
 		for(Restaurant restaurant in _restaurants){
 			_markers.add(Marker(
@@ -88,6 +89,7 @@ class MapSampleState extends State<MapSample> {
 		user = Provider.of<User>(context);
 		return _cameraPosition == null || (_markers.length == 0 && _restaurants.length != 0) ? Loading() : Container(
 		  child: GoogleMap(
+						key: _key,
 		  			markers: _markers,
 		  			myLocationButtonEnabled: true,
 		  			myLocationEnabled: true,
@@ -97,6 +99,19 @@ class MapSampleState extends State<MapSample> {
 		  				_controller.complete(controller);
 		  				controller.setMapStyle(_mapStyle);
 		  			},
+						onCameraMove: (CameraPosition pos){
+		  				_cameraPosition = pos;
+						},
+						onCameraIdle: (){
+							Size _widgetSize = _key.currentContext.size;
+							var _correctZoom = math.pow(2, _cameraPosition.zoom) * 2;
+							var _width = _widgetSize.width.toInt() / _correctZoom;
+							var _height = _widgetSize.height.toInt() / _correctZoom;
+							double latFrom = _cameraPosition.target.latitude - _width;
+							double latTo = _cameraPosition.target.latitude + _width;
+							double longFrom = _cameraPosition.target.longitude + _height;
+							double longTo = _cameraPosition.target.longitude - _height;
+						},
 		  	  ),
 		);
 	}
