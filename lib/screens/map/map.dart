@@ -57,27 +57,7 @@ class MapSampleState extends State<MapSample> {
 		rootBundle.loadString('assets/map_style.txt').then((string) {
 			_mapStyle = string;
 		});
-		fluster = Fluster<RestaurantMarker>(
-			minZoom: 0, // The min zoom at clusters will show
-			maxZoom: 20, // The max zoom at clusters will show
-			radius: 150, // Cluster radius in pixels
-			extent: 2048, // Tile extent. Radius is calculated with it.
-			nodeSize: 64, // Size of the KD-tree leaf node.
-			points: _markers, // The list of markers created before
-			createCluster: ( // Create cluster marker
-					BaseCluster cluster,
-					double lng,
-					double lat,
-					) => RestaurantMarker(
-				id: cluster.id.toString(),
-				position: LatLng(lat, lng),
-				icon: pinLocationIcon,
-				isCluster: cluster.isCluster,
-				clusterId: cluster.id,
-				pointsSize: cluster.pointsSize,
-				childMarkerId: cluster.childMarkerId,
-			),
-		);
+
 		googleMarkers = fluster.clusters([-180, -85, 180, 85], 14).map((cluster) => cluster.toMarker()).toList();
 	}
 
@@ -125,6 +105,27 @@ class MapSampleState extends State<MapSample> {
 		  			onMapCreated: (GoogleMapController controller) async{
 		  				_controller.complete(controller);
 		  				controller.setMapStyle(_mapStyle);
+							fluster = Fluster<RestaurantMarker>(
+								minZoom: 10, // The min zoom at clusters will show
+								maxZoom: 15, // The max zoom at clusters will show
+								radius: 150, // Cluster radius in pixels
+								extent: 2048, // Tile extent. Radius is calculated with it.
+								nodeSize: 64, // Size of the KD-tree leaf node.
+								points: _markers, // The list of markers created before
+								createCluster: ( // Create cluster marker
+										BaseCluster cluster,
+										double lng,
+										double lat,
+										) => RestaurantMarker(
+									id: cluster.id.toString(),
+									position: LatLng(lat, lng),
+									icon: pinLocationIcon,
+									isCluster: cluster.isCluster,
+									clusterId: cluster.id,
+									pointsSize: cluster.pointsSize,
+									childMarkerId: cluster.childMarkerId,
+								),
+							);
 		  			},
 						onCameraMove: (CameraPosition pos){
 		  				_cameraPosition = pos;
@@ -183,5 +184,6 @@ class RestaurantMarker extends Clusterable {
 			position.longitude,
 		),
 		icon: icon,
+		infoWindow: infoWindow
 	);
 }
