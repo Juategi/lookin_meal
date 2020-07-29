@@ -2,8 +2,10 @@
 
 TODO
 
-busquedas calcular nota del plato tambien por numero de votos
-mapa editar iconos y infowindow custom
+
+cambiar location a mano, elegir punto en el mapa
+busquedas calcular nota del plato tambien por numero de votos (necesita bd)
+mapa editar iconos y infowindow custom (necesita diseño)
 limpiar busqueda al cambiar ajustes, reordenar bien con ratings vacios (deprecar flappy)
 volver al registro cuando no toca, actualizar el metodo del boton back
 revisar logins, comprobar que este en bd si hacemos gmail fb
