@@ -116,21 +116,23 @@ class MapSampleState extends State<MapSample> {
 	Widget build(BuildContext context){
 		user = Provider.of<User>(context);
 		return _cameraPosition == null || (_markers.length == 0 && _restaurants.length != 0) ? Loading() : Container(
-		  child: GoogleMap(
+		  child: Stack(
+				children: <Widget>[
+					GoogleMap(
 						key: _key,
-		  			markers: googleMarkers.toSet(),
-		  			myLocationButtonEnabled: true,
-		  			myLocationEnabled: true,
-		  			mapType: MapType.normal,
-		  			initialCameraPosition: _cameraPosition,
-		  			onMapCreated: (GoogleMapController controller) async{
-		  				_controller.complete(controller);
-		  				controller.setMapStyle(_mapStyle);
-		  			},
+						markers: googleMarkers.toSet(),
+						myLocationButtonEnabled: true,
+						myLocationEnabled: true,
+						mapType: MapType.normal,
+						initialCameraPosition: _cameraPosition,
+						onMapCreated: (GoogleMapController controller) async{
+							_controller.complete(controller);
+							controller.setMapStyle(_mapStyle);
+						},
 						onCameraMove: (CameraPosition pos){
-		  				_cameraPosition = pos;
-		  				setState(() {
-		  				});
+							_cameraPosition = pos;
+							setState(() {
+							});
 						},
 						onCameraIdle: (){
 							Size _widgetSize = _key.currentContext.size;
@@ -145,7 +147,9 @@ class MapSampleState extends State<MapSample> {
 								_loadMarkers();
 							});
 						},
-		  	  ),
+					),
+				],
+			)
 		);
 	}
 
