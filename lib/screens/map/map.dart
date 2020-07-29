@@ -32,6 +32,7 @@ class MapSampleState extends State<MapSample> {
 	CameraPosition _cameraPosition;
 	Fluster<RestaurantMarker> fluster;
 	List<Marker> googleMarkers;
+	List<Marker> _markersNoCluster = [];
 
 
 	void _timer() {
@@ -60,8 +61,8 @@ class MapSampleState extends State<MapSample> {
 			_mapStyle = string;
 		});
 		fluster = Fluster<RestaurantMarker>(
-			minZoom: 0, // The min zoom at clusters will show
-			maxZoom: 21, // The max zoom at clusters will show
+			minZoom: 14, // The min zoom at clusters will show
+			maxZoom: 30, // The max zoom at clusters will show
 			radius: 150, // Cluster radius in pixels
 			extent: 2048, // Tile extent. Radius is calculated with it.
 			nodeSize: 64, // Size of the KD-tree leaf node.
@@ -87,11 +88,11 @@ class MapSampleState extends State<MapSample> {
 		pos = await _geolocationService.getLocation();
 		_cameraPosition = CameraPosition(
 			target: LatLng(pos.latitude,pos.longitude),
-			zoom: 14.5,
+			zoom: 16,
 		);
 	}
 
-	void _loadMarkers() async {
+	Future _loadMarkers() async {
 		_restaurants = await DBService().getRestaurantsSquare(pos.latitude, pos.longitude, latFrom, latTo, longFrom, longTo);
 		for(Restaurant restaurant in _restaurants){
 			_markers.add(RestaurantMarker(
@@ -105,8 +106,35 @@ class MapSampleState extends State<MapSample> {
 						List<Object> args = List<Object>();
 						args.add(restaurant);
 						args.add(user);
+						Pool.addRestaurants([restaurant]);
+						restaurant = Pool.getSubList([restaurant]).first;
 						Navigator.pushNamed(context, "/restaurant",arguments: args);
 					}
+				),
+			));
+		}
+		googleMarkers = fluster.clusters([-180, -85, 180, 85], 10).map((cluster) => cluster.toMarker()).toList();
+	}
+
+	Future _loadMarkersNoCluster() async {
+		_restaurants = await DBService().getRestaurantsSquare(pos.latitude, pos.longitude, latFrom, latTo, longFrom, longTo);
+		_markersNoCluster.clear();
+		for(Restaurant restaurant in _restaurants){
+			_markersNoCluster.add(Marker(
+				markerId: MarkerId(restaurant.restaurant_id),
+				position: LatLng(restaurant.latitude,restaurant.longitude),
+				icon: pinLocationIcon,
+				infoWindow: InfoWindow(
+						title: "${restaurant.name}   ${restaurant.rating}/5.0",
+						snippet: "${restaurant.distance} km",
+						onTap: ()async{
+							List<Object> args = List<Object>();
+							args.add(restaurant);
+							args.add(user);
+							Pool.addRestaurants([restaurant]);
+							restaurant = Pool.getSubList([restaurant]).first;
+							Navigator.pushNamed(context, "/restaurant",arguments: args);
+						}
 				),
 			));
 		}
@@ -115,12 +143,12 @@ class MapSampleState extends State<MapSample> {
 	@override
 	Widget build(BuildContext context){
 		user = Provider.of<User>(context);
-		return _cameraPosition == null || (_markers.length == 0 && _restaurants.length != 0) ? Loading() : Container(
+		return _cameraPosition == null || (_markersNoCluster.length == 0 && _restaurants.length != 0) ? Loading() : Container(
 		  child: Stack(
 				children: <Widget>[
 					GoogleMap(
 						key: _key,
-						markers: googleMarkers.toSet(),
+						markers: _markersNoCluster.toSet(),
 						myLocationButtonEnabled: true,
 						myLocationEnabled: true,
 						mapType: MapType.normal,
@@ -130,36 +158,40 @@ class MapSampleState extends State<MapSample> {
 							controller.setMapStyle(_mapStyle);
 						},
 						onCameraMove: (CameraPosition pos){
+							double lastZoom = _cameraPosition.zoom;
 							_cameraPosition = pos;
+							if(pos.zoom < 15 && pos.zoom < lastZoom) {
+								_markersNoCluster.clear();
+								_restaurants.clear();
+							}
 							setState(() {
 							});
 						},
-						onCameraIdle: (){
+					),
+					Positioned(
+						top: 550,
+						left: 140,
+						child: RaisedButton(child: Text("Cargar restaurantes"), onPressed: ()async{
 							Size _widgetSize = _key.currentContext.size;
 							var _correctZoom = math.pow(2, _cameraPosition.zoom) * 2;
 							var _width = _widgetSize.width.toInt() / _correctZoom;
 							var _height = _widgetSize.height.toInt() / _correctZoom;
 							latFrom = _cameraPosition.target.latitude - _width;
 							latTo = _cameraPosition.target.latitude + _width;
-							longFrom = _cameraPosition.target.longitude + _height;
-							longTo = _cameraPosition.target.longitude - _height;
-							setState(() {
-								_loadMarkers();
+							longFrom = _cameraPosition.target.longitude - _height;
+							longTo = _cameraPosition.target.longitude + _height;
+							print(latFrom);
+							print(latTo);
+							print(longFrom);
+							print(longTo);
+							await _loadMarkersNoCluster();
+							setState((){
 							});
-						},
-					),
+						},),
+					)
 				],
 			)
 		);
-	}
-
-	Future<void> _goToPos(Position pos) async {
-		final GoogleMapController controller = await _controller.future;
-		 _cameraPosition = CameraPosition(
-			target: LatLng(pos.latitude, pos.longitude),
-			zoom: 14.5,
-		);
-		controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
 	}
 }
 
