@@ -125,6 +125,20 @@ class DBService {
 		return parseResponse(response);
 	}
 
+	Future<List<Restaurant>> getRestaurantsSquare(double latitude, double longitude, double la1, double la2, double lo1, double lo2) async {
+		var response = await http.get(
+				"${StaticStrings.api}/square",
+				headers: {
+					"latitude": latitude.toString(),
+					"longitude": longitude.toString(),
+					"la1": la1.toString(),
+					"la2": la2.toString(),
+					"lo1": lo1.toString(),
+					"lo2": lo2.toString()
+				});
+		return parseResponse(response);
+	}
+
 	Future uploadRestaurantData(String taId, String name, String phone,
 			String website, String webUrl, String address, String email, String city,
 			String country, double latitude,

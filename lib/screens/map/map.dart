@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/loading.dart';
@@ -19,13 +20,14 @@ class MapSample extends StatefulWidget {
 
 class MapSampleState extends State<MapSample> {
 	User user;
+	Position pos;
 	String _mapStyle;
 	double latTo, latFrom, longTo, longFrom;
 	Completer<GoogleMapController> _controller = Completer();
 	final GeolocationService _geolocationService = GeolocationService();
 	final _key = GlobalKey();
 	BitmapDescriptor pinLocationIcon;
-	List<Restaurant> _restaurants;
+	List<Restaurant> _restaurants = [];
 	List<RestaurantMarker> _markers = List<RestaurantMarker>();
 	CameraPosition _cameraPosition;
 	Fluster<RestaurantMarker> fluster;
@@ -51,7 +53,7 @@ class MapSampleState extends State<MapSample> {
 			pinLocationIcon = onValue;
 		});
 		_getUserLocation();
-		_loadMarkers();
+		//_loadMarkers();
 		_timer();
 		super.initState();
 		rootBundle.loadString('assets/map_style.txt').then((string) {
@@ -82,15 +84,15 @@ class MapSampleState extends State<MapSample> {
 	}
 
 	void _getUserLocation() async{
-		Position pos = await _geolocationService.getLocation();
+		pos = await _geolocationService.getLocation();
 		_cameraPosition = CameraPosition(
 			target: LatLng(pos.latitude,pos.longitude),
 			zoom: 14.5,
 		);
 	}
 
-	void _loadMarkers(){
-		_restaurants = Pool.restaurants;
+	void _loadMarkers() async {
+		_restaurants = await DBService().getRestaurantsSquare(pos.latitude, pos.longitude, latFrom, latTo, longFrom, longTo);
 		for(Restaurant restaurant in _restaurants){
 			_markers.add(RestaurantMarker(
 				id: restaurant.restaurant_id,
@@ -100,7 +102,6 @@ class MapSampleState extends State<MapSample> {
 					title: "${restaurant.name}   ${restaurant.rating}/5.0",
 					snippet: restaurant.address,
 					onTap: ()async{
-						//Position myPos = await _geolocationService.getLocation();
 						List<Object> args = List<Object>();
 						args.add(restaurant);
 						args.add(user);
@@ -140,6 +141,9 @@ class MapSampleState extends State<MapSample> {
 							latTo = _cameraPosition.target.latitude + _width;
 							longFrom = _cameraPosition.target.longitude + _height;
 							longTo = _cameraPosition.target.longitude - _height;
+							setState(() {
+								_loadMarkers();
+							});
 						},
 		  	  ),
 		);
