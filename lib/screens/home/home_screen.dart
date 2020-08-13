@@ -5,19 +5,12 @@ import 'package:lookinmeal/models/user.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-	Position myPos;
-	List<Restaurant> restaurants;
-	String locality;
-	HomeScreen({this.myPos,this.locality,this.restaurants});
   @override
-  _HomeScreenState createState() => _HomeScreenState(myPos: myPos, restaurants: restaurants,locality: locality);
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-	_HomeScreenState({this.myPos,this.locality,this.restaurants});
-	Position myPos;
 	User user;
-	String locality;
 	List<Restaurant> restaurants;
 
 	List<Widget> _initTiles(User user){
@@ -46,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
 	@override
   Widget build(BuildContext context) {
 		user = Provider.of<User>(context);
+		restaurants = Provider.of<List<Restaurant>>(context);
 		return Container(
 			child: ListView(
 				children: _initTiles(user)

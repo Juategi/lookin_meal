@@ -147,9 +147,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 									offstage: _selectedIndex != 0,
 									child: TickerMode(
 										enabled: _selectedIndex == 0,
-										child: HomeScreen(myPos: myPos,
-												restaurants: restaurants,
-												locality: locality),
+										child: Provider<List<Restaurant>>.value(
+											value: restaurants,
+										  child: HomeScreen(),
+										),
 									),
 								),
 								Offstage(
