@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/database.dart';
@@ -116,12 +118,40 @@ class AuthService{
 			return _userFromFirebaseUser(user);
 		}
 	}
+
+	void reBirth(BuildContext context){
+		DBService.userF = null;
+		Phoenix.rebirth(context);
+	}
+
 	Future signOut() async{
+		DBService.userF = null;
+		try{
+			final facebookLogin = FacebookLogin();
+			facebookLogin.logOut();
+		}catch(e){
+			print(e);
+			//return null;
+		}
+		try{
+			final GoogleSignIn googleSignIn = GoogleSignIn(
+				scopes: [
+					'email',
+					'https://www.googleapis.com/auth/userinfo.profile',
+				],
+			);
+			await googleSignIn.signOut();
+		}catch(e){
+			print(e);
+			//return null;
+		}
 		try{
 			return await _auth.signOut();
 		}catch(e){
 			print(e);
-			return null;
+			//return null;
 		}
+		return null;
 	}
+
 }

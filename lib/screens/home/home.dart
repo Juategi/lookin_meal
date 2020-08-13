@@ -29,6 +29,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	final AuthService _auth = AuthService();
 	final DBService _dbService = DBService();
 	final GeolocationService _geolocationService = GeolocationService();
+	HomeScreen homeScreen;
 	User user;
 	String id;
 	String locality;
@@ -61,9 +62,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		myPos = await _geolocationService.getLocation();
 		locality = await _geolocationService.getLocality(myPos.latitude, myPos.longitude);
 		List<Restaurant> aux;
-		aux = await _dbService.getNearRestaurants(myPos.latitude, myPos.longitude, locality.toUpperCase()); //Faltaria obtener la ciudad dada tu posicion
+		aux = await _dbService.getNearRestaurants(myPos.latitude, myPos.longitude, locality.toUpperCase());
 		Pool.addRestaurants(aux);
-		restaurants = Pool.restaurants;
+		restaurants = Pool.getSubList(aux);
 		/*for(Restaurant restaurant in restaurants){
 			distances.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));
 		}*/
@@ -96,11 +97,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	  AppLocalizations tr = AppLocalizations.of(context);
 	  if(ready && user != null) {
 	  	flag = false;
+	  	homeScreen = new HomeScreen(myPos: myPos,
+					restaurants: restaurants,
+					locality: locality);
 			return Scaffold(
 						backgroundColor: Colors.brown[50],
 						appBar: AppBar(
 							//title: Text(tr.translate("app")),
-							title: RawMaterialButton(
+							title:_selectedIndex == 0 ? RawMaterialButton(
 								child: Row(
 								  children: <Widget>[
 								  	Icon(Icons.add_location),
@@ -114,21 +118,29 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 										MaterialPageRoute(
 											builder: (context) => PlacePicker(
 												apiKey: "AIzaSyAIIK4P68Ge26Yc0HkQ6uChj_NEqF2VeCU",
-												onPlacePicked: (result) {
+												autocompleteLanguage: "es",
+												desiredLocationAccuracy: LocationAccuracy.high,
+												hintText: "Buscar",
+												searchingText: "Buscando..",
+												onPlacePicked: (result) async {
 													print(result.formattedAddress);
 													myPos = Position(latitude: result.geometry.location.lat, longitude: result.geometry.location.lng);
+													locality = await _geolocationService.getLocality(myPos.latitude, myPos.longitude);
+													List<Restaurant> aux;
+													aux = await _dbService.getNearRestaurants(myPos.latitude, myPos.longitude, locality.toUpperCase());
+													Pool.addRestaurants(aux);
+													restaurants = Pool.getSubList(aux);
 													setState(() {
-													  locality = result.formattedAddress;
 													});
 													Navigator.of(context).pop();
 												},
 												initialPosition: LatLng(myPos.latitude, myPos.longitude),
-												useCurrentLocation: true,
+												useCurrentLocation: false,
 											),
 										),
 									);
 								},
-							),
+							) : Container(),
 							backgroundColor: Colors.brown[400],
 							elevation: 0.0,
 							//bottom: TabBar(tabs: <Widget>[IconButton(icon: Icon(Icons.search), onPressed: (){},)],),
@@ -139,9 +151,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 									offstage: _selectedIndex != 0,
 									child: TickerMode(
 										enabled: _selectedIndex == 0,
-										child: HomeScreen(myPos: myPos,
-												restaurants: restaurants,
-												locality: locality),
+										child: homeScreen,
 									),
 								),
 								Offstage(

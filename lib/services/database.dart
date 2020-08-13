@@ -12,11 +12,11 @@ import 'package:lookinmeal/shared/strings.dart';
 
 class DBService {
 
-	static User _user;
+	static User userF;
 	//String api = "https://lookinmeal-dcf41.firebaseapp.com";//"http://localhost:5001/lookinmeal-dcf41/us-central1/app";//
 
 	Future<User> getUserData(String id) async{
-		if(_user == null){
+		if(userF == null){
 			var response = await http.get(
 					"${StaticStrings.api}/users", headers: {"id": id});
 			print(response.body);
@@ -33,11 +33,11 @@ class DBService {
 					ratings: await this.getAllRating(id)
 			);
 			print("User obtained: ${result.first}");
-			_user = user;
+			userF = user;
 			return user;
 		}
 		else {
-      return _user;
+      return userF;
     }
 	}
 

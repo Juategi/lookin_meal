@@ -3,7 +3,7 @@
 TODO
 
 
-cambiar location a mano, elegir punto en el mapa
+arreglar cluster y cambiar flappy search
 busquedas calcular nota del plato tambien por numero de votos (necesita bd)
 mapa editar iconos y infowindow custom (necesita diseño)
 limpiar busqueda al cambiar ajustes, reordenar bien con ratings vacios (deprecar flappy)
