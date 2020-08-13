@@ -327,6 +327,11 @@ class DBService {
 		restaurant.sections = sections;
 	}
 
+	Future updateDailyMenu(String restaurant_id, List<String> dailyMenu) async{
+		var response = await http.put("${StaticStrings.api}/daily", body: {"restaurant_id": restaurant_id, "sections":dailyMenu.toString().replaceAll("[", "").replaceAll("]", "")});
+		print(response.body);
+	}
+
 	Future<List<Restaurant>> parseResponse(var response) async{
 		List<Restaurant> restaurants = List<Restaurant>();
 		List<dynamic> result = json.decode(response.body);
@@ -382,6 +387,8 @@ class DBService {
 					currency: element['currency'],
 					sections: element['sections'] == null ? null : List<String>.from(
 							element['sections']),
+					dailymenu: element['dailymenu'] == null ? null : List<String>.from(
+							element['dailymenu']),
 					//menu: await getMenu(element['restaurant_id'].toString())
 		);
 		restaurants.add(restaurant);
