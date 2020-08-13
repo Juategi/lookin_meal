@@ -15,4 +15,17 @@ class Loading extends StatelessWidget {
 			),
 		);
 	}
+
+}
+
+class CircularLoading extends StatelessWidget {
+	@override
+	Widget build(BuildContext context) {
+		return Row(
+			mainAxisAlignment: MainAxisAlignment.center,
+			children: <Widget>[
+				CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent),),
+			],
+		);
+	}
 }

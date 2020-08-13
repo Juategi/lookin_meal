@@ -196,7 +196,7 @@ class DBService {
 	}
 
 
-	Future<String> addMenuEntry(String restaurant_id, String name, String section, double price, String image, int pos) async{
+	Future<String> addMenuEntry(String restaurant_id, String name, String section, double price, String image, int pos, String description) async{
 		Map body = {
 			"restaurant_id": restaurant_id,
 			"name": name,
@@ -204,6 +204,7 @@ class DBService {
 			"price" : price.toString(),
       "image" : image ?? "",
 			"pos" : pos.toString(),
+			"description": description
 		};
 		var response = await http.post(
 				"${StaticStrings.api}/menus", body: body);
@@ -228,7 +229,8 @@ class DBService {
 				numReviews: int.parse(element['numreviews']),
 				price: element['price'].toDouble(),
 				image: element['image'],
-				pos: element['pos']
+				pos: element['pos'],
+				description: element['description']
 			);
 			menu.add(me);
 		}
@@ -292,7 +294,7 @@ class DBService {
 		print(response.body);
 		for(MenuEntry entry in menu){
 			if(!notNews.contains(entry.id)){
-				entry.id = await addMenuEntry(entry.restaurant_id, entry.name, entry.section, entry.price, entry.image, entry.pos);
+				entry.id = await addMenuEntry(entry.restaurant_id, entry.name, entry.section, entry.price, entry.image, entry.pos, entry.description);
 			}
 			else{
 				for(MenuEntry entryR in restaurant.menu){
@@ -305,7 +307,8 @@ class DBService {
 										"section": entry.section,
 										"price": entry.price.toString(),
 										"image": entry.image ?? "",
-										"pos": entry.pos.toString()
+										"pos": entry.pos.toString(),
+										"description": entry.description
 									});
 							print("${response.body}    ${entry.name}");
 						}

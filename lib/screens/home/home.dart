@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/favorites/favorites.dart';
@@ -98,7 +100,35 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 						backgroundColor: Colors.brown[50],
 						appBar: AppBar(
 							//title: Text(tr.translate("app")),
-							title: Text(locality),
+							title: RawMaterialButton(
+								child: Row(
+								  children: <Widget>[
+								  	Icon(Icons.add_location),
+								    SizedBox(width: 10,),
+								    Text(locality, style: TextStyle(fontWeight: FontWeight.normal, color: Colors.white, fontSize: 18,),),
+								  ],
+								),
+								onPressed: () {
+									Navigator.push(
+										context,
+										MaterialPageRoute(
+											builder: (context) => PlacePicker(
+												apiKey: "AIzaSyAIIK4P68Ge26Yc0HkQ6uChj_NEqF2VeCU",
+												onPlacePicked: (result) {
+													print(result.formattedAddress);
+													myPos = Position(latitude: result.geometry.location.lat, longitude: result.geometry.location.lng);
+													setState(() {
+													  locality = result.formattedAddress;
+													});
+													Navigator.of(context).pop();
+												},
+												initialPosition: LatLng(myPos.latitude, myPos.longitude),
+												useCurrentLocation: true,
+											),
+										),
+									);
+								},
+							),
 							backgroundColor: Colors.brown[400],
 							elevation: 0.0,
 							//bottom: TabBar(tabs: <Widget>[IconButton(icon: Icon(Icons.search), onPressed: (){},)],),

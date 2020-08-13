@@ -48,6 +48,7 @@ class _EntryRatingState extends State<EntryRating> {
   Widget build(BuildContext context) {
     AppLocalizations tr = AppLocalizations.of(context);
     return Container(
+      height: 500,
       child: Column(
         children: <Widget>[
           Container(
@@ -60,17 +61,19 @@ class _EntryRatingState extends State<EntryRating> {
               ),
             ),
           ),
-          SizedBox(height: 20,),
-          Text(entry.name),
+          SizedBox(height: 15,),
+          Text(entry.name, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black54, fontSize: 18,),),
+          SizedBox(height: 5,),
+          Text(entry.description, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black54, fontSize: 15,),),
           SizedBox(height: 20,),
           Text(hasRate ? actual.date : "Valora el plato!"),
-          SizedBox(height: 20,),
+          SizedBox(height: 10,),
           SmoothStarRating(
             allowHalfRating: true,
             rating: rate,
             filledIconData: Icons.star,
             halfFilledIconData: Icons.star_half,
-            size: 50,
+            size: 40,
             onRated: (v) {
               rate = v;
               setState(() {
