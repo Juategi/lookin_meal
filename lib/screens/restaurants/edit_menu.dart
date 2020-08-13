@@ -46,7 +46,8 @@ class _EditMenuState extends State<EditMenu> {
                 numReviews: entry.numReviews,
                 section: entry.section,
                 image: entry.image,
-                pos: entry.pos
+                pos: entry.pos,
+                description: entry.description
             ));
             ids.add(int.parse(entry.id));
           }
@@ -125,6 +126,7 @@ class _EditMenuState extends State<EditMenu> {
                           .image,),),),),
                 IconButton(icon: Icon(Icons.description), onPressed: (){
                   String desc = entry.description;
+                  print(entry.description);
                   showModalBottomSheet(context: context, builder: (BuildContext bc){
                     return Container(
                       height: 500,

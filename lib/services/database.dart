@@ -299,7 +299,7 @@ class DBService {
 			else{
 				for(MenuEntry entryR in restaurant.menu){
 					if(entry.id == entryR.id) {
-						if (!(entry.price == entryR.price && entry.name == entryR.name && entry.section == entryR.section && entry.image == entryR.image)) {
+						if (!(entry.price == entryR.price && entry.name == entryR.name && entry.section == entryR.section && entry.image == entryR.image && entry.description == entryR.description)) {
 							var response = await http.put("${StaticStrings.api}/menus",
 									body: {
 										"entry_id": entry.id,
@@ -308,7 +308,7 @@ class DBService {
 										"price": entry.price.toString(),
 										"image": entry.image ?? "",
 										"pos": entry.pos.toString(),
-										"description": entry.description
+										"description": entry.description ?? ""
 									});
 							print("${response.body}    ${entry.name}");
 						}

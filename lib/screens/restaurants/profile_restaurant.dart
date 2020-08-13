@@ -179,6 +179,12 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							Navigator.pushNamed(context, "/editmenu",arguments: restaurant).then((value) => setState(() {}));
 						},
 					),
+					RaisedButton(
+						child: Text("Edit Daily Menu"),
+						onPressed: ()async{
+							Navigator.pushNamed(context, "/editdaily",arguments: restaurant).then((value) => setState(() {}));
+						},
+					),
 					restaurant.menu == null? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),) : Menu(sections: restaurant.sections, menu: restaurant.menu, currency: restaurant.currency, user: user)
       	],
       ),
