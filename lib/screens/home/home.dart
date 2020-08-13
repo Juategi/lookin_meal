@@ -29,7 +29,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	final AuthService _auth = AuthService();
 	final DBService _dbService = DBService();
 	final GeolocationService _geolocationService = GeolocationService();
-	HomeScreen homeScreen;
 	User user;
 	String id;
 	String locality;
@@ -97,9 +96,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	  AppLocalizations tr = AppLocalizations.of(context);
 	  if(ready && user != null) {
 	  	flag = false;
-	  	homeScreen = new HomeScreen(myPos: myPos,
-					restaurants: restaurants,
-					locality: locality);
 			return Scaffold(
 						backgroundColor: Colors.brown[50],
 						appBar: AppBar(
@@ -151,7 +147,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 									offstage: _selectedIndex != 0,
 									child: TickerMode(
 										enabled: _selectedIndex == 0,
-										child: homeScreen,
+										child: HomeScreen(myPos: myPos,
+												restaurants: restaurants,
+												locality: locality),
 									),
 								),
 								Offstage(

@@ -19,8 +19,6 @@ class _HomeScreenState extends State<HomeScreen> {
 	User user;
 	String locality;
 	List<Restaurant> restaurants;
-	List<double> distances = List<double>();
-
 
 	List<Widget> _initTiles(User user){
 		List<Widget> tiles = new List<Widget>();
