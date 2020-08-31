@@ -1,7 +1,12 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:lookinmeal/services/auth.dart';
 import 'package:location_permissions/location_permissions.dart';
+import 'package:lookinmeal/shared/common_data.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Authenticate extends StatefulWidget {
 
@@ -15,15 +20,186 @@ class _AuthenticateState extends State<Authenticate> {
 
 	@override
 	Widget build(BuildContext context) {
+		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
 		AppLocalizations tr = AppLocalizations.of(context);
 		return Scaffold(
-			backgroundColor: Colors.brown[100],
-			appBar: AppBar(
-				backgroundColor: Colors.brown[400],
-				elevation: 0.0,
-				title: Text(tr.translate("app")),
+			body: Stack(
+			  children: <Widget>[
+			    Container(
+			    	decoration: BoxDecoration(
+			    			gradient: LinearGradient(
+			    					begin: Alignment.topCenter,
+			    					end: Alignment.bottomCenter,
+			    						stops: [
+			    							0.1,
+			    							0.3,
+			    							0.4,
+			    							0.8
+			    						],
+			    					colors: [Color.fromRGBO(255, 138, 120, 0.72), Color.fromRGBO(255, 110, 117, 0.62), Color.fromRGBO(246, 120, 80, 0.61), Color.fromRGBO(255, 67, 112, 1)]
+			    			)
+			    	)
+			    ),
+					Center(
+					  child: Column( mainAxisAlignment: MainAxisAlignment.center,
+					  	children: <Widget>[
+					  		Row(mainAxisAlignment: MainAxisAlignment.center,
+					  		  children: <Widget>[
+					  		    Text('Find', style: GoogleFonts.newsCycle(textStyle: TextStyle(color: Colors.white, letterSpacing: .5, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(72),),)),
+										Text('Eat', style: GoogleFonts.newsCycle(textStyle: TextStyle(color: Colors.white, letterSpacing: .5, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(72),),)),
+									],
+					  		),
+								SizedBox(height: 60.h,),
+								GestureDetector(
+								  child: Stack(
+								    children: <Widget>[
+								  		Container(
+								  			height: 56.h,
+								  			width: 280.w,
+								  			decoration: BoxDecoration(
+								  					borderRadius: BorderRadius.all(Radius.circular(28)),
+								  					border: Border.all(width: 1, color: Colors.white, style: BorderStyle.solid)
+								  			),
+								  			child: Row( mainAxisAlignment: MainAxisAlignment.center,
+								  			  children: <Widget>[
+								  			  	SizedBox(width: 20.w,),
+								  			    Text('Sign up with Facebook', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .5, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+								  			  ],
+								  			),
+								  		),
+								  		Positioned(
+								  			right: 222.w,
+								  		  top: 0.h,
+								  		  child: Container(
+								  		  	width: 58.w,
+								  		  	height: 58.h,
+								  		  	decoration: new BoxDecoration(
+								  		  		border: Border.all(color:Colors.white),
+								  		  		color: Colors.white,
+								  		  		shape: BoxShape.circle,
+								  		  	),
+								  		  	child: Center(
+								  		  		child: Container(
+								  		  				height: 47.h,
+								  		  				width: 38.w,
+								  		  				child: SvgPicture.asset("assets/facebook.svg")
+								  		  		),
+								  		  	),
+								  		  ),
+								  		),
+								    ],
+								  ),
+									onTap: () async{
+										PermissionStatus permission = await LocationPermissions().requestPermissions();
+										if(permission == PermissionStatus.granted)
+											dynamic result = await _auth.loginFB();
+									},
+								),
+								SizedBox(height: 30.h,),
+								GestureDetector(
+									child: Stack(
+										children: <Widget>[
+											Container(
+												height: 56.h,
+												width: 280.w,
+												decoration: BoxDecoration(
+														borderRadius: BorderRadius.all(Radius.circular(28)),
+														border: Border.all(width: 1, color: Colors.white, style: BorderStyle.solid)
+												),
+												child: Row( mainAxisAlignment: MainAxisAlignment.center,
+													children: <Widget>[
+														SizedBox(width: 20.w,),
+														Text('Sign up with Google', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .5, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+													],
+												),
+											),
+											Positioned(
+												right: 222.w,
+												top: 0.h,
+												child: Container(
+													width: 58.w,
+													height: 58.h,
+													decoration: new BoxDecoration(
+														border: Border.all(color:Colors.white),
+														color: Colors.white,
+														shape: BoxShape.circle,
+													),
+													child: Center(
+														child: Container(
+																height: 47.h,
+																width: 38.w,
+																child: SvgPicture.asset("assets/google.svg")
+														),
+													),
+												),
+											),
+										],
+									),
+									onTap: () async{
+										PermissionStatus permission = await LocationPermissions().requestPermissions();
+										if(permission == PermissionStatus.granted)
+											dynamic result = await _auth.loginGoogle();
+									}
+								),
+								SizedBox(height: 30.h,),
+								GestureDetector(
+										child: Stack(
+											children: <Widget>[
+												Container(
+													height: 56.h,
+													width: 280.w,
+													decoration: BoxDecoration(
+															borderRadius: BorderRadius.all(Radius.circular(28)),
+															border: Border.all(width: 1, color: Colors.white, style: BorderStyle.solid)
+													),
+													child: Row( mainAxisAlignment: MainAxisAlignment.center,
+														children: <Widget>[
+															SizedBox(width: 20.w,),
+															Text('Log in with Email', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .5, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+														],
+													),
+												),
+												Positioned(
+													right: 222.w,
+													top: 0.h,
+													child: Container(
+														width: 58.w,
+														height: 58.h,
+														decoration: new BoxDecoration(
+															border: Border.all(color:Colors.white),
+															color: Colors.white,
+															shape: BoxShape.circle,
+														),
+														child: Center(
+															child: Container(
+																	height: 47.h,
+																	width: 38.w,
+																	child: SvgPicture.asset("assets/email.svg")
+															),
+														),
+													),
+												),
+											],
+										),
+										onTap: ()async{
+											PermissionStatus permission = await LocationPermissions().requestPermissions();
+											if(permission == PermissionStatus.granted)
+											await Navigator.pushNamed(context, "/login");
+									},
+								)
+					  	],
+					  ),
+					),
+			  ],
 			),
-			body: Container(
+		);
+	}
+}
+
+/*
+
+
+Container(
 				padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
 				child: Column(
 					children: <Widget>[
@@ -70,6 +246,4 @@ class _AuthenticateState extends State<Authenticate> {
 					],
 				)
 			)
-		);
-	}
-}
+ */
