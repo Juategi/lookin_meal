@@ -36,11 +36,11 @@ class AuthService{
 		}
 	}
 
-	Future registerEP(String email, String password, String name) async{
+	Future registerEP(String email, String password, String name, String country, String username) async{
 		try{
 			AuthResult result =	await _auth.createUserWithEmailAndPassword(email: email, password: password);
 			FirebaseUser user = result.user;
-			await DBService().createUser(user.uid,email,name,StaticStrings.defaultImage,"EP");
+			await DBService.dbService.createUser(user.uid,email,name,StaticStrings.defaultImage,"EP", country, username);
 			return _userFromFirebaseUser(user);
 		} catch(e){
 			print(e);
@@ -73,11 +73,19 @@ class AuthService{
 		String picture = profile["picture"]["data"]["url"];
 		User finalUser = await DBService().getUserDataChecker(credential.user.uid);
 		if(finalUser == null) {
-			await DBService().createUser(credential.user.uid,credential.user.email, profile["name"],picture,"FB");
-			return _userFromFirebaseUser(credential.user);
+			while(true){
+				String username = profile["first_name"].toString().trim() + profile["last_name"].toString().trim() + (Random().nextInt(10000).toString());
+				if(await DBService.dbService.checkUsername(username)){
+					username = profile["first_name"].toString().trim() + profile["last_name"].toString().trim() + (Random().nextInt(10000).toString());
+				}
+				else{
+					await DBService.dbService.createUser(credential.user.uid,credential.user.email, profile["name"],picture,"FB", await DBService.dbService.getCountry(), username);
+					return _userFromFirebaseUser(credential.user);
+				}
+			}
 		}
 		else{
-			await DBService().updateUserData(credential.user.uid,credential.user.email, profile["name"],picture,"FB");
+			await DBService.dbService.updateUserData(credential.user.uid,credential.user.email, profile["name"],picture,"FB");
 			return _userFromFirebaseUser(credential.user);
 		}
 
@@ -106,13 +114,21 @@ class AuthService{
 		assert(user.uid == currentUser.uid);
 		User finalUser = await DBService().getUserDataChecker(user.uid);
 		if(finalUser == null) {
-			await DBService().createUser(
-					user.uid, user.email, authResult.additionalUserInfo.profile['name'],
-					authResult.additionalUserInfo.profile['picture'], "GM");
-			return _userFromFirebaseUser(user);
+			while(true){
+				String username = authResult.additionalUserInfo.profile['given_name'].toString().trim() + authResult.additionalUserInfo.profile['family_name'].toString().trim() + (Random().nextInt(10000).toString());
+				if(await DBService.dbService.checkUsername(username)){
+					username = authResult.additionalUserInfo.profile['given_name'].toString().trim() + authResult.additionalUserInfo.profile['family_name'].toString().trim() + (Random().nextInt(10000).toString());
+				}
+				else {
+					await DBService.dbService.createUser(
+							user.uid, user.email, authResult.additionalUserInfo.profile['name'],
+							authResult.additionalUserInfo.profile['picture'], "GM", await DBService.dbService.getCountry(), username);
+					return _userFromFirebaseUser(user);
+				}
+			}
 		}
 		else{
-			await DBService().updateUserData(
+			await DBService.dbService.updateUserData(
 					user.uid, user.email, authResult.additionalUserInfo.profile['name'],
 					authResult.additionalUserInfo.profile['picture'], "GM");
 			return _userFromFirebaseUser(user);

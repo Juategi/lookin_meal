@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 
-const textInputDeco = InputDecoration(
-	fillColor: Colors.white,
+var textInputDeco = InputDecoration(
 	filled: true,
-	enabledBorder: OutlineInputBorder(
-		borderSide: BorderSide(color: Colors.white, width: 2)
-	),
 	focusedBorder: OutlineInputBorder(
-		borderSide: BorderSide(color: Colors.pink, width: 2)
+			borderSide: BorderSide(color: Colors.white, width: 1),
+			borderRadius: BorderRadius.circular(20)
 	),
+	enabledBorder: OutlineInputBorder(
+			borderSide: BorderSide(color: Colors.white, width: 1),
+			borderRadius: BorderRadius.circular(20)
+	),
+	errorBorder: OutlineInputBorder(
+			borderSide: BorderSide(color: Colors.white, width: 1),
+			borderRadius: BorderRadius.circular(20)
+	),
+	focusedErrorBorder: OutlineInputBorder(
+			borderSide: BorderSide(color: Colors.white, width: 1),
+			borderRadius: BorderRadius.circular(20)
+	)
 );
+

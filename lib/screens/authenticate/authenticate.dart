@@ -186,8 +186,13 @@ class _AuthenticateState extends State<Authenticate> {
 											if(permission == PermissionStatus.granted)
 											await Navigator.pushNamed(context, "/login");
 									},
-								)
-					  	],
+								),
+								SizedBox(height: 40.h,),
+								Padding(
+								  padding: EdgeInsets.symmetric(horizontal: 60.w),
+								  child: Text('By signing up you agree to our Terms and conditions of use.', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(13),),)),
+								),
+							],
 					  ),
 					),
 			  ],
@@ -195,55 +200,3 @@ class _AuthenticateState extends State<Authenticate> {
 		);
 	}
 }
-
-/*
-
-
-Container(
-				padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-				child: Column(
-					children: <Widget>[
-						SizedBox(height: 20,),
-						RaisedButton(
-							color: Colors.pink[400],
-							onPressed: () async{
-								PermissionStatus permission = await LocationPermissions().requestPermissions();
-								if(permission == PermissionStatus.granted)
-									await Navigator.pushNamed(context, "/login");
-							},
-							child: Text(tr.translate("login"), style: TextStyle(color: Colors.white),),
-						),
-						SizedBox(height: 20,),
-						RaisedButton(
-							color: Colors.pink[400],
-							onPressed: () async{
-								PermissionStatus permission = await LocationPermissions().requestPermissions();
-								if(permission == PermissionStatus.granted)
-									await Navigator.pushNamed(context, "/signin");
-							},
-							child: Text(tr.translate("register"), style: TextStyle(color: Colors.white),),
-						),
-						SizedBox(height: 60,),
-						FlatButton(
-							padding: EdgeInsets.all(0),
-							child: Image.asset("assets/fb.bmp"),
-							onPressed: () async{
-								PermissionStatus permission = await LocationPermissions().requestPermissions();
-								if(permission == PermissionStatus.granted)
-									dynamic result = await _auth.loginFB();
-							}
-							),
-						SizedBox(height: 20,),
-						FlatButton(
-							padding: EdgeInsets.all(0),
-							child: Image.asset("assets/google.PNG"),
-							onPressed: () async{
-								PermissionStatus permission = await LocationPermissions().requestPermissions();
-								if(permission == PermissionStatus.granted)
-									dynamic result = await _auth.loginGoogle();
-							}
-							),
-					],
-				)
-			)
- */

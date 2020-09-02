@@ -13,6 +13,7 @@ import 'package:lookinmeal/shared/strings.dart';
 class DBService {
 
 	static User userF;
+	static final DBService dbService = DBService();
 	//String api = "https://lookinmeal-dcf41.firebaseapp.com";//"http://localhost:5001/lookinmeal-dcf41/us-central1/app";//
 
 	Future<User> getUserData(String id) async{
@@ -29,6 +30,8 @@ class DBService {
 					email: result.first["email"],
 					service: result.first["service"],
 					picture: result.first["image"],
+					country: result.first["country"],
+					username: result.first["username"],
 					favorites: await this.getUserFavorites(id, myPos.latitude, myPos.longitude),
 					ratings: await this.getAllRating(id)
 			);
@@ -52,6 +55,8 @@ class DBService {
 				email: result.first["email"],
 				service: result.first["service"],
 				picture: result.first["image"],
+				country: result.first["country"],
+				username: result.first["username"],
 			);
 			return user;
 		}
@@ -60,17 +65,43 @@ class DBService {
 	}
 
 	Future createUser(String id, String email, String name, String picture,
-			String service) async {
+			String service, String country, String username) async {
 		Map body = {
 			"id": id,
 			"name": name,
 			"email": email,
 			"service": service,
-			"image": picture
+			"image": picture,
+			"country": country,
+			"username": username
 		};
 		var response = await http.post(
 				"${StaticStrings.api}/users", body: body);
 		print(response.body);
+	}
+
+	Future<String> getCountry()async{
+		String ipUrl = "https://api.ipify.org?format=json";
+		String locIpUrl = "https://ipapi.co/";
+		var result = await http.get(ipUrl, headers: {});
+		String ip = json.decode(result.body)['ip'];
+		result = await http.get("$locIpUrl${ip}/json/", headers: {});
+		dynamic iplocalization = json.decode(result.body);
+		return iplocalization["country_name"];
+	}
+
+	Future<bool> checkUsername(String username) async{
+		String us;
+		var response = await http.get("${StaticStrings.api}/checkuser", headers: {"username": username});
+		print(response.body);
+		try {
+			var aux = json.decode(response.body);
+			us = aux[0]['username'];
+		}catch(e){}
+		if(us == null)
+			return false;
+		else
+			return true;
 	}
 
 	Future updateUserData(String id, String email, String name, String picture,
