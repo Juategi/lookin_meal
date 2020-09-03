@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -14,6 +15,7 @@ import 'package:lookinmeal/services/auth.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
+import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:lookinmeal/screens/map/map.dart';
@@ -32,9 +34,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	final GeolocationService _geolocationService = GeolocationService();
 	User user;
 	String id;
-	String locality;
+	String locality, country;
 	Position myPos;
-	List<Restaurant> restaurants;
+	List<Restaurant> nearRestaurants;
 	List<double> distances = List<double>();
 	int _selectedIndex = 0;
 	bool ready = false;
@@ -46,7 +48,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	}
 
 	void _timer() {
-		if(ready || user == null) {
+		if(!ready || user == null) {
 			Future.delayed(Duration(seconds: 2)).then((_) {
 				setState(() {
 					print("Loading..");
@@ -60,10 +62,11 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	void _update()async{
 		myPos = await _geolocationService.getLocation();
 		locality = await _geolocationService.getLocality(myPos.latitude, myPos.longitude);
+		country = await _geolocationService.getCountry(myPos.latitude, myPos.longitude);
 		List<Restaurant> aux;
 		aux = await _dbService.getNearRestaurants(myPos.latitude, myPos.longitude, locality.toUpperCase());
 		Pool.addRestaurants(aux);
-		restaurants = Pool.getSubList(aux);
+		nearRestaurants = Pool.getSubList(aux);
 		/*for(Restaurant restaurant in restaurants){
 			distances.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));
 		}*/
@@ -94,52 +97,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
 	  user = Provider.of<User>(context);
 	  AppLocalizations tr = AppLocalizations.of(context);
+		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
 	  if(ready && user != null) {
 			return Scaffold(
-						backgroundColor: Colors.brown[50],
-						appBar: AppBar(
-							//title: Text(tr.translate("app")),
-							title:_selectedIndex == 0 ? RawMaterialButton(
-								child: Row(
-								  children: <Widget>[
-								  	Icon(Icons.add_location),
-								    SizedBox(width: 10,),
-								    Text(locality, style: TextStyle(fontWeight: FontWeight.normal, color: Colors.white, fontSize: 18,),),
-								  ],
-								),
-								onPressed: () {
-									Navigator.push(
-										context,
-										MaterialPageRoute(
-											builder: (context) => PlacePicker(
-												apiKey: "AIzaSyAIIK4P68Ge26Yc0HkQ6uChj_NEqF2VeCU",
-												autocompleteLanguage: "es",
-												desiredLocationAccuracy: LocationAccuracy.high,
-												hintText: "Buscar",
-												searchingText: "Buscando..",
-												onPlacePicked: (result) async {
-													print(result.formattedAddress);
-													myPos = Position(latitude: result.geometry.location.lat, longitude: result.geometry.location.lng);
-													locality = await _geolocationService.getLocality(myPos.latitude, myPos.longitude);
-													List<Restaurant> aux;
-													aux = await _dbService.getNearRestaurants(myPos.latitude, myPos.longitude, locality.toUpperCase());
-													Pool.addRestaurants(aux);
-													restaurants = Pool.getSubList(aux);
-													setState(() {
-													});
-													Navigator.of(context).pop();
-												},
-												initialPosition: LatLng(myPos.latitude, myPos.longitude),
-												useCurrentLocation: false,
-											),
-										),
-									);
-								},
-							) : Container(),
-							backgroundColor: Colors.brown[400],
-							elevation: 0.0,
-							//bottom: TabBar(tabs: <Widget>[IconButton(icon: Icon(Icons.search), onPressed: (){},)],),
-						),
 						body: Stack(
 							children: <Widget>[
 								Offstage(
@@ -147,7 +107,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 									child: TickerMode(
 										enabled: _selectedIndex == 0,
 										child: Provider<List<Restaurant>>.value(
-											value: restaurants,
+											value: nearRestaurants,
 										  child: HomeScreen(),
 										),
 									),
@@ -156,59 +116,49 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 									offstage: _selectedIndex != 1,
 									child: TickerMode(
 										enabled: _selectedIndex == 1,
-										child: Stars(locality: locality, myPos: myPos,),
+											child: MapSample()
 									),
 								),
 								Offstage(
 									offstage: _selectedIndex != 2,
 									child: TickerMode(
 											enabled: _selectedIndex == 2,
-											child: MapSample()
+											child: Container()
 									),
 								),
 								Offstage(
 									offstage: _selectedIndex != 3,
 									child: TickerMode(
 										enabled: _selectedIndex == 3,
-										child: Favorites(),
-									),
-								),
-								Offstage(
-									offstage: _selectedIndex != 4,
-									child: TickerMode(
-											enabled: _selectedIndex == 4,
 											child: Profile()
 									),
 								),
+
 							],
 						),
 						bottomNavigationBar: BottomNavigationBar(
-							backgroundColor: Colors.brown[200],
+							backgroundColor: Colors.white,
 							type: BottomNavigationBarType.fixed,
 							items: <BottomNavigationBarItem>[
 								BottomNavigationBarItem(
-									icon: Icon(Icons.home),
+									icon: Icon(FontAwesomeIcons.compass, size: ScreenUtil().setSp(22),),
 									title: Text(tr.translate("home")),
 								),
 								BottomNavigationBarItem(
-									icon: Icon(Icons.search),
-									title: Text("Search"),
-								),
-								BottomNavigationBarItem(
-									icon: Icon(FontAwesomeIcons.mapMarkedAlt),
+									icon: Icon(FontAwesomeIcons.mapMarkedAlt, size: ScreenUtil().setSp(22),),
 									title: Text(tr.translate("map")),
 								),
 								BottomNavigationBarItem(
-									icon: Icon(Icons.favorite),
-									title: Text(tr.translate("fav")),
+									icon: Icon(Icons.star, size: ScreenUtil().setSp(25),),
+									title: Text("Top"),
 								),
 								BottomNavigationBarItem(
-									icon: Icon(Icons.person),
+									icon: Icon(Icons.person, size: ScreenUtil().setSp(25),),
 									title: Text(tr.translate("profile")),
 								),
 							],
 							currentIndex: _selectedIndex,
-							selectedItemColor: Colors.amber[800],
+							selectedItemColor: Color.fromRGBO(255, 110, 117, 0.61),
 							onTap: _onItemTapped,
 						)
 					);

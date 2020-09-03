@@ -58,14 +58,16 @@ class _FavoritesState extends State<Favorites> {
 
   @override
   Widget build(BuildContext context) { //PROBLEMA CON EL CÁLCULO DE DISTANCIAS, LO MEJOR SERÁ HACERLO EN OTRO SITIO
-	  user = Provider.of<User>(context);
+	  user = DBService.userF;
 		AppLocalizations tr = AppLocalizations.of(context);
 		//_distances();
 		if(true) {
-			return Container(
-				child: ListView(
-					children: _initTiles(tr)
-				),
+			return Scaffold(
+			  body: Container(
+			  	child: ListView(
+			  		children: _initTiles(tr)
+			  	),
+			  ),
 			);
 		}
 		else

@@ -3,6 +3,7 @@ import 'package:lookinmeal/screens/authenticate/authenticate.dart';
 import 'package:lookinmeal/screens/authenticate/email_pass.dart';
 import 'package:lookinmeal/screens/authenticate/log_in.dart';
 import 'package:lookinmeal/screens/authenticate/sign_in.dart';
+import 'package:lookinmeal/screens/favorites/favorites.dart';
 import 'package:lookinmeal/screens/home/home.dart';
 import 'package:lookinmeal/screens/profile/edit_profile.dart';
 import 'package:lookinmeal/screens/restaurants/edit_daily.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
           "/options" : (context) => SearchOptions(),
           "/entryoptions" : (context) => SearchEntry(),
           "/editdaily" : (context) => EditDaily(),
+          "/favs" : (context) => Favorites(),
         },
         home: Wrapper(),
         //initialRoute:"/",

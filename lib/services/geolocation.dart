@@ -4,6 +4,8 @@ import 'package:diacritic/diacritic.dart';
 
 class GeolocationService{
 
+	static String locality, country;
+
 	Future<double> distanceBetween(double startLatitude, double startLongitude, double endLatitude, double endLongitude)async{ //optimizable
 		double distance = await Geolocator().distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude);
 		return num.parse((distance/1000).toStringAsFixed(1));
@@ -21,6 +23,15 @@ class GeolocationService{
 		final coordinates = new Coordinates(latitude, longitude);
 		var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
 		var first = addresses.first;
+		locality = removeDiacritics(first.locality);
 		return removeDiacritics(first.locality);
+	}
+
+	Future<String> getCountry(double latitude, double longitude)async{
+		final coordinates = new Coordinates(latitude, longitude);
+		var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+		var first = addresses.first;
+		country = first.countryName;
+		return removeDiacritics(first.countryName);
 	}
 }

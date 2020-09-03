@@ -44,6 +44,14 @@ class _ProfileState extends State<Profile> {
         SizedBox(height: 20,),
         FlatButton.icon(
             onPressed: () async {
+              Navigator.pushNamed(context, "/favs");
+            },
+            icon: Icon(Icons.favorite),
+            label: Text("favoritos")
+        ),
+        SizedBox(height: 20,),
+        FlatButton.icon(
+            onPressed: () async {
               await _auth.signOut();
             },
             icon: Icon(Icons.exit_to_app),

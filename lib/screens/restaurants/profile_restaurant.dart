@@ -31,12 +31,11 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 
   @override
   Widget build(BuildContext context) {
-  	var args = List<Object>.of(ModalRoute.of(context).settings.arguments);
-  	restaurant = args.first;
+  	restaurant = ModalRoute.of(context).settings.arguments;
 		_timer();
   	if(restaurant.menu == null)
   		_loadMenu();
-		User user = args.last;
+		User user = DBService.userF;
 	  final DBService _dbService = DBService();
     return Scaffold(
 			appBar: AppBar(),
