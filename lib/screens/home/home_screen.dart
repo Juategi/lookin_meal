@@ -152,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
 			  		),
 						SizedBox(height: 10.h,),
 						Container(
-							height: 150.h,
+							height: 155.h,
 						  child: ListView(
 						  	scrollDirection: Axis.horizontal,
 						  	children: nearRestaurants.map((r) => Provider<Restaurant>.value(value: r, child: RestaurantTile(),)).toList(),
