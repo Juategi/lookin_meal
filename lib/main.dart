@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lookinmeal/screens/authenticate/authenticate.dart';
+import 'package:lookinmeal/screens/authenticate/email_pass.dart';
 import 'package:lookinmeal/screens/authenticate/log_in.dart';
 import 'package:lookinmeal/screens/authenticate/sign_in.dart';
 import 'package:lookinmeal/screens/home/home.dart';
@@ -29,11 +30,12 @@ class MyApp extends StatelessWidget {
       value: AuthService().user,
       child: MaterialApp(
         routes:{
-          //"/":(context) => Wrapper(),
+          "/wrapper":(context) => Wrapper(),
           "/home":(context) => Home(),
           "/authenticate": (context) => Authenticate(),
           "/login": (context) => LogIn(),
           "/signin": (context) => SignIn(),
+          "/emailpass": (context) => EmailPassword(),
           "/restaurant": (context) => ProfileRestaurant(),
           "/editprofile": (context) => EditProfile(),
           "/editmenu" : (context) => EditMenu(),

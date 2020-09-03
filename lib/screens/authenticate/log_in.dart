@@ -63,6 +63,9 @@ class _LogInState extends State<LogIn> {
 												onChanged: (value){
 													setState(() => email = value);
 												},
+												style: TextStyle(
+													color: Colors.white,
+												),
 												validator: (val) => !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val) ? tr.translate("enteremail") : null,
 												decoration: textInputDeco
 										),
@@ -78,6 +81,9 @@ class _LogInState extends State<LogIn> {
 										onChanged: (value){
 											setState(() => password = value);
 										},
+										style: TextStyle(
+											color: Colors.white,
+										),
 										validator: (val) => val.length < 6 ? tr.translate("enterpassw") : null,
 										decoration: textInputDeco,
 									),

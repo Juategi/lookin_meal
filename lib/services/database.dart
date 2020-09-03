@@ -104,6 +104,28 @@ class DBService {
 			return true;
 	}
 
+	Future<String> checkUsernameEmail(String username, String email) async{
+		String em, us;
+		String result = "";
+		var response = await http.get("${StaticStrings.api}/checkmail", headers: {"email": email});
+		print(response.body);
+		var response2 = await http.get("${StaticStrings.api}/checkuser", headers: {"username": username});
+		print(response2.body);
+		try {
+			var aux = json.decode(response.body);
+			em = aux[0]['email'];
+		} catch(e){}
+		try {
+			var aux = json.decode(response2.body);
+			us = aux[0]['username'];
+		}catch(e){}
+		if(us != null)
+			result += "u";
+		if(em != null)
+			result += "e";
+		return result;
+	}
+
 	Future updateUserData(String id, String email, String name, String picture,
 			String service) async {
 		Map body = {

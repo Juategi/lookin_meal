@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
+import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/decos.dart';
+import 'package:lookinmeal/shared/loading.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -13,10 +16,20 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
 
-	final AuthService _auth = AuthService();
 	final _formKey = GlobalKey<FormState>();
-	String email, password, name = " ";
-	String error = " ";
+	String username, country, name, error;
+	bool loading;
+
+	@override
+  void initState() {
+    super.initState();
+		error = " ";
+		username = "";
+		country = "";
+		name = "";
+		loading = false;
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,51 +67,108 @@ class _SignInState extends State<SignIn> {
 											],
 										),
 										SizedBox(height: 40.h,),
+										Row( mainAxisAlignment: MainAxisAlignment.start,
+											children: <Widget>[
+												Text('Name', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+											],
+										),
+										SizedBox(height: 10.h,),
 										TextFormField(
 											onChanged: (value){
 												setState(() => name = value);
 											},
+											style: TextStyle(
+												color: Colors.white,
+											),
 											validator: (val) => val.isEmpty ? tr.translate("entername") : null,
-											decoration: textInputDeco.copyWith(hintText: tr.translate("name"))
+											decoration: textInputDeco
 										),
-										SizedBox(height: 20,),
+										Row( mainAxisAlignment: MainAxisAlignment.start,
+											children: <Widget>[
+												Text('Appears in your profile', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),)),
+											],
+										),
+										SizedBox(height: 20.h,),
+										Row( mainAxisAlignment: MainAxisAlignment.start,
+											children: <Widget>[
+												Text('Username', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+											],
+										),
+										SizedBox(height: 10.h,),
 										TextFormField(
 											onChanged: (value){
-												setState(() => email = value);
+												setState(() => username= value);
 											},
-											validator: (val) => val.isEmpty ? tr.translate("enteremail") : null,
-											decoration: textInputDeco.copyWith(hintText: tr.translate("email"))
+											style: TextStyle(
+												color: Colors.white,
+											),
+											validator: (val) => username.length < 3 ? "Username too short" : null,
+											decoration: textInputDeco
 										),
-										SizedBox(height: 20,),
+										Row( mainAxisAlignment: MainAxisAlignment.start,
+											children: <Widget>[
+												Text('This name helps users find you', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),)),
+											],
+										),
+										SizedBox(height: 20.h,),
+										Row( mainAxisAlignment: MainAxisAlignment.start,
+											children: <Widget>[
+												Text('Country', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+											],
+										),
+										SizedBox(height: 10.h,),
 										TextFormField(
-											obscureText: true,
 											onChanged: (value){
-												setState(() => password = value);
+												setState(() => country = value);
 											},
-											validator: (val) => val.length < 6 ? tr.translate("enterpassw") : null,
-											decoration: textInputDeco.copyWith(hintText: tr.translate("passw")),
+											style: TextStyle(
+												color: Colors.white,
+											),
+											validator: (val) => val.isEmpty ? "Write your country" : null,
+											decoration: textInputDeco,
 										),
-									 SizedBox(height: 20,),
-										RaisedButton(
-											color: Colors.pink[400],
-											child: Text(tr.translate("register"), style: TextStyle(color: Colors.white),),
-											onPressed: () async{
-											if(_formKey.currentState.validate()){
-												dynamic result = await _auth.registerEP(email, password, name, "", "");
-												if(result == null)
+										Row( mainAxisAlignment: MainAxisAlignment.start,
+											children: <Widget>[
+												Text('Appears in your profile', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),)),
+											],
+										),
+									 SizedBox(height: 50.h,),
+										GestureDetector(
+											child: Container(
+												height: 56.h,
+												width: 280.w,
+												decoration: BoxDecoration(
+														borderRadius: BorderRadius.all(Radius.circular(16)),
+														color: Colors.white
+												),
+												child: !loading? Center(child: Text('Next', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))) : CircularLoading(),
+											),
+											onTap: () async{
+												if(_formKey.currentState.validate()) {
 													setState(() {
-														error = tr.translate("validmail");
+														loading = true;
 													});
-												else
-													Navigator.pop(context);
-											}
-										 },
+													if(await DBService.dbService.checkUsername(username) == false){
+														Navigator.pushNamed(context, "/emailpass", arguments: User(
+															name: name,
+															username: username,
+															country: country,
+														));
+													}
+													else{
+														setState(() {
+														  loading = false;
+														  error = "Username taken";
+														});
+													}
+												}
+											},
 										),
 										SizedBox(height: 12),
 										Text(
 											error,
 											style: TextStyle(color: Colors.red, fontSize: 14),
-										)
+										),
 									]
 							),
 		        ),

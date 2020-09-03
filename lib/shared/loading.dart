@@ -24,7 +24,7 @@ class CircularLoading extends StatelessWidget {
 		return Row(
 			mainAxisAlignment: MainAxisAlignment.center,
 			children: <Widget>[
-				CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent),),
+				CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color.fromRGBO(255, 65, 112, 1)),),
 			],
 		);
 	}
