@@ -11,6 +11,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/strings.dart';
 
 class AuthService{
@@ -144,6 +145,8 @@ class AuthService{
 
 	Future signOut() async{
 		DBService.userF = null;
+		Pool.ids.clear();
+		Pool.restaurants.clear();
 		try{
 			final facebookLogin = FacebookLogin();
 			facebookLogin.logOut();

@@ -20,24 +20,31 @@ class DBService {
 		if(userF == null){
 			var response = await http.get(
 					"${StaticStrings.api}/users", headers: {"id": id});
-			print(response.body);
-			List<dynamic> result = json.decode(response.body);
-			GeolocationService _geolocationService = GeolocationService();
-			Position myPos = await _geolocationService.getLocation();
-			User user = User(
-					uid: result.first["user_id"],
-					name: result.first["name"],
-					email: result.first["email"],
-					service: result.first["service"],
-					picture: result.first["image"],
-					country: result.first["country"],
-					username: result.first["username"],
-					favorites: await this.getUserFavorites(id, myPos.latitude, myPos.longitude),
-					ratings: await this.getAllRating(id)
-			);
-			print("User obtained: ${result.first}");
-			userF = user;
-			return user;
+			while(response.body == "[]"){
+				Future.delayed(const Duration(milliseconds: 900), () {});
+				response = await http.get(
+						"${StaticStrings.api}/users", headers: {"id": id});
+			}
+			if(response.body != "[]") {
+				List<dynamic> result = json.decode(response.body);
+				GeolocationService _geolocationService = GeolocationService();
+				Position myPos = await _geolocationService.getLocation();
+				User user = User(
+						uid: result.first["user_id"],
+						name: result.first["name"],
+						email: result.first["email"],
+						service: result.first["service"],
+						picture: result.first["image"],
+						country: result.first["country"],
+						username: result.first["username"],
+						favorites: await this.getUserFavorites(
+								id, myPos.latitude, myPos.longitude),
+						ratings: await this.getAllRating(id)
+				);
+				print("User obtained: ${result.first}");
+				userF = user;
+				return user;
+			}
 		}
 		else {
       return userF;

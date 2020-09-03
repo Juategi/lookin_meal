@@ -37,7 +37,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	List<Restaurant> restaurants;
 	List<double> distances = List<double>();
 	int _selectedIndex = 0;
-	bool flag = true;
 	bool ready = false;
 
 	void _onItemTapped(int index) {
@@ -47,7 +46,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	}
 
 	void _timer() {
-		if(flag) {
+		if(ready || user == null) {
 			Future.delayed(Duration(seconds: 2)).then((_) {
 				setState(() {
 					print("Loading..");
@@ -96,7 +95,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	  user = Provider.of<User>(context);
 	  AppLocalizations tr = AppLocalizations.of(context);
 	  if(ready && user != null) {
-	  	flag = false;
 			return Scaffold(
 						backgroundColor: Colors.brown[50],
 						appBar: AppBar(
