@@ -20,7 +20,7 @@ class EditRestaurant extends StatefulWidget {
 class _EditRestaurantState extends State<EditRestaurant> {
   final _formKey = GlobalKey<FormState>();
   String name, address, phone, email, web;
-  List<String> types;
+  List<String> types, delivery;
   Map<String, List<int>> schedule;
   Restaurant restaurant;
   bool loading, init;
@@ -42,6 +42,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
       address = restaurant.address;
       email = restaurant.email;
       types = restaurant.types;
+      delivery = restaurant.delivery;
       init = true;
     }
     return Scaffold(
@@ -122,7 +123,102 @@ class _EditRestaurantState extends State<EditRestaurant> {
                 decoration: textInputDeco.copyWith(hintText: "Dirección del restaurant"),
               ),
               SizedBox(height: 20,),
-
+              Padding(
+                padding: const EdgeInsets.only(right: 270),
+                child: Text("A domicilio", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: 13),),
+              ),
+              SizedBox(height: 20,),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/glovo.png").image),
+                        borderRadius: BorderRadius.all(Radius.circular(16))
+                    ),
+                  ),
+                  SizedBox(width: 20,),
+                  Flexible(
+                    child: TextFormField(
+                      onChanged: (value){
+                        delivery[0] = value;
+                      },
+                      controller: TextEditingController()..text = restaurant.delivery == null? "" : restaurant.delivery[0] ,
+                      decoration: textInputDeco,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10,),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/ubereats.png").image),
+                        borderRadius: BorderRadius.all(Radius.circular(16))
+                    ),
+                  ),
+                  SizedBox(width: 20,),
+                  Flexible(
+                    child: TextFormField(
+                      onChanged: (value){
+                        delivery[1] = value;
+                      },
+                      controller: TextEditingController()..text = restaurant.delivery == null? "" : restaurant.delivery[1] ,
+                      decoration: textInputDeco,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10,),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/justeat.png").image),
+                        borderRadius: BorderRadius.all(Radius.circular(16))
+                    ),
+                  ),
+                  SizedBox(width: 20,),
+                  Flexible(
+                    child: TextFormField(
+                      onChanged: (value){
+                        delivery[2] = value;
+                      },
+                      controller: TextEditingController()..text = restaurant.delivery == null? "" : restaurant.delivery[2] ,
+                      decoration: textInputDeco,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10,),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/deliveroo.png").image),
+                        borderRadius: BorderRadius.all(Radius.circular(16))
+                    ),
+                  ),
+                  SizedBox(width: 20,),
+                  Flexible(
+                    child: TextFormField(
+                      onChanged: (value){
+                        delivery[3] = value;
+                      },
+                      controller: TextEditingController()..text = restaurant.delivery == null? "" : restaurant.delivery[3] ,
+                      decoration: textInputDeco,
+                    ),
+                  ),
+                ],
+              ),
               SizedBox(height: 20,),
               Padding(
                 padding: const EdgeInsets.only(right: 280),
@@ -351,7 +447,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                 setState(() {
                   loading = true;
                 });
-                await DBService().updateRestaurantData(restaurant.restaurant_id, name, phone, web, address, email, types, schedule, []);
+                await DBService().updateRestaurantData(restaurant.restaurant_id, name, phone, web, address, email, types, schedule, delivery);
                 restaurant.name = name;
                 restaurant.phone = phone;
                 restaurant.website = web;
@@ -359,6 +455,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                 restaurant.email = email;
                 restaurant.types = types;
                 restaurant.schedule = schedule;
+                restaurant.delivery = delivery;
                 Navigator.pop(context);
               }
             },
