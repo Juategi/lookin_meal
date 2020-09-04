@@ -43,6 +43,9 @@ class _EditRestaurantState extends State<EditRestaurant> {
       email = restaurant.email;
       types = restaurant.types;
       delivery = restaurant.delivery;
+      if(delivery == null){
+        delivery = ["-", "-", "-", "-"];
+      }
       init = true;
     }
     return Scaffold(
@@ -447,6 +450,12 @@ class _EditRestaurantState extends State<EditRestaurant> {
                 setState(() {
                   loading = true;
                 });
+                for(int i = 0; i < delivery.length; i++){
+                  if(delivery[i] == "" || delivery[i] == " "){
+                    delivery[i] = "-";
+                  }
+                  delivery[i] = delivery[i].trim();
+                }
                 await DBService().updateRestaurantData(restaurant.restaurant_id, name, phone, web, address, email, types, schedule, delivery);
                 restaurant.name = name;
                 restaurant.phone = phone;
