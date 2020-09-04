@@ -43,7 +43,7 @@ class _RestaurantTileState extends State<RestaurantTile> {
                   image: DecorationImage(
                     image: Image.network(
                         restaurant.images.first).image,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   ),
                 ),
                 child: Row( mainAxisAlignment: MainAxisAlignment.end,

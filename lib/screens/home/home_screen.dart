@@ -157,8 +157,10 @@ class _HomeScreenState extends State<HomeScreen> {
 						  	scrollDirection: Axis.horizontal,
 						  	children: nearRestaurants.map((r) => Provider<Restaurant>.value(value: r, child: RestaurantTile(),)).toList(),
 						  ),
-						)
-			  	],
+						),
+						SizedBox(height: 50.h,),
+						Text('Popular plates', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+					],
 			  ),
 			),
 		);

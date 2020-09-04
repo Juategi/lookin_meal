@@ -1,10 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/edit_images.dart';
 import 'package:lookinmeal/screens/restaurants/menu.dart';
 import 'package:lookinmeal/services/database.dart';
-import 'package:lookinmeal/shared/alert.dart';
+import 'package:lookinmeal/shared/common_data.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ProfileRestaurant extends StatefulWidget {
   @override
@@ -37,152 +43,189 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   		_loadMenu();
 		User user = DBService.userF;
 	  final DBService _dbService = DBService();
+		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return Scaffold(
-			appBar: AppBar(),
       body: ListView(
       	children: <Widget>[
-      		Container(
-				height: 230,
-				width: 400,
-				decoration: BoxDecoration(
-					image: DecorationImage(
-						image: NetworkImage(restaurant.images.elementAt(0)),
-						fit: BoxFit.fill,
-					),
-				),
-			),
-				SizedBox(height: 20,),
-				Text(
-					"${restaurant.name}    ${restaurant.distance} Km",
-					style: TextStyle(
-						color: Colors.grey[800],
-						fontWeight: FontWeight.w900,
-						fontStyle: FontStyle.italic,
-						fontFamily: 'Open Sans',
-						fontSize: 15
-					),
-				),
-				SizedBox(height: 20,),
-				Text(
-					"Rating: ${restaurant.rating.toString()}",
-					style: TextStyle(
-						color: Colors.grey[800],
-						fontWeight: FontWeight.w900,
-						fontStyle: FontStyle.italic,
-						fontFamily: 'Open Sans',
-						fontSize: 15
-					),
-				),
-				SizedBox(height: 20,),
-				Text(
-					restaurant.address ?? " ",
-					style: TextStyle(
-						color: Colors.grey[800],
-						fontWeight: FontWeight.w900,
-						fontStyle: FontStyle.italic,
-						fontFamily: 'Open Sans',
-						fontSize: 15
-					),
-				),
-				SizedBox(height: 20,),
-				Text(
-					restaurant.email ?? " ",
-					style: TextStyle(
-						color: Colors.grey[800],
-						fontWeight: FontWeight.w900,
-						fontStyle: FontStyle.italic,
-						fontFamily: 'Open Sans',
-						fontSize: 15
-					),
-				),
-				SizedBox(height: 20,),
-				Text(
-					restaurant.phone ?? " ",
-					style: TextStyle(
-						color: Colors.grey[800],
-						fontWeight: FontWeight.w900,
-						fontStyle: FontStyle.italic,
-						fontFamily: 'Open Sans',
-						fontSize: 15
-					),
-				),
-				SizedBox(height: 20,),
-				Text(
-					restaurant.website ?? " ",
-					style: TextStyle(
-						color: Colors.grey[800],
-						fontWeight: FontWeight.w900,
-						fontStyle: FontStyle.italic,
-						fontFamily: 'Open Sans',
-						fontSize: 15
-					),
-				),
-				SizedBox(height: 20,),
-				Text(
-					restaurant.schedule == null ? " " : restaurant.schedule.toString(),
-					style: TextStyle(
-						color: Colors.grey[800],
-						fontWeight: FontWeight.w900,
-						fontStyle: FontStyle.italic,
-						fontFamily: 'Open Sans',
-						fontSize: 15
-					),
-				),
-				SizedBox(height: 20,),
-				Text(
-					restaurant.types == null ? " " : restaurant.types.toString(),
-					style: TextStyle(
-						color: Colors.grey[800],
-						fontWeight: FontWeight.w900,
-						fontStyle: FontStyle.italic,
-						fontFamily: 'Open Sans',
-						fontSize: 15
-					),
-				),
-				SizedBox(height: 20,),
-				IconButton(
-					icon: user.favorites.contains(restaurant) ? Icon(Icons.favorite) :Icon(Icons.favorite_border),
-					iconSize: 50,
-					onPressed: ()async{
-						if(user.favorites.contains(restaurant)) {
-							user.favorites.remove(restaurant);
-							_dbService.deleteFromUserFavorites(user.uid, restaurant);
-						}
-						else {
-							user.favorites.add(restaurant);
-							_dbService.addToUserFavorites(user.uid, restaurant);
-						}
-						setState(() {});
-					},
+      		GestureDetector(
+      		  child: Container(
+							height: 230,
+							width: 400,
+							decoration: BoxDecoration(
+								image: DecorationImage(
+									image: NetworkImage(restaurant.images.elementAt(0)),
+									fit: BoxFit.cover,
+								),
+							),
+							child: Row( mainAxisAlignment: MainAxisAlignment.end,
+								crossAxisAlignment: CrossAxisAlignment.start,
+								children: <Widget>[
+									IconButton(
+										icon: Icon(Icons.mode_edit),
+										iconSize: ScreenUtil().setSp(40),
+										color: Color.fromRGBO(255, 65, 112, 1),
+										onPressed: ()async{
+											showModalBottomSheet(context: context, builder: (BuildContext bc){
+												return EditImages(restaurant: restaurant,);
+											}).then((value){setState(() {});});
+										},
+									),
+									IconButton(
+										icon: user.favorites.contains(restaurant) ? Icon(Icons.favorite) :Icon(Icons.favorite_border),
+										iconSize: ScreenUtil().setSp(45),
+										color: Color.fromRGBO(255, 65, 112, 1),
+										onPressed: ()async{
+											if(user.favorites.contains(restaurant)) {
+												user.favorites.remove(restaurant);
+												_dbService.deleteFromUserFavorites(user.uid, restaurant);
+											}
+											else {
+												user.favorites.add(restaurant);
+												_dbService.addToUserFavorites(user.uid, restaurant);
+											}
+											setState(() {});
+										},
 
-				),
-					SizedBox(height: 40,),
-					SizedBox(width: 10,),
-					RaisedButton(
-						child: Text("Edit Restaurant"),
-						onPressed: ()async{
-							Navigator.pushNamed(context, "/editrestaurant",arguments: restaurant).then((value) => setState(() {}));
-						},
+									),
+								],
+							),
+						),
+						onTap: () => Navigator.pushNamed(context, "/gallery", arguments: restaurant),
+      		),
+					Container(
+						height: 42.h,
+						width: 411.w,
+						decoration: BoxDecoration(
+							color: Color.fromRGBO(255, 110, 117, 0.9),
+						),
+						child: Row(
+							children: <Widget>[
+								Expanded(child: Align( alignment: AlignmentDirectional.topCenter, child: Text(restaurant.name, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)))),
+								//Spacer(),
+								Align(
+									alignment: AlignmentDirectional.topCenter,
+									child: GestureDetector(
+										child: Container(
+											child: SvgPicture.asset("assets/admin.svg"),
+											height: 35.h,
+											width: 35.w,
+										),
+										onTap: ()async{
+											Navigator.pushNamed(context, "/editrestaurant",arguments: restaurant).then((value) => setState(() {}));
+										},
+									),
+								),
+							],
+						),
 					),
-					RaisedButton(
-						child: Text("Edit photos"),
-						onPressed: ()async{
-							showModalBottomSheet(context: context, builder: (BuildContext bc){
-								return EditImages(restaurant: restaurant,);
-							}).then((value){setState(() {});});
-						},
+					Padding(
+						padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+						child: Row(
+							children: <Widget>[
+								Column(crossAxisAlignment: CrossAxisAlignment.start,
+									children: <Widget>[
+										Container(width: 210.w, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : "${restaurant.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
+										Row(
+											children: <Widget>[
+												Container(
+													child: SvgPicture.asset("assets/markerMini.svg"),
+													height: 42.h,
+													width: 32.w,
+												),
+												//Icon(Icons.location_on, color: Colors.black, size: ScreenUtil().setSp(16),),
+												Text("${restaurant.distance.toString()} km", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))
+											],
+										)
+									],
+								),
+								Column( crossAxisAlignment:  CrossAxisAlignment.end,
+									children: <Widget>[
+										SmoothStarRating(rating: restaurant.rating, spacing: -3, isReadOnly: true, allowHalfRating: true, color: Color.fromRGBO(250, 201, 53, 1), borderColor: Color.fromRGBO(250, 201, 53, 1), size: ScreenUtil().setSp(20),),
+										Text("${restaurant.numrevta} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+										SizedBox(height: 10.h,),
+										GestureDetector(
+										  child: Container(
+										  	height: 27.h,
+										  	width: 161.w,
+										  	decoration: BoxDecoration(
+										  			borderRadius: BorderRadius.all(Radius.circular(10)),
+										  			color: Color.fromRGBO(0, 0, 0, 0.1)
+										  	),
+										  	child: Row(
+										  		children: <Widget>[
+										  			SizedBox(width: 15.w,),
+										  			Text('Restaurant info ', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(16),),)),
+										  			Icon(Icons.info_outline, size: ScreenUtil().setSp(18),)
+										  		],
+										  	),
+										  ),
+											onTap: () => Navigator.pushNamed(context, "/info", arguments: restaurant),
+										),
+									],
+								)
+							],
+						),
 					),
-					RaisedButton(
-						child: Text("Edit Menu"),
-						onPressed: ()async{
-							Navigator.pushNamed(context, "/editmenu",arguments: restaurant).then((value) => setState(() {}));
-						},
+					Container(
+						height: 42.h,
+						width: 411.w,
+						decoration: BoxDecoration(
+							color: Color.fromRGBO(255, 110, 117, 0.9),
+						),
+						child:Text("Top dishes", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
 					),
-					RaisedButton(
-						child: Text("Edit Daily Menu"),
-						onPressed: ()async{
-							Navigator.pushNamed(context, "/editdaily",arguments: restaurant).then((value) => setState(() {}));
-						},
+
+					Container(
+						height: 42.h,
+						width: 411.w,
+						decoration: BoxDecoration(
+							color: Color.fromRGBO(255, 110, 117, 0.9),
+						),
+						child: Row(
+							children: <Widget>[
+								Expanded(child: Align( alignment: AlignmentDirectional.topCenter, child: Text("Menu", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)))),
+								//Spacer(),
+								Align(
+									alignment: AlignmentDirectional.topCenter,
+									child: GestureDetector(
+										child: Container(
+											child: SvgPicture.asset("assets/admin.svg"),
+											height: 35.h,
+											width: 35.w,
+										),
+										onTap: ()async{
+											Navigator.pushNamed(context, "/editmenu",arguments: restaurant).then((value) => setState(() {}));
+										},
+									),
+								),
+							],
+						),
+					),
+					Container(
+						height: 42.h,
+						width: 411.w,
+						decoration: BoxDecoration(
+							color: Color.fromRGBO(255, 110, 117, 0.9),
+						),
+						child: Row(
+							children: <Widget>[
+								Expanded(child: Align( alignment: AlignmentDirectional.topCenter, child: Text("Daily Menu", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)))),
+								//Spacer(),
+								Align(
+									alignment: AlignmentDirectional.topCenter,
+									child: GestureDetector(
+										child: Container(
+											child: SvgPicture.asset("assets/admin.svg"),
+											height: 35.h,
+											width: 35.w,
+										),
+										onTap: ()async{
+											Navigator.pushNamed(context, "/editdaily",arguments: restaurant).then((value) => setState(() {}));
+										},
+									),
+								),
+							],
+						),
 					),
 					restaurant.menu == null? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),) : Menu(sections: restaurant.sections, menu: restaurant.menu, currency: restaurant.currency, user: user)
       	],
