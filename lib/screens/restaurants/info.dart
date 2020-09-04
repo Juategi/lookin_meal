@@ -39,7 +39,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
             padding: EdgeInsets.symmetric(horizontal: 10.w),
             child: Column(
               children: <Widget>[
-                Text(restaurant.address, maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+                Container(width: 382.w, child: Text(restaurant.address, maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
                 SizedBox(height: 10.h,),
                 GestureDetector(
                   child: Container(
@@ -68,7 +68,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                       SizedBox(width: 10.w,),
                       Column(
                         children: <Widget>[
-                          Text(restaurant.phone, maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+                          Container(width: 330.w,child: Text(restaurant.phone, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
                           SizedBox(height: 5.h,)
                         ],
                       ),
@@ -93,7 +93,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                       SizedBox(width: 10.w,),
                       Column(
                         children: <Widget>[
-                          Text(restaurant.email, maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+                          Container(width: 330.w,child: Text(restaurant.email, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
                           SizedBox(height: 7.h,)
                         ],
                       ),
@@ -118,7 +118,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                       SizedBox(width: 10.w,),
                       Column(
                         children: <Widget>[
-                          Text(restaurant.website, maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+                          Container(width: 330.w,child: Text(restaurant.website, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
                           SizedBox(height: 7.h,)
                         ],
                       ),
@@ -133,11 +133,130 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                       throw 'Could not open the web.';
                   },
                 ),
+                SizedBox(height: 10.h,),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 60.w,
+                      height: 60.h,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/glovo.png").image),
+                        borderRadius: BorderRadius.all(Radius.circular(16))
+                      ),
+                    ),
+                    SizedBox(width: 20.w,),
+                    Container(
+                      width: 60.w,
+                      height: 60.h,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/ubereats.png").image),
+                          borderRadius: BorderRadius.all(Radius.circular(16))
+                      ),
+                    ),
+                    SizedBox(width: 20.w,),
+                    Container(
+                      width: 60.w,
+                      height: 60.h,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/justeat.png").image),
+                          borderRadius: BorderRadius.all(Radius.circular(16))
+                      ),
+                    ),
+                    SizedBox(width: 20.w,),
+                    Container(
+                      width: 60.w,
+                      height: 60.h,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/deliveroo.png").image),
+                          borderRadius: BorderRadius.all(Radius.circular(16))
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20.h,),
+                Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Text("Monday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                        SizedBox(width: 50.w,),
+                        Text(parseSchedule(restaurant.schedule["1"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                      ],
+                    ),
+                    SizedBox(height: 20.h,),
+                    Row(
+                      children: <Widget>[
+                        Text("Tuesday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                        SizedBox(width: 50.w,),
+                        Text(parseSchedule(restaurant.schedule["2"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                      ],
+                    ),
+                    SizedBox(height: 20.h,),
+                    Row(
+                      children: <Widget>[
+                        Text("Wednesday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                        SizedBox(width: 28.w,),
+                        Text(parseSchedule(restaurant.schedule["3"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                      ],
+                    ),
+                    SizedBox(height: 20.h,),
+                    Row(
+                      children: <Widget>[
+                        Text("Thrusday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                        SizedBox(width: 43.w,),
+                        Text(parseSchedule(restaurant.schedule["4"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                      ],
+                    ),
+                    SizedBox(height: 20.h,),
+                    Row(
+                      children: <Widget>[
+                        Text("Friday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                        SizedBox(width: 65.w,),
+                        Text(parseSchedule(restaurant.schedule["5"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                      ],
+                    ),
+                    SizedBox(height: 20.h,),
+                    Row(
+                      children: <Widget>[
+                        Text("Saturday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                        SizedBox(width: 45.w,),
+                        Text(parseSchedule(restaurant.schedule["6"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                      ],
+                    ),
+                    SizedBox(height: 20.h,),
+                    Row(
+                      children: <Widget>[
+                        Text("Sunday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                        SizedBox(width: 57.w,),
+                        Text(parseSchedule(restaurant.schedule["0"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                      ],
+                    ),
+                  ],
+                )
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  String parseSchedule(List<int> hours){
+    String text = "";
+    for(int i = 0; i < hours.length; i+=2){
+      if(hours[i].toString().length == 2){
+        text += hours[i].toString() + ":00" ;
+      }
+      else
+        text += hours[i].toString().substring(0,2) + ":" + hours[i].toString().substring(2,4);
+      text += " - ";
+      if(hours[i+1].toString().length == 2){
+        text += hours[i+1].toString() + ":00" ;
+      }
+      else
+        text += hours[i+1].toString().substring(0,2) + ":" + hours[i+1].toString().substring(2,4);
+      text += "     ";
+    }
+    return text;
   }
 }

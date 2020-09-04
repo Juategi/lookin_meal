@@ -351,7 +351,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                 setState(() {
                   loading = true;
                 });
-                await DBService().updateRestaurantData(restaurant.restaurant_id, name, phone, web, address, email, types, schedule);
+                await DBService().updateRestaurantData(restaurant.restaurant_id, name, phone, web, address, email, types, schedule, []);
                 restaurant.name = name;
                 restaurant.phone = phone;
                 restaurant.website = web;

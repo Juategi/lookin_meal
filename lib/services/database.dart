@@ -231,7 +231,7 @@ class DBService {
 	}
 
 	updateRestaurantData(String restaurant_id, String name, String phone,
-			String website, String address, String email, List<String> types, Map<String, List<int>> schedule) async{
+			String website, String address, String email, List<String> types, Map<String, List<int>> schedule, List<String> delivery) async{
 		Map body = {
 			"id": restaurant_id,
 			"name": name,
@@ -242,6 +242,8 @@ class DBService {
 			"types": types.toString().replaceAll("[", "{").replaceAll("]", "}") ??
 					List<String>().toString(),
 			"schedule": jsonEncode(schedule).toString() ?? Map<String, List<int>>().toString(),
+			"delivery": delivery.toString().replaceAll("[", "{").replaceAll("]", "}") ??
+					List<String>().toString(),
 		};
 		print(body);
 		var response = await http.put(
@@ -449,6 +451,8 @@ class DBService {
 							element['sections']),
 					dailymenu: element['dailymenu'] == null ? null : List<String>.from(
 							element['dailymenu']),
+					delivery: element['delivery'] == null ? null : List<String>.from(
+							element['delivery']),
 					//menu: await getMenu(element['restaurant_id'].toString())
 		);
 		restaurants.add(restaurant);
