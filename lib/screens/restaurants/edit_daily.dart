@@ -63,12 +63,17 @@ class _EditDailyState extends State<EditDaily> {
         for(MenuEntry entry in restaurant.menu){
           if(entry.id == dailyMenu[i]){
             items.add(Card(
-              child:ListTile(
-                  title: Text("${entry.name}   ${entry.price == 0.0 ? "" :entry.price } ${entry.price == 0.0 ? "" : restaurant.currency }"),
-                  subtitle: Row(children: <Widget>[
-                    Text(" ${entry.description}"),
-                  ],),
-                  trailing: entry.image == null? null : Image.network(entry.image),
+              child: Row(
+                children: <Widget>[
+                  Image.network(entry.image ?? StaticStrings.defaultEntry, height: 50, width: 50,),
+                  SizedBox(width: 10,),
+                  Container(width: 270, child: Text(entry.name, style: TextStyle(fontSize: 16),)),
+                  IconButton(icon: Icon(Icons.delete, color: Colors.black,), onPressed: (){
+                    setState(() {
+                      dailyMenu.removeAt(i);
+                    });
+                  },)
+                ],
               )
             ));
             items.add(SizedBox(height: 10,));
@@ -92,7 +97,26 @@ class _EditDailyState extends State<EditDaily> {
         ));
         items.add(SizedBox(height: 10,));
         items.add(Row(children: <Widget>[IconButton(icon: Icon(Icons.add_circle_outline, size: 30,), onPressed: (){
-            //Selector platos
+          showModalBottomSheet(context: context, builder: (BuildContext bc){
+            return ListView(
+              children: restaurant.menu.map((entry) {
+                return Card(
+                  child: ListTile(
+                    title: Text(entry.name),
+                    leading: Image.network(entry.image ?? StaticStrings.defaultEntry),
+                    subtitle: Row(children: <Widget>[
+                      Text(" ${entry.description}"),
+                    ],),
+                    onTap: (){
+                      dailyMenu.insert(i+1, entry.id);
+                      Navigator.pop(context);
+                    },
+                    trailing: Icon(Icons.add_circle_outline),
+                  ),
+                );
+              }).toList(),
+            );
+          }).then((value){setState(() {});});
           },), Text("Añadir plato")],));
         items.add(SizedBox(height: 10,));
       }

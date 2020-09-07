@@ -164,6 +164,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                         ),
                       ),
                       onTap: () async{
+                        //await launch(restaurant.delivery[1].replaceAll('"', ''));
                         if (await canLaunch(restaurant.delivery[1])) {
                           await launch(restaurant.delivery[1]);
                         }
