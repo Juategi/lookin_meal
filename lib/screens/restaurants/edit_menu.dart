@@ -261,6 +261,8 @@ class _EditMenuState extends State<EditMenu> {
               }
               await DBService().uploadMenu(sections, menu, restaurant);
               Alerts.toast("Menu saved");
+              setState(() {
+              });
               Navigator.pop(context);
             },),
           ],

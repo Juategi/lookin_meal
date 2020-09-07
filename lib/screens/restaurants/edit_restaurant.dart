@@ -49,7 +49,6 @@ class _EditRestaurantState extends State<EditRestaurant> {
       init = true;
     }
     return Scaffold(
-      appBar: AppBar(),
       body: ListView(children: <Widget>[
         Container(padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),child:
           Form(

@@ -1,45 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
+import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/entry.dart';
+import 'package:lookinmeal/screens/restaurants/menu_tile.dart';
 import 'package:lookinmeal/shared/alert.dart';
+import 'package:lookinmeal/shared/common_data.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class Menu extends StatefulWidget {
-  List<String> sections;
-  List<MenuEntry> menu;
+  Restaurant restaurant;
   String currency;
   User user;
-  Menu({this.menu, this.sections, this.currency, this.user});
+  Menu({this.restaurant, this.currency, this.user});
 
   @override
-  _MenuState createState() => _MenuState();
+  _MenuState createState() => _MenuState(restaurant: restaurant);
 }
 
 class _MenuState extends State<Menu> {
   double rate = 0.0;
+  Restaurant restaurant;
+  _MenuState({this.restaurant});
 
   List<Widget> _initList(BuildContext context){
-    widget.menu.sort((f,s)=> f.pos.compareTo(s.pos));
+    restaurant.menu.sort((f,s)=> f.pos.compareTo(s.pos));
     List<Widget> entries = new List<Widget>();
-    for(String section in widget.sections){
-      entries.add(Text(section));
-      for(MenuEntry entry in widget.menu){
+    for(String section in restaurant.sections){
+      entries.add(
+          Text(section, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))
+      );
+      for(MenuEntry entry in restaurant.menu){
         if(section == entry.section){
-          entries.add(ListTile(
-            title: Text("${entry.name}   ${entry.price == 0.0 ? "" :entry.price } ${entry.price == 0.0 ? "" : widget.currency }"),
-            subtitle: Row(children: <Widget>[
-              SmoothStarRating(isReadOnly: true, allowHalfRating: true, rating: entry.rating, filledIconData: Icons.star, halfFilledIconData: Icons.star_half),
-              Text(" ${entry.rating}"),
-              Text("   (${entry.numReviews})"),
-            ],),
-            trailing: entry.image == null? null : Image.network(entry.image),
-              onTap: () {
-                showModalBottomSheet(context: context, builder: (BuildContext bc){
-                  return EntryRating(entry, widget.user);
-                }).then((value){setState(() {});});
-              }
-          ));
+          entries.add(Provider<MenuEntry>.value(value: entry, child: MenuTile()));
         }
       }
       entries.add(SizedBox(height: 5,));
@@ -49,9 +45,13 @@ class _MenuState extends State<Menu> {
 
   @override
   Widget build(BuildContext context) {
-    if(widget.sections != null){
-      return Column(
-          children: _initList(context)
+    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    if(restaurant.sections != null){
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+        child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+            children: _initList(context)
+        ),
       );
     }
     else return Container();

@@ -150,7 +150,6 @@ class _EditOrderState extends State<EditOrder> {
       init = true;
     }
     return Scaffold(
-      appBar: AppBar(),
       body: Column(
         children: <Widget>[
           Expanded(child: ReorderableListView(children: elements, onReorder: _onReorder)),

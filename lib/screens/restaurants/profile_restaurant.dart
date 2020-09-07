@@ -42,7 +42,6 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   	if(restaurant.menu == null)
   		_loadMenu();
 		User user = DBService.userF;
-	  final DBService _dbService = DBService();
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return Scaffold(
       body: ListView(
@@ -77,11 +76,11 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 										onPressed: ()async{
 											if(user.favorites.contains(restaurant)) {
 												user.favorites.remove(restaurant);
-												_dbService.deleteFromUserFavorites(user.uid, restaurant);
+												DBService.dbService.deleteFromUserFavorites(user.uid, restaurant);
 											}
 											else {
 												user.favorites.add(restaurant);
-												_dbService.addToUserFavorites(user.uid, restaurant);
+												DBService.dbService.addToUserFavorites(user.uid, restaurant);
 											}
 											setState(() {});
 										},
@@ -201,6 +200,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							],
 						),
 					),
+					restaurant.menu == null? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),) : Menu(restaurant: restaurant, currency: restaurant.currency, user: user),
 					Container(
 						height: 42.h,
 						width: 411.w,
@@ -227,7 +227,6 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							],
 						),
 					),
-					restaurant.menu == null? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),) : Menu(sections: restaurant.sections, menu: restaurant.menu, currency: restaurant.currency, user: user)
       	],
       ),
     );
