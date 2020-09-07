@@ -22,10 +22,10 @@ class _EditDailyState extends State<EditDaily> {
   bool init = false;
   
   void _copyMenu(){
+    dailyMenu = [];
     if(restaurant.dailymenu == null){
       description = "";
       price = 0.0;
-      dailyMenu = [];
     }
     else{
       description = restaurant.dailymenu[0];
@@ -144,9 +144,35 @@ class _EditDailyState extends State<EditDaily> {
       _copyMenu();
       init = true;
     }
+    print(restaurant.dailymenu);
     return Scaffold(
       body: ListView(
         children: _initList()
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: GestureDetector(
+          child: Container(
+            height: 50,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.save),
+                SizedBox(width: 10,),
+                Text("Save")
+              ],
+            ),
+          ),
+          onTap: ()async{
+            restaurant.dailymenu = [];
+            restaurant.dailymenu.add(description);
+            restaurant.dailymenu.add(price.toString());
+            restaurant.dailymenu.addAll(dailyMenu);
+            await DBService().updateDailyMenu(restaurant.restaurant_id, restaurant.dailymenu);
+            Alerts.toast("Menu saved");
+            Navigator.pop(context);
+          },
+        ),
       ),
     );
   }

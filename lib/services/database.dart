@@ -390,7 +390,7 @@ class DBService {
 	}
 
 	Future updateDailyMenu(String restaurant_id, List<String> dailyMenu) async{
-		var response = await http.put("${StaticStrings.api}/daily", body: {"restaurant_id": restaurant_id, "sections":dailyMenu.toString().replaceAll("[", "").replaceAll("]", "")});
+		var response = await http.put("${StaticStrings.api}/daily", body: {"restaurant_id": restaurant_id, "dailymenu":dailyMenu.toString().replaceAll("[", "").replaceAll("]", "")});
 		print(response.body);
 	}
 
