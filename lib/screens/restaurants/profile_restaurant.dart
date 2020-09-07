@@ -9,6 +9,7 @@ import 'package:lookinmeal/screens/restaurants/edit_images.dart';
 import 'package:lookinmeal/screens/restaurants/menu.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:lookinmeal/shared/widgets.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
@@ -139,7 +140,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 								),
 								Column( crossAxisAlignment:  CrossAxisAlignment.end,
 									children: <Widget>[
-										SmoothStarRating(rating: restaurant.rating, spacing: -3, isReadOnly: true, allowHalfRating: true, color: Color.fromRGBO(250, 201, 53, 1), borderColor: Color.fromRGBO(250, 201, 53, 1), size: ScreenUtil().setSp(20),),
+										StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: restaurant.rating, size: ScreenUtil().setSp(15),),
 										Text("${restaurant.numrevta} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
 										SizedBox(height: 10.h,),
 										GestureDetector(

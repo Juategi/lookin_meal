@@ -8,6 +8,7 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:lookinmeal/shared/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
@@ -76,7 +77,7 @@ class _RestaurantTileState extends State<RestaurantTile> {
                   Column(
                     children: <Widget>[
                       SizedBox(height: 4.h,),
-                      SmoothStarRating(rating: restaurant.rating, spacing: -3, isReadOnly: true, allowHalfRating: true, color: Color.fromRGBO(250, 201, 53, 1), borderColor: Color.fromRGBO(250, 201, 53, 1), size: ScreenUtil().setSp(12),),
+                      StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: restaurant.rating, size: ScreenUtil().setSp(9),),
                     ],
                   ),
                   SizedBox(width: 3.w,),

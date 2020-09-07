@@ -5,6 +5,7 @@ import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/screens/restaurants/entry.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:lookinmeal/shared/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
@@ -41,10 +42,11 @@ class _MenuTileState extends State<MenuTile> {
                     Row(
                       children: <Widget>[
                         SizedBox(width: 10.w,),
-                        SmoothStarRating(rating: entry.rating, spacing: -3, isReadOnly: true, allowHalfRating: true, color: Color.fromRGBO(250, 201, 53, 1), borderColor: Color.fromRGBO(250, 201, 53, 1), size: ScreenUtil().setSp(21),),
+                        //SmoothStarRating(rating: entry.rating, spacing: -3, isReadOnly: true, allowHalfRating: true, color: Color.fromRGBO(250, 201, 53, 1), borderColor: Color.fromRGBO(250, 201, 53, 1), size: ScreenUtil().setSp(21),),
+                        StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: entry.rating, size: ScreenUtil().setSp(15),),
                         SizedBox(width: 10.w,),
                         Text("${entry.numReviews} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
-                        SizedBox(width: 26.w,),
+                        SizedBox(width: 34.w,),
                         Container(
                           width: 70.w,
                           height: 25.h,
