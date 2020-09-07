@@ -213,41 +213,6 @@ class _EditMenuState extends State<EditMenu> {
       setState(() {});
       },), Text("Añadir seccion")],));
 
-    entries.add(RaisedButton(child: Text("Edit order"),onPressed: () async{
-      dynamic result = await Navigator.pushNamed(context, "/editorder",arguments:[sections,menu]);
-      if(result != null){
-        result = List.from(result);
-        sections = result.first;
-        menu = result.last;
-      }
-      setState(() {});
-    },));
-
-    entries.add(RaisedButton(child: indicator ? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white),) :
-    Text("Save"),onPressed: ()async{
-      List temp = sections.toSet().toList();
-      if(temp.length < sections.length){
-        Alerts.dialog('You can not have sections with the same name', context);
-        return;
-      }
-      for(String section in sections){
-        if(int.tryParse(section) != null){
-          Alerts.dialog('You can not have sections with just numbers', context);
-          return;
-        }
-      }
-      indicator = true;
-      setState(() {
-      });
-      for(MenuEntry entry in menu){
-        entry.price = entry.price.toDouble();
-        print("${entry.section} / ${entry.name} / ${entry.price}");
-      }
-      await DBService().uploadMenu(sections, menu, restaurant);
-      Alerts.toast("Menu saved");
-      Navigator.pop(context);
-    },));
-
     this.setState((){});
     return entries;
   }
@@ -260,8 +225,47 @@ class _EditMenuState extends State<EditMenu> {
       init = true;
     }
     return Scaffold(
-      appBar: AppBar(),
       body: ListView(children: _initMenu()),
+      bottomNavigationBar: BottomAppBar(
+        child: new Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            IconButton(icon: Icon(Icons.reorder), onPressed: () async{
+              dynamic result = await Navigator.pushNamed(context, "/editorder",arguments:[sections,menu]);
+              if(result != null){
+                result = List.from(result);
+                sections = result.first;
+                menu = result.last;
+              }
+              setState(() {});
+            }, ),
+            IconButton(icon: Icon(Icons.save), onPressed: ()async{
+              List temp = sections.toSet().toList();
+              if(temp.length < sections.length){
+                Alerts.dialog('You can not have sections with the same name', context);
+                return;
+              }
+              for(String section in sections){
+                if(int.tryParse(section) != null){
+                  Alerts.dialog('You can not have sections with just numbers', context);
+                  return;
+                }
+              }
+              indicator = true;
+              setState(() {
+              });
+              for(MenuEntry entry in menu){
+                entry.price = entry.price.toDouble();
+                print("${entry.section} / ${entry.name} / ${entry.price}");
+              }
+              await DBService().uploadMenu(sections, menu, restaurant);
+              Alerts.toast("Menu saved");
+              Navigator.pop(context);
+            },),
+          ],
+        ),
+      ),
     );
 
   }
