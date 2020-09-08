@@ -9,10 +9,12 @@ import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/daily.dart';
 import 'package:lookinmeal/screens/restaurants/edit_images.dart';
 import 'package:lookinmeal/screens/restaurants/menu.dart';
+import 'package:lookinmeal/screens/restaurants/top_dishes_tile.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/widgets.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ProfileRestaurant extends StatefulWidget {
@@ -40,6 +42,15 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 				_timer();
 			});
 		}
+	}
+
+	List<Widget> _loadTop(){
+		List<Widget> list = [];
+		for(int i = 0; i < 3; i++){
+			list.add(Provider<MenuEntry>.value(value: restaurant.menu[i], child: TopDishesTile()));
+			list.add(Provider<MenuEntry>.value(value: restaurant.menu[i], child: TopDishesTile()));
+		}
+		return list;
 	}
 
   @override
@@ -180,7 +191,13 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 						),
 						child:Text("Top dishes", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
 					),
-
+					Padding(
+					  padding: EdgeInsets.all(8.0),
+					  child: Container(
+					  	height: 260.h,
+					  	child: IgnorePointer(child: GridView.count(crossAxisCount: 3, children: _loadTop(),))
+					  ),
+					),
 					Container(
 						height: 42.h,
 						width: 411.w,
