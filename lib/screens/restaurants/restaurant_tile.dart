@@ -77,7 +77,7 @@ class _RestaurantTileState extends State<RestaurantTile> {
                   Column(
                     children: <Widget>[
                       SizedBox(height: 4.h,),
-                      StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: restaurant.rating, size: ScreenUtil().setSp(9),),
+                      StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: restaurant.rating, size: ScreenUtil().setSp(8),),
                     ],
                   ),
                   SizedBox(width: 3.w,),

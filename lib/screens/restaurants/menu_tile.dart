@@ -7,15 +7,20 @@ import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class MenuTile extends StatefulWidget {
+  bool daily;
+  MenuTile({this.daily});
   @override
-  _MenuTileState createState() => _MenuTileState();
+  _MenuTileState createState() => _MenuTileState(daily: daily);
 }
 
-class _MenuTileState extends State<MenuTile> {
+class _MenuTileState extends State<MenuTile> with TickerProviderStateMixin {
+  _MenuTileState({this.daily = false});
   MenuEntry entry;
+  bool daily = false;
+
+
   @override
   Widget build(BuildContext context) {
     entry = Provider.of<MenuEntry>(context);
@@ -47,17 +52,17 @@ class _MenuTileState extends State<MenuTile> {
                         SizedBox(width: 10.w,),
                         Text("${entry.numReviews} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                         SizedBox(width: 34.w,),
-                        Container(
+                        entry.price == 0.0 || daily? Container(width: 70.w,) : Container(
                           width: 70.w,
                           height: 25.h,
                           decoration: BoxDecoration(
-                            color: Color.fromRGBO(255, 110, 117, 0.9),
-                            borderRadius: BorderRadius.all(Radius.circular(12))
+                              color: Color.fromRGBO(255, 110, 117, 0.9),
+                              borderRadius: BorderRadius.all(Radius.circular(12))
                           ),
-                          child: Text("${entry.price}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+                          child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
                         )
                       ],
-                    )
+                    ),
                   ],
                 ),
                 SizedBox(width: 10.w,),
@@ -74,9 +79,9 @@ class _MenuTileState extends State<MenuTile> {
           ),
         ),
       ),
-      onTap: () {
-        showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
-          return EntryRating(entry, DBService.userF);
+      onTap: () async{
+        await showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
+          return EntryRating(entry);
         }).then((value){setState(() {});});
       },
     );

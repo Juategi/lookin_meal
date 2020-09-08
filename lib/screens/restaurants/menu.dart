@@ -4,18 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
-import 'package:lookinmeal/screens/restaurants/entry.dart';
 import 'package:lookinmeal/screens/restaurants/menu_tile.dart';
-import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:provider/provider.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class Menu extends StatefulWidget {
   Restaurant restaurant;
   String currency;
-  User user;
-  Menu({this.restaurant, this.currency, this.user});
+  Menu({this.restaurant, this.currency});
 
   @override
   _MenuState createState() => _MenuState(restaurant: restaurant);
@@ -35,7 +31,7 @@ class _MenuState extends State<Menu> {
       );
       for(MenuEntry entry in restaurant.menu){
         if(section == entry.section){
-          entries.add(Provider<MenuEntry>.value(value: entry, child: MenuTile()));
+          entries.add(Provider<MenuEntry>.value(value: entry, child: MenuTile(daily: false,)));
         }
       }
       entries.add(SizedBox(height: 5,));

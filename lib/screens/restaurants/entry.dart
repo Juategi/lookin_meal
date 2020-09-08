@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/screens/restaurants/menu_tile.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/shared/alert.dart';
@@ -14,14 +15,13 @@ import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class EntryRating extends StatefulWidget {
   MenuEntry entry;
-  User user;
-  EntryRating(this.entry, this.user);
+  EntryRating(this.entry);
   @override
-  _EntryRatingState createState() => _EntryRatingState(entry, user);
+  _EntryRatingState createState() => _EntryRatingState(entry);
 }
 
 class _EntryRatingState extends State<EntryRating> {
-  _EntryRatingState(this.entry, this.user);
+  _EntryRatingState(this.entry);
   User user;
   MenuEntry entry;
   double rate, oldRate;
@@ -34,6 +34,7 @@ class _EntryRatingState extends State<EntryRating> {
   @override
   void initState(){
     super.initState();
+    user = DBService.userF;
     for(Rating r in user.ratings){
       if(r.entry_id == entry.id){
           rate = r.rating;
@@ -77,7 +78,7 @@ class _EntryRatingState extends State<EntryRating> {
               color: Color.fromRGBO(255, 110, 117, 0.9),
               borderRadius: BorderRadius.all(Radius.circular(12))
           ),
-          child: Align( alignment: Alignment.center, child: Text("${entry.price}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(22),),))),
+          child: Align( alignment: Alignment.center, child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(22),),))),
         ),
         SizedBox(height: 100.h,),
         SmoothStarRating(

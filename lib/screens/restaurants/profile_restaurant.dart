@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/screens/restaurants/daily.dart';
 import 'package:lookinmeal/screens/restaurants/edit_images.dart';
 import 'package:lookinmeal/screens/restaurants/menu.dart';
 import 'package:lookinmeal/services/database.dart';
@@ -201,7 +202,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							],
 						),
 					),
-					restaurant.menu == null? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),) : Menu(restaurant: restaurant, currency: restaurant.currency, user: user),
+					restaurant.menu == null? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),) : Menu(restaurant: restaurant, currency: restaurant.currency),
 					Container(
 						height: 42.h,
 						width: 411.w,
@@ -228,6 +229,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							],
 						),
 					),
+					restaurant.menu == null? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),) : DailyMenu(restaurant: restaurant, currency: restaurant.currency),
       	],
       ),
     );
