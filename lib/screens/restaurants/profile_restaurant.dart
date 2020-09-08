@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/daily.dart';
@@ -24,6 +25,10 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 
 	void _loadMenu()async{
 		restaurant.menu = await DBService().getMenu(restaurant.restaurant_id);
+		for(MenuEntry entry in restaurant.menu){
+			entry.addListener(() { setState(() {
+			});});
+		}
 	}
 
 	void _timer() {

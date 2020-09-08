@@ -20,7 +20,7 @@ import 'services/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() => runApp(MyApp());
+void main() { Provider.debugCheckInvalidValueType = null; runApp(MyApp()); }
 
 
 class MyApp extends StatelessWidget {

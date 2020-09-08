@@ -52,7 +52,6 @@ class _EntryRatingState extends State<EntryRating> {
   Widget build(BuildContext context) {
     AppLocalizations tr = AppLocalizations.of(context);
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
-    print(entry.name);
     return Column(
       children: <Widget>[
         entry.image == null || entry.image == ""? Container(height: 300.h,) : Container(
@@ -99,7 +98,8 @@ class _EntryRatingState extends State<EntryRating> {
               await _dbService.deleteRate(user.uid, entry.id);
               _dbService.addRate(user.uid, entry.id, rate);
               double aux = (entry.rating*entry.numReviews + rate - oldRate)/(entry.numReviews);
-              entry.rating = double.parse(aux.toStringAsFixed(2));
+              //entry.rating = double.parse(aux.toStringAsFixed(2));
+              entry.rate = double.parse(aux.toStringAsFixed(2));
               Alerts.toast("Rating saved");
               Navigator.pop(context);
             }
@@ -111,8 +111,10 @@ class _EntryRatingState extends State<EntryRating> {
               ));
               _dbService.addRate(user.uid, entry.id, rate);
               double aux = (entry.rating*entry.numReviews + rate)/(entry.numReviews+1);
-              entry.rating = double.parse(aux.toStringAsFixed(2));
-              entry.numReviews += 1;
+              //entry.rating = double.parse(aux.toStringAsFixed(2));
+              //entry.numReviews += 1;
+              entry.rate = double.parse(aux.toStringAsFixed(2));
+              entry.reviews = entry.numReviews + 1;
               Alerts.toast("Rating saved");
               Navigator.pop(context);
             }
