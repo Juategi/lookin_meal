@@ -133,30 +133,30 @@ class _EditMenuState extends State<EditMenu> {
                   print(entry.description);
                   showModalBottomSheet(context: context, builder: (BuildContext bc){
                     return Container(
-                      height: 500,
+                      height: 500.h,
                       child: Column(
                         children: <Widget>[
-                          SizedBox(height: 20,),
-                          Text("Añade una descripción al plato", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black54, fontSize: 20,),),
+                          SizedBox(height: 20.h,),
+                          Text("Añade una descripción al plato", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black54, fontSize: ScreenUtil().setSp(20),),),
                           Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: TextField(
                               controller: TextEditingController()..text = desc, maxLines: 6, maxLength: 300, onChanged: (v) {desc = v;},),
                           ),
-                          SizedBox(height: 100,),
+                          SizedBox(height: 100.h,),
                           Row(mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               IconButton(
-                                icon: FaIcon(FontAwesomeIcons.check, size: 50,),
-                                iconSize: 73,
+                                icon: FaIcon(FontAwesomeIcons.check, size: ScreenUtil().setSp(50),),
+                                iconSize: ScreenUtil().setSp(73),
                                 onPressed: ()async{
                                   entry.description = desc;
                                   Navigator.pop(context);
                                 },
                               ),
                               IconButton(
-                                icon: FaIcon(FontAwesomeIcons.ban, size: 50,),
-                                iconSize: 73,
+                                icon: FaIcon(FontAwesomeIcons.ban, size: ScreenUtil().setSp(50),),
+                                iconSize: ScreenUtil().setSp(73),
                                 onPressed: (){
                                   Navigator.pop(context);
                                 },
@@ -208,14 +208,14 @@ class _EditMenuState extends State<EditMenu> {
           }
           setState(() {});
         },),
-        Text("Añadir plato")
+        Text("Añadir plato", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))
       ],));
-      entries.add(SizedBox(height: 30,));
+      entries.add(SizedBox(height: 30.h,));
     }
-    entries.add(Row(children: <Widget>[IconButton(icon: Icon(Icons.add_circle_outline, size: 30,), onPressed: (){
+    entries.add(Row(children: <Widget>[IconButton(icon: Icon(Icons.add_circle_outline, size: ScreenUtil().setSp(30),), onPressed: (){
       sections.add("New");
       setState(() {});
-      },), Text("Añadir seccion")],));
+      },), Text("Añadir seccion", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),))],));
 
     this.setState((){});
     return entries;

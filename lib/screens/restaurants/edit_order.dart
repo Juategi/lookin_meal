@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/shared/alert.dart';
+import 'package:lookinmeal/shared/common_data.dart';
 
 class EditOrder extends StatefulWidget {
   @override
@@ -45,7 +48,7 @@ class _EditOrderState extends State<EditOrder> {
   List<Widget> _init(){
     List<Widget> entries = new List<Widget>();
     for(String section in sections){
-      entries.add(Card(key: ValueKey(section) ,child: ListTile(title: Text(section,), leading: Text("Section"), trailing: Icon(Icons.menu),),));
+      entries.add(Card(color: Color.fromRGBO(255, 110, 117, 0.3), key: ValueKey(section) ,child: ListTile(title: Text(section,), trailing: Icon(Icons.menu),),));
       for(MenuEntry entry in menu){
         if (entry.section == section) {
           entries.add(Card(key: ValueKey(entry.id) ,child: ListTile(title: Text(entry.name), trailing: Icon(Icons.menu),),));
@@ -141,6 +144,7 @@ class _EditOrderState extends State<EditOrder> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     List<Object> result = ModalRoute.of(context).settings.arguments;
     originalSections = result.first;
     originalMenu = result.last;
@@ -150,12 +154,44 @@ class _EditOrderState extends State<EditOrder> {
       init = true;
     }
     return Scaffold(
+      bottomNavigationBar: BottomAppBar(
+        child: Container(
+          height: 80.h,
+          child: Row( mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                height: 50.h,
+                width: 260.w,
+                child: RaisedButton(
+                  elevation: 0,
+                  color: Color.fromRGBO(255, 110, 117, 0.9),
+                  child: Text("Guardar", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
+                  onPressed: () async{
+                    Navigator.pop(context, [sections, menu]);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       body: Column(
         children: <Widget>[
+          SizedBox(height: 32.h,),
+          Container(
+            height: 42.h,
+            width: 411.w,
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(255, 110, 117, 0.9),
+            ),
+            child: Row( mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Align( alignment: AlignmentDirectional.topCenter, child: Text("Editar orden", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
+              ],
+            ),
+          ),
+          SizedBox(height: 32.h,),
           Expanded(child: ReorderableListView(children: elements, onReorder: _onReorder)),
-          RaisedButton(child: Text("Save"),onPressed: ()async{
-            Navigator.pop(context, [sections, menu]);
-          })
         ],
       ),
     );

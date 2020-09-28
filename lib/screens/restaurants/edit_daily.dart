@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/alert.dart';
+import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/strings.dart';
 
 class EditDaily extends StatefulWidget {
@@ -38,26 +41,32 @@ class _EditDailyState extends State<EditDaily> {
 
   List<Widget> _initList(){
     List<Widget> items = [];
-    items.add(Text("Añade una descripción"));
-    items.add(SizedBox(height: 30,));
-    items.add(TextFormField(
-      maxLength: 300,
-      maxLines: 4,
-      controller: TextEditingController()..text = description , onChanged: (v) {
-      description = v;
-    },));
-    items.add(SizedBox(height: 30,));
-    items.add(Text("Añade un precio"));
-    items.add(SizedBox(height: 30,));
-    items.add(TextFormField(
-      keyboardType: TextInputType.number,
-      maxLength: 7,
-      controller: TextEditingController()..text =price.toString() , onChanged: (v) {
-      price = double.parse(v);
-    },));
-    items.add(SizedBox(height: 30,));
-    items.add(Text("Crea el menú"));
-    items.add(SizedBox(height: 30,));
+    items.add(Text("Añade una descripción", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)));
+    items.add(SizedBox(height: 30.h,));
+    items.add(Container(
+      color: Color.fromRGBO(255, 110, 117, 0.1),
+      child: TextFormField(
+        maxLength: 300,
+        maxLines: 4,
+        controller: TextEditingController()..text = description,  onChanged: (v) {
+        description = v;
+      },),
+    ));
+    items.add(SizedBox(height: 30.h,));
+    items.add(Text("Añade un precio", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)));
+    items.add(SizedBox(height: 30.h,));
+    items.add(Container(
+      color: Color.fromRGBO(255, 110, 117, 0.1),
+      child: TextFormField(
+        keyboardType: TextInputType.number,
+        maxLength: 7,
+        controller: TextEditingController()..text =price.toString() , onChanged: (v) {
+        price = double.parse(v);
+      },),
+    ));
+    items.add(SizedBox(height: 30.h,));
+    items.add(Text("Crea el menú", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)));
+    items.add(SizedBox(height: 30.h,));
     for(int i = 0; i < dailyMenu.length; i++){
       if(_isNumeric(dailyMenu[i])){
         for(MenuEntry entry in restaurant.menu){
@@ -65,9 +74,9 @@ class _EditDailyState extends State<EditDaily> {
             items.add(Card(
               child: Row(
                 children: <Widget>[
-                  Image.network(entry.image ?? StaticStrings.defaultEntry, height: 50, width: 50,),
-                  SizedBox(width: 10,),
-                  Container(width: 270, child: Text(entry.name, style: TextStyle(fontSize: 16),)),
+                  Image.network(entry.image ?? StaticStrings.defaultEntry, height: 50.h, width: 50.w,),
+                  SizedBox(width: 10.w,),
+                  Container(width: 256.w, child: Text(entry.name, style: TextStyle(fontSize: ScreenUtil().setSp(16)),)),
                   IconButton(icon: Icon(Icons.delete, color: Colors.black,), onPressed: (){
                     setState(() {
                       dailyMenu.removeAt(i);
@@ -76,24 +85,27 @@ class _EditDailyState extends State<EditDaily> {
                 ],
               )
             ));
-            items.add(SizedBox(height: 10,));
+            items.add(SizedBox(height: 10.h,));
           }
         }
       }
       else{
-        items.add(Row(
-          children: <Widget>[
-            Flexible(
-                child: TextFormField(keyboardType: TextInputType.text, controller: TextEditingController()..text = dailyMenu[i], onChanged: (v) {
-                  dailyMenu[i] = v;
-                },)),
-            IconButton(icon: Icon(Icons.delete), onPressed: (){
-                setState(() {
-                  dailyMenu.removeAt(i);
-                });
-             }
-            )
-          ],
+        items.add(Container(
+          color: Color.fromRGBO(255, 110, 117, 0.2),
+          child: Row(
+            children: <Widget>[
+              Flexible(
+                  child: TextFormField(keyboardType: TextInputType.text, controller: TextEditingController()..text = dailyMenu[i], onChanged: (v) {
+                    dailyMenu[i] = v;
+                  },)),
+              IconButton(icon: Icon(Icons.delete), onPressed: (){
+                  setState(() {
+                    dailyMenu.removeAt(i);
+                  });
+               }
+              )
+            ],
+          ),
         ));
         items.add(SizedBox(height: 10,));
         items.add(Row(children: <Widget>[IconButton(icon: Icon(Icons.add_circle_outline, size: 30,), onPressed: (){
@@ -104,9 +116,7 @@ class _EditDailyState extends State<EditDaily> {
                   child: ListTile(
                     title: Text(entry.name),
                     leading: Image.network(entry.image ?? StaticStrings.defaultEntry),
-                    subtitle: Row(children: <Widget>[
-                      Text(" ${entry.description}"),
-                    ],),
+                    subtitle: Text("${entry.description}", maxLines: 1, ),
                     onTap: (){
                       dailyMenu.insert(i+1, entry.id);
                       Navigator.pop(context);
@@ -117,7 +127,8 @@ class _EditDailyState extends State<EditDaily> {
               }).toList(),
             );
           }).then((value){setState(() {});});
-          },), Text("Añadir plato")],));
+          },), Text("Añadir plato", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))
+        ],));
         items.add(SizedBox(height: 10,));
       }
     }
@@ -125,7 +136,8 @@ class _EditDailyState extends State<EditDaily> {
     items.add(Row(children: <Widget>[IconButton(icon: Icon(Icons.add_circle_outline, size: 30,), onPressed: (){
         dailyMenu.add("New");
         setState(() {});
-      },), Text("Añadir seccion")],));
+      },),Text("Añadir seccion", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),))
+    ],));
 
     return items;
   }
@@ -139,6 +151,7 @@ class _EditDailyState extends State<EditDaily> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     restaurant = ModalRoute.of(context).settings.arguments;
     if(!init) {
       _copyMenu();
@@ -146,32 +159,56 @@ class _EditDailyState extends State<EditDaily> {
     }
     print(restaurant.dailymenu);
     return Scaffold(
-      body: ListView(
-        children: _initList()
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: GestureDetector(
-          child: Container(
-            height: 50,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
+      body: Column(
+        children: <Widget>[
+          SizedBox(height: 32.h),
+          Container(
+            height: 42.h,
+            width: 411.w,
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(255, 110, 117, 0.9),
+            ),
+            child: Row( mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(Icons.save),
-                SizedBox(width: 10,),
-                Text("Save")
+                Align( alignment: AlignmentDirectional.topCenter, child: Text("Editar menú del dia", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
               ],
             ),
           ),
-          onTap: ()async{
-            restaurant.dailymenu = [];
-            restaurant.dailymenu.add(description);
-            restaurant.dailymenu.add(price.toString());
-            restaurant.dailymenu.addAll(dailyMenu);
-            await DBService().updateDailyMenu(restaurant.restaurant_id, restaurant.dailymenu);
-            Alerts.toast("Menu saved");
-            Navigator.pop(context);
-          },
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
+              child: ListView(
+                children: _initList()
+              ),
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Container(
+          height: 80.h,
+          child: Row( mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                height: 50.h,
+                width: 260.w,
+                child: RaisedButton(
+                  elevation: 0,
+                  color: Color.fromRGBO(255, 110, 117, 0.9),
+                  child: Text("Guardar", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
+                  onPressed: ()async{
+                    restaurant.dailymenu = [];
+                    restaurant.dailymenu.add(description);
+                    restaurant.dailymenu.add(price.toString());
+                    restaurant.dailymenu.addAll(dailyMenu);
+                    await DBService().updateDailyMenu(restaurant.restaurant_id, restaurant.dailymenu);
+                    Alerts.toast("Menu saved");
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

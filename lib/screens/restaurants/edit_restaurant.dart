@@ -65,7 +65,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                 child: loading? CircularLoading() : RaisedButton(
                   elevation: 0,
                   color: Color.fromRGBO(255, 110, 117, 0.9),
-                  child: Text("Actualizar", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
+                  child: Text("Guardar", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
                   onPressed: () async{
                     if(_formKey.currentState.validate()){
                       setState(() {
