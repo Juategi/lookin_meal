@@ -70,6 +70,7 @@ class _RestaurantTileState extends State<RestaurantTile> {
                   ],
                 ),
               ),
+              SizedBox(height: 1.h,),
               Row( crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(width: 5.w,),
@@ -84,7 +85,7 @@ class _RestaurantTileState extends State<RestaurantTile> {
                   SizedBox(width: 3.w,),
                   Column(
                     children: <Widget>[
-                      SizedBox(height: 4.h,),
+                      SizedBox(height: 2.h,),
                       Text("${Functions.getVotes(restaurant)} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(8),),)),
                     ],
                   ),

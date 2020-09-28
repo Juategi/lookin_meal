@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/edit_images.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/alert.dart';
+import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/decos.dart';
+import 'package:lookinmeal/shared/loading.dart';
 import 'package:lookinmeal/shared/strings.dart';
 import 'package:flutter_multiselect/flutter_multiselect.dart';
 
@@ -34,6 +37,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
   }
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     restaurant = ModalRoute.of(context).settings.arguments;
     if(!init){
       name = restaurant.name;
@@ -49,16 +53,54 @@ class _EditRestaurantState extends State<EditRestaurant> {
       init = true;
     }
     return Scaffold(
+      bottomNavigationBar: BottomAppBar(
+        child: Container(
+          height: 80.h,
+          child: Row( mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                height: 50.h,
+                width: 260.w,
+                child: loading? CircularLoading() : RaisedButton(
+                  elevation: 0,
+                  color: Color.fromRGBO(255, 110, 117, 0.9),
+                  child: Text("Actualizar", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
+                  onPressed: () async{
+                    if(_formKey.currentState.validate()){
+                      setState(() {
+                        loading = true;
+                      });
+                      for(int i = 0; i < delivery.length; i++){
+                        if(delivery[i] == "" || delivery[i] == " "){
+                          delivery[i] = "-";
+                        }
+                        delivery[i] = delivery[i].trim();
+                      }
+                      await DBService().updateRestaurantData(restaurant.restaurant_id, name, phone, web, address, email, types, schedule, delivery);
+                      restaurant.name = name;
+                      restaurant.phone = phone;
+                      restaurant.website = web;
+                      restaurant.address = address;
+                      restaurant.email = email;
+                      restaurant.types = types;
+                      restaurant.schedule = schedule;
+                      restaurant.delivery = delivery;
+                      Navigator.pop(context);
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       body: ListView(children: <Widget>[
         Container(padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),child:
           Form(
             key: _formKey,
-            child: Column(children: <Widget>[
+            child: Column( crossAxisAlignment:CrossAxisAlignment.start, children: <Widget>[
               SizedBox(height: 20,),
-              Padding(
-                padding: const EdgeInsets.only(right: 290),
-                child: Text("Nombre", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: 13),),
-              ),
+              Text("Nombre", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
               SizedBox(height: 10,),
               TextFormField(
                 onChanged: (value){
@@ -69,10 +111,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                 decoration: textInputDeco.copyWith(hintText: "Nombre del restaurant"),
               ),
               SizedBox(height: 20,),
-              Padding(
-                padding: const EdgeInsets.only(right: 305),
-                child: Text("Email", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: 13),),
-              ),
+              Text("Email", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
               SizedBox(height: 10,),
               TextFormField(
                 onChanged: (value){
@@ -83,10 +122,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                 decoration: textInputDeco.copyWith(hintText: "Email"),
               ),
               SizedBox(height: 20,),
-              Padding(
-                padding: const EdgeInsets.only(right: 310),
-                child: Text("Web", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: 13),),
-              ),
+              Text("Web", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
               SizedBox(height: 10,),
               TextFormField(
                 onChanged: (value){
@@ -97,10 +133,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                 decoration: textInputDeco.copyWith(hintText: "Web del restaurant"),
               ),
               SizedBox(height: 20,),
-              Padding(
-                padding: const EdgeInsets.only(right: 290),
-                child: Text("Teléfono", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: 13),),
-              ),
+              Text("Teléfono", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
               SizedBox(height: 10,),
               TextFormField(
                 onChanged: (value){
@@ -111,10 +144,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                 decoration: textInputDeco.copyWith(hintText: "Teléfono del restaurant"),
               ),
               SizedBox(height: 20,),
-              Padding(
-                padding: const EdgeInsets.only(right: 280),
-                child: Text("Dirección", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: 13),),
-              ),
+              Text("Dirección", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
               SizedBox(height: 10,),
               TextFormField(
                 onChanged: (value){
@@ -125,10 +155,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                 decoration: textInputDeco.copyWith(hintText: "Dirección del restaurant"),
               ),
               SizedBox(height: 20,),
-              Padding(
-                padding: const EdgeInsets.only(right: 270),
-                child: Text("A domicilio", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: 13),),
-              ),
+              Text("A domicilio", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
               SizedBox(height: 20,),
               Row(
                 children: <Widget>[
@@ -222,10 +249,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                 ],
               ),
               SizedBox(height: 20,),
-              Padding(
-                padding: const EdgeInsets.only(right: 280),
-                child: Text("Horario", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: 13),),
-              ),
+              Text("Horario", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
               SizedBox(height: 20,),
               Text("Lunes:"),
               SizedBox(height: 5,),
@@ -258,216 +282,192 @@ class _EditRestaurantState extends State<EditRestaurant> {
             ],),
           ),),
         SizedBox(height: 20,),
-        Container(child: MultiSelect(
-          //autovalidate: false,
-          titleText: "Tipo de restaurante",
-          /*validator: (value) {
-                    if (value == null) {
-                      return 'Please select one or more option(s)';
-                    }
-                    else
-                      return "";
-                  },*/
-          //errorText: 'Please select one or more option(s)',
-          dataSource: [
-            {"value": "Café"},
-            {"value": "Afghan"},
-            {"value": "Afghani"},
-            {"value": "African"},
-            {"value": "American"},
-            {"value": "Argentinean"},
-            {"value": "Armenian"},
-            {"value": "Asian"},
-            {"value": "Asian Fusion"},
-            {"value": "Australian"},
-            {"value": "Austrian"},
-            {"value": "Bagels"},
-            {"value": "Bahamian"},
-            {"value": "Bakery"},
-            {"value": "Balti"},
-            {"value": "Bangladeshi"},
-            {"value": "Bar"},
-            {"value": "Barbeque"},
-            {"value": "Basque"},
-            {"value": "Belgian"},
-            {"value": "Bistro"},
-            {"value": "Brasserie"},
-            {"value": "Brazilian"},
-            {"value": "Brew Pub"},
-            {"value": "British"},
-            {"value": "Burmese"},
-            {"value": "Cajun & Creole"},
-            {"value": "Californian"},
-            {"value": "Cambodian"},
-            {"value": "Canadian"},
-            {"value": "Caribbean"},
-            {"value": "Central American"},
-            {"value": "Central European"},
-            {"value": "Chicken Wings"},
-            {"value": "Chilean"},
-            {"value": "Chinese"},
-            {"value": "Chowder"},
-            {"value": "Coffee Shop"},
-            {"value": "Colombian"},
-            {"value": "Contemporary"},
-            {"value": "Continental"},
-            {"value": "Costa Rican"},
-            {"value": "Creperie"},
-            {"value": "Croatian"},
-            {"value": "Cuban"},
-            {"value": "Czech"},
-            {"value": "Danish"},
-            {"value": "Delicatessen"},
-            {"value": "Dessert"},
-            {"value": "Dim Sum"},
-            {"value": "Diner"},
-            {"value": "Donuts"},
-            {"value": "Dutch"},
-            {"value": "Eastern European"},
-            {"value": "Eclectic"},
-            {"value": "Ecuadorean"},
-            {"value": "Egyptian"},
-            {"value": "English"},
-            {"value": "Ethiopian"},
-            {"value": "European"},
-            {"value": "Family Fare"},
-            {"value": "Fast Food"},
-            {"value": "Filipino"},
-            {"value": "Fish & Chips"},
-            {"value": "Fondue"},
-            {"value": "French"},
-            {"value": "Fusion"},
-            {"value": "Gastropub"},
-            {"value": "German"},
-            {"value": "Greek"},
-            {"value": "Grill"},
-            {"value": "Guatemalan"},
-            {"value": "Gluten Free Options"},
-            {"value": "Halal"},
-            {"value": "Hamburgers"},
-            {"value": "Hawaiian"},
-            {"value": "Healthy"},
-            {"value": "Hot Dogs"},
-            {"value": "Hunan"},
-            {"value": "Hungarian"},
-            {"value": "Ice Cream"},
-            {"value": "Indian"},
-            {"value": "Indonesian"},
-            {"value": "International"},
-            {"value": "Irish"},
-            {"value": "Israeli"},
-            {"value": "Italian"},
-            {"value": "Jamaican"},
-            {"value": "Japanese"},
-            {"value": "Korean"},
-            {"value": "Kosher"},
-            {"value": "Latin"},
-            {"value": "Latvian"},
-            {"value": "Lebanese"},
-            {"value": "Malaysian"},
-            {"value": "Mediterranean"},
-            {"value": "Mexican"},
-            {"value": "Middle Eastern"},
-            {"value": "Mongolian"},
-            {"value": "Moroccan"},
-            {"value": "Native American"},
-            {"value": "Nepali"},
-            {"value": "New Zealand"},
-            {"value": "Nonya"},
-            {"value": "Noodle"},
-            {"value": "Noodle Shop"},
-            {"value": "Norwegian"},
-            {"value": "Organic"},
-            {"value": "Oyster Bar"},
-            {"value": "Pacific Rim"},
-            {"value": "Pakistani"},
-            {"value": "Pan-Asian"},
-            {"value": "Pasta"},
-            {"value": "Peruvian"},
-            {"value": "Philippine"},
-            {"value": "Pizza"},
-            {"value": "Pizza & Pasta"},
-            {"value": "Polish"},
-            {"value": "Polynesian"},
-            {"value": "Portuguese"},
-            {"value": "Pub"},
-            {"value": "Puerto Rican"},
-            {"value": "Romanian"},
-            {"value": "Russian"},
-            {"value": "Salvadoran"},
-            {"value": "Sandwiches"},
-            {"value": "Scandinavian"},
-            {"value": "Scottish"},
-            {"value": "Seafood"},
-            {"value": "Singaporean"},
-            {"value": "Slovenian"},
-            {"value": "Soups"},
-            {"value": "South American"},
-            {"value": "Southwestern"},
-            {"value": "Spanish"},
-            {"value": "Sri Lankan"},
-            {"value": "Steakhouse"},
-            {"value": "Street Food"},
-            {"value": "Sushi"},
-            {"value": "Swedish"},
-            {"value": "Swiss"},
-            {"value": "Szechuan"},
-            {"value": "Taiwanese"},
-            {"value": "Tapas"},
-            {"value": "Tea Room"},
-            {"value": "Thai"},
-            {"value": "Tibetan"},
-            {"value": "Tunisian"},
-            {"value": "Turkish"},
-            {"value": "Ukrainian"},
-            {"value": "Vegan Options"},
-            {"value": "Vegetarian Friendly"},
-            {"value": "Venezuelan"},
-            {"value": "Vietnamese"},
-            {"value": "Welsh"},
-            {"value": "Wine Bar"},
-            {"value": "Winery"},
-            {"value": "Yugoslavian"},
-          ],
-          textField: 'value',
-          valueField: 'value',
-          filterable: true,
-          required: true,
-          value: null,
-          initialValue: restaurant.types,
-          maxLength: 20,
-          change: (value) {
-            types = List<String>.from(value);
-          },
-        ),),
-        SizedBox(height: 40,),
-        loading? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),) : RaisedButton(
-            color: Colors.pink[400],
-            child: Text("Actualizar", style: TextStyle(color: Colors.white),),
-            onPressed: () async{
-              if(_formKey.currentState.validate()){
-                setState(() {
-                  loading = true;
-                });
-                for(int i = 0; i < delivery.length; i++){
-                  if(delivery[i] == "" || delivery[i] == " "){
-                    delivery[i] = "-";
-                  }
-                  delivery[i] = delivery[i].trim();
-                }
-                await DBService().updateRestaurantData(restaurant.restaurant_id, name, phone, web, address, email, types, schedule, delivery);
-                restaurant.name = name;
-                restaurant.phone = phone;
-                restaurant.website = web;
-                restaurant.address = address;
-                restaurant.email = email;
-                restaurant.types = types;
-                restaurant.schedule = schedule;
-                restaurant.delivery = delivery;
-                Navigator.pop(context);
-              }
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.w),
+          child: Container(child: MultiSelect(
+            //autovalidate: false,
+            titleText: "Tipo de restaurante",
+            /*validator: (value) {
+                      if (value == null) {
+                        return 'Please select one or more option(s)';
+                      }
+                      else
+                        return "";
+                    },*/
+            //errorText: 'Please select one or more option(s)',
+            dataSource: [
+              {"value": "Café"},
+              {"value": "Afghan"},
+              {"value": "Afghani"},
+              {"value": "African"},
+              {"value": "American"},
+              {"value": "Argentinean"},
+              {"value": "Armenian"},
+              {"value": "Asian"},
+              {"value": "Asian Fusion"},
+              {"value": "Australian"},
+              {"value": "Austrian"},
+              {"value": "Bagels"},
+              {"value": "Bahamian"},
+              {"value": "Bakery"},
+              {"value": "Balti"},
+              {"value": "Bangladeshi"},
+              {"value": "Bar"},
+              {"value": "Barbeque"},
+              {"value": "Basque"},
+              {"value": "Belgian"},
+              {"value": "Bistro"},
+              {"value": "Brasserie"},
+              {"value": "Brazilian"},
+              {"value": "Brew Pub"},
+              {"value": "British"},
+              {"value": "Burmese"},
+              {"value": "Cajun & Creole"},
+              {"value": "Californian"},
+              {"value": "Cambodian"},
+              {"value": "Canadian"},
+              {"value": "Caribbean"},
+              {"value": "Central American"},
+              {"value": "Central European"},
+              {"value": "Chicken Wings"},
+              {"value": "Chilean"},
+              {"value": "Chinese"},
+              {"value": "Chowder"},
+              {"value": "Coffee Shop"},
+              {"value": "Colombian"},
+              {"value": "Contemporary"},
+              {"value": "Continental"},
+              {"value": "Costa Rican"},
+              {"value": "Creperie"},
+              {"value": "Croatian"},
+              {"value": "Cuban"},
+              {"value": "Czech"},
+              {"value": "Danish"},
+              {"value": "Delicatessen"},
+              {"value": "Dessert"},
+              {"value": "Dim Sum"},
+              {"value": "Diner"},
+              {"value": "Donuts"},
+              {"value": "Dutch"},
+              {"value": "Eastern European"},
+              {"value": "Eclectic"},
+              {"value": "Ecuadorean"},
+              {"value": "Egyptian"},
+              {"value": "English"},
+              {"value": "Ethiopian"},
+              {"value": "European"},
+              {"value": "Family Fare"},
+              {"value": "Fast Food"},
+              {"value": "Filipino"},
+              {"value": "Fish & Chips"},
+              {"value": "Fondue"},
+              {"value": "French"},
+              {"value": "Fusion"},
+              {"value": "Gastropub"},
+              {"value": "German"},
+              {"value": "Greek"},
+              {"value": "Grill"},
+              {"value": "Guatemalan"},
+              {"value": "Gluten Free Options"},
+              {"value": "Halal"},
+              {"value": "Hamburgers"},
+              {"value": "Hawaiian"},
+              {"value": "Healthy"},
+              {"value": "Hot Dogs"},
+              {"value": "Hunan"},
+              {"value": "Hungarian"},
+              {"value": "Ice Cream"},
+              {"value": "Indian"},
+              {"value": "Indonesian"},
+              {"value": "International"},
+              {"value": "Irish"},
+              {"value": "Israeli"},
+              {"value": "Italian"},
+              {"value": "Jamaican"},
+              {"value": "Japanese"},
+              {"value": "Korean"},
+              {"value": "Kosher"},
+              {"value": "Latin"},
+              {"value": "Latvian"},
+              {"value": "Lebanese"},
+              {"value": "Malaysian"},
+              {"value": "Mediterranean"},
+              {"value": "Mexican"},
+              {"value": "Middle Eastern"},
+              {"value": "Mongolian"},
+              {"value": "Moroccan"},
+              {"value": "Native American"},
+              {"value": "Nepali"},
+              {"value": "New Zealand"},
+              {"value": "Nonya"},
+              {"value": "Noodle"},
+              {"value": "Noodle Shop"},
+              {"value": "Norwegian"},
+              {"value": "Organic"},
+              {"value": "Oyster Bar"},
+              {"value": "Pacific Rim"},
+              {"value": "Pakistani"},
+              {"value": "Pan-Asian"},
+              {"value": "Pasta"},
+              {"value": "Peruvian"},
+              {"value": "Philippine"},
+              {"value": "Pizza"},
+              {"value": "Pizza & Pasta"},
+              {"value": "Polish"},
+              {"value": "Polynesian"},
+              {"value": "Portuguese"},
+              {"value": "Pub"},
+              {"value": "Puerto Rican"},
+              {"value": "Romanian"},
+              {"value": "Russian"},
+              {"value": "Salvadoran"},
+              {"value": "Sandwiches"},
+              {"value": "Scandinavian"},
+              {"value": "Scottish"},
+              {"value": "Seafood"},
+              {"value": "Singaporean"},
+              {"value": "Slovenian"},
+              {"value": "Soups"},
+              {"value": "South American"},
+              {"value": "Southwestern"},
+              {"value": "Spanish"},
+              {"value": "Sri Lankan"},
+              {"value": "Steakhouse"},
+              {"value": "Street Food"},
+              {"value": "Sushi"},
+              {"value": "Swedish"},
+              {"value": "Swiss"},
+              {"value": "Szechuan"},
+              {"value": "Taiwanese"},
+              {"value": "Tapas"},
+              {"value": "Tea Room"},
+              {"value": "Thai"},
+              {"value": "Tibetan"},
+              {"value": "Tunisian"},
+              {"value": "Turkish"},
+              {"value": "Ukrainian"},
+              {"value": "Vegan Options"},
+              {"value": "Vegetarian Friendly"},
+              {"value": "Venezuelan"},
+              {"value": "Vietnamese"},
+              {"value": "Welsh"},
+              {"value": "Wine Bar"},
+              {"value": "Winery"},
+              {"value": "Yugoslavian"},
+            ],
+            textField: 'value',
+            valueField: 'value',
+            filterable: true,
+            required: true,
+            value: null,
+            initialValue: restaurant.types,
+            maxLength: 20,
+            change: (value) {
+              types = List<String>.from(value);
             },
-          ),
+          ),),
+        ),
+        SizedBox(height: 40,),
 
       ],)
     );
