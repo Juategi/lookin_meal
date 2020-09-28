@@ -453,7 +453,7 @@ class DBService {
 							element['dailymenu']),
 					delivery: element['delivery'] == null ? null : List<String>.from(
 							element['delivery']),
-					//menu: await getMenu(element['restaurant_id'].toString())
+					menu: await getMenu(element['restaurant_id'].toString())
 		);
 		restaurants.add(restaurant);
 		}

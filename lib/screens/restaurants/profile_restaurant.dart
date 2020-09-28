@@ -27,10 +27,6 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 
 	void _loadMenu()async{
 		restaurant.menu = await DBService().getMenu(restaurant.restaurant_id);
-		for(MenuEntry entry in restaurant.menu){
-			entry.addListener(() { setState(() {
-			});});
-		}
 	}
 
 	void _timer() {
@@ -46,10 +42,11 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 
 	List<Widget> _loadTop(){
 		List<Widget> list = [];
-		for(int i = 0; i < 3; i++){
-			list.add(Provider<MenuEntry>.value(value: restaurant.menu[i], child: TopDishesTile()));
-			list.add(Provider<MenuEntry>.value(value: restaurant.menu[i], child: TopDishesTile()));
-		}
+		if(restaurant.menu.length > 0)
+			for(int i = 0; i < 3; i++){
+				list.add(Provider<MenuEntry>.value(value: restaurant.menu[i], child: TopDishesTile()));
+				list.add(Provider<MenuEntry>.value(value: restaurant.menu[i], child: TopDishesTile()));
+			}
 		return list;
 	}
 
@@ -57,8 +54,12 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   Widget build(BuildContext context) {
   	restaurant = ModalRoute.of(context).settings.arguments;
 		_timer();
-  	if(restaurant.menu == null)
-  		_loadMenu();
+		for(MenuEntry entry in restaurant.menu){
+			entry.addListener(() { setState(() {
+			});});
+		}
+  	//if(restaurant.menu == null)
+  		//_loadMenu();
 		User user = DBService.userF;
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return Scaffold(
