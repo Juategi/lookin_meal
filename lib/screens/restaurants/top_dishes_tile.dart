@@ -7,6 +7,7 @@ import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class TopDishesTile extends StatefulWidget {
   @override
@@ -29,16 +30,43 @@ class _TopDishesTileState extends State<TopDishesTile> with TickerProviderStateM
             width: 110.w,
             height: 110.h,
             //color: Colors.white,
-            child: Column(
-              children: <Widget>[
-                Container(
-                  width: 110.w,
-                  height: 64.h,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(image: Image.network(entry.image, fit: BoxFit.cover).image)
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 3.w),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    width: 120.w,
+                    height: 64.h,
+                    decoration: BoxDecoration(
+                      color: Color.fromRGBO(255, 110, 117, 0.1),
+                      image: DecorationImage(image: Image.network(entry.image, fit: BoxFit.fitHeight).image)
+                    ),
                   ),
-                )
-              ],
+                  SizedBox(height: 5.h,),
+                  Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Container(width: 55.w, child: Text("${entry.name}", maxLines: 2, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3,  fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(9),),))),
+                      Column( mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          //SmoothStarRating(rating: entry.rating, spacing: -3, isReadOnly: true, allowHalfRating: true, color: Color.fromRGBO(250, 201, 53, 1), borderColor: Color.fromRGBO(250, 201, 53, 1), size: ScreenUtil().setSp(10),),
+                          StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: entry.rating, size: ScreenUtil().setSp(7),),
+                          Text("${entry.numReviews} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(8),),)),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 5.h,),
+                  entry.price == 0.0 ? Container(width: 70.w,) : Container(
+                    width: 38.w,
+                    height: 15.h,
+                    decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 110, 117, 0.9),
+                        borderRadius: BorderRadius.all(Radius.circular(12))
+                    ),
+                    child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),)),
+                  )
+                ],
+              ),
             )
           ),
         ),
