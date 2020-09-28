@@ -84,7 +84,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 										iconSize: ScreenUtil().setSp(40),
 										color: Color.fromRGBO(255, 65, 112, 1),
 										onPressed: ()async{
-											showModalBottomSheet(context: context, builder: (BuildContext bc){
+											showModalBottomSheet(context: context, isScrollControlled: true,  builder: (BuildContext bc){
 												return EditImages(restaurant: restaurant,);
 											}).then((value){setState(() {});});
 										},

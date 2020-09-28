@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/alert.dart';
+import 'package:lookinmeal/shared/common_data.dart';
+import 'package:lookinmeal/shared/loading.dart';
 import 'package:reorderables/reorderables.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -42,8 +45,8 @@ class _EditImagesState extends State<EditImages> {
             padding: EdgeInsets.all(0.0),
             child: Container(
                 constraints: BoxConstraints.expand(
-                    height: 90,
-                    width: 90
+                    height: 90.h,
+                    width: 90.w
                 ),
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -54,9 +57,9 @@ class _EditImagesState extends State<EditImages> {
                 child: Stack(
                   children: <Widget>[
                     Positioned(
-                      right: 35,
-                      bottom: 3.0,
-                      child: Icon(Icons.delete, size: 22, color: Colors.black,),
+                      right: 35.w,
+                      bottom: 3.0.h,
+                      child: Icon(Icons.delete, size: ScreenUtil().setSp(22), color: Colors.black,),
                     ),
                   ],
                 )
@@ -68,7 +71,7 @@ class _EditImagesState extends State<EditImages> {
       GridTile(
         child: images.length >= 30? Container(height: 0,): IconButton(
           icon: Icon(Icons.add_circle_outline, color: Colors.grey[500],),
-          iconSize: 73,
+          iconSize: ScreenUtil().setSp(73),
           onPressed: ()async{
             String image = await StorageService().uploadImage(context,"restaurants");
             if(image != null){
@@ -84,7 +87,9 @@ class _EditImagesState extends State<EditImages> {
   }
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return Column(children: <Widget>[
+      SizedBox(height: 45.h,),
       Expanded(child:
         ReorderableWrap(
             spacing: 8.0,
@@ -99,11 +104,11 @@ class _EditImagesState extends State<EditImages> {
           children: _initItems()),
       ),
       //SizedBox(height: 20,),
-      loading? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),) :Row(mainAxisAlignment: MainAxisAlignment.center,
+      loading? CircularLoading() : Row(mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
         IconButton(
-          icon: FaIcon(FontAwesomeIcons.check, size: 50,),
-          iconSize: 73,
+          icon: FaIcon(FontAwesomeIcons.check, size: ScreenUtil().setSp(50),),
+          iconSize: ScreenUtil().setSp(73),
           onPressed: ()async{
             setState(() {
               loading = true;
@@ -115,8 +120,8 @@ class _EditImagesState extends State<EditImages> {
           },
         ),
         IconButton(
-          icon: FaIcon(FontAwesomeIcons.ban, size: 50,),
-          iconSize: 73,
+          icon: FaIcon(FontAwesomeIcons.ban, size: ScreenUtil().setSp(50),),
+          iconSize: ScreenUtil().setSp(73),
           onPressed: (){
             Navigator.pop(context);
           },
