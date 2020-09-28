@@ -12,6 +12,7 @@ import 'package:lookinmeal/screens/restaurants/menu.dart';
 import 'package:lookinmeal/screens/restaurants/top_dishes_tile.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/widgets.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
@@ -158,8 +159,8 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 								),
 								Column( crossAxisAlignment:  CrossAxisAlignment.end,
 									children: <Widget>[
-										StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: restaurant.rating, size: ScreenUtil().setSp(15),),
-										Text("${restaurant.numrevta} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+										StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: Functions.getRating(restaurant), size: ScreenUtil().setSp(15),),
+										Text("${Functions.getVotes(restaurant)} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
 										SizedBox(height: 10.h,),
 										GestureDetector(
 										  child: Container(
@@ -257,4 +258,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
       ),
     );
   }
+
+
+
 }
