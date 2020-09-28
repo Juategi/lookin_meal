@@ -5,6 +5,7 @@ import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/screens/restaurants/entry.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:lookinmeal/shared/strings.dart';
 import 'package:lookinmeal/shared/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
@@ -27,8 +28,8 @@ class _TopDishesTileState extends State<TopDishesTile> with TickerProviderStateM
         child: Card(
           elevation: 0 ,
           child: Container(
-            width: 110.w,
-            height: 110.h,
+            width: 116.w,
+            height: 116.h,
             //color: Colors.white,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 3.w),
@@ -39,7 +40,7 @@ class _TopDishesTileState extends State<TopDishesTile> with TickerProviderStateM
                     height: 64.h,
                     decoration: BoxDecoration(
                       color: Color.fromRGBO(255, 110, 117, 0.1),
-                      image: DecorationImage(image: Image.network(entry.image, fit: BoxFit.fitHeight).image)
+                      image: DecorationImage(image: Image.network(entry.image == null || entry.image == "" ? StaticStrings.defaultEntry : entry.image, fit: BoxFit.fitHeight).image)
                     ),
                   ),
                   SizedBox(height: 5.h,),
@@ -57,13 +58,13 @@ class _TopDishesTileState extends State<TopDishesTile> with TickerProviderStateM
                   ),
                   SizedBox(height: 5.h,),
                   entry.price == 0.0 ? Container(width: 70.w,) : Container(
-                    width: 38.w,
-                    height: 15.h,
+                    width: 36.w,
+                    height: 14.h,
                     decoration: BoxDecoration(
                         color: Color.fromRGBO(255, 110, 117, 0.9),
                         borderRadius: BorderRadius.all(Radius.circular(12))
                     ),
-                    child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),)),
+                    child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(10),),)),
                   )
                 ],
               ),

@@ -240,7 +240,20 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 					  padding: EdgeInsets.all(8.0),
 					  child: Container(
 					  	height: _lines() >= 6 ? 260.h : 130.h,
-					  	child: IgnorePointer(child: GridView.count(crossAxisCount: 3, children: _loadTop(),))
+					  	child: _lines() >= 6?  Column(
+								children: <Widget>[
+									Row(
+										children: _loadTop().sublist(0,3),
+									),
+									SizedBox(height: 5.h,),
+									Row(
+										children: _loadTop().sublist(3,6),
+									)
+								],
+							) :
+							Row(
+								children: _loadTop(),
+							),
 					  ),
 					),
 					Container(
