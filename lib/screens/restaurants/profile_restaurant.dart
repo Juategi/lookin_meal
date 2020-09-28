@@ -43,13 +43,56 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 
 	List<Widget> _loadTop(){
 		List<Widget> list = [];
-		if(restaurant.menu.length > 0)
-			for(int i = 0; i < 3; i++){
-				list.add(Provider<MenuEntry>.value(value: restaurant.menu[i], child: TopDishesTile()));
-				list.add(Provider<MenuEntry>.value(value: restaurant.menu[i], child: TopDishesTile()));
+		int three = 0;
+		if(restaurant.menu.length > 0) {
+			for(MenuEntry entry in restaurant.menu){
+				if(entry.numReviews > 0){
+					three++;
+				}
 			}
+			if(three >= 6){
+				for(MenuEntry entry in _getTop(6)){
+					list.add(Provider<MenuEntry>.value(value: entry, child: TopDishesTile()));
+				}
+			}
+			else{
+				for(MenuEntry entry in _getTop(3)){
+					if(entry != null)
+						list.add(Provider<MenuEntry>.value(value: entry, child: TopDishesTile())
+						);
+				}
+			}
+		}
 		return list;
 	}
+
+	int _lines(){
+		int three = 0;
+		for(MenuEntry entry in restaurant.menu){
+			if(entry.numReviews > 0){
+				three++;
+			}
+		}
+		return three;
+	}
+
+	List<MenuEntry> _getTop(int index){
+		int max = 0;
+		for(MenuEntry entry in restaurant.menu){
+			if(entry.numReviews > max){
+				max = entry.numReviews;
+			}
+		}
+		restaurant.menu.sort((e1, e2) =>(e2.rating*0.5 + (e2.numReviews*5/max)*0.5).compareTo((e1.rating*0.5 + (e1.numReviews*5/max)*0.5)));
+		print(restaurant.menu.length);
+		if(index == 3){
+			return restaurant.menu.sublist(0,3);
+		}
+		else{
+			return restaurant.menu.sublist(0,6);
+		}
+	}
+
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +239,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 					Padding(
 					  padding: EdgeInsets.all(8.0),
 					  child: Container(
-					  	height: 260.h,
+					  	height: _lines() >= 6 ? 260.h : 130.h,
 					  	child: IgnorePointer(child: GridView.count(crossAxisCount: 3, children: _loadTop(),))
 					  ),
 					),
