@@ -30,6 +30,13 @@ class _RestaurantTileState extends State<RestaurantTile> {
       padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: GestureDetector(
         onTap: (){
+          if(!user.recently.contains(restaurant)){
+            if(user.recently.length == 5){
+              user.recently.removeAt(0);
+            }
+            user.recently.add(restaurant);
+            DBService.dbService.updateRecently();
+          }
           Navigator.pushNamed(context, "/restaurant",arguments: restaurant);
         },
         child: Container(

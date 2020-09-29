@@ -22,7 +22,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 	User user;
 	List<Restaurant> nearRestaurants;
-	Position myPos;
 	String location;
 
 	List<Widget> _initTiles(User user){
@@ -105,17 +104,17 @@ class _HomeScreenState extends State<HomeScreen> {
 																searchingText: "Buscando..",
 																onPlacePicked: (result) async {
 																	print(result.formattedAddress);
-																	myPos = Position(latitude: result.geometry.location.lat, longitude: result.geometry.location.lng);
-																	String locality = await GeolocationService().getLocality(myPos.latitude, myPos.longitude);
+																	GeolocationService.myPos = Position(latitude: result.geometry.location.lat, longitude: result.geometry.location.lng);
+																	String locality = await GeolocationService().getLocality(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude);
 																	List<Restaurant> aux;
-																	aux = await DBService.dbService.getNearRestaurants(myPos.latitude, myPos.longitude, locality.toUpperCase());
+																	aux = await DBService.dbService.getNearRestaurants(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude, locality.toUpperCase());
 																	Pool.addRestaurants(aux);
 																	nearRestaurants = Pool.getSubList(aux);
 																	setState(() {
 																	});
 																	Navigator.of(context).pop();
 																},
-																initialPosition: LatLng(myPos.latitude, myPos.longitude),
+																initialPosition: LatLng(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude),
 																useCurrentLocation: false,
 															),
 														),

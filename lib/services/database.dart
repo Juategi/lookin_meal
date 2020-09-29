@@ -39,7 +39,8 @@ class DBService {
 						username: result.first["username"],
 						favorites: await this.getUserFavorites(
 								id, myPos.latitude, myPos.longitude),
-						ratings: await this.getAllRating(id)
+						ratings: await this.getAllRating(id),
+						recently: await this.getRecently(result.first["user_id"])
 				);
 				print("User obtained: ${result.first}");
 				userF = user;
@@ -170,6 +171,21 @@ class DBService {
 				"${StaticStrings.api}/userfavs",
 				headers: {"latitude": latitude.toString(), "longitude": longitude.toString(),"id": id});
 		return parseResponse(response);
+	}
+
+	Future<List<Restaurant>> getRecently(String id) async {
+		var response = await http.get("${StaticStrings.api}/recently", headers: {"user_id" : id});
+		return parseResponse(response);
+	}
+
+	Future updateRecently() async {
+		Map body = {
+			"user_id": userF.uid,
+			"recently": userF.recently.map((r) => r.restaurant_id).toList().toString().replaceAll("[", "{").replaceAll("]", "}")
+		};
+		var response = await http.put(
+				"${StaticStrings.api}/recently", body: body);
+		print(response.body);
 	}
 
 	Future<List<Restaurant>> getAllRestaurants() async {

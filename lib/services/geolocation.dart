@@ -5,6 +5,7 @@ import 'package:diacritic/diacritic.dart';
 class GeolocationService{
 
 	static String locality, country;
+	static Position myPos;
 
 	Future<double> distanceBetween(double startLatitude, double startLongitude, double endLatitude, double endLongitude)async{ //optimizable
 		double distance = await Geolocator().distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude);
@@ -13,10 +14,14 @@ class GeolocationService{
 
 	Future<Position> getLocation() async{
 		Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-		if(position == null)
-			return await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
-		else
+		if(position == null) {
+			myPos = await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
+			return myPos;
+		}
+		else {
+			myPos = position;
 			return position;
+		}
 	}
 
 	Future<String> getLocality(double latitude, double longitude)async{
