@@ -37,7 +37,7 @@ class _TopState extends State<Top> {
   void initState() {
     super.initState();
     _loadData();
-    _timer();
+    //_timer();
   }
 
   @override

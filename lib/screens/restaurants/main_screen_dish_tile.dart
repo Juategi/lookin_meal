@@ -45,54 +45,52 @@ class _DishTileState extends State<DishTile> {
         updateRecent();
         Navigator.pushNamed(context, "/restaurant",arguments: restaurant);
       },
-        child: Card(
-          elevation: 1,
-          child: Container(
-            height: 170.h,
-            width: 220.w,
-            child: Column(
-              children: <Widget>[
-                Container(
-                  width: 220.w,
-                  height: 100.h,
-                  decoration: BoxDecoration(
-                      //color: Color.fromRGBO(255, 110, 117, 0.1),
-                      image: DecorationImage(image: Image.network(entry.image == null || entry.image == "" ? StaticStrings.defaultEntry : entry.image, fit: BoxFit.fitHeight).image)
+        child: Container(
+          color: Colors.white,
+          height: 170.h,
+          width: 220.w,
+          child: Column(
+            children: <Widget>[
+              Container(
+                width: 220.w,
+                height: 100.h,
+                decoration: BoxDecoration(
+                    //color: Color.fromRGBO(255, 110, 117, 0.1),
+                    image: DecorationImage(image: Image.network(entry.image == null || entry.image == "" ? StaticStrings.defaultEntry : entry.image, fit: BoxFit.fitHeight).image)
+                ),
+              ),
+              SizedBox(height: 10.h,),
+              Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Container(width: 100.w, child: Text("${entry.name}", maxLines: 2, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3,  fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
+                  SizedBox(width: 7.w,),
+                  Column( mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      //SmoothStarRating(rating: entry.rating, spacing: -3, isReadOnly: true, allowHalfRating: true, color: Color.fromRGBO(250, 201, 53, 1), borderColor: Color.fromRGBO(250, 201, 53, 1), size: ScreenUtil().setSp(10),),
+                      StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: entry.rating, size: ScreenUtil().setSp(9),),
+                      Text("${entry.numReviews} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(10),),)),
+                    ],
                   ),
-                ),
-                SizedBox(height: 10.h,),
-                Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Container(width: 100.w, child: Text("${entry.name}", maxLines: 2, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3,  fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
-                    SizedBox(width: 7.w,),
-                    Column( mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        //SmoothStarRating(rating: entry.rating, spacing: -3, isReadOnly: true, allowHalfRating: true, color: Color.fromRGBO(250, 201, 53, 1), borderColor: Color.fromRGBO(250, 201, 53, 1), size: ScreenUtil().setSp(10),),
-                        StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: entry.rating, size: ScreenUtil().setSp(9),),
-                        Text("${entry.numReviews} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(10),),)),
-                      ],
+                ],
+              ),
+              entry.price == 0.0 ? SizedBox(height: 22.h,) : SizedBox(height: 12.h,),
+              Row( mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  entry.price == 0.0 ? Container(width: 55.w, height: 17.h,) : Container(
+                    width: 55.w,
+                    height: 17.h,
+                    decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 110, 117, 0.9),
+                        borderRadius: BorderRadius.all(Radius.circular(12))
                     ),
-                  ],
-                ),
-                entry.price == 0.0 ? SizedBox(height: 22.h,) : SizedBox(height: 12.h,),
-                Row( mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    entry.price == 0.0 ? Container(width: 55.w, height: 17.h,) : Container(
-                      width: 55.w,
-                      height: 17.h,
-                      decoration: BoxDecoration(
-                          color: Color.fromRGBO(255, 110, 117, 0.9),
-                          borderRadius: BorderRadius.all(Radius.circular(12))
-                      ),
-                      child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),)),
-                    ),
-                    SizedBox(width: 5.w,),
-                    Container(width: 145.w, child: Text(restaurant.name, maxLines: 1, textAlign: TextAlign.end, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),))),
-                    SizedBox(width: 8.w,)
-                  ],
-                )
-              ],
-            ),
+                    child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),)),
+                  ),
+                  SizedBox(width: 5.w,),
+                  Container(width: 145.w, child: Text(restaurant.name, maxLines: 1, textAlign: TextAlign.end, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),))),
+                  SizedBox(width: 8.w,)
+                ],
+              )
+            ],
           ),
         )
     );

@@ -34,8 +34,12 @@ class _HomeScreenState extends State<HomeScreen> {
 		popular = Provider.of<Map<MenuEntry,Restaurant>>(context);
 		user.addListener(() { setState(() {
 		});});
-		for(MenuEntry entry in user.favorites.first.menu){
+		for(MenuEntry entry in popular.keys){
 			entry.addListener(() { setState(() {
+			});});
+		}
+		for(Restaurant r in nearRestaurants){
+			r.addListener(() { setState(() {
 			});});
 		}
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
@@ -158,7 +162,10 @@ class _HomeScreenState extends State<HomeScreen> {
 										Provider<MenuEntry>(create: (c) => e.key,),
 										Provider<Restaurant>(create: (c) => e.value,)
 									],
-									child: DishTile(),
+									child: Padding(
+									  padding: EdgeInsets.symmetric(horizontal: 10.w),
+									  child: DishTile(),
+									),
 								) ).toList(),
 							),
 						),

@@ -261,6 +261,12 @@ class DBService {
 					pos: element['pos'],
 					description: element['description']
 			);
+			for(MenuEntry e in restaurant.menu){
+				if(e.id == entry.id){
+					entry = e;
+					break;
+				}
+			}
 			popular[entry] = restaurant;
 		}
 		Pool.addRestaurants(popular.values.toList());
