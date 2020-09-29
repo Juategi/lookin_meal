@@ -5,6 +5,7 @@ import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
 import 'package:lookinmeal/services/database.dart';
+import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/json_update.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +37,7 @@ class _ProfileState extends State<Profile> {
         SizedBox(height: 20,),
         FlatButton.icon(
             onPressed: () async {
-              Map<MenuEntry,Restaurant> popular = await DBService.dbService.getPopular();
+              GeolocationService.prueba();
             },
             icon: Icon(Icons.pan_tool),
             label: Text("prueba")

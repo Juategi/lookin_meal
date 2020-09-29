@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:http/http.dart' as http;
-import 'package:lookinmeal/screens/stars/parameters.dart';
+import 'package:lookinmeal/screens/search/parameters.dart';
 import 'package:lookinmeal/shared/strings.dart';
 
 class SearchService{

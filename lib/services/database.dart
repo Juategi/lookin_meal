@@ -264,6 +264,14 @@ class DBService {
 			popular[entry] = restaurant;
 		}
 		Pool.addRestaurants(popular.values.toList());
+		List<Restaurant> restaurants = Pool.getSubList(popular.values.toList());
+		for(MenuEntry entry in popular.keys.toList()){
+			for(Restaurant restaurant in restaurants){
+				if(popular[entry].restaurant_id == restaurant.restaurant_id){
+					popular[entry] = restaurant;
+				}
+			}
+		}
 		return popular;
 	}
 

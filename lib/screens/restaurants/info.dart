@@ -59,7 +59,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                   },
                 ),
                 SizedBox(height: 20.h,),
-                GestureDetector(
+                restaurant.phone != null && restaurant.phone.length > 2 ? GestureDetector(
                   child: Row(
                     children: <Widget>[
                       Container(
@@ -82,9 +82,9 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                     else
                       throw 'Could not open the call.';
                   },
-                ),
+                ):Container(),
                 SizedBox(height: 10.h,),
-                GestureDetector(
+                restaurant.email != null && restaurant.email.length > 2 ? GestureDetector(
                   child: Row(
                     children: <Widget>[
                       Container(
@@ -107,9 +107,9 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                     else
                       throw 'Could not open the email.';
                   },
-                ),
+                ) : Container(),
                 SizedBox(height: 10.h,),
-                GestureDetector(
+                restaurant.website != null && restaurant.website.length > 2  ?GestureDetector(
                   child: Row(
                     children: <Widget>[
                       Container(
@@ -132,7 +132,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                     else
                       throw 'Could not open the web.';
                   },
-                ),
+                ):Container(),
                 SizedBox(height: 10.h,),
                 Row(
                   children: <Widget>[

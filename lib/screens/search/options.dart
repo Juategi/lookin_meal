@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
-import 'package:lookinmeal/screens/stars/parameters.dart';
+import 'package:lookinmeal/screens/search/parameters.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/services/search.dart';
 import 'package:provider/provider.dart';

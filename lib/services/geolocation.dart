@@ -39,4 +39,17 @@ class GeolocationService{
 		country = first.countryName;
 		return removeDiacritics(first.countryName);
 	}
+
+	static Future prueba()async{
+		String query1 = "Carrer del Pintor Vila Prades, 21,València, 46008";
+		String query2 = "C/Pintor Vila Prades 21 C/Pintor Vila Prades 21, 46008, Valencia España";
+		var addresses = await Geocoder.local.findAddressesFromQuery(query1);
+		print(addresses.first.coordinates.latitude);
+		print(addresses.first.coordinates.longitude);
+
+		addresses = await Geocoder.local.findAddressesFromQuery(query2);
+		print(addresses.first.coordinates.latitude);
+		print(addresses.first.coordinates.longitude);
+
+	}
 }

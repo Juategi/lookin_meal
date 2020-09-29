@@ -13,7 +13,7 @@ import 'package:lookinmeal/screens/restaurants/edit_restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/gallery.dart';
 import 'package:lookinmeal/screens/restaurants/info.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
-import 'package:lookinmeal/screens/stars/options.dart';
+import 'package:lookinmeal/screens/search/options.dart';
 import 'services/app_localizations.dart';
 import 'screens/authenticate/wrapper.dart';
 import 'services/auth.dart';

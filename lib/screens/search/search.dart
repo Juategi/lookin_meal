@@ -9,15 +9,15 @@ import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/services/search.dart';
 import 'package:provider/provider.dart';
 
-class Stars extends StatefulWidget {
+class Search extends StatefulWidget {
   Position myPos;
   String locality;
-  Stars({this.myPos,this.locality});
+  Search({this.myPos,this.locality});
   @override
-  _StarsState createState() => _StarsState(myPos: myPos, locality: locality);
+  _SearchState createState() => _SearchState(myPos: myPos, locality: locality);
 }
 
-class _StarsState extends State<Stars> {
+class _SearchState extends State<Search> {
   User user;
   List<bool> _selections = List.generate(2, (index) => false);
   Map<MenuEntry, Restaurant> map;
@@ -25,7 +25,7 @@ class _StarsState extends State<Stars> {
   Position myPos;
   String locality;
   String error = "";
-  _StarsState({this.myPos,this.locality});
+  _SearchState({this.myPos,this.locality});
 
   Future<List<Restaurant>> _search(String query) async{
     List<Restaurant> list = await SearchService().query(myPos.latitude, myPos.longitude, locality, query);
