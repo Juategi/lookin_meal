@@ -40,7 +40,7 @@ class DBService {
 						favorites: await this.getUserFavorites(
 								id, myPos.latitude, myPos.longitude),
 						ratings: await this.getAllRating(id),
-						recently: await this.getRecently(result.first["user_id"])
+						recently: await this.getRecently(result.first["user_id"].toString())
 				);
 				print("User obtained: ${result.first}");
 				userF = user;
@@ -174,7 +174,7 @@ class DBService {
 	}
 
 	Future<List<Restaurant>> getRecently(String id) async {
-		var response = await http.get("${StaticStrings.api}/recently", headers: {"user_id" : id});
+		var response = await http.get("${StaticStrings.api}/recently", headers: {"user_id" : id, "latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
 		return parseResponse(response);
 	}
 

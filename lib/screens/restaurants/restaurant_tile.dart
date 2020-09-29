@@ -21,6 +21,18 @@ class RestaurantTile extends StatefulWidget {
 class _RestaurantTileState extends State<RestaurantTile> {
   Restaurant restaurant;
   User user;
+
+  Future updateRecent() async{
+    if(!user.recently.contains(restaurant)){
+      if(user.recently.length == 5){
+        user.recently.removeAt(0);
+      }
+      user.recently.add(restaurant);
+      user.recent = user.recently;
+      DBService.dbService.updateRecently();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     restaurant = Provider.of<Restaurant>(context);
@@ -30,13 +42,7 @@ class _RestaurantTileState extends State<RestaurantTile> {
       padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: GestureDetector(
         onTap: (){
-          if(!user.recently.contains(restaurant)){
-            if(user.recently.length == 5){
-              user.recently.removeAt(0);
-            }
-            user.recently.add(restaurant);
-            DBService.dbService.updateRecently();
-          }
+          updateRecent();
           Navigator.pushNamed(context, "/restaurant",arguments: restaurant);
         },
         child: Container(

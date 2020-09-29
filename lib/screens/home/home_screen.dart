@@ -47,9 +47,12 @@ class _HomeScreenState extends State<HomeScreen> {
 		return tiles;
 	}
 
+
 	@override
   Widget build(BuildContext context) {
 		user = Provider.of<User>(context);
+		user.addListener(() { setState(() {
+		});});
 		nearRestaurants = Provider.of<List<Restaurant>>(context);
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
 		return Scaffold(
@@ -159,6 +162,16 @@ class _HomeScreenState extends State<HomeScreen> {
 						),
 						SizedBox(height: 50.h,),
 						Text('Popular plates', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+						SizedBox(height: 50.h,),
+						Text('Recently viewed', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+						SizedBox(height: 10.h,),
+						Container(
+							height: 155.h,
+							child: ListView(
+								scrollDirection: Axis.horizontal,
+								children: user.recently.map((r) => Provider<Restaurant>.value(value: r, child: RestaurantTile(),)).toList(),
+							),
+						),
 					],
 			  ),
 			),
