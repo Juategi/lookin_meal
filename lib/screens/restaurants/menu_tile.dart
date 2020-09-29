@@ -68,7 +68,7 @@ class _MenuTileState extends State<MenuTile> with TickerProviderStateMixin {
                 SizedBox(width: 10.w,),
                 entry.image == null || entry.image == ""? Container() : Container(
                     height: 75.h,
-                    width: 75.w,
+                    width: 71.w,
                     decoration: entry.image == null || entry.image == "" ? null: BoxDecoration(
                       border: Border.all(color: Colors.black54, width: 1)
                     ),

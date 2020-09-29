@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -74,7 +75,7 @@ class _DishTileState extends State<DishTile> {
                   ],
                 ),
                 entry.price == 0.0 ? SizedBox(height: 22.h,) : SizedBox(height: 12.h,),
-                Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
+                Row( mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     entry.price == 0.0 ? Container(width: 55.w, height: 17.h,) : Container(
                       width: 55.w,
@@ -85,8 +86,9 @@ class _DishTileState extends State<DishTile> {
                       ),
                       child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),)),
                     ),
-                    SizedBox(width: 25.w,),
-                    Text(restaurant.name, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),)),
+                    SizedBox(width: 5.w,),
+                    Container(width: 145.w, child: Text(restaurant.name, maxLines: 1, textAlign: TextAlign.end, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),))),
+                    SizedBox(width: 8.w,)
                   ],
                 )
               ],

@@ -188,6 +188,85 @@ class DBService {
 		print(response.body);
 	}
 
+	Future<Map<MenuEntry,Restaurant>> getPopular() async {
+		var response = await http.get("${StaticStrings.api}/popular", headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
+		Map<MenuEntry,Restaurant> popular = Map<MenuEntry,Restaurant>();
+		List<dynamic> result = json.decode(response.body);
+		Map<String, List<int>> schedule;
+		for (dynamic element in result) {
+			schedule = {
+				'1': new List<int>(),
+				'2': new List<int>(),
+				'3': new List<int>(),
+				'4': new List<int>(),
+				'5': new List<int>(),
+				'6': new List<int>(),
+				'0': new List<int>()
+			};
+			if (element['schedule'] != null) {
+				dynamic result = json.decode(element['schedule'].toString()
+						.replaceAll("0:", '"0":')
+						.replaceAll("1:", '"1":')
+						.replaceAll("2:", '"2":')
+						.replaceAll("3:", '"3":')
+						.replaceAll("4:", '"4":')
+						.replaceAll("5:", '"5":')
+						.replaceAll("6:", '"6":')
+				);
+				for (int i = 0; i < 7; i++) {
+					for (dynamic hour in result[i.toString()].toList()) {
+						schedule[i.toString()].add(hour);
+					}
+				}
+			}
+			Restaurant restaurant = Restaurant(
+					restaurant_id: element['restaurant_id'].toString(),
+					ta_id: element['ta_id'].toString(),
+					name: element['name'],
+					phone: element['phone'],
+					email: element['email'],
+					website: element['website'],
+					webUrl: element['weburl'],
+					address: element['address'],
+					city: element['city'],
+					country: element['country'],
+					latitude: element['latitude'],
+					longitude: element['longitude'],
+					distance: double.parse(element['distance'].toStringAsFixed(2)),
+					rating: double.parse(element['rating'].toString()),
+					numrevta: element['numrevta'],
+					images: element['images'] == null ? null : List<String>.from(
+							element['images']),
+					types: element['types'] == null ? null : List<String>.from(
+							element['types']),
+					schedule: schedule,
+					currency: element['currency'],
+					sections: element['sections'] == null ? null : List<String>.from(
+							element['sections']),
+					dailymenu: element['dailymenu'] == null ? null : List<String>.from(
+							element['dailymenu']),
+					delivery: element['delivery'] == null ? null : List<String>.from(
+							element['delivery']),
+					menu: await getMenu(element['restaurant_id'].toString())
+			);
+			MenuEntry entry = MenuEntry(
+					id: element['entry_id'].toString(),
+					restaurant_id: element['restaurant_id'].toString(),
+					name: element['entryname'],
+					section: element['section'],
+					rating: element['rating'] == null ? 0.0 : double.parse(element['rating'].toStringAsFixed(2)),
+					numReviews: int.parse(element['numreviews']),
+					price: element['price'].toDouble(),
+					image: element['image'],
+					pos: element['pos'],
+					description: element['description']
+			);
+			popular[entry] = restaurant;
+		}
+		Pool.addRestaurants(popular.values.toList());
+		return popular;
+	}
+
 	Future<List<Restaurant>> getAllRestaurants() async {
 		var response = await http.get(
 				"${StaticStrings.api}/allrestaurants");

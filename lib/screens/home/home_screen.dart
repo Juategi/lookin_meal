@@ -24,38 +24,20 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 	User user;
 	List<Restaurant> nearRestaurants;
+	Map<MenuEntry,Restaurant> popular;
 	String location;
-
-	List<Widget> _initTiles(User user){
-		List<Widget> tiles = new List<Widget>();
-		for(int i = 0; i < nearRestaurants.length; i ++){
-			tiles.add(
-				Card(
-					child: ListTile(
-						title: Text(nearRestaurants.elementAt(i).name),
-						subtitle: Text(" 📍 ${nearRestaurants.elementAt(i).distance} Km"),
-						leading: Image.network(nearRestaurants.elementAt(i).images.first, width: 100, height: 100,),
-						trailing: Icon(Icons.arrow_right),
-						onTap: () {
-							List<Object> args = List<Object>();
-							args.add(nearRestaurants.elementAt(i));
-							args.add(user);
-							Navigator.pushNamed(context, "/restaurant",arguments: args);
-						}
-					),
-				)
-			);
-		}
-		return tiles;
-	}
-
 
 	@override
   Widget build(BuildContext context) {
 		user = Provider.of<User>(context);
+		nearRestaurants = Provider.of<List<Restaurant>>(context);
+		popular = Provider.of<Map<MenuEntry,Restaurant>>(context);
 		user.addListener(() { setState(() {
 		});});
-		nearRestaurants = Provider.of<List<Restaurant>>(context);
+		for(MenuEntry entry in user.favorites.first.menu){
+			entry.addListener(() { setState(() {
+			});});
+		}
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
 		return Scaffold(
 			appBar: PreferredSize(
@@ -171,10 +153,10 @@ class _HomeScreenState extends State<HomeScreen> {
 							child: ListView(
 								scrollDirection: Axis.horizontal,
 								//children: user.favorites.first.menu.map((e) => Provider<MenuEntry>.value(value: e, child: DishTile(),)).toList(),
-								children: user.favorites.first.menu.map((e) => MultiProvider(
+								children: popular.entries.map((e) => MultiProvider(
 									providers: [
-										Provider<MenuEntry>(create: (c) => e,),
-										Provider<Restaurant>(create: (c) => user.favorites.first,)
+										Provider<MenuEntry>(create: (c) => e.key,),
+										Provider<Restaurant>(create: (c) => e.value,)
 									],
 									child: DishTile(),
 								) ).toList(),

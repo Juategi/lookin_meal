@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
+import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/favorites/favorites.dart';
@@ -37,6 +38,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	String locality, country;
 	Position myPos;
 	List<Restaurant> nearRestaurants;
+	Map<MenuEntry,Restaurant> popular;
 	List<double> distances = List<double>();
 	int _selectedIndex = 0;
 	bool ready = false;
@@ -70,6 +72,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		/*for(Restaurant restaurant in restaurants){
 			distances.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));
 		}*/
+		popular = await DBService.dbService.getPopular();
 		ready = true;
 	}
 
@@ -106,10 +109,13 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 									offstage: _selectedIndex != 0,
 									child: TickerMode(
 										enabled: _selectedIndex == 0,
-										child: Provider<List<Restaurant>>.value(
-											value: nearRestaurants,
-										  child: HomeScreen(),
-										),
+										child: MultiProvider(
+											providers: [
+												Provider<Map<MenuEntry, Restaurant>>(create: (c) => popular,),
+												Provider<List<Restaurant>>(create: (c) => nearRestaurants,)
+											],
+											child: HomeScreen(),
+										)
 									),
 								),
 								Offstage(

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lookinmeal/models/menu_entry.dart';
+import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
+import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/json_update.dart';
 import 'package:provider/provider.dart';
 
@@ -33,10 +36,7 @@ class _ProfileState extends State<Profile> {
         SizedBox(height: 20,),
         FlatButton.icon(
             onPressed: () async {
-              for(int i = 1000; i <= 2000; i++ ){
-                print("interation $i");
-                await JsonUpdate().updateFromJson("valencia_tripad.json", i);
-              }
+              Map<MenuEntry,Restaurant> popular = await DBService.dbService.getPopular();
             },
             icon: Icon(Icons.pan_tool),
             label: Text("prueba")
