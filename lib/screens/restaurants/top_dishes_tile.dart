@@ -39,7 +39,7 @@ class _TopDishesTileState extends State<TopDishesTile> with TickerProviderStateM
                     width: 120.w,
                     height: 64.h,
                     decoration: BoxDecoration(
-                      color: Color.fromRGBO(255, 110, 117, 0.1),
+                      //color: Color.fromRGBO(255, 110, 117, 0.1),
                       image: DecorationImage(image: Image.network(entry.image == null || entry.image == "" ? StaticStrings.defaultEntry : entry.image, fit: BoxFit.fitHeight).image)
                     ),
                   ),
@@ -58,7 +58,7 @@ class _TopDishesTileState extends State<TopDishesTile> with TickerProviderStateM
                   ),
                   SizedBox(height: 5.h,),
                   entry.price == 0.0 ? Container(width: 70.w,) : Container(
-                    width: 36.w,
+                    width: 50.w,
                     height: 14.h,
                     decoration: BoxDecoration(
                         color: Color.fromRGBO(255, 110, 117, 0.9),

@@ -5,8 +5,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
+import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/screens/restaurants/main_screen_dish_tile.dart';
 import 'package:lookinmeal/screens/restaurants/restaurant_tile.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/geolocation.dart';
@@ -57,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
 		return Scaffold(
 			appBar: PreferredSize(
-				preferredSize: Size.fromHeight(70.h),
+				preferredSize: Size.fromHeight(80.h),
 				child: AppBar(
 					elevation: 0,
 					backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -137,6 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
 										)
 								),
 							),
+							SizedBox(height: 10.h,),
 						],
 					),
 				),
@@ -154,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
 			  		),
 						SizedBox(height: 10.h,),
 						Container(
-							height: 155.h,
+							height: 165.h,
 						  child: ListView(
 						  	scrollDirection: Axis.horizontal,
 						  	children: nearRestaurants.map((r) => Provider<Restaurant>.value(value: r, child: RestaurantTile(),)).toList(),
@@ -162,16 +165,33 @@ class _HomeScreenState extends State<HomeScreen> {
 						),
 						SizedBox(height: 50.h,),
 						Text('Popular plates', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+						SizedBox(height: 10.h,),
+						Container(
+							height: 190.h,
+							child: ListView(
+								scrollDirection: Axis.horizontal,
+								//children: user.favorites.first.menu.map((e) => Provider<MenuEntry>.value(value: e, child: DishTile(),)).toList(),
+								children: user.favorites.first.menu.map((e) => MultiProvider(
+									providers: [
+										Provider<MenuEntry>(create: (c) => e,),
+										Provider<Restaurant>(create: (c) => user.favorites.first,)
+									],
+									child: DishTile(),
+								) ).toList(),
+							),
+						),
 						SizedBox(height: 50.h,),
 						Text('Recently viewed', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
 						SizedBox(height: 10.h,),
 						Container(
-							height: 155.h,
+							height: 165.h,
 							child: ListView(
 								scrollDirection: Axis.horizontal,
 								children: user.recently.map((r) => Provider<Restaurant>.value(value: r, child: RestaurantTile(),)).toList(),
 							),
 						),
+						SizedBox(height: 50.h,),
+						Text('You might like', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
 					],
 			  ),
 			),
