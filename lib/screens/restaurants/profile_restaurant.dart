@@ -25,7 +25,7 @@ class ProfileRestaurant extends StatefulWidget {
 
 class _ProfileRestaurantState extends State<ProfileRestaurant> {
 	Restaurant restaurant;
-
+	bool first = true;
 	void _loadMenu()async{
 		restaurant.menu = await DBService().getMenu(restaurant.restaurant_id);
 	}
@@ -93,14 +93,24 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 		}
 	}
 
+	@override
+  void dispose() {
+		for(MenuEntry entry in restaurant.menu){
+			entry.removeListener(() { });
+		}
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
   	restaurant = ModalRoute.of(context).settings.arguments;
 		_timer();
-		for(MenuEntry entry in restaurant.menu){
-			entry.addListener(() { setState(() {
-			});});
+		if(first){
+			for(MenuEntry entry in restaurant.menu){
+				entry.addListener(() { setState(() {
+				});});
+			}
+			first = false;
 		}
   	//if(restaurant.menu == null)
   		//_loadMenu();

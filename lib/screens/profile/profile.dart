@@ -37,7 +37,7 @@ class _ProfileState extends State<Profile> {
         SizedBox(height: 20,),
         FlatButton.icon(
             onPressed: () async {
-              GeolocationService.prueba();
+              DBService.dbService.getPopular();
             },
             icon: Icon(Icons.pan_tool),
             label: Text("prueba")

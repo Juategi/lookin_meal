@@ -3,6 +3,7 @@
 TODO
 
 
+reactualizar home screen
 arreglar cluster y cambiar flappy search
 busquedas calcular nota del plato tambien por numero de votos (necesita bd)
 mapa editar iconos y infowindow custom (necesita diseño)

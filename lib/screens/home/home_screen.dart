@@ -26,21 +26,33 @@ class _HomeScreenState extends State<HomeScreen> {
 	List<Restaurant> nearRestaurants;
 	Map<MenuEntry,Restaurant> popular;
 	String location;
+	bool first = true;
 
 	@override
   Widget build(BuildContext context) {
 		user = Provider.of<User>(context);
 		nearRestaurants = Provider.of<List<Restaurant>>(context);
 		popular = Provider.of<Map<MenuEntry,Restaurant>>(context);
-		user.addListener(() { setState(() {
-		});});
-		for(MenuEntry entry in popular.keys){
-			entry.addListener(() { setState(() {
+		if(first){
+			user.addListener(() { setState(() {
 			});});
-		}
-		for(Restaurant r in nearRestaurants){
-			r.addListener(() { setState(() {
-			});});
+			for(MenuEntry entry in popular.keys){
+				entry.addListener(() { setState(() {
+				});});
+			}
+			for(Restaurant r in nearRestaurants){
+				for(MenuEntry entry in r.menu){
+					entry.addListener(() { setState(() {
+					});});
+				}
+			}
+			for(Restaurant r in user.recently){
+				for(MenuEntry entry in r.menu){
+					entry.addListener(() { setState(() {
+					});});
+				}
+			}
+			first = false;
 		}
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
 		return Scaffold(

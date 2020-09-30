@@ -249,32 +249,38 @@ class DBService {
 							element['delivery']),
 					menu: await getMenu(element['restaurant_id'].toString())
 			);
-			MenuEntry entry = MenuEntry(
-					id: element['entry_id'].toString(),
-					restaurant_id: element['restaurant_id'].toString(),
-					name: element['entryname'],
-					section: element['section'],
-					rating: element['rating'] == null ? 0.0 : double.parse(element['rating'].toStringAsFixed(2)),
-					numReviews: int.parse(element['numreviews']),
-					price: element['price'].toDouble(),
-					image: element['image'],
-					pos: element['pos'],
-					description: element['description']
-			);
+			MenuEntry entry;
 			for(MenuEntry e in restaurant.menu){
-				if(e.id == entry.id){
+				if(e.id == element['entry_id'].toString()){
 					entry = e;
 					break;
 				}
 			}
 			popular[entry] = restaurant;
 		}
+
 		Pool.addRestaurants(popular.values.toList());
 		List<Restaurant> restaurants = Pool.getSubList(popular.values.toList());
 		for(MenuEntry entry in popular.keys.toList()){
 			for(Restaurant restaurant in restaurants){
 				if(popular[entry].restaurant_id == restaurant.restaurant_id){
-					popular[entry] = restaurant;
+					//popular[entry] = restaurant;
+					for(MenuEntry e in restaurant.menu){
+						if(e.id == entry.id){
+							popular[e] = restaurant;
+							popular.remove(entry);
+						}
+						break;
+					}
+					break;
+				}
+			}
+		}
+		for(MenuEntry entry in popular.keys){
+			for(MenuEntry e in popular[entry].menu){
+				if(entry.id == e.id){
+					print(entry.hashCode);
+					print(e.hashCode);
 				}
 			}
 		}
