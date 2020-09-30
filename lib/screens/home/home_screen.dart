@@ -155,17 +155,20 @@ class _HomeScreenState extends State<HomeScreen> {
 			  		),
 						SizedBox(height: 10.h,),
 						Container(
-							height: 165.h,
+							height: 175.h,
 						  child: ListView(
 						  	scrollDirection: Axis.horizontal,
-						  	children: nearRestaurants.map((r) => Provider<Restaurant>.value(value: r, child: RestaurantTile(),)).toList(),
+						  	children: nearRestaurants.map((r) => Padding(
+									padding: EdgeInsets.symmetric(vertical: 10.h),
+						  	  child: Provider<Restaurant>.value(value: r, child: RestaurantTile(),),
+						  	)).toList(),
 						  ),
 						),
 						SizedBox(height: 50.h,),
 						Text('Popular plates', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
 						SizedBox(height: 10.h,),
 						Container(
-							height: 190.h,
+							height: 195.h,
 							child: ListView(
 								scrollDirection: Axis.horizontal,
 								//children: user.favorites.first.menu.map((e) => Provider<MenuEntry>.value(value: e, child: DishTile(),)).toList(),
@@ -175,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
 										Provider<Restaurant>(create: (c) => e.value,)
 									],
 									child: Padding(
-									  padding: EdgeInsets.symmetric(horizontal: 10.w),
+									  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
 									  child: DishTile(),
 									),
 								) ).toList(),
@@ -185,10 +188,13 @@ class _HomeScreenState extends State<HomeScreen> {
 						Text('Recently viewed', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
 						SizedBox(height: 10.h,),
 						Container(
-							height: 165.h,
+							height: 175.h,
 							child: ListView(
 								scrollDirection: Axis.horizontal,
-								children: user.recently.map((r) => Provider<Restaurant>.value(value: r, child: RestaurantTile(),)).toList(),
+								children: user.recently.map((r) => Padding(
+									padding: EdgeInsets.symmetric(vertical: 10.h),
+								  child: Provider<Restaurant>.value(value: r, child: RestaurantTile(),),
+								)).toList(),
 							),
 						),
 						SizedBox(height: 50.h,),

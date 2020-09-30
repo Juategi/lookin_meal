@@ -100,6 +100,8 @@ class _EntryRatingState extends State<EntryRating> {
               double aux = (entry.rating*entry.numReviews + rate - oldRate)/(entry.numReviews);
               //entry.rating = double.parse(aux.toStringAsFixed(2));
               entry.rate = double.parse(aux.toStringAsFixed(2));
+              print("______________");
+              print(entry.rating);
               Alerts.toast("Rating saved");
               Navigator.pop(context);
             }

@@ -46,7 +46,6 @@ class _DishTileState extends State<DishTile> {
         Navigator.pushNamed(context, "/restaurant",arguments: restaurant);
       },
         child: Container(
-          color: Colors.white,
           height: 170.h,
           width: 220.w,
           child: Column(
@@ -91,6 +90,15 @@ class _DishTileState extends State<DishTile> {
                 ],
               )
             ],
+          ),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 3,
+                offset: Offset(1, 1), // changes position of shadow
+              ),]
           ),
         )
     );
