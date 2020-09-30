@@ -25,15 +25,16 @@ class _EditRestaurantState extends State<EditRestaurant> {
   final _formKey = GlobalKey<FormState>();
   String name, address, phone, email, web;
   List<String> types, delivery;
-  Map<String, List<int>> schedule;
+  Map<String, List<String>> schedule;
   Restaurant restaurant;
   bool loading, init;
+  List<List<Widget>> scheduleTree = [];
 
   @override
   void initState() {
     init = false;
     loading = false;
-    schedule = {'1': new List<int>()..add(-1)..add(-1)..add(-1)..add(-1), '2': new List<int>()..add(-1)..add(-1)..add(-1)..add(-1), '3': new List<int>()..add(-1)..add(-1)..add(-1)..add(-1), '4': new List<int>()..add(-1)..add(-1)..add(-1)..add(-1), '5': new List<int>()..add(-1)..add(-1)..add(-1)..add(-1), '6': new List<int>()..add(-1)..add(-1)..add(-1)..add(-1), '0': new List<int>()..add(-1)..add(-1)..add(-1)..add(-1)};
+    schedule = {'1': new List<String>()..add("-1")..add("-1")..add("-1")..add("-1"), '2': new List<String>()..add("-1")..add("-1")..add("-1")..add("-1"), '3': new List<String>()..add("-1")..add("-1")..add("-1")..add("-1"), '4': new List<String>()..add("-1")..add("-1")..add("-1")..add("-1"), '5': new List<String>()..add("-1")..add("-1")..add("-1")..add("-1"), '6': new List<String>()..add("-1")..add("-1")..add("-1")..add("-1"), '0': new List<String>()..add("-1")..add("-1")..add("-1")..add("-1")};
     super.initState();
   }
   @override
@@ -48,6 +49,9 @@ class _EditRestaurantState extends State<EditRestaurant> {
       email = restaurant.email;
       types = restaurant.types;
       delivery = restaurant.delivery;
+      for(int i = 0; i <=6; i++){
+        scheduleTree.add(_initRow(i));
+      }
       if(delivery == null){
         delivery = ["-", "-", "-", "-"];
       }
@@ -123,7 +127,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                       onChanged: (value){
                         name = value;
                       },
-                      controller: TextEditingController()..text = restaurant.name,
+                      controller: TextEditingController()..text = name..selection = TextSelection.fromPosition(TextPosition(offset: name.length)),
                       validator: (val) => val.length < 4 || val.length > 120 ? "Mínimo 4 carácteres y menos de 120" : null,
                       decoration: textInputDeco.copyWith(hintText: "Nombre del restaurant"),
                     ),
@@ -134,7 +138,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                       onChanged: (value){
                         email = value;
                       },
-                      controller: TextEditingController()..text = restaurant.email,
+                      controller: TextEditingController()..text = email..selection = TextSelection.fromPosition(TextPosition(offset: email.length)),
                       validator: (val) => !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val) ? "Introduce un email válido" : null,
                       decoration: textInputDeco.copyWith(hintText: "Email"),
                     ),
@@ -145,7 +149,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                       onChanged: (value){
                         web = value;
                       },
-                      controller: TextEditingController()..text = restaurant.website,
+                      controller: TextEditingController()..text = web..selection = TextSelection.fromPosition(TextPosition(offset: web.length)),
                       validator: (val) => val.length < 4 || val.length > 149 ? "Mínimo 4 carácteres y menos de 150" : null,
                       decoration: textInputDeco.copyWith(hintText: "Web del restaurant"),
                     ),
@@ -156,7 +160,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                       onChanged: (value){
                         phone = value;
                       },
-                      controller: TextEditingController()..text = restaurant.phone,
+                      controller: TextEditingController()..text = phone..selection = TextSelection.fromPosition(TextPosition(offset: phone.length)),
                       validator: (val) => val.length < 6 || val.length > 49 ? "Mínimo 6 carácteres y menos de 50" : null,
                       decoration: textInputDeco.copyWith(hintText: "Teléfono del restaurant"),
                     ),
@@ -167,7 +171,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                       onChanged: (value){
                         address = value;
                       },
-                      controller: TextEditingController()..text = restaurant.address,
+                      controller: TextEditingController()..text = address..selection = TextSelection.fromPosition(TextPosition(offset: address.length)),
                       validator: (val) => val.length < 4 || val.length > 149 ? "Mínimo 4 carácteres y menos de 150" : null,
                       decoration: textInputDeco.copyWith(hintText: "Dirección del restaurant"),
                     ),
@@ -190,7 +194,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                             onChanged: (value){
                               delivery[0] = value;
                             },
-                            controller: TextEditingController()..text = restaurant.delivery == null? "" : restaurant.delivery[0] ,
+                            controller: TextEditingController()..text = delivery == null? "" : delivery[0]..selection = TextSelection.fromPosition(TextPosition(offset: delivery[0].length)) ,
                             decoration: textInputDeco,
                           ),
                         ),
@@ -213,7 +217,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                             onChanged: (value){
                               delivery[1] = value;
                             },
-                            controller: TextEditingController()..text = restaurant.delivery == null? "" : restaurant.delivery[1] ,
+                            controller: TextEditingController()..text = delivery == null? "" : delivery[1]..selection = TextSelection.fromPosition(TextPosition(offset: delivery[1].length)) ,
                             decoration: textInputDeco,
                           ),
                         ),
@@ -236,7 +240,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                             onChanged: (value){
                               delivery[2] = value;
                             },
-                            controller: TextEditingController()..text = restaurant.delivery == null? "" : restaurant.delivery[2] ,
+                            controller: TextEditingController()..text = delivery == null? "" : delivery[2]..selection = TextSelection.fromPosition(TextPosition(offset: delivery[2].length)) ,
                             decoration: textInputDeco,
                           ),
                         ),
@@ -259,7 +263,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                             onChanged: (value){
                               delivery[3] = value;
                             },
-                            controller: TextEditingController()..text = restaurant.delivery == null? "" : restaurant.delivery[3] ,
+                            controller: TextEditingController()..text = delivery == null? "" :delivery[3]..selection = TextSelection.fromPosition(TextPosition(offset: delivery[3].length)) ,
                             decoration: textInputDeco,
                           ),
                         ),
@@ -270,31 +274,31 @@ class _EditRestaurantState extends State<EditRestaurant> {
                     SizedBox(height: 20,),
                     Text("Lunes:"),
                     SizedBox(height: 5,),
-                    Row(children: _initRow(1),),
+                    Row(children: scheduleTree[1],),
                     SizedBox(height: 25,),
                     Text("Martes:"),
                     SizedBox(height: 5,),
-                    Row(children: _initRow(2),),
+                    Row(children: scheduleTree[2],),
                     SizedBox(height: 25,),
                     Text("Miercoles:"),
                     SizedBox(height: 5,),
-                    Row(children: _initRow(3),),
+                    Row(children: scheduleTree[3],),
                     SizedBox(height: 25,),
                     Text("Jueves:"),
                     SizedBox(height: 5,),
-                    Row(children: _initRow(4),),
+                    Row(children: scheduleTree[4],),
                     SizedBox(height: 25,),
                     Text("Viernes:"),
                     SizedBox(height: 5,),
-                    Row(children: _initRow(5),),
+                    Row(children: scheduleTree[5]),
                     SizedBox(height: 25,),
                     Text("Sábado:"),
                     SizedBox(height: 5,),
-                    Row(children: _initRow(6),),
+                    Row(children: scheduleTree[6]),
                     SizedBox(height: 25,),
                     Text("Domingo:"),
                     SizedBox(height: 5,),
-                    Row(children: _initRow(0),),
+                    Row(children: scheduleTree[0]),
                     SizedBox(height: 25,),
                   ],),
                 ),),
@@ -496,14 +500,14 @@ class _EditRestaurantState extends State<EditRestaurant> {
   List<Widget> _initRow(int i){
     List<Widget> items = List<Widget>();
     if(restaurant.schedule[i.toString()].length == 2){
-      restaurant.schedule[i.toString()].add(-1);
-      restaurant.schedule[i.toString()].add(-1);
+      restaurant.schedule[i.toString()].add("-1");
+      restaurant.schedule[i.toString()].add("-1");
     }
     else if(restaurant.schedule[i.toString()].length == 0){
-      restaurant.schedule[i.toString()].add(-1);
-      restaurant.schedule[i.toString()].add(-1);
-      restaurant.schedule[i.toString()].add(-1);
-      restaurant.schedule[i.toString()].add(-1);
+      restaurant.schedule[i.toString()].add("-1");
+      restaurant.schedule[i.toString()].add("-1");
+      restaurant.schedule[i.toString()].add("-1");
+      restaurant.schedule[i.toString()].add("-1");
     }
 
     for(int j = 0; j < 4; j++){
@@ -513,12 +517,17 @@ class _EditRestaurantState extends State<EditRestaurant> {
           child: TextFormField(
             onChanged: (value){
               if(value == "")
-                schedule[i.toString()][j] = -1;
-              else
-                schedule[i.toString()][j] = int.parse(value);
+                schedule[i.toString()][j] = "-1";
+              else {
+                if(value.length == 1){
+                  schedule[i.toString()][j] = "0" + value;
+                }
+                else
+                  schedule[i.toString()][j] = value;
+              }
               print(schedule);
             },
-            initialValue: restaurant.schedule[i.toString()][j] == -1? null : restaurant.schedule[i.toString()][j].toString(),
+            initialValue: restaurant.schedule[i.toString()][j] == "-1"? null : restaurant.schedule[i.toString()][j].toString(),
             decoration: textInputDeco.copyWith(hintText: "00"),
             keyboardType: TextInputType.number,
           ),

@@ -27,17 +27,17 @@ class SearchService{
     Map<MenuEntry, Restaurant> map = Map<MenuEntry, Restaurant>();
     List<dynamic> result = json.decode(response.body);
     print(response.body);
-    Map<String, List<int>> schedule;
+    Map<String, List<String>> schedule;
 
     for (dynamic element in result) {
       schedule = {
-        '1': new List<int>(),
-        '2': new List<int>(),
-        '3': new List<int>(),
-        '4': new List<int>(),
-        '5': new List<int>(),
-        '6': new List<int>(),
-        '0': new List<int>()
+        '1': new List<String>(),
+        '2': new List<String>(),
+        '3': new List<String>(),
+        '4': new List<String>(),
+        '5': new List<String>(),
+        '6': new List<String>(),
+        '0': new List<String>()
       };
       if (element['schedule'] != null) {
         dynamic result = json.decode(element['schedule'].toString()
@@ -101,16 +101,16 @@ class SearchService{
     List<Restaurant> restaurants = List<Restaurant>();
     List<dynamic> result = json.decode(response.body);
     print(response.body);
-    Map<String, List<int>> schedule;
+    Map<String, List<String>> schedule;
     for (dynamic element in result) {
       schedule = {
-        '1': new List<int>(),
-        '2': new List<int>(),
-        '3': new List<int>(),
-        '4': new List<int>(),
-        '5': new List<int>(),
-        '6': new List<int>(),
-        '0': new List<int>()
+        '1': new List<String>(),
+        '2': new List<String>(),
+        '3': new List<String>(),
+        '4': new List<String>(),
+        '5': new List<String>(),
+        '6': new List<String>(),
+        '0': new List<String>()
       };
       if (element['schedule'] != null) {
         dynamic result = json.decode(element['schedule'].toString()

@@ -84,7 +84,6 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 			}
 		}
 		restaurant.menu.sort((e1, e2) =>(e2.rating*0.5 + (e2.numReviews*5/max)*0.5).compareTo((e1.rating*0.5 + (e1.numReviews*5/max)*0.5)));
-		print(restaurant.menu.length);
 		if(index == 3){
 			return restaurant.menu.sublist(0,3);
 		}

@@ -6,7 +6,7 @@ class Restaurant{
 	double latitude, longitude, rating, distance;
 	int numrevta;
 	List<String> types, images, sections, dailymenu, delivery;
-	Map<String,List<int>> schedule;
+	Map<String,List<String>> schedule;
 	List<MenuEntry> menu;
 
 	//Map<String,List<int>> schedule = {'1': new List<int>(), '2': new List<int>(), '3': new List<int>(), '4': new List<int>(), '5': new List<int>(), '6': new List<int>(), '0': new List<int>()};

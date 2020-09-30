@@ -281,21 +281,23 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
     );
   }
 
-  String parseSchedule(List<int> hours){
+  String parseSchedule(List<String> hours){
     String text = "";
     for(int i = 0; i < hours.length; i+=2){
-      if(hours[i] != -1){
+      if(hours[i] != "-1"){
         if(hours[i].toString().length == 2){
           text += hours[i].toString() + ":00" ;
         }
-        else
+        else{
           text += hours[i].toString().substring(0,2) + ":" + hours[i].toString().substring(2,4);
+        }
         text += " - ";
         if(hours[i+1].toString().length == 2){
           text += hours[i+1].toString() + ":00" ;
         }
-        else
+        else{
           text += hours[i+1].toString().substring(0,2) + ":" + hours[i+1].toString().substring(2,4);
+        }
         text += "     ";
       }
     }

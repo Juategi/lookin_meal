@@ -56,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
 		}
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
 		return Scaffold(
+			//backgroundColor: Color.fromRGBO(255, 110, 117, 0.02),
 			appBar: PreferredSize(
 				preferredSize: Size.fromHeight(80.h),
 				child: AppBar(

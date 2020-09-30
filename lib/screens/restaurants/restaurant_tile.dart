@@ -23,14 +23,17 @@ class _RestaurantTileState extends State<RestaurantTile> {
   User user;
 
   Future updateRecent() async{
-    if(!user.recently.contains(restaurant)){
-      if(user.recently.length == 5){
-        user.recently.removeAt(0);
+    for(Restaurant r in user.recently){
+      if(r.restaurant_id == restaurant.restaurant_id){
+        return;
       }
-      user.recently.add(restaurant);
-      user.recent = user.recently;
-      DBService.dbService.updateRecently();
     }
+    if(user.recently.length == 5){
+      user.recently.removeAt(0);
+    }
+    user.recently.add(restaurant);
+    user.recent = user.recently;
+    DBService.dbService.updateRecently();
   }
 
   @override

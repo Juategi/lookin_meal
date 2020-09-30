@@ -192,16 +192,16 @@ class DBService {
 		var response = await http.get("${StaticStrings.api}/popular", headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
 		Map<MenuEntry,Restaurant> popular = Map<MenuEntry,Restaurant>();
 		List<dynamic> result = json.decode(response.body);
-		Map<String, List<int>> schedule;
+		Map<String, List<String>> schedule;
 		for (dynamic element in result) {
 			schedule = {
-				'1': new List<int>(),
-				'2': new List<int>(),
-				'3': new List<int>(),
-				'4': new List<int>(),
-				'5': new List<int>(),
-				'6': new List<int>(),
-				'0': new List<int>()
+				'1': new List<String>(),
+				'2': new List<String>(),
+				'3': new List<String>(),
+				'4': new List<String>(),
+				'5': new List<String>(),
+				'6': new List<String>(),
+				'0': new List<String>()
 			};
 			if (element['schedule'] != null) {
 				dynamic result = json.decode(element['schedule'].toString()
@@ -256,13 +256,13 @@ class DBService {
 					break;
 				}
 			}
+			Pool.addRestaurants([restaurant]);
+			restaurant = Pool.getSubList([restaurant]).first;
 			popular[entry] = restaurant;
 		}
 
-		Pool.addRestaurants(popular.values.toList());
-		List<Restaurant> restaurants = Pool.getSubList(popular.values.toList());
 		for(MenuEntry entry in popular.keys.toList()){
-			for(Restaurant restaurant in restaurants){
+			for(Restaurant restaurant in popular.values.toList()){
 				if(popular[entry].restaurant_id == restaurant.restaurant_id){
 					//popular[entry] = restaurant;
 					for(MenuEntry e in restaurant.menu){
@@ -276,14 +276,14 @@ class DBService {
 				}
 			}
 		}
-		for(MenuEntry entry in popular.keys){
+		/*for(MenuEntry entry in popular.keys){
 			for(MenuEntry e in popular[entry].menu){
 				if(entry.id == e.id){
 					print(entry.hashCode);
 					print(e.hashCode);
 				}
 			}
-		}
+		}*/
 		return popular;
 	}
 
@@ -346,7 +346,7 @@ class DBService {
 	}
 
 	updateRestaurantData(String restaurant_id, String name, String phone,
-			String website, String address, String email, List<String> types, Map<String, List<int>> schedule, List<String> delivery) async{
+			String website, String address, String email, List<String> types, Map<String, List<String>> schedule, List<String> delivery) async{
 		Map body = {
 			"id": restaurant_id,
 			"name": name,
@@ -356,7 +356,7 @@ class DBService {
 			"email": email ?? "",
 			"types": types.toString().replaceAll("[", "{").replaceAll("]", "}") ??
 					List<String>().toString(),
-			"schedule": jsonEncode(schedule).toString() ?? Map<String, List<int>>().toString(),
+			"schedule": jsonEncode(schedule).toString() ?? Map<String, List<String>>().toString(),
 			"delivery": delivery.toString().replaceAll("[", "{").replaceAll("]", "}") ??
 					List<String>().toString(),
 		};
@@ -513,16 +513,16 @@ class DBService {
 		List<Restaurant> restaurants = List<Restaurant>();
 		List<dynamic> result = json.decode(response.body);
 		print(response.body);
-		Map<String, List<int>> schedule;
+		Map<String, List<String>> schedule;
 		for (dynamic element in result) {
 			schedule = {
-				'1': new List<int>(),
-				'2': new List<int>(),
-				'3': new List<int>(),
-				'4': new List<int>(),
-				'5': new List<int>(),
-				'6': new List<int>(),
-				'0': new List<int>()
+				'1': new List<String>(),
+				'2': new List<String>(),
+				'3': new List<String>(),
+				'4': new List<String>(),
+				'5': new List<String>(),
+				'6': new List<String>(),
+				'0': new List<String>()
 			};
 			if (element['schedule'] != null) {
 				dynamic result = json.decode(element['schedule'].toString()
