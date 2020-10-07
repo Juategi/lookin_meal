@@ -2,7 +2,9 @@
 
 TODO
 
-no guarda horario
+//Revisar crear horario en json tripad
+
+optimizar pool al buscar el id restaurante antes y no crear instancia
 listener en nombre y tipos de restaurante para los tiles
 a veces el rating no guarda bien en local
 arreglar cluster y cambiar flappy search

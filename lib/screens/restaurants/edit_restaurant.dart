@@ -528,7 +528,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
               print(schedule);
             },
             initialValue: restaurant.schedule[i.toString()][j] == "-1"? null : restaurant.schedule[i.toString()][j].toString(),
-            decoration: textInputDeco.copyWith(hintText: "00"),
+            decoration: textInputDeco.copyWith(hintText: "0000"),
             keyboardType: TextInputType.number,
           ),
         ),

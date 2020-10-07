@@ -8,6 +8,7 @@ import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/strings.dart';
 
 class DBService {
@@ -37,8 +38,7 @@ class DBService {
 						picture: result.first["image"],
 						country: result.first["country"],
 						username: result.first["username"],
-						favorites: await this.getUserFavorites(
-								id, myPos.latitude, myPos.longitude),
+						favorites: await this.getUserFavorites(id, myPos.latitude, myPos.longitude),
 						ratings: await this.getAllRating(id),
 						recently: await this.getRecently(result.first["user_id"].toString())
 				);
@@ -215,7 +215,7 @@ class DBService {
 				);
 				for (int i = 0; i < 7; i++) {
 					for (dynamic hour in result[i.toString()].toList()) {
-						schedule[i.toString()].add(hour);
+						schedule[i.toString()].add(hour.toString());
 					}
 				}
 			}
@@ -373,7 +373,7 @@ class DBService {
 	}
 
 
-	Future<String> addMenuEntry(String restaurant_id, String name, String section, double price, String image, int pos, String description) async{
+	Future<String> addMenuEntry(String restaurant_id, String name, String section, double price, String image, int pos, String description, List<String> allergens) async{
 		Map body = {
 			"restaurant_id": restaurant_id,
 			"name": name,
@@ -381,7 +381,8 @@ class DBService {
 			"price" : price.toString(),
       "image" : image ?? "",
 			"pos" : pos.toString(),
-			"description": description
+			"description": description,
+			"allergens": allergens.toString().replaceAll("[", "{").replaceAll("]", "}")
 		};
 		var response = await http.post(
 				"${StaticStrings.api}/menus", body: body);
@@ -395,7 +396,7 @@ class DBService {
 				"${StaticStrings.api}/menus",
 				headers: {"restaurant_id": restaurant_id});
 		List<dynamic> result = json.decode(response.body);
-		print(result);
+		//print(result);
 		for(var element in result){
 			MenuEntry me = MenuEntry(
 				id: element['entry_id'].toString(),
@@ -407,7 +408,8 @@ class DBService {
 				price: element['price'].toDouble(),
 				image: element['image'],
 				pos: element['pos'],
-				description: element['description']
+				description: element['description'],
+				allergens: element['allergens'] == null ? [] : List<String>.from(element['allergens'])
 			);
 			menu.add(me);
 		}
@@ -466,17 +468,18 @@ class DBService {
 		List<String> notNews = List<String>();
 		for(MenuEntry entryR in restaurant.menu){
 			notNews.add(entryR.id);
+			//print(entryR.allergens);
 		}
 		var response = await http.put("${StaticStrings.api}/sections", body: {"restaurant_id": restaurant.restaurant_id, "sections":sections.toString().replaceAll("[", "").replaceAll("]", "")});
-		print(response.body);
+		//print(response.body);
 		for(MenuEntry entry in menu){
 			if(!notNews.contains(entry.id)){
-				entry.id = await addMenuEntry(entry.restaurant_id, entry.name, entry.section, entry.price, entry.image, entry.pos, entry.description);
+				entry.id = await addMenuEntry(entry.restaurant_id, entry.name, entry.section, entry.price, entry.image, entry.pos, entry.description, entry.allergens);
 			}
 			else{
 				for(MenuEntry entryR in restaurant.menu){
 					if(entry.id == entryR.id) {
-						if (!(entry.price == entryR.price && entry.name == entryR.name && entry.section == entryR.section && entry.image == entryR.image && entry.description == entryR.description)) {
+						if (!(entry.price == entryR.price && entry.name == entryR.name && entry.section == entryR.section && entry.image == entryR.image && entry.description == entryR.description && Functions.compareList(entry.allergens, entryR.allergens))) {
 							var response = await http.put("${StaticStrings.api}/menus",
 									body: {
 										"entry_id": entry.id,
@@ -485,7 +488,8 @@ class DBService {
 										"price": entry.price.toString(),
 										"image": entry.image ?? "",
 										"pos": entry.pos.toString(),
-										"description": entry.description ?? ""
+										"description": entry.description ?? "",
+										"allergens": entry.allergens.toString().replaceAll("[", "{").replaceAll("]", "}")
 									});
 							print("${response.body}    ${entry.name}");
 						}
@@ -512,7 +516,6 @@ class DBService {
 	Future<List<Restaurant>> parseResponse(var response) async{
 		List<Restaurant> restaurants = List<Restaurant>();
 		List<dynamic> result = json.decode(response.body);
-		print(response.body);
 		Map<String, List<String>> schedule;
 		for (dynamic element in result) {
 			schedule = {
@@ -525,7 +528,7 @@ class DBService {
 				'0': new List<String>()
 			};
 			if (element['schedule'] != null) {
-				dynamic result = json.decode(element['schedule'].toString()
+				Map<String, dynamic> result = json.decode(element['schedule'].toString()
 						.replaceAll("0:", '"0":')
 						.replaceAll("1:", '"1":')
 						.replaceAll("2:", '"2":')
@@ -533,10 +536,13 @@ class DBService {
 						.replaceAll("4:", '"4":')
 						.replaceAll("5:", '"5":')
 						.replaceAll("6:", '"6":')
+						.replaceAll("[", '"[')
+						.replaceAll("]", ']"')
 				);
 				for (int i = 0; i < 7; i++) {
-					for (dynamic hour in result[i.toString()].toList()) {
-						schedule[i.toString()].add(hour);
+					//print(result[i.toString()]);
+					for (dynamic hour in result[i.toString()].toString().split(',')) {
+						schedule[i.toString()].add(hour.toString());
 					}
 				}
 			}
@@ -574,7 +580,7 @@ class DBService {
 		}
 		Pool.addRestaurants(restaurants);
 		restaurants = Pool.getSubList(restaurants);
-		print("Number of restaurants : ${restaurants.length}");
+		//print("Number of restaurants : ${restaurants.length}");
 		return restaurants;
 	}
 

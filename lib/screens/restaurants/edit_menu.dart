@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
@@ -40,6 +41,10 @@ class _EditMenuState extends State<EditMenu> {
         sections.add(section);
         for (MenuEntry entry in restaurant.menu) {
           if (entry.section == section) {
+            List<String> allergens = [];
+            for(String allergen in entry.allergens){
+              allergens.add(allergen);
+            }
             menu.add(MenuEntry(
                 id: entry.id,
                 name: entry.name,
@@ -50,7 +55,8 @@ class _EditMenuState extends State<EditMenu> {
                 section: entry.section,
                 image: entry.image,
                 pos: entry.pos,
-                description: entry.description
+                description: entry.description,
+                allergens: allergens
             ));
             ids.add(int.parse(entry.id));
           }
@@ -109,11 +115,11 @@ class _EditMenuState extends State<EditMenu> {
                 Expanded(child:
                   Container(width: 300.w,
                     child: TextFormField(
-                  controller: TextEditingController()..text = entry.name, maxLines: 5, maxLength: 150, onChanged: (v) {entry.name = v;},))),
+                  controller: TextEditingController()..text = entry.name..selection = TextSelection.fromPosition(TextPosition(offset: entry.name.length)), maxLines: 5, maxLength: 150, onChanged: (v) {entry.name = v;},))),
                   SizedBox(width: 10.w,),
                 Container( width: 50.w, child: TextFormField(
                   keyboardType: TextInputType.number,
-                  controller: TextEditingController()..text = entry.price.toString() , maxLength: 6, onChanged: (v) {
+                  controller: TextEditingController()..text = entry.price.toString()..selection = TextSelection.fromPosition(TextPosition(offset: entry.price.toString().length)) , maxLength: 6, onChanged: (v) {
                      entry.price = double.parse(v);
                 },)),
                 FlatButton(onPressed: () async{
@@ -128,45 +134,465 @@ class _EditMenuState extends State<EditMenu> {
                       left: 30.0.w, bottom: 52.0.h, right: 30.0.w),
                     decoration: BoxDecoration(image: DecorationImage(
                       image:  Image.network(entry.image == null || entry.image == "" ? StaticStrings.defaultEntry : entry.image).image,),),),),
-                IconButton(icon: Icon(Icons.description), onPressed: (){
-                  String desc = entry.description;
-                  print(entry.description);
-                  showModalBottomSheet(context: context, builder: (BuildContext bc){
-                    return Container(
-                      height: 500.h,
-                      child: Column(
-                        children: <Widget>[
-                          SizedBox(height: 20.h,),
-                          Text("Añade una descripción al plato", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black54, fontSize: ScreenUtil().setSp(20),),),
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: TextField(
-                              controller: TextEditingController()..text = desc, maxLines: 6, maxLength: 300, onChanged: (v) {desc = v;},),
-                          ),
-                          SizedBox(height: 100.h,),
-                          Row(mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              IconButton(
-                                icon: FaIcon(FontAwesomeIcons.check, size: ScreenUtil().setSp(50),),
-                                iconSize: ScreenUtil().setSp(73),
-                                onPressed: ()async{
-                                  entry.description = desc;
-                                  Navigator.pop(context);
-                                },
-                              ),
-                              IconButton(
-                                icon: FaIcon(FontAwesomeIcons.ban, size: ScreenUtil().setSp(50),),
-                                iconSize: ScreenUtil().setSp(73),
-                                onPressed: (){
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ],)
-                        ],
+                Column( mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    GestureDetector(
+                      child: Container(
+                        height: 26.h,
+                        width: 26.w,
+                        decoration: BoxDecoration(image: DecorationImage(
+                          image: Image.asset("assets/allergens/cacahuetes.png").image))
                       ),
-                    );
-                  }).then((value){setState(() {});});
-                },),
+                      onTap: (){
+                        showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
+                          return StatefulBuilder(
+                            builder: (BuildContext context, setState) {
+                              return Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 50.h),
+                                child: ListView(
+                                  children: <Widget>[
+                                    Text("Alérgenos", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: ScreenUtil().setSp(25),),),
+                                    SizedBox(height: 30.h,),
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                            height: 60.h,
+                                            width: 60.w,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: Image.asset("assets/allergens/cacahuetes.png").image))
+                                        ),
+                                        Expanded(
+                                          child: CheckboxListTile(
+                                            value: entry.allergens.contains("cacahuetes"),
+                                            onChanged: (f) {
+                                              setState(() {
+                                                print(f);
+                                                if (!entry.allergens.contains("cacahuetes"))
+                                                  entry.allergens.add("cacahuetes");
+                                                else
+                                                  entry.allergens.remove("cacahuetes");
+                                                print(entry.allergens);
+                                              });
+                                            },
+                                            title: Text("Cacahuetes", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h,),
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                            height: 60.h,
+                                            width: 60.w,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: Image.asset("assets/allergens/altramuces.png").image))
+                                        ),
+                                        Expanded(
+                                          child: CheckboxListTile(
+                                            value: entry.allergens.contains("altramuces"),
+                                            onChanged: (f) {
+                                              setState(() {
+                                                print(f);
+                                                if (!entry.allergens.contains("altramuces"))
+                                                  entry.allergens.add("altramuces");
+                                                else
+                                                  entry.allergens.remove("altramuces");
+                                                print(entry.allergens);
+                                              });
+                                            },
+                                            title: Text("Altramuces", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h,),
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                            height: 60.h,
+                                            width: 60.w,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: Image.asset("assets/allergens/apio.png").image))
+                                        ),
+                                        Expanded(
+                                          child: CheckboxListTile(
+                                            value: entry.allergens.contains("apio"),
+                                            onChanged: (f) {
+                                              setState(() {
+                                                print(f);
+                                                if (!entry.allergens.contains("apio"))
+                                                  entry.allergens.add("apio");
+                                                else
+                                                  entry.allergens.remove("apio");
+                                                print(entry.allergens);
+                                              });
+                                            },
+                                            title: Text("Apio", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h,),
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                            height: 60.h,
+                                            width: 60.w,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: Image.asset("assets/allergens/crustaceos.png").image))
+                                        ),
+                                        Expanded(
+                                          child: CheckboxListTile(
+                                            value: entry.allergens.contains("crustaceos"),
+                                            onChanged: (f) {
+                                              setState(() {
+                                                print(f);
+                                                if (!entry.allergens.contains("crustaceos"))
+                                                  entry.allergens.add("crustaceos");
+                                                else
+                                                  entry.allergens.remove("crustaceos");
+                                                print(entry.allergens);
+                                              });
+                                            },
+                                            title: Text("Crustaceos", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h,),
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                            height: 60.h,
+                                            width: 60.w,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: Image.asset("assets/allergens/frutoscascara.png").image))
+                                        ),
+                                        Expanded(
+                                          child: CheckboxListTile(
+                                            value: entry.allergens.contains("frutoscascara"),
+                                            onChanged: (f) {
+                                              setState(() {
+                                                print(f);
+                                                if (!entry.allergens.contains("frutoscascara"))
+                                                  entry.allergens.add("frutoscascara");
+                                                else
+                                                  entry.allergens.remove("frutoscascara");
+                                                print(entry.allergens);
+                                              });
+                                            },
+                                            title: Text("Frutos con cascara", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h,),
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                            height: 60.h,
+                                            width: 60.w,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: Image.asset("assets/allergens/gluten.png").image))
+                                        ),
+                                        Expanded(
+                                          child: CheckboxListTile(
+                                            value: entry.allergens.contains("gluten"),
+                                            onChanged: (f) {
+                                              setState(() {
+                                                print(f);
+                                                if (!entry.allergens.contains("gluten"))
+                                                  entry.allergens.add("gluten");
+                                                else
+                                                  entry.allergens.remove("gluten");
+                                                print(entry.allergens);
+                                              });
+                                            },
+                                            title: Text("Gluten", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h,),
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                            height: 60.h,
+                                            width: 60.w,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: Image.asset("assets/allergens/huevos.png").image))
+                                        ),
+                                        Expanded(
+                                          child: CheckboxListTile(
+                                            value: entry.allergens.contains("huevos"),
+                                            onChanged: (f) {
+                                              setState(() {
+                                                print(f);
+                                                if (!entry.allergens.contains("huevos"))
+                                                  entry.allergens.add("huevos");
+                                                else
+                                                  entry.allergens.remove("huevos");
+                                                print(entry.allergens);
+                                              });
+                                            },
+                                            title: Text("Huevos", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h,),
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                            height: 60.h,
+                                            width: 60.w,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: Image.asset("assets/allergens/leche.png").image))
+                                        ),
+                                        Expanded(
+                                          child: CheckboxListTile(
+                                            value: entry.allergens.contains("leche"),
+                                            onChanged: (f) {
+                                              setState(() {
+                                                print(f);
+                                                if (!entry.allergens.contains("leche"))
+                                                  entry.allergens.add("leche");
+                                                else
+                                                  entry.allergens.remove("leche");
+                                                print(entry.allergens);
+                                              });
+                                            },
+                                            title: Text("Leche", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h,),
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                            height: 60.h,
+                                            width: 60.w,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: Image.asset("assets/allergens/moluscos.png").image))
+                                        ),
+                                        Expanded(
+                                          child: CheckboxListTile(
+                                            value: entry.allergens.contains("moluscos"),
+                                            onChanged: (f) {
+                                              setState(() {
+                                                print(f);
+                                                if (!entry.allergens.contains("moluscos"))
+                                                  entry.allergens.add("moluscos");
+                                                else
+                                                  entry.allergens.remove("moluscos");
+                                                print(entry.allergens);
+                                              });
+                                            },
+                                            title: Text("Moluscos", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h,),
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                            height: 60.h,
+                                            width: 60.w,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: Image.asset("assets/allergens/mostaza.png").image))
+                                        ),
+                                        Expanded(
+                                          child: CheckboxListTile(
+                                            value: entry.allergens.contains("mostaza"),
+                                            onChanged: (f) {
+                                              setState(() {
+                                                print(f);
+                                                if (!entry.allergens.contains("mostaza"))
+                                                  entry.allergens.add("mostaza");
+                                                else
+                                                  entry.allergens.remove("mostaza");
+                                                print(entry.allergens);
+                                              });
+                                            },
+                                            title: Text("Mostaza", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h,),
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                            height: 60.h,
+                                            width: 60.w,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: Image.asset("assets/allergens/pescado.png").image))
+                                        ),
+                                        Expanded(
+                                          child: CheckboxListTile(
+                                            value: entry.allergens.contains("pescado"),
+                                            onChanged: (f) {
+                                              setState(() {
+                                                print(f);
+                                                if (!entry.allergens.contains("pescado"))
+                                                  entry.allergens.add("pescado");
+                                                else
+                                                  entry.allergens.remove("pescado");
+                                                print(entry.allergens);
+                                              });
+                                            },
+                                            title: Text("Pescado", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h,),
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                            height: 60.h,
+                                            width: 60.w,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: Image.asset("assets/allergens/sesamo.png").image))
+                                        ),
+                                        Expanded(
+                                          child: CheckboxListTile(
+                                            value: entry.allergens.contains("sesamo"),
+                                            onChanged: (f) {
+                                              setState(() {
+                                                print(f);
+                                                if (!entry.allergens.contains("sesamo"))
+                                                  entry.allergens.add("sesamo");
+                                                else
+                                                  entry.allergens.remove("sesamo");
+                                                print(entry.allergens);
+                                              });
+                                            },
+                                            title: Text("Sesamo", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h,),
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                            height: 60.h,
+                                            width: 60.w,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: Image.asset("assets/allergens/soja.png").image))
+                                        ),
+                                        Expanded(
+                                          child: CheckboxListTile(
+                                            value: entry.allergens.contains("soja"),
+                                            onChanged: (f) {
+                                              setState(() {
+                                                print(f);
+                                                if (!entry.allergens.contains("soja"))
+                                                  entry.allergens.add("soja");
+                                                else
+                                                  entry.allergens.remove("soja");
+                                                print(entry.allergens);
+                                              });
+                                            },
+                                            title: Text("Soja", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h,),
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                            height: 60.h,
+                                            width: 60.w,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: Image.asset("assets/allergens/sulfitos.png").image))
+                                        ),
+                                        Expanded(
+                                          child: CheckboxListTile(
+                                            value: entry.allergens.contains("sulfitos"),
+                                            onChanged: (f) {
+                                              setState(() {
+                                                print(f);
+                                                if (!entry.allergens.contains("sulfitos"))
+                                                  entry.allergens.add("sulfitos");
+                                                else
+                                                  entry.allergens.remove("sulfitos");
+                                                print(entry.allergens);
+                                              });
+                                            },
+                                            title: Text("Sulfitos", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          );
+                        });
+                      },
+                    ),
+                    IconButton(icon: Icon(Icons.description), onPressed: (){
+                      String desc = entry.description;
+                      print(entry.description);
+                      showModalBottomSheet(context: context, builder: (BuildContext bc){
+                        return Container(
+                          height: 500.h,
+                          child: Column(
+                            children: <Widget>[
+                              SizedBox(height: 20.h,),
+                              Text("Añade una descripción al plato", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black54, fontSize: ScreenUtil().setSp(20),),),
+                              Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: TextField(
+                                  controller: TextEditingController()..text = desc, maxLines: 6, maxLength: 300, onChanged: (v) {desc = v;},),
+                              ),
+                              SizedBox(height: 100.h,),
+                              Row(mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: FaIcon(FontAwesomeIcons.check, size: ScreenUtil().setSp(50),),
+                                    iconSize: ScreenUtil().setSp(73),
+                                    onPressed: ()async{
+                                      entry.description = desc;
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: FaIcon(FontAwesomeIcons.ban, size: ScreenUtil().setSp(50),),
+                                    iconSize: ScreenUtil().setSp(73),
+                                    onPressed: (){
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],)
+                            ],
+                          ),
+                        );
+                      }).then((value){setState(() {});});
+                    },),
+                  ],
+                ),
                 IconButton(icon: Icon(Icons.delete), onPressed: (){
                   menu.remove(entry);
                   setState(() {});
@@ -188,7 +614,8 @@ class _EditMenuState extends State<EditMenu> {
                 rating: 0,
                 numReviews: 0,
                 pos: menu.length == 0? 0 :  menu.last.pos + 1,
-                description: " "
+                description: " ",
+                allergens: []
             ));
             ids.add(1);
           }
@@ -202,7 +629,8 @@ class _EditMenuState extends State<EditMenu> {
                 rating: 0,
                 numReviews: 0,
                 pos: menu.length == 0? 0 :  menu.last.pos + 1,
-                description: " "
+                description: " ",
+                allergens: []
             ));
             ids.add(ids.last + 1);
           }
@@ -300,7 +728,7 @@ class _EditMenuState extends State<EditMenu> {
                   });
                   for(MenuEntry entry in menu){
                     entry.price = entry.price.toDouble();
-                    print("${entry.section} / ${entry.name} / ${entry.price}");
+                    //print("${entry.section} / ${entry.name} / ${entry.price}/ ${entry.allergens}");
                   }
                   await DBService().uploadMenu(sections, menu, restaurant);
                   Alerts.toast("Menu saved");
