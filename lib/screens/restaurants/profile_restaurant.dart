@@ -468,6 +468,18 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 											width: 35.w,
 										),
 										onTap: ()async{
+											for(MenuEntry entry in restaurant.menu){
+												for(Translate tl in restaurant.original){
+													if(tl.id == entry.id){
+														entry.name = tl.name;
+														entry.description = tl.description;
+														break;
+													}
+												}
+											}
+											setState(() {
+											  language = "Original";
+											});
 											Navigator.pushNamed(context, "/editmenu",arguments: restaurant).then((value) => setState(() {}));
 										},
 									),
@@ -495,6 +507,18 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 											width: 35.w,
 										),
 										onTap: ()async{
+											for(MenuEntry entry in restaurant.menu){
+												for(Translate tl in restaurant.original){
+													if(tl.id == entry.id){
+														entry.name = tl.name;
+														entry.description = tl.description;
+														break;
+													}
+												}
+											}
+											setState(() {
+												language = "Original";
+											});
 											Navigator.pushNamed(context, "/editdaily",arguments: restaurant).then((value) => setState(() {}));
 										},
 									),
