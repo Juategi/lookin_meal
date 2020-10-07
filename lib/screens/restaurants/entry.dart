@@ -68,16 +68,6 @@ class _EntryRatingState extends State<EntryRating> {
           SizedBox(height: 10.h,),
           Container(width: 360.w,child: Text("${entry.name}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.7), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
           SizedBox(height: 20.h,),
-          Container(
-            width: 100.w,
-            height: 45.h,
-            decoration: BoxDecoration(
-                color: Color.fromRGBO(255, 110, 117, 0.9),
-                borderRadius: BorderRadius.all(Radius.circular(12))
-            ),
-            child: Align( alignment: Alignment.center, child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(22),),))),
-          ),
-          SizedBox(height: 20.h,),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Text("${entry.description}", maxLines: 4, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
@@ -92,8 +82,8 @@ class _EntryRatingState extends State<EntryRating> {
                   //crossAxisCount: 8,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: entry.allergens.map((allergen) => Container(
-                      height: 45.h,
-                      width: 45.w,
+                      height: 40.h,
+                      width: 40.w,
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               image: Image.asset("assets/allergens/${allergen}.png").image))
@@ -130,6 +120,16 @@ class _EntryRatingState extends State<EntryRating> {
               },
             ),
           ),
+          Container(
+            width: 100.w,
+            height: 45.h,
+            decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 110, 117, 0.9),
+                borderRadius: BorderRadius.all(Radius.circular(12))
+            ),
+            child: Align( alignment: Alignment.center, child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(22),),))),
+          ),
+          SizedBox(height: 20.h,),
           SmoothStarRating(
             allowHalfRating: true,
             rating: rate,

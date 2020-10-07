@@ -141,7 +141,7 @@ class _EditMenuState extends State<EditMenu> {
                         height: 26.h,
                         width: 26.w,
                         decoration: BoxDecoration(image: DecorationImage(
-                          image: Image.asset("assets/allergens/cacahuetes.png").image))
+                          image: Image.asset("assets/allergens/gluten.png").image))
                       ),
                       onTap: (){
                         showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
@@ -164,6 +164,7 @@ class _EditMenuState extends State<EditMenu> {
                                         ),
                                         Expanded(
                                           child: CheckboxListTile(
+                                            activeColor: Color.fromRGBO(255, 110, 117, 0.9),
                                             value: entry.allergens.contains("cacahuetes"),
                                             onChanged: (f) {
                                               setState(() {
@@ -192,6 +193,7 @@ class _EditMenuState extends State<EditMenu> {
                                         ),
                                         Expanded(
                                           child: CheckboxListTile(
+                                            activeColor: Color.fromRGBO(255, 110, 117, 0.9),
                                             value: entry.allergens.contains("altramuces"),
                                             onChanged: (f) {
                                               setState(() {
@@ -220,6 +222,7 @@ class _EditMenuState extends State<EditMenu> {
                                         ),
                                         Expanded(
                                           child: CheckboxListTile(
+                                            activeColor: Color.fromRGBO(255, 110, 117, 0.9),
                                             value: entry.allergens.contains("apio"),
                                             onChanged: (f) {
                                               setState(() {
@@ -248,6 +251,7 @@ class _EditMenuState extends State<EditMenu> {
                                         ),
                                         Expanded(
                                           child: CheckboxListTile(
+                                            activeColor: Color.fromRGBO(255, 110, 117, 0.9),
                                             value: entry.allergens.contains("crustaceos"),
                                             onChanged: (f) {
                                               setState(() {
@@ -276,6 +280,7 @@ class _EditMenuState extends State<EditMenu> {
                                         ),
                                         Expanded(
                                           child: CheckboxListTile(
+                                            activeColor: Color.fromRGBO(255, 110, 117, 0.9),
                                             value: entry.allergens.contains("frutoscascara"),
                                             onChanged: (f) {
                                               setState(() {
@@ -304,6 +309,7 @@ class _EditMenuState extends State<EditMenu> {
                                         ),
                                         Expanded(
                                           child: CheckboxListTile(
+                                            activeColor: Color.fromRGBO(255, 110, 117, 0.9),
                                             value: entry.allergens.contains("gluten"),
                                             onChanged: (f) {
                                               setState(() {
@@ -332,6 +338,7 @@ class _EditMenuState extends State<EditMenu> {
                                         ),
                                         Expanded(
                                           child: CheckboxListTile(
+                                            activeColor: Color.fromRGBO(255, 110, 117, 0.9),
                                             value: entry.allergens.contains("huevos"),
                                             onChanged: (f) {
                                               setState(() {
@@ -360,6 +367,7 @@ class _EditMenuState extends State<EditMenu> {
                                         ),
                                         Expanded(
                                           child: CheckboxListTile(
+                                            activeColor: Color.fromRGBO(255, 110, 117, 0.9),
                                             value: entry.allergens.contains("leche"),
                                             onChanged: (f) {
                                               setState(() {
@@ -388,6 +396,7 @@ class _EditMenuState extends State<EditMenu> {
                                         ),
                                         Expanded(
                                           child: CheckboxListTile(
+                                            activeColor: Color.fromRGBO(255, 110, 117, 0.9),
                                             value: entry.allergens.contains("moluscos"),
                                             onChanged: (f) {
                                               setState(() {
@@ -416,6 +425,7 @@ class _EditMenuState extends State<EditMenu> {
                                         ),
                                         Expanded(
                                           child: CheckboxListTile(
+                                            activeColor: Color.fromRGBO(255, 110, 117, 0.9),
                                             value: entry.allergens.contains("mostaza"),
                                             onChanged: (f) {
                                               setState(() {
@@ -444,6 +454,7 @@ class _EditMenuState extends State<EditMenu> {
                                         ),
                                         Expanded(
                                           child: CheckboxListTile(
+                                            activeColor: Color.fromRGBO(255, 110, 117, 0.9),
                                             value: entry.allergens.contains("pescado"),
                                             onChanged: (f) {
                                               setState(() {
@@ -472,6 +483,7 @@ class _EditMenuState extends State<EditMenu> {
                                         ),
                                         Expanded(
                                           child: CheckboxListTile(
+                                            activeColor: Color.fromRGBO(255, 110, 117, 0.9),
                                             value: entry.allergens.contains("sesamo"),
                                             onChanged: (f) {
                                               setState(() {
@@ -500,6 +512,7 @@ class _EditMenuState extends State<EditMenu> {
                                         ),
                                         Expanded(
                                           child: CheckboxListTile(
+                                            activeColor: Color.fromRGBO(255, 110, 117, 0.9),
                                             value: entry.allergens.contains("soja"),
                                             onChanged: (f) {
                                               setState(() {
@@ -528,6 +541,7 @@ class _EditMenuState extends State<EditMenu> {
                                         ),
                                         Expanded(
                                           child: CheckboxListTile(
+                                            activeColor: Color.fromRGBO(255, 110, 117, 0.9),
                                             value: entry.allergens.contains("sulfitos"),
                                             onChanged: (f) {
                                               setState(() {
@@ -561,7 +575,7 @@ class _EditMenuState extends State<EditMenu> {
                           child: Column(
                             children: <Widget>[
                               SizedBox(height: 20.h,),
-                              Text("Añade una descripción al plato", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black54, fontSize: ScreenUtil().setSp(20),),),
+                              Text("Añade una descripción al plato", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: TextField(

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
-import 'package:lookinmeal/models/user.dart';
+import 'package:translator/translator.dart';
 import 'package:lookinmeal/screens/restaurants/menu_tile.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:provider/provider.dart';
