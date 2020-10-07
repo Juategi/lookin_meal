@@ -52,77 +52,128 @@ class _EntryRatingState extends State<EntryRating> {
   Widget build(BuildContext context) {
     AppLocalizations tr = AppLocalizations.of(context);
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
-    return Column(
-      children: <Widget>[
-        entry.image == null || entry.image == ""? Container(height: 300.h,) : Container(
-            height: 392.h,
-            width: 392.w,
-            decoration: entry.image == null || entry.image == "" ? null: BoxDecoration(
-                border: Border.all(color: Colors.black54, width: 1)
-            ),
-            child: Image.network(entry.image, fit: BoxFit.cover, )
-        ),
-        SizedBox(height: 20.h,),
-        Text("${entry.name}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.7), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
-        SizedBox(height: 20.h,),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Text("${entry.description}", maxLines: 4, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
-        ),
-        SizedBox(height: 20.h,),
-        Container(
-          width: 100.w,
-          height: 45.h,
-          decoration: BoxDecoration(
-              color: Color.fromRGBO(255, 110, 117, 0.9),
-              borderRadius: BorderRadius.all(Radius.circular(12))
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10.w),
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 40.h,),
+          entry.image == null || entry.image == ""? Container(height: 300.h,) : Container(
+              height: 342.h,
+              width: 342.w,
+              decoration: entry.image == null || entry.image == "" ? null: BoxDecoration(
+                  border: Border.all(color: Colors.black54, width: 1)
+              ),
+              child: Image.network(entry.image, fit: BoxFit.cover, )
           ),
-          child: Align( alignment: Alignment.center, child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(22),),))),
-        ),
-        SizedBox(height: 100.h,),
-        SmoothStarRating(
-          allowHalfRating: true,
-          rating: rate,
-          color: Color.fromRGBO(250, 201, 53, 1),
-          borderColor: Color.fromRGBO(250, 201, 53, 1),
-          filledIconData: Icons.star,
-          halfFilledIconData: Icons.star_half,
-          size: ScreenUtil().setSp(40),
-          onRated: (v) async{
-            rate = v;
-            indicator = true;
-            setState(() {});
-            if(hasRate){
-              actual.rating = rate;
-              actual.date = formatter.format(DateTime.now());
-              await _dbService.deleteRate(user.uid, entry.id);
-              _dbService.addRate(user.uid, entry.id, rate);
-              double aux = (entry.rating*entry.numReviews + rate - oldRate)/(entry.numReviews);
-              //entry.rating = double.parse(aux.toStringAsFixed(2));
-              entry.rate = double.parse(aux.toStringAsFixed(2));
-              print("______________");
-              print(entry.rating);
-              Alerts.toast("Rating saved");
-              Navigator.pop(context);
-            }
-            else{
-              user.ratings.add(Rating(
-                  entry_id: entry.id,
-                  rating: rate,
-                  date: formatter.format(DateTime.now())
-              ));
-              _dbService.addRate(user.uid, entry.id, rate);
-              double aux = (entry.rating*entry.numReviews + rate)/(entry.numReviews+1);
-              //entry.rating = double.parse(aux.toStringAsFixed(2));
-              //entry.numReviews += 1;
-              entry.rate = double.parse(aux.toStringAsFixed(2));
-              entry.reviews = entry.numReviews + 1;
-              Alerts.toast("Rating saved");
-              Navigator.pop(context);
-            }
-          },
-        ),
-      ],
+          SizedBox(height: 10.h,),
+          Container(width: 360.w,child: Text("${entry.name}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.7), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
+          SizedBox(height: 20.h,),
+          Container(
+            width: 100.w,
+            height: 45.h,
+            decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 110, 117, 0.9),
+                borderRadius: BorderRadius.all(Radius.circular(12))
+            ),
+            child: Align( alignment: Alignment.center, child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(22),),))),
+          ),
+          SizedBox(height: 20.h,),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Text("${entry.description}", maxLines: 4, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+          ),
+          SizedBox(height: 20.h,),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12.w),
+            child: GestureDetector(
+              child: Container(
+                height: 100.h,
+                child: Wrap(
+                  //crossAxisCount: 8,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: entry.allergens.map((allergen) => Container(
+                      height: 45.h,
+                      width: 45.w,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: Image.asset("assets/allergens/${allergen}.png").image))
+                  ),).toList(),
+                ),
+              ),
+              onTap: (){
+                showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 50.h),
+                    child: ListView(
+                      children: <Widget>[
+                        Text("Alérgenos", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: ScreenUtil().setSp(25),),),
+                        SizedBox(height: 30.h,),
+                        Column(
+                          children: CommonData.allergens.map((allergen) => Row(
+                            children: <Widget>[
+                              Container(
+                                  height: 60.h,
+                                  width: 60.w,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: Image.asset("assets/allergens/$allergen.png").image))
+                              ),
+                              SizedBox(width: 40.w,),
+                              Text("${allergen[0].toUpperCase()}${allergen.substring(1)}", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                            ],
+                          )).toList(),
+                        )
+                      ],
+                    ),
+                  );
+                });
+              },
+            ),
+          ),
+          SmoothStarRating(
+            allowHalfRating: true,
+            rating: rate,
+            color: Color.fromRGBO(250, 201, 53, 1),
+            borderColor: Color.fromRGBO(250, 201, 53, 1),
+            filledIconData: Icons.star,
+            halfFilledIconData: Icons.star_half,
+            size: ScreenUtil().setSp(45),
+            onRated: (v) async{
+              rate = v;
+              indicator = true;
+              setState(() {});
+              if(hasRate){
+                actual.rating = rate;
+                actual.date = formatter.format(DateTime.now());
+                await _dbService.deleteRate(user.uid, entry.id);
+                _dbService.addRate(user.uid, entry.id, rate);
+                double aux = (entry.rating*entry.numReviews + rate - oldRate)/(entry.numReviews);
+                //entry.rating = double.parse(aux.toStringAsFixed(2));
+                entry.rate = double.parse(aux.toStringAsFixed(2));
+                print("______________");
+                print(entry.rating);
+                Alerts.toast("Rating saved");
+                Navigator.pop(context);
+              }
+              else{
+                user.ratings.add(Rating(
+                    entry_id: entry.id,
+                    rating: rate,
+                    date: formatter.format(DateTime.now())
+                ));
+                _dbService.addRate(user.uid, entry.id, rate);
+                double aux = (entry.rating*entry.numReviews + rate)/(entry.numReviews+1);
+                //entry.rating = double.parse(aux.toStringAsFixed(2));
+                //entry.numReviews += 1;
+                entry.rate = double.parse(aux.toStringAsFixed(2));
+                entry.reviews = entry.numReviews + 1;
+                Alerts.toast("Rating saved");
+                Navigator.pop(context);
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }
