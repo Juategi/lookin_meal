@@ -8,6 +8,7 @@ import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/menu_tile.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/database.dart';
+import 'package:lookinmeal/services/translator.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/strings.dart';
@@ -172,6 +173,7 @@ class _EntryRatingState extends State<EntryRating> {
               }
             },
           ),
+
         ],
       ),
     );

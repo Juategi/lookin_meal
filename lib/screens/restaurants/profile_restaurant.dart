@@ -5,12 +5,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/models/translate.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/daily.dart';
 import 'package:lookinmeal/screens/restaurants/edit_images.dart';
 import 'package:lookinmeal/screens/restaurants/menu.dart';
 import 'package:lookinmeal/screens/restaurants/top_dishes_tile.dart';
 import 'package:lookinmeal/services/database.dart';
+import 'package:lookinmeal/services/translator.dart';
+import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/widgets.dart';
@@ -26,6 +29,7 @@ class ProfileRestaurant extends StatefulWidget {
 class _ProfileRestaurantState extends State<ProfileRestaurant> {
 	Restaurant restaurant;
 	bool first = true;
+	String language;
 	void _loadMenu()async{
 		restaurant.menu = await DBService().getMenu(restaurant.restaurant_id);
 	}
@@ -93,6 +97,12 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 	}
 
 	@override
+  void initState() {
+    language = "Original";
+    super.initState();
+  }
+
+	@override
   void dispose() {
 		for(MenuEntry entry in restaurant.menu){
 			entry.removeListener(() { });
@@ -105,9 +115,16 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   	restaurant = ModalRoute.of(context).settings.arguments;
 		_timer();
 		if(first){
+			if(restaurant.original == null){
+				restaurant.original = [];
+			}
 			for(MenuEntry entry in restaurant.menu){
 				entry.addListener(() { setState(() {
 				});});
+				if(restaurant.original.length != restaurant.menu.length){
+					Translate original = Translate(id: entry.id, name: entry.name, description: entry.description);
+					restaurant.original.add(original);
+				}
 			}
 			first = false;
 		}
@@ -273,8 +290,173 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 						),
 						child: Row(
 							children: <Widget>[
+								SizedBox(width: 10.w,),
+								DropdownButton(
+									value: language,
+									elevation: 1,
+									dropdownColor: Color.fromRGBO(255, 110, 117, 0.9),
+									items: [
+										DropdownMenuItem(
+											child: Row(
+												children: <Widget>[
+													Text("Original", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),))
+												],
+											),
+											value: "Original",
+										),
+										DropdownMenuItem(
+											child: Row(
+												children: <Widget>[
+													Text("English", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),))
+												],
+											),
+											value: "English",
+										),
+										DropdownMenuItem(
+											child: Row(
+												children: <Widget>[
+													Text("French", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),))
+												],
+											),
+											value: "French",
+										),
+										DropdownMenuItem(
+											child: Row(
+												children: <Widget>[
+													Text("German", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),))
+												],
+											),
+											value: "German",
+										),
+										DropdownMenuItem(
+											child: Row(
+												children: <Widget>[
+													Text("Italian", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),))
+												],
+											),
+											value: "Italian",
+										),
+									],
+									onChanged: (selected) async{
+										setState(() {
+											Alerts.toast("El idioma de la carta se actualizará en breve...");
+											language = selected;
+										});
+										switch (selected){
+											case "English":
+												if(restaurant.english == null){
+													restaurant.english = [];
+													for(MenuEntry entry in restaurant.menu){
+														String name = await Translator.translate('en', entry.name);
+														String description = await Translator.translate('en', entry.description);
+														Translate translation = Translate(id: entry.id, name: name, description: description);
+														restaurant.english.add(translation);
+														entry.name = name;
+														entry.description = description;
+													}
+												}
+												else{
+													for(MenuEntry entry in restaurant.menu){
+														for(Translate tl in restaurant.english){
+															if(tl.id == entry.id){
+																entry.name = tl.name;
+																entry.description = tl.description;
+																break;
+															}
+														}
+													}
+												}
+												break;
+											case "French":
+												if(restaurant.french == null){
+													restaurant.french = [];
+													for(MenuEntry entry in restaurant.menu){
+														String name = await Translator.translate('fr', entry.name);
+														String description = await Translator.translate('fr', entry.description);
+														Translate translation = Translate(id: entry.id, name: name, description: description);
+														restaurant.french.add(translation);
+														entry.name = name;
+														entry.description = description;
+													}
+												}
+												else{
+													for(MenuEntry entry in restaurant.menu){
+														for(Translate tl in restaurant.french){
+															if(tl.id == entry.id){
+																entry.name = tl.name;
+																entry.description = tl.description;
+																break;
+															}
+														}
+													}
+												}
+												break;
+											case "German":
+												if(restaurant.german == null){
+													restaurant.german = [];
+													for(MenuEntry entry in restaurant.menu){
+														String name = await Translator.translate('de', entry.name);
+														String description = await Translator.translate('de', entry.description);
+														Translate translation = Translate(id: entry.id, name: name, description: description);
+														restaurant.german.add(translation);
+														entry.name = name;
+														entry.description = description;
+													}
+												}
+												else{
+													for(MenuEntry entry in restaurant.menu){
+														for(Translate tl in restaurant.german){
+															if(tl.id == entry.id){
+																entry.name = tl.name;
+																entry.description = tl.description;
+																break;
+															}
+														}
+													}
+												}
+												break;
+											case "Italian":
+												if(restaurant.italian == null){
+													restaurant.italian = [];
+													for(MenuEntry entry in restaurant.menu){
+														String name = await Translator.translate('it', entry.name);
+														String description = await Translator.translate('it', entry.description);
+														Translate translation = Translate(id: entry.id, name: name, description: description);
+														restaurant.italian.add(translation);
+														entry.name = name;
+														entry.description = description;
+													}
+												}
+												else{
+													for(MenuEntry entry in restaurant.menu){
+														for(Translate tl in restaurant.italian){
+															if(tl.id == entry.id){
+																entry.name = tl.name;
+																entry.description = tl.description;
+																break;
+															}
+														}
+													}
+												}
+												break;
+											case "Original":
+													for(MenuEntry entry in restaurant.menu){
+														for(Translate tl in restaurant.original){
+															if(tl.id == entry.id){
+																entry.name = tl.name;
+																entry.description = tl.description;
+																break;
+															}
+														}
+													}
+												break;
+										}
+										setState(() {
+										});
+									},
+								),
 								Expanded(child: Align( alignment: AlignmentDirectional.topCenter, child: Text("Menu", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)))),
-								//Spacer(),
+								SizedBox(width: 40.w,),
 								Align(
 									alignment: AlignmentDirectional.topCenter,
 									child: GestureDetector(
