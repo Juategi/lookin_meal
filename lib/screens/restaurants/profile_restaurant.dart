@@ -291,6 +291,8 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 						child: Row(
 							children: <Widget>[
 								SizedBox(width: 10.w,),
+								Icon(Icons.translate, color: Colors.white, size: ScreenUtil().setSp(19),),
+								SizedBox(width: 8.w,),
 								DropdownButton(
 									value: language,
 									elevation: 1,
@@ -456,7 +458,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 									},
 								),
 								Expanded(child: Align( alignment: AlignmentDirectional.topCenter, child: Text("Menu", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)))),
-								SizedBox(width: 40.w,),
+								SizedBox(width: 70.w,),
 								Align(
 									alignment: AlignmentDirectional.topCenter,
 									child: GestureDetector(
