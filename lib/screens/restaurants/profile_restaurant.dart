@@ -17,6 +17,7 @@ import 'package:lookinmeal/services/translator.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
+import 'package:lookinmeal/shared/loading.dart';
 import 'package:lookinmeal/shared/widgets.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +31,7 @@ class ProfileRestaurant extends StatefulWidget {
 class _ProfileRestaurantState extends State<ProfileRestaurant> {
 	Restaurant restaurant;
 	bool first = true;
+	bool loading = false;
 	String language;
 	void _loadMenu()async{
 		restaurant.menu = await DBService().getMenu(restaurant.restaurant_id);
@@ -377,6 +379,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 										setState(() {
 											Alerts.toast("El idioma de la carta se actualizará en breve...");
 											language = selected;
+											loading = true;
 										});
 										switch (selected){
 											case "English":
@@ -552,11 +555,14 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 												break;
 										}
 										setState(() {
+											loading = false;
 										});
 									},
 								),
+								SizedBox(width: 10.w,),
+								loading? Container(height: 20.h, width: 20.w, child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white), strokeWidth: 2,)) : Container(width: 20.w, height: 20.h,),
 								Expanded(child: Align( alignment: AlignmentDirectional.topCenter, child: Text("Menu", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)))),
-								SizedBox(width: 70.w,),
+								SizedBox(width: 100.w,),
 								Align(
 									alignment: AlignmentDirectional.topCenter,
 									child: GestureDetector(
