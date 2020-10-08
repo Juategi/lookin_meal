@@ -383,8 +383,16 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 												if(restaurant.english == null){
 													restaurant.english = [];
 													for(MenuEntry entry in restaurant.menu){
-														String name = await Translator.translate('en', entry.name);
-														String description = await Translator.translate('en', entry.description);
+														String name, description;
+														if(language == "Original"){
+															name = await Translator.translate('en', entry.name);
+															description = await Translator.translate('en', entry.description);
+														}
+														else{
+															Translate tr = restaurant.original.firstWhere((element) => element.id == entry.id);
+															name = await Translator.translate('en', tr.name);
+															description = await Translator.translate('en', tr.description);
+														}
 														Translate translation = Translate(id: entry.id, name: name, description: description);
 														restaurant.english.add(translation);
 														entry.name = name;
@@ -407,8 +415,16 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 												if(restaurant.spanish == null){
 													restaurant.spanish = [];
 													for(MenuEntry entry in restaurant.menu){
-														String name = await Translator.translate('es', entry.name);
-														String description = await Translator.translate('es', entry.description);
+														String name, description;
+														if(language == "Original"){
+															name = await Translator.translate('es', entry.name);
+															description = await Translator.translate('es', entry.description);
+														}
+														else{
+															Translate tr = restaurant.original.firstWhere((element) => element.id == entry.id);
+															name = await Translator.translate('es', tr.name);
+															description = await Translator.translate('es', tr.description);
+														}
 														Translate translation = Translate(id: entry.id, name: name, description: description);
 														restaurant.spanish.add(translation);
 														entry.name = name;
@@ -431,8 +447,16 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 												if(restaurant.french == null){
 													restaurant.french = [];
 													for(MenuEntry entry in restaurant.menu){
-														String name = await Translator.translate('fr', entry.name);
-														String description = await Translator.translate('fr', entry.description);
+														String name, description;
+														if(language == "Original"){
+															name = await Translator.translate('fr', entry.name);
+															description = await Translator.translate('fr', entry.description);
+														}
+														else{
+															Translate tr = restaurant.original.firstWhere((element) => element.id == entry.id);
+															name = await Translator.translate('fr', tr.name);
+															description = await Translator.translate('fr', tr.description);
+														}
 														Translate translation = Translate(id: entry.id, name: name, description: description);
 														restaurant.french.add(translation);
 														entry.name = name;
@@ -455,8 +479,16 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 												if(restaurant.german == null){
 													restaurant.german = [];
 													for(MenuEntry entry in restaurant.menu){
-														String name = await Translator.translate('de', entry.name);
-														String description = await Translator.translate('de', entry.description);
+														String name, description;
+														if(language == "Original"){
+															name = await Translator.translate('de', entry.name);
+															description = await Translator.translate('de', entry.description);
+														}
+														else{
+															Translate tr = restaurant.original.firstWhere((element) => element.id == entry.id);
+															name = await Translator.translate('de', tr.name);
+															description = await Translator.translate('de', tr.description);
+														}
 														Translate translation = Translate(id: entry.id, name: name, description: description);
 														restaurant.german.add(translation);
 														entry.name = name;
@@ -479,8 +511,16 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 												if(restaurant.italian == null){
 													restaurant.italian = [];
 													for(MenuEntry entry in restaurant.menu){
-														String name = await Translator.translate('it', entry.name);
-														String description = await Translator.translate('it', entry.description);
+														String name, description;
+														if(language == "Original"){
+															name = await Translator.translate('it', entry.name);
+															description = await Translator.translate('it', entry.description);
+														}
+														else{
+															Translate tr = restaurant.original.firstWhere((element) => element.id == entry.id);
+															name = await Translator.translate('it', tr.name);
+															description = await Translator.translate('it', tr.description);
+														}
 														Translate translation = Translate(id: entry.id, name: name, description: description);
 														restaurant.italian.add(translation);
 														entry.name = name;
