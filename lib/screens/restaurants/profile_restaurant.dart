@@ -377,13 +377,13 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 									],
 									onChanged: (selected) async{
 										setState(() {
-											Alerts.toast("El idioma de la carta se actualizará en breve...");
 											language = selected;
 											loading = true;
 										});
 										switch (selected){
 											case "English":
 												if(restaurant.english == null){
+													Alerts.toast("El idioma de la carta se actualizará en breve...");
 													restaurant.english = [];
 													for(MenuEntry entry in restaurant.menu){
 														String name, description;
@@ -416,6 +416,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 												break;
 											case "Spanish":
 												if(restaurant.spanish == null){
+													Alerts.toast("El idioma de la carta se actualizará en breve...");
 													restaurant.spanish = [];
 													for(MenuEntry entry in restaurant.menu){
 														String name, description;
@@ -448,6 +449,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 												break;
 											case "French":
 												if(restaurant.french == null){
+													Alerts.toast("El idioma de la carta se actualizará en breve...");
 													restaurant.french = [];
 													for(MenuEntry entry in restaurant.menu){
 														String name, description;
@@ -480,6 +482,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 												break;
 											case "German":
 												if(restaurant.german == null){
+													Alerts.toast("El idioma de la carta se actualizará en breve...");
 													restaurant.german = [];
 													for(MenuEntry entry in restaurant.menu){
 														String name, description;
@@ -512,6 +515,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 												break;
 											case "Italian":
 												if(restaurant.italian == null){
+													Alerts.toast("El idioma de la carta se actualizará en breve...");
 													restaurant.italian = [];
 													for(MenuEntry entry in restaurant.menu){
 														String name, description;
