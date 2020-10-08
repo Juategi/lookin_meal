@@ -58,6 +58,7 @@ dependencies:
   url_launcher: ^5.5.2
   property_change_notifier: ^0.2.0
   translator: ^0.1.5
+  back_button_interceptor: ^4.3.1
 
 dev_dependencies:
   flutter_test:

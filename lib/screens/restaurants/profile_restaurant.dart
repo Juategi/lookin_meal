@@ -1,3 +1,4 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -96,9 +97,33 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 		}
 	}
 
+	Future backToOriginal() async{
+		for(MenuEntry entry in restaurant.menu){
+			for(Translate tl in restaurant.original){
+				if(tl.id == entry.id){
+					entry.name = tl.name;
+					entry.description = tl.description;
+					break;
+				}
+			}
+		}
+		setState(() {
+			language = "Original";
+		});
+	}
+
+	bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+		if (info.ifRouteChanged(context)) return false;
+		if(language != "Original"){
+			backToOriginal();
+		}
+		return false;
+	}
+
 	@override
   void initState() {
     language = "Original";
+		BackButtonInterceptor.add(myInterceptor, context: context);
     super.initState();
   }
 
@@ -107,6 +132,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 		for(MenuEntry entry in restaurant.menu){
 			entry.removeListener(() { });
 		}
+		BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
   }
 
@@ -468,18 +494,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 											width: 35.w,
 										),
 										onTap: ()async{
-											for(MenuEntry entry in restaurant.menu){
-												for(Translate tl in restaurant.original){
-													if(tl.id == entry.id){
-														entry.name = tl.name;
-														entry.description = tl.description;
-														break;
-													}
-												}
-											}
-											setState(() {
-											  language = "Original";
-											});
+											backToOriginal();
 											Navigator.pushNamed(context, "/editmenu",arguments: restaurant).then((value) => setState(() {}));
 										},
 									),
@@ -507,18 +522,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 											width: 35.w,
 										),
 										onTap: ()async{
-											for(MenuEntry entry in restaurant.menu){
-												for(Translate tl in restaurant.original){
-													if(tl.id == entry.id){
-														entry.name = tl.name;
-														entry.description = tl.description;
-														break;
-													}
-												}
-											}
-											setState(() {
-												language = "Original";
-											});
+											backToOriginal();
 											Navigator.pushNamed(context, "/editdaily",arguments: restaurant).then((value) => setState(() {}));
 										},
 									),
