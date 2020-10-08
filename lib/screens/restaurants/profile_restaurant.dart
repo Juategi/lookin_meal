@@ -343,6 +343,14 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 										DropdownMenuItem(
 											child: Row(
 												children: <Widget>[
+													Text("Spanish", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),))
+												],
+											),
+											value: "Spanish",
+										),
+										DropdownMenuItem(
+											child: Row(
+												children: <Widget>[
 													Text("French", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),))
 												],
 											),
@@ -386,6 +394,30 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 												else{
 													for(MenuEntry entry in restaurant.menu){
 														for(Translate tl in restaurant.english){
+															if(tl.id == entry.id){
+																entry.name = tl.name;
+																entry.description = tl.description;
+																break;
+															}
+														}
+													}
+												}
+												break;
+											case "Spanish":
+												if(restaurant.spanish == null){
+													restaurant.spanish = [];
+													for(MenuEntry entry in restaurant.menu){
+														String name = await Translator.translate('es', entry.name);
+														String description = await Translator.translate('es', entry.description);
+														Translate translation = Translate(id: entry.id, name: name, description: description);
+														restaurant.spanish.add(translation);
+														entry.name = name;
+														entry.description = description;
+													}
+												}
+												else{
+													for(MenuEntry entry in restaurant.menu){
+														for(Translate tl in restaurant.spanish){
 															if(tl.id == entry.id){
 																entry.name = tl.name;
 																entry.description = tl.description;
