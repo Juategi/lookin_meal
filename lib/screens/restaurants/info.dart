@@ -284,7 +284,9 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
   String parseSchedule(List<String> hours){
     String text = "";
     for(int i = 0; i < hours.length; i+=2){
-      if(hours[i] != "-1"){
+      hours[i] = hours[i].replaceAll("[", "").replaceAll("]", "").trim();
+      hours[i+1] = hours[i+1].replaceAll("[", "").replaceAll("]", "").trim();
+      if(hours[i].toString() != "-1"){
         if(hours[i].toString().length == 2){
           text += hours[i].toString() + ":00" ;
         }
