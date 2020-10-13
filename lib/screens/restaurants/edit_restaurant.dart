@@ -58,6 +58,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
       init = true;
     }
     return Scaffold(
+        //backgroundColor: CommonData.backgroundColor,
       bottomNavigationBar: BottomAppBar(
         child: Container(
           height: 80.h,

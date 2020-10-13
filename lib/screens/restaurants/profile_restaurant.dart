@@ -161,6 +161,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 		User user = DBService.userF;
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return Scaffold(
+			//backgroundColor: CommonData.backgroundColor,
       body: ListView(
       	children: <Widget>[
       		GestureDetector(

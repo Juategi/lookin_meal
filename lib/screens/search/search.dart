@@ -1,13 +1,18 @@
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/services/search.dart';
+import 'package:lookinmeal/shared/common_data.dart';
+import 'package:lookinmeal/shared/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class Search extends StatefulWidget {
   Position myPos;
@@ -24,6 +29,8 @@ class _SearchState extends State<Search> {
   bool isRestaurant = true;
   Position myPos;
   String locality;
+  double rate = 0;
+  double price = 0;
   String error = "";
   _SearchState({this.myPos,this.locality});
 
@@ -48,141 +55,180 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     user = Provider.of<User>(context);
+    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return Scaffold(
       //appBar: AppBar(backgroundColor: ThemeData().scaffoldBackgroundColor,),
-      body: Stack(
-        children: <Widget>[
-          Positioned(
-            top: 40,
-            child: Container(
-              height: 600,
-              width: 390,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: isRestaurant? SearchBar(
-                  emptyWidget: Text(error),
-                  cancellationWidget: Text(" Cancel "),
-                  debounceDuration: Duration(milliseconds: 800),
-                  loader: Center(child: SpinKitChasingDots(color: Colors.brown, size: 50.0,),),
-                  minimumChars: 1,
-                  onSearch: _search ,
-                  onItemFound: (Restaurant restaurant, int index){
-                    return Card(
-                      child: ListTile(
-                          title: Text(restaurant.name),
-                          subtitle: Text(" 📍 ${restaurant.distance} Km"),
-                          leading: Image.network(restaurant.images.first, width: 100, height: 100,),
-                          trailing: Icon(Icons.arrow_right),
-                          onTap: () {
-                            List<Object> args = List<Object>();
-                            Pool.addRestaurants([restaurant]);
-                            restaurant = Pool.getSubList([restaurant]).first;
-                            args.add(restaurant);
-                            args.add(user);
-                            Navigator.pushNamed(context, "/restaurant",arguments: args);
-                          }
-                      ),
-                    );
-                  }
-                ):
-                SearchBar(
-                    emptyWidget: Text(error),
-                    cancellationWidget: Text(" Cancel "),
-                    debounceDuration: Duration(milliseconds: 800),
-                    loader: Center(child: SpinKitChasingDots(color: Colors.brown, size: 50.0,),),
-                    minimumChars: 1,
-                    onSearch: _searchEntry ,
-                    onItemFound: (MenuEntry entry, int index){
-                      return Card(
-                        child: ListTile(
-                            title: Text("${entry.name} ${entry.rating}"),
-                            subtitle: Text(" 📍 ${map[entry].distance} Km     ${entry.price}€"),
-                            leading: Image.network(entry.image, width: 100, height: 100,),
-                            trailing: Icon(Icons.arrow_right),
-                            onTap: () {
-                              List<Object> args = List<Object>();
-                              Pool.addRestaurants([map[entry]]);
-                              map[entry] = Pool.getSubList([map[entry]]).first;
-                              args.add(map[entry]);
-                              args.add(user);
-                              Navigator.pushNamed(context, "/restaurant",arguments: args);
-                            }
-                        ),
-                      );
-                    }
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 10,
-            left: 90,
-            child: Row(
+      backgroundColor: CommonData.backgroundColor,
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12.w),
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 50.h,),
+            Row( mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                ToggleButtons(
-                  focusColor: Colors.black,
-                  selectedColor: Colors.blue,
-                  selectedBorderColor: Colors.blue,
-                  fillColor: Colors.blue,
-                  constraints: BoxConstraints.tight(Size(100,40)),
-                  isSelected: _selections,
-                  onPressed: (int index){
+                GestureDetector(
+                  onTap: (){
                     setState(() {
-                      if(index == 0){
-                        isRestaurant = true;
-                      }
-                      else
-                        isRestaurant = false;
+                      isRestaurant = true;
                     });
                   },
-                  children: <Widget>[
-                    Text("Restaurante", style: TextStyle(color: isRestaurant ? Colors.blue : Colors.black),),
-                    Text("Plato", style: TextStyle(color: !isRestaurant ? Colors.blue : Colors.black))
-                  ],),
-                SizedBox(width: 30,),
-                IconButton(
-                  icon: Icon(Icons.settings),
-                  onPressed: ()async{
-                    if(isRestaurant){
-                      await Navigator.pushNamed(context, "/options");
-                      setState(() {
-                      });
-                    }
-                    else{
-                      await Navigator.pushNamed(context, "/entryoptions");
-                      setState(() {
-                      });
-                    }
+                  child: Container(
+                    width: 110.w,
+                    height: 45.h,
+                    decoration: BoxDecoration(
+                        color: isRestaurant? Color.fromRGBO(255, 110, 117, 0.9) : Color.fromRGBO(255, 110, 117, 0.3)  ,
+                        borderRadius: BorderRadius.all(Radius.circular(8))
+                    ),
+                    child: Center(child: Text("RESTAURANTS", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      isRestaurant = false;
+                    });
                   },
-                )
+                  child: Container(
+                    width: 110.w,
+                    height: 45.h,
+                    decoration: BoxDecoration(
+                        color: !isRestaurant? Color.fromRGBO(255, 110, 117, 0.9) : Color.fromRGBO(255, 110, 117, 0.3)  ,
+                        borderRadius: BorderRadius.all(Radius.circular(8))
+                    ),
+                    child: Center(child: Text("DISHES", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                  ),
+                ),
               ],
             ),
-          )
-        ],
+            SizedBox(height: 20.h,),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    width: 390.w,
+                    height: 50.h,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(16))
+                    ),
+                    child: TextField(
+                      //controller: _searchQuery,
+                      autofocus: false,
+                      style: TextStyle(
+                        color: Colors.black54,
+                      ),
+                      decoration: new InputDecoration.collapsed(
+                          hintText: "   Restaurant or dish...",
+                          hintStyle: new TextStyle(color: Colors.black45)
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+           !isRestaurant? Column(
+             children: <Widget>[
+               Row( mainAxisAlignment: MainAxisAlignment.end,
+                 children: <Widget>[
+                   GestureDetector(
+                       child: Text("+Add", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.grey, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),))
+                   )
+                 ],
+               ),
+               SizedBox(height: 20.h,),
+               Row(mainAxisAlignment: MainAxisAlignment.start,
+                 children: <Widget>[
+                   Text("Filters", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black54, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                 ],
+               ),
+               SizedBox(height: 20.h,),
+               Container(
+                 width: 388.w,
+                 height: 104.h,
+                 decoration: BoxDecoration(
+                     color: Colors.white,
+                     borderRadius: BorderRadius.all(Radius.circular(12))
+                 ),
+                 child: Padding(
+                   padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
+                   child: Column(
+                     children: <Widget>[
+                       Row(mainAxisAlignment: MainAxisAlignment.start,
+                         children: <Widget>[
+                           Text("Stars", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black54, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                         ],
+                       ),
+                       SizedBox(height: 15.h,),
+                       Row(mainAxisAlignment: MainAxisAlignment.start,
+                         children: <Widget>[
+                           SmoothStarRating(
+                             allowHalfRating: true,
+                             rating: rate,
+                             color: Color.fromRGBO(250, 201, 53, 1),
+                             borderColor: Color.fromRGBO(250, 201, 53, 1),
+                             filledIconData: Icons.star,
+                             halfFilledIconData: Icons.star_half,
+                             size: ScreenUtil().setSp(45),
+                             onRated: (v) async{
+                             },
+                           ),
+                         ],
+                       )
+                     ],
+                   ),
+                 ),
+               ),
+               SizedBox(height: 20.h,),
+               Container(
+                 width: 388.w,
+                 height: 104.h,
+                 decoration: BoxDecoration(
+                     color: Colors.white,
+                     borderRadius: BorderRadius.all(Radius.circular(12))
+                 ),
+                 child: Padding(
+                   padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
+                   child: Column(
+                     children: <Widget>[
+                       Row(mainAxisAlignment: MainAxisAlignment.start,
+                         children: <Widget>[
+                           Text("Price", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black54, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                         ],
+                       ),
+                       SizedBox(height: 15.h,),
+                       Row(mainAxisAlignment: MainAxisAlignment.start,
+                         children: <Widget>[
+                           Container(
+                             width: 330.w,
+                             child: Slider(
+                               value: price,
+                               divisions: 100,
+                               max: 50,
+                               min: 0,
+                               activeColor: Color.fromRGBO(255, 110, 117, 0.9),
+                               inactiveColor: Color.fromRGBO(255, 110, 117, 0.2),
+                               label: price.toStringAsFixed(1) + "€",
+                               onChanged: (val){
+                                 setState(() {
+                                   price = val;
+                                 });
+                               },
+                             ),
+                           )
+                         ],
+                       )
+                     ],
+                   ),
+                 ),
+               ),
+             ],
+           ) :
+               Container()
+          ],
+        ),
       ),
     );
   }
 }
 
 
-/*ToggleButtons(
-            focusColor: Colors.black,
-            selectedColor: Colors.blue,
-            selectedBorderColor: Colors.blue,
-            fillColor: Colors.blue,
-            constraints: BoxConstraints.tight(Size(100,40)),
-            isSelected: _selections,
-            onPressed: (int index){
-              setState(() {
-                if(index == 0){
-                  restaurant = true;
-                }
-                else
-                  restaurant = false;
-              });
-              print(restaurant);
-            },
-            children: <Widget>[
-              Text("Restaurante", style: TextStyle(color: restaurant ? Colors.blue : Colors.black),),
-              Text("Plato", style: TextStyle(color: !restaurant ? Colors.blue : Colors.black))
-            ],),*/

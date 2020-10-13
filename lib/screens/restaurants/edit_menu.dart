@@ -672,6 +672,7 @@ class _EditMenuState extends State<EditMenu> {
       init = true;
     }
     return Scaffold(
+      //backgroundColor: CommonData.backgroundColor,
       body: Column(
         children: <Widget>[
           SizedBox(height: 32.h,),

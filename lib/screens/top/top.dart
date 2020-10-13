@@ -44,6 +44,7 @@ class _TopState extends State<Top> {
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return Scaffold(
+      backgroundColor: CommonData.backgroundColor,
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 40.h, horizontal: 10.w),
         child: Column(

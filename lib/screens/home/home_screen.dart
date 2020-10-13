@@ -1,3 +1,4 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,6 +11,7 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/main_screen_dish_tile.dart';
 import 'package:lookinmeal/screens/restaurants/restaurant_tile.dart';
+import 'package:lookinmeal/screens/search/search.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
@@ -27,6 +29,28 @@ class _HomeScreenState extends State<HomeScreen> {
 	Map<MenuEntry,Restaurant> popular;
 	String location;
 	bool first = true;
+	bool search = false;
+
+	bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+		if (info.ifRouteChanged(context)) return false;
+		if(!search) return false;
+		setState(() {
+		  search = false;
+		});
+		return true;
+	}
+
+	@override
+  void initState() {
+		BackButtonInterceptor.add(myInterceptor, context: context);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+		BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
 
 	@override
   Widget build(BuildContext context) {
@@ -55,8 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
 			first = false;
 		}
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
-		return Scaffold(
-			//backgroundColor: Color.fromRGBO(255, 110, 117, 0.02),
+		return !search? Scaffold(
+			backgroundColor: CommonData.backgroundColor,
 			appBar: PreferredSize(
 				preferredSize: Size.fromHeight(80.h),
 				child: AppBar(
@@ -72,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
 								height: 50.h,
 								child: Row(
 									children: <Widget>[
-										IconButton(
+										/*IconButton(
 											icon: Icon(FontAwesomeIcons.listUl,
 												color: Color.fromRGBO(255, 110, 117, 0.61),
 												size: ScreenUtil().setSp(16),
@@ -90,7 +114,16 @@ class _HomeScreenState extends State<HomeScreen> {
 														hintStyle: new TextStyle(color: Colors.black45)
 												),
 											),
+										),*/
+										GestureDetector(
+											child: Text('Search for restaurant or dish...', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.4), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+											onTap: (){
+												setState(() {
+												  search = true;
+												});
+											},
 										),
+										SizedBox(width: 40.w,),
 										IconButton(
 												icon: Icon(Icons.my_location,
 													color: Color.fromRGBO(255, 110, 117, 0.61),
@@ -203,6 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
 					],
 			  ),
 			),
-		);
+		):
+		Search();
   }
 }
