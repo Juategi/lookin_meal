@@ -1,15 +1,13 @@
-import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/dish_query.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
-import 'package:lookinmeal/services/pool.dart';
+import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:lookinmeal/services/search.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/widgets.dart';
@@ -164,7 +162,7 @@ class _SearchState extends State<Search> {
                Row( mainAxisAlignment: MainAxisAlignment.end,
                  children: <Widget>[
                    Text(error, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.red, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
-                   SizedBox(width: 240.w,),
+                   SizedBox(width: 235.w,),
                    queries.length < 3 ?GestureDetector(
                      onTap: (){
                       if(actual.query != ""){
@@ -179,7 +177,7 @@ class _SearchState extends State<Search> {
                         });
                       }
                      },
-                       child: Text("+Add", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.grey, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),))
+                       child: Text("+ Add", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.9), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),))
                    ): Container()
                  ],
                ),
@@ -247,12 +245,7 @@ class _SearchState extends State<Search> {
                              filledIconData: Icons.star,
                              halfFilledIconData: Icons.star_half,
                              size: ScreenUtil().setSp(45),
-                             onRated: (v) async{
-                               setState(() {
-                                 actual.rating = v;
-                               });
-                             },
-                           ),
+                           )
                          ],
                        )
                      ],
@@ -274,6 +267,8 @@ class _SearchState extends State<Search> {
                        Row(mainAxisAlignment: MainAxisAlignment.start,
                          children: <Widget>[
                            Text("Price", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black54, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                           SizedBox(width: 240.w,),
+                           Text("${actual.price.toStringAsFixed(1)}€", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                          ],
                        ),
                        SizedBox(height: 15.h,),
@@ -281,6 +276,7 @@ class _SearchState extends State<Search> {
                          children: <Widget>[
                            Container(
                              width: 330.w,
+                             height: 50.h,
                              child: Slider(
                                value: actual.price,
                                divisions: 100,
