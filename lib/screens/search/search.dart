@@ -1,9 +1,11 @@
 import 'package:flappy_search_bar/flappy_search_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/models/dish_query.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
@@ -29,8 +31,8 @@ class _SearchState extends State<Search> {
   bool isRestaurant = true;
   Position myPos;
   String locality;
-  double rate = 0;
-  double price = 0;
+  List<DishQuery> queries;
+  DishQuery actual;
   String error = "";
   _SearchState({this.myPos,this.locality});
 
@@ -53,6 +55,13 @@ class _SearchState extends State<Search> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    queries = [];
+    actual = DishQuery(allergens: []);
+  }
+
+  @override
   Widget build(BuildContext context) {
     user = Provider.of<User>(context);
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
@@ -61,9 +70,9 @@ class _SearchState extends State<Search> {
       backgroundColor: CommonData.backgroundColor,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.w),
-        child: Column(
+        child: ListView(
           children: <Widget>[
-            SizedBox(height: 50.h,),
+            SizedBox(height: 10.h,),
             Row( mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 GestureDetector(
@@ -111,15 +120,39 @@ class _SearchState extends State<Search> {
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(16))
                     ),
-                    child: TextField(
-                      //controller: _searchQuery,
-                      autofocus: false,
-                      style: TextStyle(
-                        color: Colors.black54,
-                      ),
-                      decoration: new InputDecoration.collapsed(
-                          hintText: "   Restaurant or dish...",
-                          hintStyle: new TextStyle(color: Colors.black45)
+                    child: Padding(
+                      padding:EdgeInsets.symmetric(horizontal: 5.w),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: TextField(
+                              enabled: queries.length < 3,
+                              controller: TextEditingController()..text = actual.query..selection = TextSelection.fromPosition(TextPosition(offset: actual.query.length)),
+                              onChanged: (val){
+                                actual.query = val;
+                                setState(() {
+                                  error = "";
+                                });
+                              },
+
+                              maxLines: 1,
+                              maxLength: 20,
+                              autofocus: false,
+                              style: TextStyle(
+                                color: Colors.black54,
+                              ),
+                              decoration: InputDecoration(
+                                  hintText: queries.length < 3? "   Restaurant or dish..." : "   Press search",
+                                  hintStyle: TextStyle(color: Colors.black45),
+                                  counterText: "",
+                                  border: InputBorder.none
+                              ),
+                            ),
+                          ),
+                          IconButton(icon: Icon(Icons.search), iconSize: ScreenUtil().setSp(30), onPressed: (){
+
+                          },)
+                        ],
                       ),
                     ),
                   ),
@@ -130,12 +163,57 @@ class _SearchState extends State<Search> {
              children: <Widget>[
                Row( mainAxisAlignment: MainAxisAlignment.end,
                  children: <Widget>[
-                   GestureDetector(
+                   Text(error, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.red, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                   SizedBox(width: 240.w,),
+                   queries.length < 3 ?GestureDetector(
+                     onTap: (){
+                      if(actual.query != ""){
+                        queries.add(actual);
+                        setState(() {
+                          actual = DishQuery(allergens: []);
+                        });
+                      }
+                      else{
+                        setState(() {
+                          error = "Add a name";
+                        });
+                      }
+                     },
                        child: Text("+Add", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.grey, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),))
-                   )
+                   ): Container()
                  ],
                ),
-               SizedBox(height: 20.h,),
+               SizedBox(height: 10.h,),
+               Container(
+                 height: 30.h,
+                 child: ListView(
+                   scrollDirection: Axis.horizontal,
+                   children: queries.map((query) => Padding(
+                     padding: EdgeInsets.symmetric(horizontal: 5.w),
+                     child: Container(
+                       height: 30.h,
+                       decoration: BoxDecoration(
+                           color: Colors.white,
+                           borderRadius: BorderRadius.all(Radius.circular(12))
+                       ),
+                       child: Padding(
+                         padding:  EdgeInsets.symmetric(horizontal: 5.w),
+                         child: Row(
+                           children: <Widget>[
+                             Text(query.query, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black54, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                             Center(child: IconButton(icon: Icon(Icons.cancel), iconSize: ScreenUtil().setSp(18), color: Color.fromRGBO(255, 110, 117, 0.9), onPressed: (){
+                               setState(() {
+                                 queries.remove(query);
+                               });
+                             },))
+                           ],
+                         ),
+                       ),
+                     ),
+                   )).toList(),
+                 ),
+               ),
+               SizedBox(height: 10.h,),
                Row(mainAxisAlignment: MainAxisAlignment.start,
                  children: <Widget>[
                    Text("Filters", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black54, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
@@ -163,13 +241,16 @@ class _SearchState extends State<Search> {
                          children: <Widget>[
                            SmoothStarRating(
                              allowHalfRating: true,
-                             rating: rate,
+                             rating: actual.rating,
                              color: Color.fromRGBO(250, 201, 53, 1),
                              borderColor: Color.fromRGBO(250, 201, 53, 1),
                              filledIconData: Icons.star,
                              halfFilledIconData: Icons.star_half,
                              size: ScreenUtil().setSp(45),
                              onRated: (v) async{
+                               setState(() {
+                                 actual.rating = v;
+                               });
                              },
                            ),
                          ],
@@ -201,22 +282,75 @@ class _SearchState extends State<Search> {
                            Container(
                              width: 330.w,
                              child: Slider(
-                               value: price,
+                               value: actual.price,
                                divisions: 100,
                                max: 50,
                                min: 0,
                                activeColor: Color.fromRGBO(255, 110, 117, 0.9),
                                inactiveColor: Color.fromRGBO(255, 110, 117, 0.2),
-                               label: price.toStringAsFixed(1) + "€",
+                               label: actual.price.toStringAsFixed(1) + "€",
                                onChanged: (val){
                                  setState(() {
-                                   price = val;
+                                   actual.price = val;
                                  });
                                },
                              ),
                            )
                          ],
                        )
+                     ],
+                   ),
+                 ),
+               ),
+               SizedBox(height: 20.h,),
+               Container(
+                 width: 388.w,
+                 height: 201.h,
+                 decoration: BoxDecoration(
+                     color: Colors.white,
+                     borderRadius: BorderRadius.all(Radius.circular(12))
+                 ),
+                 child: Padding(
+                   padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
+                   child: Column(
+                     children: <Widget>[
+                       Row(mainAxisAlignment: MainAxisAlignment.start,
+                         children: <Widget>[
+                           Text("Allergens", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black54, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                         ],
+                       ),
+                       SizedBox(height: 15.h,),
+                       Container(
+                         height: 120.h,
+                         child: Wrap(
+                           //crossAxisCount: 8,
+                           spacing: 2,
+                           runSpacing: 5,
+                           crossAxisAlignment: WrapCrossAlignment.center,
+                           children: CommonData.allergens.map((allergen) => Column(
+                             children: <Widget>[
+                               GestureDetector(
+                                 child: Container(
+                                     height: 47.h,
+                                     width: 47.w,
+                                     decoration: BoxDecoration(
+                                         image: DecorationImage(
+                                             image: Image.asset("assets/allergens/${allergen}.png").image, colorFilter: actual.allergens.contains(allergen)? null : ColorFilter.linearToSrgbGamma()))
+                                 ),
+                                 onTap: (){
+                                   setState(() {
+                                     if(actual.allergens.contains(allergen))
+                                       actual.allergens.remove(allergen);
+                                     else
+                                       actual.allergens.add(allergen);
+                                   });
+                                 },
+                               ),
+                               Text("${allergen[0].toUpperCase()}${allergen.substring(1)}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black54, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(8),),)),
+                             ],
+                           ),).toList(),
+                         ),
+                       ),
                      ],
                    ),
                  ),

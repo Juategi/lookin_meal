@@ -76,7 +76,7 @@ class _EditMenuState extends State<EditMenu> {
         color: Color.fromRGBO(255, 110, 117, 0.2),
         child: Row(children: <Widget>[
           Flexible(
-              child: TextFormField(keyboardType: TextInputType.text, controller: TextEditingController()..text = section, onChanged: (v) {
+              child: TextFormField(keyboardType: TextInputType.text, controller: TextEditingController()..text = section..selection = TextSelection.fromPosition(TextPosition(offset: section.length)), onChanged: (v) {
                 sections[i] = v;
                 for(MenuEntry entry in menu){
                   if(entry.section == section) {
@@ -579,7 +579,7 @@ class _EditMenuState extends State<EditMenu> {
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: TextField(
-                                  controller: TextEditingController()..text = desc, maxLines: 6, maxLength: 300, onChanged: (v) {desc = v;},),
+                                  controller: TextEditingController()..text = desc..selection = TextSelection.fromPosition(TextPosition(offset: desc.length)), maxLines: 6, maxLength: 300, onChanged: (v) {desc = v;},),
                               ),
                               SizedBox(height: 100.h,),
                               Row(mainAxisAlignment: MainAxisAlignment.center,
