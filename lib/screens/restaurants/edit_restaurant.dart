@@ -512,7 +512,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
     }
 
     for(int j = 0; j < 4; j++){
-      schedule[i.toString()][j] = restaurant.schedule[i.toString()][j];
+      schedule[i.toString()][j] = restaurant.schedule[i.toString()][j].replaceAll("[", '').replaceAll("]", '');
       items.add(
         Container( width: 66,
           child: TextFormField(
