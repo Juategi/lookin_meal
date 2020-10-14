@@ -106,8 +106,7 @@ class MapSampleState extends State<MapSample> {
 						List<Object> args = List<Object>();
 						args.add(restaurant);
 						args.add(user);
-						Pool.addRestaurants([restaurant]);
-						restaurant = Pool.getSubList([restaurant]).first;
+						Pool.addRestaurant(restaurant);
 						Navigator.pushNamed(context, "/restaurant",arguments: args);
 					}
 				),
@@ -131,8 +130,7 @@ class MapSampleState extends State<MapSample> {
 							List<Object> args = List<Object>();
 							args.add(restaurant);
 							args.add(user);
-							Pool.addRestaurants([restaurant]);
-							restaurant = Pool.getSubList([restaurant]).first;
+							Pool.addRestaurant(restaurant);
 							Navigator.pushNamed(context, "/restaurant",arguments: args);
 						}
 				),

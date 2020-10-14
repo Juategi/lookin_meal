@@ -145,7 +145,7 @@ class AuthService{
 
 	Future signOut() async{
 		DBService.userF = null;
-		Pool.ids.clear();
+		//Pool.ids.clear();
 		Pool.restaurants.clear();
 		try{
 			final facebookLogin = FacebookLogin();

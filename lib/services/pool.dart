@@ -2,9 +2,21 @@ import 'package:lookinmeal/models/restaurant.dart';
 
 class Pool{
   static List<Restaurant> restaurants = List<Restaurant>();
-  static List<String> ids = List<String>();
+  //static List<String> ids = List<String>();
 
-  static void addRestaurants(List<Restaurant> list){
+  static Restaurant getRestaurant(String id){
+    for(Restaurant restaurant in restaurants) {
+      if (restaurant.restaurant_id == id)
+        return restaurant;
+    }
+    return null;
+  }
+
+  static void addRestaurant(Restaurant restaurant){
+    restaurants.add(restaurant);
+  }
+
+  /*static void addRestaurants(List<Restaurant> list){
     for(Restaurant r in list){
       if(!ids.contains(r.restaurant_id)){
         restaurants.add(r);
@@ -24,5 +36,6 @@ class Pool{
     }
     return result;
   }
+   */
 
 }

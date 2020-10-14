@@ -143,10 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
 																	print(result.formattedAddress);
 																	GeolocationService.myPos = Position(latitude: result.geometry.location.lat, longitude: result.geometry.location.lng);
 																	String locality = await GeolocationService().getLocality(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude);
-																	List<Restaurant> aux;
-																	aux = await DBService.dbService.getNearRestaurants(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude, locality.toUpperCase());
-																	Pool.addRestaurants(aux);
-																	nearRestaurants = Pool.getSubList(aux);
+																	nearRestaurants = await DBService.dbService.getNearRestaurants(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude, locality.toUpperCase());
 																	setState(() {
 																	});
 																	Navigator.of(context).pop();
