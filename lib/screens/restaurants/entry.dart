@@ -92,27 +92,37 @@ class _EntryRatingState extends State<EntryRating> {
                 ),
               ),
               onTap: (){
-                showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
+                showModalBottomSheet(context: context,  builder: (BuildContext bc){
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 50.h),
-                    child: ListView(
+                    child: Column(
                       children: <Widget>[
-                        Text("Alérgenos", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: ScreenUtil().setSp(25),),),
-                        SizedBox(height: 30.h,),
-                        Column(
-                          children: CommonData.allergens.map((allergen) => Row(
-                            children: <Widget>[
-                              Container(
-                                  height: 60.h,
-                                  width: 60.w,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: Image.asset("assets/allergens/$allergen.png").image))
-                              ),
-                              SizedBox(width: 40.w,),
-                              Text("${allergen[0].toUpperCase()}${allergen.substring(1)}", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
-                            ],
-                          )).toList(),
+                        Text("Alérgenos", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: ScreenUtil().setSp(22),),),
+                        SizedBox(height: 10.h,),
+                        Center(
+                          child: Container(
+                            height: 300.h,
+                            //width: 300.w,
+                            child: Wrap(
+                              direction: Axis.vertical,
+                              children: CommonData.allergens.map((allergen) => Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                    child: Container(
+                                        height: 40.h,
+                                        width: 40.w,
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: Image.asset("assets/allergens/$allergen.png").image))
+                                    ),
+                                  ),
+                                  SizedBox(width: 10.w,),
+                                  Text("${allergen[0].toUpperCase()}${allergen.substring(1)}", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(13),),),
+                                ],
+                              )).toList(),
+                            ),
+                          ),
                         )
                       ],
                     ),
