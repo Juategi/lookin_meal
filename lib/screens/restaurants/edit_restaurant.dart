@@ -515,7 +515,8 @@ class _EditRestaurantState extends State<EditRestaurant> {
     }
 
     for(int j = 0; j < 4; j++){
-      schedule[i.toString()][j] = restaurant.schedule[i.toString()][j].replaceAll("[", '').replaceAll("]", '');
+      schedule[i.toString()][j] = restaurant.schedule[i.toString()][j].replaceAll("[", "").replaceAll("]", "").trim();
+      print(schedule[i.toString()][j] );
       items.add(
         Container( width: 66,
           child: TextFormField(
@@ -531,7 +532,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
               }
               print(schedule);
             },
-            initialValue: restaurant.schedule[i.toString()][j] == "-1"? null : restaurant.schedule[i.toString()][j].toString(),
+            initialValue: restaurant.schedule[i.toString()][j].replaceAll("[", "").replaceAll("]", "").trim() == "-1"? null : restaurant.schedule[i.toString()][j].replaceAll("[", "").replaceAll("]", "").trim(),
             decoration: textInputDeco.copyWith(hintText: "0000"),
             keyboardType: TextInputType.number,
           ),
