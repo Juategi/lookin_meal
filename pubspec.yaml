@@ -60,6 +60,7 @@ dependencies:
   translator: ^0.1.5
   back_button_interceptor: ^4.3.1
   flutter_xlider: ^3.4.0
+  country_code_picker: ^1.6.0
 
 dev_dependencies:
   flutter_test:

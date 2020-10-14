@@ -3,11 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
-import 'package:lookinmeal/services/auth.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/decos.dart';
 import 'package:lookinmeal/shared/loading.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -117,7 +117,7 @@ class _SignInState extends State<SignIn> {
 											],
 										),
 										SizedBox(height: 10.h,),
-										TextFormField(
+										/*TextFormField(
 											onChanged: (value){
 												setState(() => country = value);
 											},
@@ -126,6 +126,23 @@ class _SignInState extends State<SignIn> {
 											),
 											validator: (val) => val.isEmpty ? "Write your country" : null,
 											decoration: textInputDeco,
+										),*/
+										Container(
+											height: 60.h,
+											decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(20)),
+										  child: CountryCodePicker(
+										  	onChanged: (c){
+										  		country = c.name;
+										  		print(country);
+										  	},
+										  	initialSelection: 'ES',
+										  	showCountryOnly: true,
+										  	showOnlyCountryWhenClosed: true,
+										  	alignLeft: false,
+										  	dialogTextStyle: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),),
+										  	searchStyle: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),),
+										  	textStyle: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),),
+										  ),
 										),
 										Row( mainAxisAlignment: MainAxisAlignment.start,
 											children: <Widget>[
