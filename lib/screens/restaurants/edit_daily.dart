@@ -160,30 +160,33 @@ class _EditDailyState extends State<EditDaily> {
     print(restaurant.dailymenu);
     return Scaffold(
       //backgroundColor: CommonData.backgroundColor,
-      body: Column(
-        children: <Widget>[
-          SizedBox(height: 32.h),
-          Container(
-            height: 42.h,
-            width: 411.w,
-            decoration: BoxDecoration(
-              color: Color.fromRGBO(255, 110, 117, 0.9),
-            ),
-            child: Row( mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Align( alignment: AlignmentDirectional.topCenter, child: Text("Editar menú del dia", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
-              child: ListView(
-                children: _initList()
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 32.h),
+            Container(
+              height: 42.h,
+              width: 411.w,
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 110, 117, 0.9),
+              ),
+              child: Row( mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Align( alignment: AlignmentDirectional.topCenter, child: Text("Editar menú del dia", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
+                ],
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
+                child: ListView(
+                  children: _initList()
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Container(

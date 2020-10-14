@@ -36,8 +36,10 @@ class _SignInState extends State<SignIn> {
 	  AppLocalizations tr = AppLocalizations.of(context);
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
 		return Scaffold(
-		  body: Stack(
-		    children: <Widget>[
+		  body: GestureDetector(
+				onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+		    child: Stack(
+		      children: <Widget>[
 					Container(
 							decoration: BoxDecoration(
 									gradient: LinearGradient(
@@ -53,9 +55,9 @@ class _SignInState extends State<SignIn> {
 									)
 							)
 					),
-		      Padding(
+		        Padding(
 						padding: EdgeInsets.symmetric(horizontal: 50.w),
-		        child: Form(
+		          child: Form(
 								key: _formKey,
 								child: ListView(
 									children: <Widget>[
@@ -128,6 +130,7 @@ class _SignInState extends State<SignIn> {
 											decoration: textInputDeco,
 										),*/
 										Container(
+											padding: EdgeInsets.only(left: 10.w),
 											height: 60.h,
 											decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(20)),
 										  child: CountryCodePicker(
@@ -138,7 +141,9 @@ class _SignInState extends State<SignIn> {
 										  	initialSelection: 'ES',
 										  	showCountryOnly: true,
 										  	showOnlyCountryWhenClosed: true,
-										  	alignLeft: false,
+										  	alignLeft: true,
+												showFlag: false,
+												showFlagDialog: true,
 										  	dialogTextStyle: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),),
 										  	searchStyle: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),),
 										  	textStyle: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),),
@@ -188,9 +193,10 @@ class _SignInState extends State<SignIn> {
 										),
 									]
 							),
+		          ),
 		        ),
-		      ),
-		    ],
+		      ],
+		    ),
 		  ),
 	  );
   }
