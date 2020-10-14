@@ -2,9 +2,8 @@
 
 TODO
 
-//Revisar crear horario en json tripad
+//Revisar crear horario en json tripad, y limitar tipos comida
 
-optimizar pool al buscar el id restaurante antes y no crear instancia
 listener en nombre y tipos de restaurante para los tiles
 a veces el rating no guarda bien en local
 arreglar cluster
