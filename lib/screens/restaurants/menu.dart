@@ -1,4 +1,5 @@
 import 'package:expandable/expandable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,20 +39,31 @@ class _MenuState extends State<Menu> {
       }
       Widget sectionText = ExpandableButton(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 10.h),
-          child: Text(section, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+          padding: EdgeInsets.symmetric(vertical: 12.h),
+          child: Row( mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Text(section, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+              Spacer(),
+              Icon(Icons.expand_more, size: ScreenUtil().setSp(28),)
+            ],
+          ),
         )
       );
       lists.add(
         ExpandableNotifier(
+            controller: ExpandableController(initialExpanded: true),
             child: Column(
                 children: [
                   Expandable(
+                    theme: ExpandableThemeData(
+                      animationDuration: Duration(milliseconds: 500),
+                      collapseIcon: Icons.expand_more,
+                      expandIcon: Icons.expand_less
+                    ),
                     collapsed: sectionText,
                     expanded: Column(
                         children: [sectionText]+sections[section]
                     ),
-                    controller: ExpandableController(initialExpanded: true),
                   ),
                 ]
           )
