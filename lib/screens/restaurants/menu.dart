@@ -36,20 +36,22 @@ class _MenuState extends State<Menu> {
               value: entry, child: MenuTile(daily: false,)));
         }
       }
-      Widget sextionText = ExpandableButton(
-        child: Text(section, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))
+      Widget sectionText = ExpandableButton(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 10.h),
+          child: Text(section, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+        )
       );
       lists.add(
         ExpandableNotifier(
             child: Column(
                 children: [
                   Expandable(
-                    collapsed: ExpandableButton(
-                      child: sextionText
-                    ),
+                    collapsed: sectionText,
                     expanded: Column(
-                        children: [sextionText]+sections[section]
+                        children: [sectionText]+sections[section]
                     ),
+                    controller: ExpandableController(initialExpanded: true),
                   ),
                 ]
           )
@@ -80,22 +82,3 @@ class _MenuState extends State<Menu> {
 
 
 }
-
-
-/*
-ListView.builder(
-              itemCount: 1,
-              itemBuilder: (context, i){
-                return ExpansionTile(
-                  title: Text(section, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
-                  children: entries[section],
-                  onExpansionChanged: (changed){
-                    setState(() {
-                      extended = changed;
-                    });
-                    print(extended);
-                  },
-                );
-              },
-            ),
- */
