@@ -20,6 +20,7 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   double rate = 0.0;
   Restaurant restaurant;
+  Map<String,bool> expanded = {};
   bool init = true;
   _MenuState({this.restaurant});
 
@@ -67,11 +68,55 @@ class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    if(init){
+      for(String section in restaurant.sections){
+        expanded[section] = true;
+      }
+      init = false;
+    }
     if(restaurant.sections != null){
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-          children: _initList(context),
+          children:
+            restaurant.sections.map((section) =>
+                Column(
+                  children: [
+                    Padding(
+                      key: UniqueKey(),
+                      padding: EdgeInsets.symmetric(vertical: 12.h),
+                      child: GestureDetector(
+                        onTap: (){
+                          setState(() {
+                            expanded[section] = !expanded[section];
+                            print(expanded[section]);
+                          });
+                        },
+                        child: Row( mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text(section, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+                            Spacer(),
+                            Icon(expanded[section]  ? Icons.expand_less : Icons.expand_more, size: ScreenUtil().setSp(28),)
+                          ],
+                        ),
+                      ),
+                    ),
+                    Column(
+                      children: expanded[section]  ?
+                        restaurant.menu.map((entry){
+                          if(section == entry.section)
+                            return Provider<MenuEntry>.value(
+                                key: UniqueKey(),
+                                value: entry, child: MenuTile(daily: false,));
+                          else
+                            return Container();
+                        }
+                        ).toList() : [Container()]
+                    )
+                  ]
+                )
+            ).toList()
+          ,
         )
       );
     }
