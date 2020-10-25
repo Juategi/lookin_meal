@@ -113,20 +113,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.1"
-  diffutil_dart:
-    dependency: transitive
-    description:
-      name: diffutil_dart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.2"
-  diffutil_sliverlist:
-    dependency: "direct main"
-    description:
-      name: diffutil_sliverlist
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.1"
   equatable:
     dependency: transitive
     description:
