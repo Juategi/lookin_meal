@@ -174,16 +174,6 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 								crossAxisAlignment: CrossAxisAlignment.start,
 								children: <Widget>[
 									IconButton(
-										icon: Icon(Icons.mode_edit),
-										iconSize: ScreenUtil().setSp(40),
-										color: Color.fromRGBO(255, 65, 112, 1),
-										onPressed: ()async{
-											showModalBottomSheet(context: context, isScrollControlled: true,  builder: (BuildContext bc){
-												return EditImages(restaurant: restaurant,);
-											}).then((value){setState(() {});});
-										},
-									),
-									IconButton(
 										icon: user.favorites.contains(restaurant) ? Icon(Icons.favorite) :Icon(Icons.favorite_border),
 										iconSize: ScreenUtil().setSp(45),
 										color: Color.fromRGBO(255, 65, 112, 1),
@@ -224,7 +214,8 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 											width: 35.w,
 										),
 										onTap: ()async{
-											Navigator.pushNamed(context, "/editrestaurant",arguments: restaurant).then((value) => setState(() {}));
+											backToOriginal();
+											Navigator.pushNamed(context, "/admin",arguments: restaurant).then((value) => setState(() {}));
 										},
 									),
 								),
@@ -386,21 +377,8 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 								SizedBox(width: 10.w,),
 								loading? Container(height: 20.h, width: 20.w, child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white), strokeWidth: 2,)) : Container(width: 20.w, height: 20.h,),
 								Expanded(child: Align( alignment: AlignmentDirectional.topCenter, child: Text("Menu", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)))),
-								SizedBox(width: 100.w,),
-								Align(
-									alignment: AlignmentDirectional.topCenter,
-									child: GestureDetector(
-										child: Container(
-											child: SvgPicture.asset("assets/admin.svg"),
-											height: 35.h,
-											width: 35.w,
-										),
-										onTap: ()async{
-											backToOriginal();
-											Navigator.pushNamed(context, "/editmenu",arguments: restaurant).then((value) => setState(() {}));
-										},
-									),
-								),
+								SizedBox(width: 130.w,),
+
 							],
 						),
 					),
@@ -415,20 +393,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							children: <Widget>[
 								Expanded(child: Align( alignment: AlignmentDirectional.topCenter, child: Text("Daily Menu", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)))),
 								//Spacer(),
-								Align(
-									alignment: AlignmentDirectional.topCenter,
-									child: GestureDetector(
-										child: Container(
-											child: SvgPicture.asset("assets/admin.svg"),
-											height: 35.h,
-											width: 35.w,
-										),
-										onTap: ()async{
-											backToOriginal();
-											Navigator.pushNamed(context, "/editdaily",arguments: restaurant).then((value) => setState(() {}));
-										},
-									),
-								),
+
 							],
 						),
 					),
