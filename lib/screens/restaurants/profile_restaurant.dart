@@ -10,6 +10,7 @@ import 'package:lookinmeal/models/translate.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/daily.dart';
 import 'package:lookinmeal/screens/restaurants/edit_images.dart';
+import 'package:lookinmeal/screens/restaurants/info.dart';
 import 'package:lookinmeal/screens/restaurants/menu.dart';
 import 'package:lookinmeal/screens/restaurants/top_dishes_tile.dart';
 import 'package:lookinmeal/services/database.dart';
@@ -270,15 +271,16 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							],
 						),
 					),
-					Container(
+					restaurant.menu.length != 0 ? Container(
 						height: 42.h,
 						width: 411.w,
 						decoration: BoxDecoration(
 							color: Color.fromRGBO(255, 110, 117, 0.9),
 						),
 						child:Text("Top dishes", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
-					),
-					Padding(
+					) : //Container(height: 780.h, child: RestaurantInfo()),
+					Container(),
+					restaurant.menu.length != 0 ? Padding(
 					  padding: EdgeInsets.all(8.0),
 					  child: Container(
 					  	height: _lines() >= 6 ? 260.h : 130.h,
@@ -297,8 +299,8 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 								children: _loadTop(),
 							),
 					  ),
-					),
-					Container(
+					) : Container(),
+					restaurant.menu.length != 0 ? Container(
 						height: 42.h,
 						width: 411.w,
 						decoration: BoxDecoration(
@@ -381,9 +383,9 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 
 							],
 						),
-					),
-					restaurant.menu == null? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),) : Menu(restaurant: restaurant, currency: restaurant.currency),
-					Container(
+					) : Container(),
+					restaurant.menu.length != 0 ? Menu(restaurant: restaurant, currency: restaurant.currency) : Container(),
+					restaurant.dailymenu != null? Container(
 						height: 42.h,
 						width: 411.w,
 						decoration: BoxDecoration(
@@ -396,8 +398,8 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 
 							],
 						),
-					),
-					restaurant.menu == null? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),) : DailyMenu(restaurant: restaurant, currency: restaurant.currency),
+					): Container(),
+					restaurant.dailymenu != null ? DailyMenu(restaurant: restaurant, currency: restaurant.currency) : Container(),
       	],
       ),
     );

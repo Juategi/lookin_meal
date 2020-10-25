@@ -48,7 +48,7 @@ class _EditDailyState extends State<EditDaily> {
       child: TextFormField(
         maxLength: 300,
         maxLines: 4,
-        controller: TextEditingController()..text = description,  onChanged: (v) {
+        controller: TextEditingController()..text = description..selection = TextSelection.fromPosition(TextPosition(offset: description.length)),  onChanged: (v) {
         description = v;
       },),
     ));
@@ -60,7 +60,7 @@ class _EditDailyState extends State<EditDaily> {
       child: TextFormField(
         keyboardType: TextInputType.number,
         maxLength: 7,
-        controller: TextEditingController()..text =price.toString() , onChanged: (v) {
+        controller: TextEditingController()..text = price.toString()..selection = TextSelection.fromPosition(TextPosition(offset: price.toString().length)) , onChanged: (v) {
         price = double.parse(v);
       },),
     ));
@@ -95,7 +95,7 @@ class _EditDailyState extends State<EditDaily> {
           child: Row(
             children: <Widget>[
               Flexible(
-                  child: TextFormField(keyboardType: TextInputType.text, controller: TextEditingController()..text = dailyMenu[i], onChanged: (v) {
+                  child: TextFormField(keyboardType: TextInputType.text, controller: TextEditingController()..text = dailyMenu[i]..selection = TextSelection.fromPosition(TextPosition(offset: dailyMenu[i].length)), onChanged: (v) {
                     dailyMenu[i] = v;
                   },)),
               IconButton(icon: Icon(Icons.delete), onPressed: (){
