@@ -43,15 +43,15 @@ class _SignInState extends State<SignIn> {
 					Container(
 							decoration: BoxDecoration(
 									gradient: LinearGradient(
-											begin: Alignment.topCenter,
-											end: Alignment.bottomCenter,
-											stops: [
-												0.1,
-												0.3,
-												0.4,
-												0.8
-											],
-											colors: [Color.fromRGBO(255, 138, 120, 0.72), Color.fromRGBO(255, 110, 117, 0.62), Color.fromRGBO(246, 120, 80, 0.61), Color.fromRGBO(255, 67, 112, 1)]
+										begin: Alignment.topCenter,
+										end: Alignment.bottomCenter,
+										stops: [
+											0.1,
+											0.3,
+											0.4,
+											0.8
+										],
+										colors: [Color.fromRGBO(255, 138, 120, 0.72), Color.fromRGBO(255, 110, 117, 0.62), Color.fromRGBO(246, 120, 80, 0.61), Color.fromRGBO(255, 67, 112, 1)],
 									)
 							)
 					),

@@ -1,4 +1,3 @@
-import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,11 +20,10 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   double rate = 0.0;
   Restaurant restaurant;
-  Column _column;
   bool init = true;
   _MenuState({this.restaurant});
 
-  void _initList(BuildContext context) {
+  List<Widget> _initList(BuildContext context) {
     restaurant.menu.sort((f, s) => f.pos.compareTo(s.pos));
     List<Widget> lists = new List<Widget>();
     Map<String,List<Widget>> sections = {};
@@ -34,59 +32,47 @@ class _MenuState extends State<Menu> {
       for (MenuEntry entry in restaurant.menu) {
         if (section == entry.section) {
           sections[section].add(Provider<MenuEntry>.value(
+              key: UniqueKey(),
               value: entry, child: MenuTile(daily: false,)));
         }
       }
-      Widget sectionText = ExpandableButton(
-        child: Padding(
+      bool expanded = true;
+      Widget sectionText = Padding(
+          key: UniqueKey(),
           padding: EdgeInsets.symmetric(vertical: 12.h),
-          child: Row( mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Text(section, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
-              Spacer(),
-              Icon(Icons.expand_more, size: ScreenUtil().setSp(28),)
-            ],
+          child: GestureDetector(
+            onTap: (){
+              setState(() {
+                expanded = !expanded;
+                print(expanded);
+              });
+            },
+            child: Row( mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(section, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+                Spacer(),
+                Icon(expanded  ? Icons.expand_less : Icons.expand_more, size: ScreenUtil().setSp(28),)
+              ],
+            ),
           ),
-        )
       );
       lists.add(
-        ExpandableNotifier(
-            controller: ExpandableController(initialExpanded: true),
-            child: Column(
-                children: [
-                  Expandable(
-                    theme: ExpandableThemeData(
-                      animationDuration: Duration(milliseconds: 500),
-                      collapseIcon: Icons.expand_more,
-                      expandIcon: Icons.expand_less
-                    ),
-                    collapsed: sectionText,
-                    expanded: Column(
-                        children: [sectionText]+sections[section]
-                    ),
-                  ),
-                ]
-          )
-        )
+        sectionText
       );
-      //entries.add(SizedBox(height: 5,));
-      _column = Column(crossAxisAlignment: CrossAxisAlignment.start,
-          children: lists
-      );
+      lists.addAll(sections[section]);
     }
+    return lists;
   }
 
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
-    if(init){
-      _initList(context);
-      init = false;
-    }
     if(restaurant.sections != null){
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-        child: _column
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+          children: _initList(context),
+        )
       );
     }
     else return Container();
