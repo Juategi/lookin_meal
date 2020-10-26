@@ -89,7 +89,6 @@ class _MenuState extends State<Menu> {
                         onTap: (){
                           setState(() {
                             expanded[section] = !expanded[section];
-                            print(expanded[section]);
                           });
                         },
                         child: Row( mainAxisAlignment: MainAxisAlignment.start,

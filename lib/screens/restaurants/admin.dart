@@ -45,7 +45,11 @@ class _AdminPageState extends State<AdminPage> {
             GestureDetector(
               child: Row(
                 children: [
-                  Icon(Icons.menu_book, size: ScreenUtil().setSp(32),),
+                  Container(
+                      height: 40.h,
+                      width: 40.w,
+                      child: SvgPicture.asset("assets/menu.svg")
+                  ),
                   SizedBox(width: 30.w,),
                   Text("Edit menu", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                 ],
@@ -58,7 +62,11 @@ class _AdminPageState extends State<AdminPage> {
             GestureDetector(
               child: Row(
                 children: [
-                  Icon(Icons.menu_book_sharp, size: ScreenUtil().setSp(32),),
+                  Container(
+                      height: 40.h,
+                      width: 40.w,
+                      child: SvgPicture.asset("assets/menu.svg", )
+                  ),
                   SizedBox(width: 30.w,),
                   Text("Edit daily menu", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                 ],

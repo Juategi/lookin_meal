@@ -14,6 +14,7 @@ import 'package:lookinmeal/screens/restaurants/info.dart';
 import 'package:lookinmeal/screens/restaurants/menu.dart';
 import 'package:lookinmeal/screens/restaurants/top_dishes_tile.dart';
 import 'package:lookinmeal/services/database.dart';
+import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/services/translator.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
@@ -279,7 +280,31 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 						),
 						child:Text("Top dishes", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
 					) : //Container(height: 780.h, child: RestaurantInfo()),
-					Container(),
+					Column(
+						children: [
+							SizedBox(height: 40.h,),
+							Container(width: 300.w, height: 190.h, child: Text("¡Parece que no hay menu, haz una foto a la carta y nosotros nos encargaremos de subirla!", maxLines: 5, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(28),),))),
+							SizedBox(height: 30.h,),
+							GestureDetector(
+								onTap: ()async{
+									//await StorageService().uploadNanonets(context, restaurant.restaurant_id);
+								},
+							  child: Container(
+							  	height: 80.h,
+							  	width: 80.w,
+							  	/*decoration: BoxDecoration(
+							  		borderRadius: BorderRadius.all(Radius.circular(40)),
+							  		border: Border.all(width: 5, color: Color.fromRGBO(255, 110, 117, 0.9), style: BorderStyle.solid),
+							  	),*/
+							  	child: Container(
+							  			height: 40.h,
+							  			width: 40.w,
+							  			child: SvgPicture.asset("assets/menu.svg", color: Color.fromRGBO(255, 110, 117, 0.9), fit: BoxFit.contain,)
+							  	),
+							  ),
+							)
+						],
+					),
 					restaurant.menu.length != 0 ? Padding(
 					  padding: EdgeInsets.all(8.0),
 					  child: Container(
