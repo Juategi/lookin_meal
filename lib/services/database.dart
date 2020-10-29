@@ -330,28 +330,30 @@ class DBService {
 			String website, String webUrl, String address, String email, String city,
 			String country, double latitude,
 			double longitude, double rating, int numberViews, List<String> images,
-			List<String> types, Map<String, List<int>> schedule, String currency) async {
-		Map body = {
-			"taid": taId ?? "",
-			"name": name,
-			"phone": phone ?? "",
-			"website": website ?? "",
-			"webUrl": webUrl ?? "",
-			"address": address,
-			"email": email ?? "",
-			"city": city.trim().toUpperCase(),
-			"country": country,
-			"latitude": latitude.toString(),
-			"longitude": longitude.toString(),
-			"rating": rating.toString() ?? "0.0",
-			"numrevta": numberViews.toString() ?? "0",
-			"images": images.toString().replaceAll("[", "{").replaceAll("]", "}") ??
-					List<String>().toString(),
-			"types": types.toString().replaceAll("[", "{").replaceAll("]", "}") ??
-					List<String>().toString(),
-			"schedule": jsonEncode(schedule) ?? Map<String, List<int>>().toString(),
-      "currency": currency
-		};
+			List<String> types, Map<String, List<int>> schedule, String currency, List<String> delivery) async {
+			Map body = {
+				"taid": taId ?? "",
+				"name": name,
+				"phone": phone ?? "",
+				"website": website ?? "",
+				"webUrl": webUrl ?? "",
+				"address": address,
+				"email": email ?? "",
+				"city": city.trim().toUpperCase(),
+				"country": country,
+				"latitude": latitude.toString(),
+				"longitude": longitude.toString(),
+				"rating": rating.toString() ?? "0.0",
+				"numrevta": numberViews.toString() ?? "0",
+				"images": images.toString().replaceAll("[", "{").replaceAll("]", "}") ??
+						List<String>().toString(),
+				"types": types.toString().replaceAll("[", "{").replaceAll("]", "}") ??
+						List<String>().toString(),
+				"schedule": jsonEncode(schedule) ?? Map<String, List<int>>().toString(),
+				"currency": currency,
+				"delivery": delivery.toString().replaceAll("[", "{").replaceAll("]", "}") ??
+						List<String>().toString(),
+			};
 		var response = await http.post(
 				"${StaticStrings.api}/restaurants", body: body);
 		print(response.body);
@@ -563,6 +565,12 @@ class DBService {
 						}
 					}
 				}
+				List<String> images = element['images'] == null ? null : List<String>.from(element['images']);
+				for(String image in images){
+					images.remove(image);
+					image = image.replaceAll("'", "");
+					images.add(image);
+				}
 				Restaurant restaurant = Restaurant(
 						restaurant_id: element['restaurant_id'].toString(),
 						ta_id: element['ta_id'].toString(),
@@ -579,8 +587,7 @@ class DBService {
 						distance: double.parse(element['distance'].toStringAsFixed(2)),
 						rating: double.parse(element['rating'].toString()),
 						numrevta: element['numrevta'],
-						images: element['images'] == null ? null : List<String>.from(
-								element['images']),
+						images: images,
 						types: element['types'] == null ? null : List<String>.from(
 								element['types']),
 						schedule: schedule,
