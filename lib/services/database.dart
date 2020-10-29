@@ -416,7 +416,7 @@ class DBService {
 				id: element['entry_id'].toString(),
 				restaurant_id: element['restaurant_id'].toString(),
 				name: element['name'],
-				section: element['section'],
+				section: element['section'].toString().replaceAll("'", ""),
 				rating: element['rating'] == null ? 0.0 : double.parse(element['rating'].toStringAsFixed(2)),
 				numReviews: int.parse(element['numreviews']),
 				price: element['price'].toDouble(),
@@ -559,18 +559,22 @@ class DBService {
 							.replaceAll("]", ']"')
 					);
 					for (int i = 0; i < 7; i++) {
-						//print(result[i.toString()]);
+						if(result[i.toString()] == null){
+							result[i.toString()] = [-1,-1];
+						}
 						for (dynamic hour in result[i.toString()].toString().split(',')) {
 							schedule[i.toString()].add(hour.toString());
 						}
 					}
 				}
 				List<String> images = element['images'] == null ? null : List<String>.from(element['images']);
-				for(String image in images){
-					images.remove(image);
-					image = image.replaceAll("'", "");
-					images.add(image);
-				}
+				images = Functions.cleanStrings(images);
+				List<String> sections = element['sections'] == null ? null : List<String>.from(element['sections']);
+				sections = Functions.cleanStrings(sections);
+				List<String> types = element['types'] == null ? null : List<String>.from(element['types']);
+				types = Functions.cleanStrings(types);
+				List<String> delivery = element['delivery'] == null ? null : List<String>.from(element['delivery']);
+				delivery = Functions.cleanStrings(delivery);
 				Restaurant restaurant = Restaurant(
 						restaurant_id: element['restaurant_id'].toString(),
 						ta_id: element['ta_id'].toString(),
@@ -588,16 +592,13 @@ class DBService {
 						rating: double.parse(element['rating'].toString()),
 						numrevta: element['numrevta'],
 						images: images,
-						types: element['types'] == null ? null : List<String>.from(
-								element['types']),
+						types: types,
 						schedule: schedule,
 						currency: element['currency'],
-						sections: element['sections'] == null ? null : List<String>.from(
-								element['sections']),
+						sections: sections,
 						dailymenu: element['dailymenu'] == null ? null : List<String>.from(
 								element['dailymenu']),
-						delivery: element['delivery'] == null ? null : List<String>.from(
-								element['delivery']),
+						delivery: delivery,
 						menu: await getMenu(element['restaurant_id'].toString())
 				);
 				restaurants.add(restaurant);

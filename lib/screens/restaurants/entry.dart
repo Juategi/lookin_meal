@@ -71,7 +71,7 @@ class _EntryRatingState extends State<EntryRating> {
           SizedBox(height: 20.h,),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Text("${entry.description}", maxLines: 4, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+            child: Text("${entry.description}", maxLines: 6, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
           ),
           SizedBox(height: 20.h,),
           Padding(

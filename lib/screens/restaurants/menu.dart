@@ -6,6 +6,7 @@ import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/menu_tile.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:lookinmeal/shared/functions.dart';
 import 'package:provider/provider.dart';
 
 class Menu extends StatefulWidget {
@@ -93,7 +94,7 @@ class _MenuState extends State<Menu> {
                         },
                         child: Row( mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            Text(section, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+                            Text(Functions.limitString(section, 26), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
                             Spacer(),
                             Icon(expanded[section]  ? Icons.expand_less : Icons.expand_more, size: ScreenUtil().setSp(28),)
                           ],

@@ -31,4 +31,19 @@ class Functions{
     }
     return true;
   }
+
+  static String limitString(String s, int n){
+    if(s.length > n){
+      return "${s.substring(0,n-3)}...";
+    }
+    else return s;
+  }
+
+  static List<String> cleanStrings(List<String> list){
+    List<String> aux = [];
+    for(String s in list){
+      aux.add(s.replaceAll("'", ""));
+    }
+    return aux;
+  }
 }

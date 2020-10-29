@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -136,7 +135,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                 SizedBox(height: 10.h,),
                 Row(
                   children: <Widget>[
-                    GestureDetector(
+                    restaurant.delivery[0] == "" ? Container() : GestureDetector(
                       child: Container(
                         width: 60.w,
                         height: 60.h,
@@ -153,8 +152,8 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                           throw 'Could not open the web.';
                       },
                     ),
-                    SizedBox(width: 20.w,),
-                    GestureDetector(
+                    restaurant.delivery[0] == "" ? Container() : SizedBox(width: 20.w,),
+                    restaurant.delivery[1] == "" ? Container() : GestureDetector(
                       child: Container(
                         width: 60.w,
                         height: 60.h,
@@ -174,8 +173,8 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                         }
                       },
                     ),
-                    SizedBox(width: 20.w,),
-                    GestureDetector(
+                    restaurant.delivery[1] == "" ? Container() : SizedBox(width: 20.w,),
+                    restaurant.delivery[2] == "" ? Container() : GestureDetector(
                       child: Container(
                         width: 60.w,
                         height: 60.h,
@@ -192,8 +191,8 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                           throw 'Could not open the web.';
                       },
                     ),
-                    SizedBox(width: 20.w,),
-                    GestureDetector(
+                    restaurant.delivery[2] == "" ? Container() : SizedBox(width: 20.w,),
+                    restaurant.delivery[3] == "" ? Container() : GestureDetector(
                       child: Container(
                         width: 60.w,
                         height: 60.h,
