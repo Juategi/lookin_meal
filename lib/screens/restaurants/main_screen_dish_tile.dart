@@ -101,7 +101,8 @@ class _DishTileState extends State<DishTile> {
                 spreadRadius: 2,
                 blurRadius: 3,
                 offset: Offset(1, 1), // changes position of shadow
-              ),]
+              ),],
+
           ),
         )
     );

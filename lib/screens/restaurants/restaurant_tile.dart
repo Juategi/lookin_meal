@@ -46,7 +46,7 @@ class _RestaurantTileState extends State<RestaurantTile> {
       child: GestureDetector(
         onTap: (){
           updateRecent();
-          Navigator.pushNamed(context, "/restaurant",arguments: restaurant);
+          Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
         },
         child: Container(
           width: 240.w,
@@ -119,17 +119,21 @@ class _RestaurantTileState extends State<RestaurantTile> {
                   Text("${restaurant.distance.toString()} km", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(10),),))
                 ],
               ),
-              SizedBox(height: 3.h,)
+              SizedBox(height: 2.h,)
             ],
           ),
           decoration: BoxDecoration(
-              color: Colors.white,
+            color: Colors.white,
             boxShadow: [BoxShadow(
               color: Colors.grey.withOpacity(0.2),
               spreadRadius: 2,
               blurRadius: 3,
               offset: Offset(1, 1), // changes position of shadow
-            ),]
+            ),],
+            border: new Border.all(
+              color: Color.fromRGBO(255, 110, 117, 1),
+              width: 0.2,
+            ),
           ),
         ),
       ),

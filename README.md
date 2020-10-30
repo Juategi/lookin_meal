@@ -5,8 +5,6 @@ TODO
 //Revisar crear horario en json tripad, y limitar tipos comida
 
 info revisar mapa
-revisar rating con muchos 0 votos
-favs no se actualiza en tiles home si se usa dentro
 listener en nombre y tipos de restaurante para los tiles
 a veces el rating no guarda bien en local
 arreglar cluster

@@ -80,7 +80,8 @@ class _HomeScreenState extends State<HomeScreen> {
 		}
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
 		return !search? Scaffold(
-			backgroundColor: CommonData.backgroundColor,
+			//backgroundColor: CommonData.backgroundColor,
+			backgroundColor: Colors.white,
 			appBar: PreferredSize(
 				preferredSize: Size.fromHeight(80.h),
 				child: AppBar(

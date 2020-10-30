@@ -12,12 +12,16 @@ class Functions{
   }
   static double getRating(Restaurant restaurant){
     double totalRating = 0.0;
+    int counter = 0;
     for(MenuEntry entry in restaurant.menu){
-      totalRating += entry.rating;
+      if(entry.numReviews > 0) {
+        totalRating += entry.rating;
+        counter++;
+      }
     }
     if(totalRating == 0.0)
       return 0.0;
-    return totalRating/restaurant.menu.length;
+    return totalRating/counter;
   }
 
   static bool compareList(List<String> l1, List<String> l2){

@@ -34,7 +34,6 @@ class _MenuTileState extends State<MenuTile> with TickerProviderStateMixin {
           child: Container(
             width: 365.w,
             height: 75.h,
-            //color: Colors.white,
             child: Row(
               children: <Widget>[
                 Column( crossAxisAlignment: CrossAxisAlignment.start,

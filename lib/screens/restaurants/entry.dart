@@ -68,12 +68,12 @@ class _EntryRatingState extends State<EntryRating> {
           ),
           SizedBox(height: 10.h,),
           Container(width: 360.w,child: Text("${entry.name}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.7), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
-          SizedBox(height: 20.h,),
+          SizedBox(height: 10.h,),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Text("${entry.description}", maxLines: 6, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
           ),
-          SizedBox(height: 20.h,),
+          SizedBox(height: 10.h,),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 12.w),
             child: GestureDetector(
@@ -101,7 +101,7 @@ class _EntryRatingState extends State<EntryRating> {
                         SizedBox(height: 10.h,),
                         Center(
                           child: Container(
-                            height: 300.h,
+                            height: 200.h,
                             //width: 300.w,
                             child: Wrap(
                               direction: Axis.vertical,
@@ -140,7 +140,7 @@ class _EntryRatingState extends State<EntryRating> {
             ),
             child: Align( alignment: Alignment.center, child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(22),),))),
           ),
-          SizedBox(height: 20.h,),
+          SizedBox(height: 10.h,),
           SmoothStarRating(
             allowHalfRating: true,
             rating: rate,
