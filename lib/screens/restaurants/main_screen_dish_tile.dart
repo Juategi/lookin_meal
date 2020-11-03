@@ -58,13 +58,33 @@ class _DishTileState extends State<DishTile> {
                 height: 100.h,
                 decoration: BoxDecoration(
                     //color: Color.fromRGBO(255, 110, 117, 0.1),
-                    image: DecorationImage(image: Image.network(entry.image == null || entry.image == "" ? StaticStrings.defaultEntry : entry.image, fit: BoxFit.fitHeight).image)
+                    image: DecorationImage(image: Image.network(entry.image == null || entry.image == "" ? StaticStrings.defaultEntry : entry.image, fit: BoxFit.cover).image)
+                ),
+                child: entry.price == 0.0 ? Container() : Column( mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Row( mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
+                          child: Container(
+                            width: 58.w,
+                            height: 20.h,
+                            decoration: BoxDecoration(
+                                color: Color.fromRGBO(255, 110, 117, 0.9),
+                                borderRadius: BorderRadius.all(Radius.circular(12))
+                            ),
+                            child: Align( alignment: Alignment.center, child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 10.h,),
               Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Container(width: 100.w, child: Text("${entry.name}", maxLines: 2, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3,  fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
+                  Container(width: 100.w, height: 32.h, child: Text("${entry.name}", maxLines: 2, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3,  fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
                   SizedBox(width: 7.w,),
                   Column( mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
@@ -75,23 +95,8 @@ class _DishTileState extends State<DishTile> {
                   ),
                 ],
               ),
-              entry.price == 0.0 ? SizedBox(height: 22.h,) : SizedBox(height: 12.h,),
-              Row( mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  entry.price == 0.0 ? Container(width: 55.w, height: 17.h,) : Container(
-                    width: 55.w,
-                    height: 17.h,
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 110, 117, 0.9),
-                        borderRadius: BorderRadius.all(Radius.circular(12))
-                    ),
-                    child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),)),
-                  ),
-                  SizedBox(width: 5.w,),
-                  Container(width: 145.w, child: Text(restaurant.name, maxLines: 1, textAlign: TextAlign.end, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),))),
-                  SizedBox(width: 8.w,)
-                ],
-              )
+              SizedBox(height: 12.h,),
+              Container(width: 210.w, child: Text(restaurant.name, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),)))
             ],
           ),
           decoration: BoxDecoration(
@@ -102,7 +107,6 @@ class _DishTileState extends State<DishTile> {
                 blurRadius: 3,
                 offset: Offset(1, 1), // changes position of shadow
               ),],
-
           ),
         )
     );

@@ -62,9 +62,33 @@ class _EntryRatingState extends State<EntryRating> {
               height: 342.h,
               width: 342.w,
               decoration: entry.image == null || entry.image == "" ? null: BoxDecoration(
-                  border: Border.all(color: Colors.black54, width: 1)
+                  border: Border.all(color: Colors.black54, width: 1),
+                image: DecorationImage(
+                  image: Image.network(
+                      entry.image).image,
+                  fit: BoxFit.cover,
+                ),
               ),
-              child: Image.network(entry.image, fit: BoxFit.cover, )
+              child: entry.price == 0.0 ? Container() : Column( mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Row( mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
+                        child: Container(
+                          width: 100.w,
+                          height: 33.h,
+                          decoration: BoxDecoration(
+                              color: Color.fromRGBO(255, 110, 117, 0.9),
+                              borderRadius: BorderRadius.all(Radius.circular(12))
+                          ),
+                          child: Align( alignment: Alignment.center, child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(22),),))),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
           ),
           SizedBox(height: 10.h,),
           Container(width: 360.w,child: Text("${entry.name}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.7), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
@@ -130,15 +154,6 @@ class _EntryRatingState extends State<EntryRating> {
                 });
               },
             ),
-          ),
-          Container(
-            width: 100.w,
-            height: 45.h,
-            decoration: BoxDecoration(
-                color: Color.fromRGBO(255, 110, 117, 0.9),
-                borderRadius: BorderRadius.all(Radius.circular(12))
-            ),
-            child: Align( alignment: Alignment.center, child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(22),),))),
           ),
           SizedBox(height: 10.h,),
           SmoothStarRating(

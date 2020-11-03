@@ -64,13 +64,17 @@ class _SearchState extends State<Search> {
           child: SearchRestaurantTile(),
         ))
       ).toList());
-    else
-      return ListView(children: user.recently.map((restaurant) =>
-          Provider.value(value: restaurant, child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 15.h),
-            child: SearchRestaurantTile(),
+    else {
+      Restaurant restaurant = user.recently[1];
+      return ListView(children: restaurant.menu.map((entry) =>
+          Provider.value(value: restaurant, child: Provider.value(value: entry,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 15.h),
+              child: SearchEntryTile(),
+            ),
           ))
       ).toList());
+    }
   }
 
   @override
