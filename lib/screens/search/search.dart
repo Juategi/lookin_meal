@@ -70,7 +70,7 @@ class _SearchState extends State<Search> {
     queries = [];
     actual = DishQuery(allergens: []);
   }
-  //boton de cargar mas, rebusqueda al elegir sort, busqueda sin texto
+  //boton de cargar mas,  rebusqueda con el or si es nula la primera
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
@@ -107,6 +107,13 @@ class _SearchState extends State<Search> {
                                     error = "";
                                   });
                                 },
+                                onTap: (){
+                                  if(isSearching){
+                                    setState(() {
+                                      isSearching = false;
+                                    });
+                                  }
+                                },
                                 maxLines: 1,
                                 maxLength: 20,
                                 autofocus: false,
@@ -128,6 +135,13 @@ class _SearchState extends State<Search> {
                                     error = "";
                                   });
                                 },
+                                onTap: (){
+                                  if(isSearching){
+                                    setState(() {
+                                      isSearching = false;
+                                    });
+                                  }
+                                },
                                 maxLines: 1,
                                 maxLength: 20,
                                 autofocus: false,
@@ -144,7 +158,7 @@ class _SearchState extends State<Search> {
                             ),
                             IconButton(icon: Icon(Icons.search), iconSize: ScreenUtil().setSp(30), onPressed: ()async{
                               setState(() {
-                                isSearching = !isSearching;
+                                isSearching = true;
                                 searching = true;
                               });
                               await _search(query);
@@ -187,9 +201,16 @@ class _SearchState extends State<Search> {
                               child: Text(value, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                             );
                           }).toList(),
-                          onChanged: (val) {
+                          onChanged: (val) async{
                             setState(() {
                               searchType = val;
+                              isSearching = true;
+                              searching = true;
+                            });
+                            await _search(query);
+                            setState(() {
+                              searching = false;
+                              types.clear();
                             });
                           },
                         ),

@@ -45,6 +45,8 @@ class Functions{
 
   static List<String> cleanStrings(List<String> list){
     List<String> aux = [];
+    if(list == null)
+      return aux;
     for(String s in list){
       aux.add(s.replaceAll("'", ""));
     }

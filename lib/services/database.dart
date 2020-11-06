@@ -483,7 +483,7 @@ class DBService {
 						latitude: element['latitude'],
 						longitude: element['longitude'],
 						distance: double.parse(element['distance'].toStringAsFixed(2)),
-						rating: double.parse(element['rating'].toString()),
+						//rating: double.parse(element['rating'].toString()),
 						numrevta: element['numrevta'],
 						images: images,
 						types: types,
@@ -559,7 +559,7 @@ class DBService {
 						latitude: element['latitude'],
 						longitude: element['longitude'],
 						distance: double.parse(element['distance'].toStringAsFixed(2)),
-						rating: double.parse(element['rating'].toString()),
+						//rating: double.parse(element['rating'].toString()),
 						numrevta: element['numrevta'],
 						images: element['images'] == null ? null : List<String>.from(
 								element['images']),

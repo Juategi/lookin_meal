@@ -24,7 +24,7 @@ class SearchService{
       }
     }
     String finalTypes = types.toString().replaceAll("[", "{").replaceAll("]", "}");
-    print(finalTypes);
+    print(query.length);
     var response = await http.get(
         "${StaticStrings.api}/search",
         headers: {"query": query, "distance" : maxDistance.toString(), "latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": searchType, "offset" :offset.toString(), "types":finalTypes});
