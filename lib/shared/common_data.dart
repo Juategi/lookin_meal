@@ -6,7 +6,7 @@ class CommonData{
   static final String defaultProfile = "https://firebasestorage.googleapis.com/v0/b/home-races.appspot.com/o/user%2FUsuario.png?alt=media&token=12f7cb55-8574-44aa-9cf7-50afb66516f4";
   static final List<String> allergens = ["altramuces", "apio", "cacahuetes", "crustaceos", "frutoscascara", "gluten", "huevos", "leche", "moluscos", "mostaza", "pescado", "sesamo", "soja", "sulfitos"];
   static final Color backgroundColor = Color.fromRGBO(229, 229, 229, 0.3);
-  static final List<String> typesList = ["African", "American", "Argentinean", "Asian", "Bar", "Barbeque", "Bistro", "Brazilian", "British", "Cafe", "Canadian", "Chinese", "Contemporary", "Dessert", "English", "French", "Fusion", "German", "Greek", "Grill", "Gourmet", "Hamburgers", "Hawaiian", "Healthy", "Indian", "Indonesian", "Italian", "Korean", "Lebanese", "Mediterranean", "Mexican", "Organic", "Pizza", "Pub", "Seafood", "South American", "Street Food", "Sushi", "Tapas", "Thai", "Turkish", "Vegan Options", "Vegetarian Friendly", "Wine Bar"];
+  static final List<String> typesList = ["African", "American", "Argentinean", "Asian", "Bar", "Barbeque", "Bistro", "Brazilian", "Cafe", "Canadian", "Chinese", "Dessert", "English", "French", "Fusion", "German", "Greek", "Grill", "Gourmet", "Hamburgers", "Hawaiian", "Healthy", "Indian", "Indonesian", "Italian", "Japanese", "Korean", "Lebanese", "Mexican", "Morocco", "Organic", "Pizza", "Pub", "Seafood", "South American", "Spanish", "Street Food", "Sushi", "Tapas", "Thai", "Turkish", "Vegan Options", "Vegetarian Friendly", "Wine Bar"];
   static final List<dynamic> types = [
     {"value": "Cafe"},
     {"value": "African"},

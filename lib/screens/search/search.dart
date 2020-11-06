@@ -29,6 +29,7 @@ class _SearchState extends State<Search> {
   Map<MenuEntry, Restaurant> map;
   bool isRestaurant = true;
   bool isSearching = false;
+  String searchType = 'Sort by relevance';
   Position myPos;
   String locality;
   List<DishQuery> queries;
@@ -92,56 +93,99 @@ class _SearchState extends State<Search> {
       appBar: AppBar(
         backgroundColor: CommonData.backgroundColor,
         elevation: 0,
+        toolbarHeight: 107.h,
         flexibleSpace: Padding(
           padding: EdgeInsets.only(top: 40.h, right: 10.w, left: 10.w),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Container(
-                  width: 390.w,
-                  height: 50.h,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(16))
-                  ),
-                  child: Padding(
-                    padding:EdgeInsets.symmetric(horizontal: 5.w),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: TextField(
-                            enabled: queries.length < 3,
-                            controller: TextEditingController()..text = actual.query..selection = TextSelection.fromPosition(TextPosition(offset: actual.query.length)),
-                            onChanged: (val){
-                              actual.query = val;
+          child: Column(
+            children: [
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      width: 390.w,
+                      height: 50.h,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(16))
+                      ),
+                      child: Padding(
+                        padding:EdgeInsets.symmetric(horizontal: 5.w),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: TextField(
+                                enabled: queries.length < 3,
+                                controller: TextEditingController()..text = actual.query..selection = TextSelection.fromPosition(TextPosition(offset: actual.query.length)),
+                                onChanged: (val){
+                                  actual.query = val;
+                                  setState(() {
+                                    error = "";
+                                  });
+                                },
+                                maxLines: 1,
+                                maxLength: 20,
+                                autofocus: false,
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                ),
+                                decoration: InputDecoration(
+                                    hintText: queries.length < 3? "   Restaurant or dish..." : "   Press search",
+                                    hintStyle: TextStyle(color: Colors.black45),
+                                    counterText: "",
+                                    border: InputBorder.none
+                                ),
+                              ),
+                            ),
+                            IconButton(icon: Icon(Icons.search), iconSize: ScreenUtil().setSp(30), onPressed: (){
                               setState(() {
-                                error = "";
+                                isSearching = !isSearching;
                               });
-                            },
-                            maxLines: 1,
-                            maxLength: 20,
-                            autofocus: false,
-                            style: TextStyle(
-                              color: Colors.black54,
-                            ),
-                            decoration: InputDecoration(
-                                hintText: queries.length < 3? "   Restaurant or dish..." : "   Press search",
-                                hintStyle: TextStyle(color: Colors.black45),
-                                counterText: "",
-                                border: InputBorder.none
-                            ),
-                          ),
+                            },)
+                          ],
                         ),
-                        IconButton(icon: Icon(Icons.search), iconSize: ScreenUtil().setSp(30), onPressed: (){
-                          setState(() {
-                            isSearching = !isSearching;
-                          });
-                        },)
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
+              SizedBox(height: 10.h,),
+              Row( mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    width: 250.w,
+                    height: 27.h,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(3))
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5.w),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: searchType,
+                          style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),)),
+                          items: isRestaurant?  <String>['Sort by relevance', 'Sort by distance'].map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                            );
+                          }).toList() : <String>['Sort by relevance', 'Sort by price lower first', 'Sort by price higher first'].map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                            );
+                          }).toList(),
+                          onChanged: (val) {
+                            setState(() {
+                              searchType = val;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              )
             ],
           ),
         ),
@@ -182,6 +226,7 @@ class _SearchState extends State<Search> {
                     onTap: (){
                       setState(() {
                         isRestaurant = true;
+                        searchType = 'Sort by relevance';
                       });
                     },
                     child: Container(
@@ -198,6 +243,7 @@ class _SearchState extends State<Search> {
                     onTap: (){
                       setState(() {
                         isRestaurant = false;
+                        searchType = 'Sort by relevance';
                       });
                     },
                     child: Container(
