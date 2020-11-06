@@ -190,113 +190,7 @@ class DBService {
 
 	Future<Map<MenuEntry,Restaurant>> getPopular() async {
 		var response = await http.get("${StaticStrings.api}/popular", headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
-		Map<MenuEntry,Restaurant> popular = Map<MenuEntry,Restaurant>();
-		List<dynamic> result = json.decode(response.body);
-		Map<String, List<String>> schedule;
-		for (dynamic element in result) {
-			Restaurant restaurant = Pool.getRestaurant(element['restaurant_id'].toString());
-			if(restaurant != null){
-				MenuEntry entry;
-				for(MenuEntry e in restaurant.menu){
-					if(e.id == element['entry_id'].toString()){
-						entry = e;
-						break;
-					}
-				}
-				popular[entry] = restaurant;
-			}
-			else{
-				schedule = {
-					'1': new List<String>(),
-					'2': new List<String>(),
-					'3': new List<String>(),
-					'4': new List<String>(),
-					'5': new List<String>(),
-					'6': new List<String>(),
-					'0': new List<String>()
-				};
-				if (element['schedule'] != null) {
-					dynamic result = json.decode(element['schedule'].toString()
-							.replaceAll("0:", '"0":')
-							.replaceAll("1:", '"1":')
-							.replaceAll("2:", '"2":')
-							.replaceAll("3:", '"3":')
-							.replaceAll("4:", '"4":')
-							.replaceAll("5:", '"5":')
-							.replaceAll("6:", '"6":')
-					);
-					for (int i = 0; i < 7; i++) {
-						for (dynamic hour in result[i.toString()].toList()) {
-							schedule[i.toString()].add(hour.toString());
-						}
-					}
-				}
-				Restaurant restaurant = Restaurant(
-						restaurant_id: element['restaurant_id'].toString(),
-						ta_id: element['ta_id'].toString(),
-						name: element['name'],
-						phone: element['phone'],
-						email: element['email'],
-						website: element['website'],
-						webUrl: element['weburl'],
-						address: element['address'],
-						city: element['city'],
-						country: element['country'],
-						latitude: element['latitude'],
-						longitude: element['longitude'],
-						distance: double.parse(element['distance'].toStringAsFixed(2)),
-						rating: double.parse(element['rating'].toString()),
-						numrevta: element['numrevta'],
-						images: element['images'] == null ? null : List<String>.from(
-								element['images']),
-						types: element['types'] == null ? null : List<String>.from(
-								element['types']),
-						schedule: schedule,
-						currency: element['currency'],
-						sections: element['sections'] == null ? null : List<String>.from(
-								element['sections']),
-						dailymenu: element['dailymenu'] == null ? null : List<String>.from(
-								element['dailymenu']),
-						delivery: element['delivery'] == null ? null : List<String>.from(
-								element['delivery']),
-						menu: await getMenu(element['restaurant_id'].toString())
-				);
-				MenuEntry entry;
-				for(MenuEntry e in restaurant.menu){
-					if(e.id == element['entry_id'].toString()){
-						entry = e;
-						break;
-					}
-				}
-				popular[entry] = restaurant;
-				Pool.addRestaurant(restaurant);
-			}
-		}
-
-		for(MenuEntry entry in popular.keys.toList()){
-			for(Restaurant restaurant in popular.values.toList()){
-				if(popular[entry].restaurant_id == restaurant.restaurant_id){
-					//popular[entry] = restaurant;
-					for(MenuEntry e in restaurant.menu){
-						if(e.id == entry.id){
-							popular[e] = restaurant;
-							popular.remove(entry);
-						}
-						break;
-					}
-					break;
-				}
-			}
-		}
-		/*for(MenuEntry entry in popular.keys){
-			for(MenuEntry e in popular[entry].menu){
-				if(entry.id == e.id){
-					print(entry.hashCode);
-					print(e.hashCode);
-				}
-			}
-		}*/
-		return popular;
+		return parseResponseEntry(response);
 	}
 
 	Future<List<Restaurant>> getAllRestaurants() async {
@@ -607,6 +501,116 @@ class DBService {
 		}
 		//print("Number of restaurants : ${restaurants.length}");
 		return restaurants;
+	}
+
+	Future<Map<MenuEntry,Restaurant>> parseResponseEntry(var response) async{
+		Map<MenuEntry,Restaurant> map = Map<MenuEntry,Restaurant>();
+		List<dynamic> result = json.decode(response.body);
+		Map<String, List<String>> schedule;
+		for (dynamic element in result) {
+			Restaurant restaurant = Pool.getRestaurant(element['restaurant_id'].toString());
+			if(restaurant != null){
+				MenuEntry entry;
+				for(MenuEntry e in restaurant.menu){
+					if(e.id == element['entry_id'].toString()){
+						entry = e;
+						break;
+					}
+				}
+				map[entry] = restaurant;
+			}
+			else{
+				schedule = {
+					'1': new List<String>(),
+					'2': new List<String>(),
+					'3': new List<String>(),
+					'4': new List<String>(),
+					'5': new List<String>(),
+					'6': new List<String>(),
+					'0': new List<String>()
+				};
+				if (element['schedule'] != null) {
+					dynamic result = json.decode(element['schedule'].toString()
+							.replaceAll("0:", '"0":')
+							.replaceAll("1:", '"1":')
+							.replaceAll("2:", '"2":')
+							.replaceAll("3:", '"3":')
+							.replaceAll("4:", '"4":')
+							.replaceAll("5:", '"5":')
+							.replaceAll("6:", '"6":')
+					);
+					for (int i = 0; i < 7; i++) {
+						for (dynamic hour in result[i.toString()].toList()) {
+							schedule[i.toString()].add(hour.toString());
+						}
+					}
+				}
+				Restaurant restaurant = Restaurant(
+						restaurant_id: element['restaurant_id'].toString(),
+						ta_id: element['ta_id'].toString(),
+						name: element['name'],
+						phone: element['phone'],
+						email: element['email'],
+						website: element['website'],
+						webUrl: element['weburl'],
+						address: element['address'],
+						city: element['city'],
+						country: element['country'],
+						latitude: element['latitude'],
+						longitude: element['longitude'],
+						distance: double.parse(element['distance'].toStringAsFixed(2)),
+						rating: double.parse(element['rating'].toString()),
+						numrevta: element['numrevta'],
+						images: element['images'] == null ? null : List<String>.from(
+								element['images']),
+						types: element['types'] == null ? null : List<String>.from(
+								element['types']),
+						schedule: schedule,
+						currency: element['currency'],
+						sections: element['sections'] == null ? null : List<String>.from(
+								element['sections']),
+						dailymenu: element['dailymenu'] == null ? null : List<String>.from(
+								element['dailymenu']),
+						delivery: element['delivery'] == null ? null : List<String>.from(
+								element['delivery']),
+						menu: await getMenu(element['restaurant_id'].toString())
+				);
+				MenuEntry entry;
+				for(MenuEntry e in restaurant.menu){
+					if(e.id == element['entry_id'].toString()){
+						entry = e;
+						break;
+					}
+				}
+				map[entry] = restaurant;
+				Pool.addRestaurant(restaurant);
+			}
+		}
+
+		for(MenuEntry entry in map.keys.toList()){
+			for(Restaurant restaurant in map.values.toList()){
+				if(map[entry].restaurant_id == restaurant.restaurant_id){
+					//popular[entry] = restaurant;
+					for(MenuEntry e in restaurant.menu){
+						if(e.id == entry.id){
+							map[e] = restaurant;
+							map.remove(entry);
+						}
+						break;
+					}
+					break;
+				}
+			}
+		}
+		/*for(MenuEntry entry in popular.keys){
+			for(MenuEntry e in popular[entry].menu){
+				if(entry.id == e.id){
+					print(entry.hashCode);
+					print(e.hashCode);
+				}
+			}
+		}*/
+		return map;
 	}
 
 }

@@ -14,7 +14,6 @@ import 'package:lookinmeal/screens/restaurants/edit_restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/gallery.dart';
 import 'package:lookinmeal/screens/restaurants/info.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
-import 'package:lookinmeal/screens/search/options.dart';
 import 'services/app_localizations.dart';
 import 'screens/authenticate/wrapper.dart';
 import 'services/auth.dart';
@@ -45,8 +44,6 @@ class MyApp extends StatelessWidget {
           "/editmenu" : (context) => EditMenu(),
           "/editorder" : (context) => EditOrder(),
           "/editrestaurant" : (context) => EditRestaurant(),
-          "/options" : (context) => SearchOptions(),
-          "/entryoptions" : (context) => SearchEntry(),
           "/editdaily" : (context) => EditDaily(),
           "/favs" : (context) => Favorites(),
           "/gallery" : (context) => Gallery(),

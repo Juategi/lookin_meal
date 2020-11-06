@@ -23,6 +23,8 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
 
   List<MenuEntry> _getTop(){
     int max = 0;
+    if(restaurant.menu == null || restaurant.menu.isEmpty)
+      return [];
     for(MenuEntry entry in restaurant.menu){
       if(entry.numReviews > max){
         max = entry.numReviews;
@@ -46,7 +48,7 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
       },
       child: Container(
         width: 390.w,
-        height: 295.h,
+        height: 315.h,
         child: Column(
           children: [
             Container(
@@ -105,7 +107,7 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
             Row(
               children: <Widget>[
                 SizedBox(width: 5.w,),
-                Container(width: 214.w, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : "${restaurant.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                restaurant.types.length == 0? Container(width: 214.w) : Container(width: 214.w, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : "${restaurant.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
                 SizedBox(width: 66.w,),
                 Container(
                   child: SvgPicture.asset("assets/markerMini.svg", height: 25.h, width: 25.w,),

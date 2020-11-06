@@ -9,64 +9,50 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:lookinmeal/screens/search/searchTiles.dart';
+import 'package:lookinmeal/services/database.dart';
+import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/search.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:lookinmeal/shared/loading.dart';
 import 'package:lookinmeal/shared/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class Search extends StatefulWidget {
-  Position myPos;
-  String locality;
-  Search({this.myPos,this.locality});
   @override
-  _SearchState createState() => _SearchState(myPos: myPos, locality: locality);
+  _SearchState createState() => _SearchState();
 }
 
 class _SearchState extends State<Search> {
-  User user;
-  List<bool> _selections = List.generate(2, (index) => false);
   Map<MenuEntry, Restaurant> map;
   bool isRestaurant = true;
   bool isSearching = false;
+  bool searching = false;
   String searchType = 'Sort by relevance';
-  Position myPos;
   String locality;
   List<DishQuery> queries;
   List<String> types = [];
   DishQuery actual;
   String error = "";
+  String query = "";
   double maxDistance = 5.0;
-  _SearchState({this.myPos,this.locality});
+  int offset = 0;
+  List<Restaurant> result;
 
   Future<List<Restaurant>> _search(String query) async{
-    List<Restaurant> list = await SearchService().query(myPos.latitude, myPos.longitude, locality, query);
-    if(list.length == 0)
-      error = "No results";
-    else
-      error = "";
-    return list;
+    result = await SearchService().query(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude, maxDistance, offset, types, query, searchType);
   }
 
-  Future<List<MenuEntry>> _searchEntry(String query) async{
-    map = await SearchService().queryEntry(myPos.latitude, myPos.longitude, locality, query);
-    if(map.length == 0)
-      error = "No results";
-    else
-      error = "";
-    return map.keys.toList();
-  }
-
-  Widget search(){
+  Widget _buildList(){
     if(isRestaurant)
-      return ListView(children: user.recently.map((restaurant) =>
+      return ListView(children: result.map((restaurant) =>
         Provider.value(value: restaurant, child: Padding(
           padding: EdgeInsets.symmetric(vertical: 15.h),
           child: SearchRestaurantTile(),
         ))
       ).toList());
     else {
-      Restaurant restaurant = user.recently[1];
+      Restaurant restaurant = DBService.userF.recently[1];
       return ListView(children: restaurant.menu.map((entry) =>
           Provider.value(value: restaurant, child: Provider.value(value: entry,
             child: Padding(
@@ -87,7 +73,6 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
-    user = Provider.of<User>(context);
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return Scaffold(
       appBar: AppBar(
@@ -113,7 +98,7 @@ class _SearchState extends State<Search> {
                         child: Row(
                           children: <Widget>[
                             Expanded(
-                              child: TextField(
+                              child: !isRestaurant? TextField(
                                 enabled: queries.length < 3,
                                 controller: TextEditingController()..text = actual.query..selection = TextSelection.fromPosition(TextPosition(offset: actual.query.length)),
                                 onChanged: (val){
@@ -134,11 +119,37 @@ class _SearchState extends State<Search> {
                                     counterText: "",
                                     border: InputBorder.none
                                 ),
+                              ):
+                              TextField(
+                                controller: TextEditingController()..text = query..selection = TextSelection.fromPosition(TextPosition(offset: query.length)),
+                                onChanged: (val){
+                                  query = val;
+                                  setState(() {
+                                    error = "";
+                                  });
+                                },
+                                maxLines: 1,
+                                maxLength: 20,
+                                autofocus: false,
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                ),
+                                decoration: InputDecoration(
+                                    hintText: "   Press search",
+                                    hintStyle: TextStyle(color: Colors.black45),
+                                    counterText: "",
+                                    border: InputBorder.none
+                                ),
                               ),
                             ),
-                            IconButton(icon: Icon(Icons.search), iconSize: ScreenUtil().setSp(30), onPressed: (){
+                            IconButton(icon: Icon(Icons.search), iconSize: ScreenUtil().setSp(30), onPressed: ()async{
                               setState(() {
                                 isSearching = !isSearching;
+                                searching = true;
+                              });
+                              await _search(query);
+                              setState(() {
+                                searching = false;
                               });
                             },)
                           ],
@@ -191,9 +202,9 @@ class _SearchState extends State<Search> {
         ),
       ),
       backgroundColor: CommonData.backgroundColor,
-      body: Padding(
+      body: searching? CircularLoading()  : Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.w),
-        child: isSearching? search() :  SingleChildScrollView(
+        child: isSearching? _buildList() :  SingleChildScrollView(
           child: Column(
             children: <Widget>[
               SizedBox(height: 10.h,),
