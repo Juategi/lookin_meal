@@ -17,10 +17,17 @@ class SearchService{
         aux[i] = "&" + aux[i];
     }
     query = aux.join(" ");
-    print(maxDistance);
+    for(int i = 0; i < types.length; i++){
+      types[i] = "'" + types[i] + "'";
+      if(types[i].split(" ").length > 1){
+        types[i] = '"' + types[i] + '"';
+      }
+    }
+    String finalTypes = types.toString().replaceAll("[", "{").replaceAll("]", "}");
+    print(finalTypes);
     var response = await http.get(
         "${StaticStrings.api}/search",
-        headers: {"query": query, "distance" : maxDistance.toString(), "latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": searchType, "offset" :offset.toString(), "types":types.toString().replaceAll("[", "{").replaceAll("]", "}")});
+        headers: {"query": query, "distance" : maxDistance.toString(), "latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": searchType, "offset" :offset.toString(), "types":finalTypes});
     print(response.body);
     return DBService().parseResponse(response);
   }

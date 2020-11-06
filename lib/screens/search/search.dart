@@ -70,7 +70,7 @@ class _SearchState extends State<Search> {
     queries = [];
     actual = DishQuery(allergens: []);
   }
-
+  //boton de cargar mas, rebusqueda al elegir sort, busqueda sin texto
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
@@ -150,6 +150,7 @@ class _SearchState extends State<Search> {
                               await _search(query);
                               setState(() {
                                 searching = false;
+                                types.clear();
                               });
                             },)
                           ],
