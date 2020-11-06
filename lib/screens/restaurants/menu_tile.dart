@@ -81,7 +81,7 @@ class _MenuTileState extends State<MenuTile> with TickerProviderStateMixin {
       ),
       onTap: () async{
         await showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
-          return EntryRating(entry);
+          return Provider<MenuEntry>.value(value: entry, child: EntryRating());
         }).then((value){setState(() {});});
       },
     );

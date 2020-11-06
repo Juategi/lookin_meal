@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/rating.dart';
+import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/menu_tile.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
@@ -12,66 +15,83 @@ import 'package:lookinmeal/services/translator.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/strings.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class EntryRating extends StatefulWidget {
-  MenuEntry entry;
-  EntryRating(this.entry);
   @override
-  _EntryRatingState createState() => _EntryRatingState(entry);
+  _EntryRatingState createState() => _EntryRatingState();
 }
 
 class _EntryRatingState extends State<EntryRating> {
-  _EntryRatingState(this.entry);
-  User user;
   MenuEntry entry;
+  Restaurant restaurant;
   double rate, oldRate;
   bool hasRate;
   bool indicator = false;
+  bool init = true;
   Rating actual;
   final DBService _dbService = DBService();
   final formatter = new DateFormat('yyyy-MM-dd');
 
-  @override
-  void initState(){
-    super.initState();
-    user = DBService.userF;
-    for(Rating r in user.ratings){
-      if(r.entry_id == entry.id){
-          rate = r.rating;
-          oldRate = rate;
-          hasRate = true;
-          actual = r;
-          return;
-      }
-    }
-    rate = 0.0;
-    hasRate = false;
-  }
 
   @override
   Widget build(BuildContext context) {
     AppLocalizations tr = AppLocalizations.of(context);
+    try {
+      restaurant = Provider.of<Restaurant>(context);
+    }catch(e){
+
+    }
+    entry = Provider.of<MenuEntry>(context);
+    if(init){
+      rate = 0.0;
+      hasRate = false;
+      for(Rating r in DBService.userF.ratings){
+        if(r.entry_id == entry.id){
+          rate = r.rating;
+          oldRate = rate;
+          hasRate = true;
+          actual = r;
+        }
+      }
+      init = false;
+    }
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: Column(
         children: <Widget>[
           SizedBox(height: 40.h,),
-          entry.image == null || entry.image == ""? Container(height: 300.h,) : Container(
+          Container(
               height: 342.h,
               width: 342.w,
               decoration: entry.image == null || entry.image == "" ? null: BoxDecoration(
                   border: Border.all(color: Colors.black54, width: 1),
-                image: DecorationImage(
+                image: entry.image == null || entry.image == ""? null: DecorationImage(
                   image: Image.network(
                       entry.image).image,
                   fit: BoxFit.cover,
                 ),
               ),
-              child: entry.price == 0.0 ? Container() : Column( mainAxisAlignment: MainAxisAlignment.end,
+              child: Column( mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Row( mainAxisAlignment: MainAxisAlignment.start,
+                  restaurant != null ? Row( mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onTap:(){
+                          Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
+                        },
+                        child: Container(
+                            height: 45.h,
+                            width: 45.w,
+                            child: SvgPicture.asset("assets/menu.svg", color: Color.fromRGBO(255, 110, 117, 0.9), fit: BoxFit.contain,)
+                        ),
+                      ),
+                    ],
+                  ) : Container(),
+                  SizedBox(height: 240.h,),
+                  entry.price == 0.0 ? Container():Row( mainAxisAlignment: entry.image == null || entry.image == ""?  MainAxisAlignment.center : MainAxisAlignment.start,
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
@@ -171,8 +191,8 @@ class _EntryRatingState extends State<EntryRating> {
               if(hasRate){
                 actual.rating = rate;
                 actual.date = formatter.format(DateTime.now());
-                await _dbService.deleteRate(user.uid, entry.id);
-                _dbService.addRate(user.uid, entry.id, rate);
+                await _dbService.deleteRate(DBService.userF.uid, entry.id);
+                _dbService.addRate(DBService.userF.uid, entry.id, rate);
                 double aux = (entry.rating*entry.numReviews + rate - oldRate)/(entry.numReviews);
                 //entry.rating = double.parse(aux.toStringAsFixed(2));
                 entry.rate = double.parse(aux.toStringAsFixed(2));
@@ -182,12 +202,12 @@ class _EntryRatingState extends State<EntryRating> {
                 Navigator.pop(context);
               }
               else{
-                user.ratings.add(Rating(
+                DBService.userF.ratings.add(Rating(
                     entry_id: entry.id,
                     rating: rate,
                     date: formatter.format(DateTime.now())
                 ));
-                _dbService.addRate(user.uid, entry.id, rate);
+                _dbService.addRate(DBService.userF.uid, entry.id, rate);
                 double aux = (entry.rating*entry.numReviews + rate)/(entry.numReviews+1);
                 //entry.rating = double.parse(aux.toStringAsFixed(2));
                 //entry.numReviews += 1;

@@ -44,10 +44,11 @@ class _DishTileState extends State<DishTile> {
     user = DBService.userF;
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return GestureDetector(
-      onTap: (){
-        updateRecent();
-        Navigator.pushNamed(context, "/restaurant",arguments: restaurant);
-      },
+        onTap: () async{
+          await showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
+            return Provider<Restaurant>.value(value: restaurant, child: Provider<MenuEntry>.value(value: entry, child: EntryRating()));
+          }).then((value){setState(() {});});
+        },
         child: Container(
           height: 170.h,
           width: 220.w,
