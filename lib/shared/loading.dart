@@ -21,11 +21,13 @@ class Loading extends StatelessWidget {
 class CircularLoading extends StatelessWidget {
 	@override
 	Widget build(BuildContext context) {
-		return Row(
-			mainAxisAlignment: MainAxisAlignment.center,
-			children: <Widget>[
-				CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color.fromRGBO(255, 65, 112, 1)),),
-			],
+		return Center(
+		  child: Row(
+		  	mainAxisAlignment: MainAxisAlignment.center,
+		  	children: <Widget>[
+		  		CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color.fromRGBO(255, 65, 112, 1)),),
+		  	],
+		  ),
 		);
 	}
 }

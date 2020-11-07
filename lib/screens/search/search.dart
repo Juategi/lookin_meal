@@ -28,6 +28,7 @@ class _SearchState extends State<Search> {
   bool isRestaurant = true;
   bool isSearching = false;
   bool searching = false;
+  bool searchingMore = false;
   String searchType = 'Sort by relevance';
   String locality;
   List<DishQuery> queries;
@@ -39,18 +40,54 @@ class _SearchState extends State<Search> {
   int offset = 0;
   List<Restaurant> result;
 
-  Future<List<Restaurant>> _search(String query) async{
+  Future _search() async{
     result = await SearchService().query(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude, maxDistance, offset, types, query, searchType);
   }
 
+  Future _searchMore() async{
+    offset += 10;
+    result += await SearchService().query(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude, maxDistance, offset, types, query, searchType);
+  }
+
   Widget _buildList(){
-    if(isRestaurant)
-      return ListView(children: result.map((restaurant) =>
-        Provider.value(value: restaurant, child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 15.h),
-          child: SearchRestaurantTile(),
-        ))
-      ).toList());
+    if(isRestaurant) {
+      List<Widget> buildList = result.map((restaurant) =>
+          Container(
+            child: Provider.value(value: restaurant, child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 15.h),
+              child: SearchRestaurantTile(),
+            )),
+          )
+      ).toList();
+      if(offset < 20)
+        buildList.add(searchingMore? Container(child: CircularLoading()) : Container(
+          child: GestureDetector(
+            onTap: ()async{
+              setState(() {
+                searchingMore = true;
+              });
+              await _searchMore();
+              setState(() {
+                searchingMore = false;
+              });
+            },
+            child: Container(
+              height: 50.h,
+              width: 50.w,
+              color: Color.fromRGBO(255, 110, 117, 0.9),
+              child: Center(child: Text("Show more", maxLines: 1,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white,
+                    letterSpacing: .3,
+                    fontWeight: FontWeight.normal,
+                    fontSize: ScreenUtil().setSp(22),),))),
+
+            ),
+          ),
+        ));
+      return ListView(children: buildList);
+    }
+
     else {
       Restaurant restaurant = DBService.userF.recently[1];
       return ListView(children: restaurant.menu.map((entry) =>
@@ -70,7 +107,7 @@ class _SearchState extends State<Search> {
     queries = [];
     actual = DishQuery(allergens: []);
   }
-  //boton de cargar mas,  rebusqueda con el or si es nula la primera
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
@@ -111,6 +148,7 @@ class _SearchState extends State<Search> {
                                   if(isSearching){
                                     setState(() {
                                       isSearching = false;
+                                      offset = 0;
                                     });
                                   }
                                 },
@@ -139,6 +177,7 @@ class _SearchState extends State<Search> {
                                   if(isSearching){
                                     setState(() {
                                       isSearching = false;
+                                      offset = 0;
                                     });
                                   }
                                 },
@@ -157,14 +196,17 @@ class _SearchState extends State<Search> {
                               ),
                             ),
                             IconButton(icon: Icon(Icons.search), iconSize: ScreenUtil().setSp(30), onPressed: ()async{
+                              FocusScopeNode currentFocus = FocusScope.of(context);
+                              if (!currentFocus.hasPrimaryFocus) {
+                                currentFocus.unfocus();
+                              }
                               setState(() {
                                 isSearching = true;
                                 searching = true;
                               });
-                              await _search(query);
+                              await _search();
                               setState(() {
                                 searching = false;
-                                types.clear();
                               });
                             },)
                           ],
@@ -202,16 +244,22 @@ class _SearchState extends State<Search> {
                             );
                           }).toList(),
                           onChanged: (val) async{
-                            setState(() {
-                              searchType = val;
-                              isSearching = true;
-                              searching = true;
-                            });
-                            await _search(query);
-                            setState(() {
-                              searching = false;
-                              types.clear();
-                            });
+                            if(isSearching){
+                              setState(() {
+                                searchType = val;
+                                isSearching = true;
+                                searching = true;
+                              });
+                              await _search();
+                              setState(() {
+                                searching = false;
+                              });
+                            }
+                            else{
+                              setState(() {
+                                searchType = val;
+                              });
+                            }
                           },
                         ),
                       ),
@@ -232,7 +280,6 @@ class _SearchState extends State<Search> {
               SizedBox(height: 10.h,),
               !isRestaurant? Row( mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Text(error, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.red, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                   SizedBox(width: 235.w,),
                   queries.length < 3 ?GestureDetector(
                       onTap: (){

@@ -48,7 +48,17 @@ class Functions{
     if(list == null)
       return aux;
     for(String s in list){
-      aux.add(s.replaceAll("'", ""));
+      aux.add(s.replaceAll("'", "").replaceAll("'", ""));
+    }
+    return aux;
+  }
+
+  static List<String> copyList(List<String> list){
+    List<String> aux = [];
+    if(list == null)
+      return aux;
+    for(String s in list){
+      aux.add(s);
     }
     return aux;
   }

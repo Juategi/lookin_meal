@@ -530,7 +530,7 @@ class DBService {
 					'0': new List<String>()
 				};
 				if (element['schedule'] != null) {
-					dynamic result = json.decode(element['schedule'].toString()
+					Map<String, dynamic> result = json.decode(element['schedule'].toString()
 							.replaceAll("0:", '"0":')
 							.replaceAll("1:", '"1":')
 							.replaceAll("2:", '"2":')
@@ -538,13 +538,26 @@ class DBService {
 							.replaceAll("4:", '"4":')
 							.replaceAll("5:", '"5":')
 							.replaceAll("6:", '"6":')
+							.replaceAll("[", '"[')
+							.replaceAll("]", ']"')
 					);
 					for (int i = 0; i < 7; i++) {
-						for (dynamic hour in result[i.toString()].toList()) {
+						if(result[i.toString()] == null){
+							result[i.toString()] = [-1,-1];
+						}
+						for (dynamic hour in result[i.toString()].toString().split(',')) {
 							schedule[i.toString()].add(hour.toString());
 						}
 					}
 				}
+				List<String> images = element['images'] == null ? null : List<String>.from(element['images']);
+				images = Functions.cleanStrings(images);
+				List<String> sections = element['sections'] == null ? null : List<String>.from(element['sections']);
+				sections = Functions.cleanStrings(sections);
+				List<String> types = element['types'] == null ? null : List<String>.from(element['types']);
+				types = Functions.cleanStrings(types);
+				List<String> delivery = element['delivery'] == null ? null : List<String>.from(element['delivery']);
+				delivery = Functions.cleanStrings(delivery);
 				Restaurant restaurant = Restaurant(
 						restaurant_id: element['restaurant_id'].toString(),
 						ta_id: element['ta_id'].toString(),
