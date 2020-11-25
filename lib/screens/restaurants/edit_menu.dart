@@ -558,6 +558,35 @@ class _EditMenuState extends State<EditMenu> {
                                         )
                                       ],
                                     ),
+                                    SizedBox(height: 10.h,),
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                            height: 60.h,
+                                            width: 60.w,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: Image.asset("assets/allergens/picante.png").image))
+                                        ),
+                                        Expanded(
+                                          child: CheckboxListTile(
+                                            activeColor: Color.fromRGBO(255, 110, 117, 0.9),
+                                            value: entry.allergens.contains("picante"),
+                                            onChanged: (f) {
+                                              setState(() {
+                                                print(f);
+                                                if (!entry.allergens.contains("picante"))
+                                                  entry.allergens.add("picante");
+                                                else
+                                                  entry.allergens.remove("picante");
+                                                print(entry.allergens);
+                                              });
+                                            },
+                                            title: Text("Picante", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ],
                                 ),
                               );

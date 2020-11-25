@@ -11,8 +11,7 @@ import 'package:provider/provider.dart';
 
 class Menu extends StatefulWidget {
   Restaurant restaurant;
-  String currency;
-  Menu({this.restaurant, this.currency});
+  Menu({this.restaurant});
 
   @override
   _MenuState createState() => _MenuState(restaurant: restaurant);
@@ -105,9 +104,13 @@ class _MenuState extends State<Menu> {
                       children: expanded[section]  ?
                         restaurant.menu.map((entry){
                           if(section == entry.section)
-                            return Provider<MenuEntry>.value(
-                                key: UniqueKey(),
-                                value: entry, child: MenuTile(daily: false,));
+                            return Provider<Restaurant>.value(
+                              key: UniqueKey(),
+                              value: restaurant,
+                              child: Provider<MenuEntry>.value(
+                                  key: UniqueKey(),
+                                  value: entry, child: MenuTile(daily: false,)),
+                            );
                           else
                             return Container();
                         }

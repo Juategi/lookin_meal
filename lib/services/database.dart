@@ -254,7 +254,13 @@ class DBService {
 	}
 
 	updateRestaurantData(String restaurant_id, String name, String phone,
-			String website, String address, String email, List<String> types, Map<String, List<String>> schedule, List<String> delivery) async{
+			String website, String address, String email, List<String> types, Map<String, List<String>> schedule, List<String> delivery, String currency) async{
+		switch (currency){
+			case "€": currency = "euro"; break;
+			case "\$": currency = "dolar"; break;
+			case "¥": currency = "yen"; break;
+			case "£": currency = "libra"; break;
+		}
 		Map body = {
 			"id": restaurant_id,
 			"name": name,
@@ -267,6 +273,7 @@ class DBService {
 			"schedule": jsonEncode(schedule).toString() ?? Map<String, List<String>>().toString(),
 			"delivery": delivery.toString().replaceAll("[", "{").replaceAll("]", "}") ??
 					List<String>().toString(),
+			"currency": currency
 		};
 		print(body);
 		var response = await http.put(
@@ -469,6 +476,13 @@ class DBService {
 				types = Functions.cleanStrings(types);
 				List<String> delivery = element['delivery'] == null ? null : List<String>.from(element['delivery']);
 				delivery = Functions.cleanStrings(delivery);
+				String currency;
+				switch (element['currency']){
+					case "euro": currency = "€"; break;
+					case "dolar": currency = "\$"; break;
+					case "yen": currency = "¥"; break;
+					case "libra": currency = "£"; break;
+				}
 				Restaurant restaurant = Restaurant(
 						restaurant_id: element['restaurant_id'].toString(),
 						ta_id: element['ta_id'].toString(),
@@ -488,7 +502,7 @@ class DBService {
 						images: images,
 						types: types,
 						schedule: schedule,
-						currency: element['currency'],
+						currency: currency,
 						sections: sections,
 						dailymenu: element['dailymenu'] == null ? null : List<String>.from(
 								element['dailymenu']),
@@ -558,6 +572,13 @@ class DBService {
 				types = Functions.cleanStrings(types);
 				List<String> delivery = element['delivery'] == null ? null : List<String>.from(element['delivery']);
 				delivery = Functions.cleanStrings(delivery);
+				String currency;
+				switch (element['currency']){
+					case "euro": currency = "€"; break;
+					case "dolar": currency = "\$"; break;
+					case "yen": currency = "¥"; break;
+					case "libra": currency = "£"; break;
+				}
 				Restaurant restaurant = Restaurant(
 						restaurant_id: element['restaurant_id'].toString(),
 						ta_id: element['ta_id'].toString(),
@@ -579,7 +600,7 @@ class DBService {
 						types: element['types'] == null ? null : List<String>.from(
 								element['types']),
 						schedule: schedule,
-						currency: element['currency'],
+						currency: currency,
 						sections: element['sections'] == null ? null : List<String>.from(
 								element['sections']),
 						dailymenu: element['dailymenu'] == null ? null : List<String>.from(

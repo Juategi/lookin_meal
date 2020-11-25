@@ -37,7 +37,7 @@ class _DailyMenuState extends State<DailyMenu> {
                   color: Color.fromRGBO(255, 110, 117, 0.9),
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
-              child: Text("${restaurant.dailymenu[1]} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(22),),))
+              child: Text("${restaurant.dailymenu[1]} ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(22),),))
           ),
         ],
       ),

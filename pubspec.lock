@@ -230,6 +230,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_currency_converter:
+    dependency: "direct main"
+    description:
+      name: flutter_currency_converter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   flutter_facebook_login:
     dependency: "direct main"
     description:

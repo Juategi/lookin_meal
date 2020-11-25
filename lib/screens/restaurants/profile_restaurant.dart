@@ -13,6 +13,7 @@ import 'package:lookinmeal/screens/restaurants/edit_images.dart';
 import 'package:lookinmeal/screens/restaurants/info.dart';
 import 'package:lookinmeal/screens/restaurants/menu.dart';
 import 'package:lookinmeal/screens/restaurants/top_dishes_tile.dart';
+import 'package:lookinmeal/services/currency_converter.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/services/translator.dart';
@@ -57,13 +58,15 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 			}
 			if(three >= 6){
 				for(MenuEntry entry in _getTop(6)){
-					list.add(Provider<MenuEntry>.value(value: entry, child: TopDishesTile()));
+					list.add(Provider<Restaurant>.value(
+							value: restaurant, child: Provider<MenuEntry>.value(value: entry, child: TopDishesTile())));
 				}
 			}
 			else{
 				for(MenuEntry entry in _getTop(3)){
 					if(entry != null)
-						list.add(Provider<MenuEntry>.value(value: entry, child: TopDishesTile())
+						list.add(Provider<Restaurant>.value(
+								value: restaurant, child: Provider<MenuEntry>.value(value: entry, child: TopDishesTile()))
 						);
 				}
 			}
@@ -409,7 +412,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							],
 						),
 					) : Container(),
-					restaurant.menu.length != 0 ? Menu(restaurant: restaurant, currency: restaurant.currency) : Container(),
+					restaurant.menu.length != 0 ? Menu(restaurant: restaurant) : Container(),
 					restaurant.dailymenu != null? Container(
 						height: 42.h,
 						width: 411.w,

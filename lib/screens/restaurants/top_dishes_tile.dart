@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
+import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/entry.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -17,10 +18,12 @@ class TopDishesTile extends StatefulWidget {
 
 class _TopDishesTileState extends State<TopDishesTile> with TickerProviderStateMixin {
   MenuEntry entry;
+  Restaurant restaurant;
 
   @override
   Widget build(BuildContext context) {
     entry = Provider.of<MenuEntry>(context);
+    restaurant = Provider.of<Restaurant>(context);
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return GestureDetector(
       child: Padding(
@@ -64,7 +67,7 @@ class _TopDishesTileState extends State<TopDishesTile> with TickerProviderStateM
                         color: Color.fromRGBO(255, 110, 117, 0.9),
                         borderRadius: BorderRadius.all(Radius.circular(12))
                     ),
-                    child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(10),),)),
+                    child: Text("${entry.price} ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(10),),)),
                   )
                 ],
               ),
@@ -74,7 +77,8 @@ class _TopDishesTileState extends State<TopDishesTile> with TickerProviderStateM
       ),
       onTap: () async{
         await showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
-          return Provider<MenuEntry>.value(value: entry, child: EntryRating());
+          return Provider<Restaurant>.value(
+              value: restaurant, child: Provider<MenuEntry>.value(value: entry, child: EntryRating()));
         }).then((value){setState(() {});});
       },
     );

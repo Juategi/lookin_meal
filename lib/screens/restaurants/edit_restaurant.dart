@@ -23,7 +23,7 @@ class EditRestaurant extends StatefulWidget {
 
 class _EditRestaurantState extends State<EditRestaurant> {
   final _formKey = GlobalKey<FormState>();
-  String name, address, phone, email, web;
+  String name, address, phone, email, web, currency;
   List<String> types, delivery;
   Map<String, List<String>> schedule;
   Restaurant restaurant;
@@ -49,6 +49,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
       email = restaurant.email;
       types = restaurant.types;
       delivery = restaurant.delivery;
+      currency = restaurant.currency;
       for(int i = 0; i <=6; i++){
         scheduleTree.add(_initRow(i));
       }
@@ -84,7 +85,8 @@ class _EditRestaurantState extends State<EditRestaurant> {
                           }
                           delivery[i] = delivery[i].trim();
                         }
-                        await DBService().updateRestaurantData(restaurant.restaurant_id, name, phone, web, address, email, types, schedule, delivery);
+                        await DBService().updateRestaurantData(restaurant.restaurant_id, name, phone, web, address, email, types, schedule, delivery, currency);
+                        restaurant.currency = currency;
                         restaurant.name = name;
                         restaurant.phone = phone;
                         restaurant.website = web;
@@ -177,6 +179,56 @@ class _EditRestaurantState extends State<EditRestaurant> {
                         controller: TextEditingController()..text = address..selection = TextSelection.fromPosition(TextPosition(offset: address.length)),
                         validator: (val) => val.length < 4 || val.length > 149 ? "Mínimo 4 carácteres y menos de 150" : null,
                         decoration: textInputDeco.copyWith(hintText: "Dirección del restaurant"),
+                      ),
+                      SizedBox(height: 20,),
+                      Text("Moneda", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
+                      SizedBox(height: 10,),
+                      DropdownButton(
+                        value: currency,
+                        elevation: 1,
+                        items: [
+                          DropdownMenuItem(
+                            child: Row(
+                              children: <Widget>[
+                                Text("€", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),)),
+                                SizedBox(width: 50.w,)
+                              ],
+                            ),
+                            value: "€",
+                          ),
+                          DropdownMenuItem(
+                            child: Row(
+                              children: <Widget>[
+                                Text("\$", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),)),
+                                SizedBox(width: 50.w,)
+                              ],
+                            ),
+                            value: "\$",
+                          ),
+                          DropdownMenuItem(
+                            child: Row(
+                              children: <Widget>[
+                                Text("£", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),)),
+                                SizedBox(width: 50.w,)
+                              ],
+                            ),
+                            value: "£",
+                          ),
+                          DropdownMenuItem(
+                            child: Row(
+                              children: <Widget>[
+                                Text("¥", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),)),
+                                SizedBox(width: 50.w,)
+                              ],
+                            ),
+                            value: "¥",
+                          ),
+                        ],
+                        onChanged: (selected) async{
+                          setState(() {
+                            currency = selected;
+                          });
+                        },
                       ),
                       SizedBox(height: 20,),
                       Text("A domicilio", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),

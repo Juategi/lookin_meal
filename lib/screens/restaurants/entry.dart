@@ -102,7 +102,7 @@ class _EntryRatingState extends State<EntryRating> {
                               color: Color.fromRGBO(255, 110, 117, 0.9),
                               borderRadius: BorderRadius.all(Radius.circular(12))
                           ),
-                          child: Align( alignment: Alignment.center, child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(22),),))),
+                          child: Align( alignment: Alignment.center, child: Text("${entry.price} ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(22),),))),
                         ),
                       ),
                     ],
@@ -138,14 +138,14 @@ class _EntryRatingState extends State<EntryRating> {
               onTap: (){
                 showModalBottomSheet(context: context,  builder: (BuildContext bc){
                   return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 50.h),
+                    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 40.h),
                     child: Column(
                       children: <Widget>[
                         Text("Alérgenos", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: ScreenUtil().setSp(22),),),
                         SizedBox(height: 10.h,),
                         Center(
                           child: Container(
-                            height: 200.h,
+                            height: 320.h,
                             //width: 300.w,
                             child: Wrap(
                               direction: Axis.vertical,

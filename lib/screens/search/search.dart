@@ -460,7 +460,7 @@ class _SearchState extends State<Search> {
                  SizedBox(height: 20.h,),
                  Container(
                    width: 388.w,
-                   height: 201.h,
+                   height: 231.h,
                    decoration: BoxDecoration(
                        color: Colors.white,
                        borderRadius: BorderRadius.all(Radius.circular(12))
@@ -476,7 +476,7 @@ class _SearchState extends State<Search> {
                          ),
                          SizedBox(height: 15.h,),
                          Container(
-                           height: 120.h,
+                           height: 180.h,
                            child: Wrap(
                              //crossAxisCount: 8,
                              spacing: 2,
