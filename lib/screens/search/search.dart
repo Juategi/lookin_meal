@@ -96,7 +96,6 @@ class _SearchState extends State<Search> {
         ));
       return ListView(children: buildList);
     }
-
     else {
       return ListView(
         children: resultEntry.keys.map((restaurant) => Padding(
@@ -108,7 +107,13 @@ class _SearchState extends State<Search> {
             ),
             child: Column(
               children: [
-                Text(restaurant.name, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+                GestureDetector(
+                      onTap:(){
+                        print(restaurant.types);
+                        Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
+                      },
+                    child: Text(restaurant.name, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))
+                ),
                 Column(children: restaurant.menu.where((entry) => resultEntry[restaurant].contains(entry.id)).map((entry) =>
                     Provider.value(value: restaurant, child: Provider.value(value: entry,
                       child: Padding(

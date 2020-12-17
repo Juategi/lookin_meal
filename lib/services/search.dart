@@ -85,15 +85,16 @@ class SearchService{
             "price1": queries.first.price.toString(), "price2": queries[1].price.toString(), "price3": queries.last.price.toString(),
             "allergens1": allergensString.first, "allergens2": allergensString[1], "allergens3": allergensString.last
           });
+      print(response.body);
       List<Restaurant> parsed = await DBService().parseResponse(response);
       List<dynamic> result = json.decode(response.body);
       finalMap = {};
       for(int i = 0; i < result.length; i++){
         var element = result[i];
         List<String> aux = [];
-        aux.add(element['id1']);
-        aux.add(element['id2']);
-        aux.add(element['id3']);
+        aux.add(element['id1'].toString());
+        aux.add(element['id2'].toString());
+        aux.add(element['id3'].toString());
         finalMap[parsed[i]] = aux;
       }
     }
@@ -107,14 +108,15 @@ class SearchService{
             "price1": queries.first.price.toString(), "price2": queries[1].price.toString(), "price3": "",
             "allergens1": allergensString.first, "allergens2": allergensString[1], "allergens3": ""
           });
+      print(response.body);
       List<Restaurant> parsed = await DBService().parseResponse(response);
       List<dynamic> result = json.decode(response.body);
       finalMap = {};
       for(int i = 0; i < result.length; i++){
         var element = result[i];
         List<String> aux = [];
-        aux.add(element['id1']);
-        aux.add(element['id2']);
+        aux.add(element['id1'].toString());
+        aux.add(element['id2'].toString());
         finalMap[parsed[i]] = aux;
       }
     }
@@ -128,13 +130,14 @@ class SearchService{
             "price1": queries.first.price.toString(), "price2": "", "price3": "",
             "allergens1": allergensString.first, "allergens2": "", "allergens3": ""
           });
+      print(response.body);
       List<Restaurant> parsed = await DBService().parseResponse(response);
       List<dynamic> result = json.decode(response.body);
       finalMap = {};
       for(int i = 0; i < result.length; i++){
         var element = result[i];
         List<String> aux = [];
-        aux.add(element['id1']);
+        aux.add(element['id1'].toString());
         finalMap[parsed[i]] = aux;
       }
     }
