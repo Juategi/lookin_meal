@@ -226,7 +226,7 @@ class _SearchEntryTileState extends State<SearchEntryTile> {
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withOpacity(0.2),
             spreadRadius: 2,
             blurRadius: 3,
             offset: Offset(0, 3),

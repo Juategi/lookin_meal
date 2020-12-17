@@ -39,9 +39,18 @@ class _SearchState extends State<Search> {
   double maxDistance = 5.0;
   int offset = 0;
   List<Restaurant> result;
+  Map<Restaurant, List<String>> resultEntry;
 
   Future _search() async{
-    result = await SearchService().query(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude, maxDistance, offset, types, query, searchType);
+    if(isRestaurant) {
+      result = await SearchService().query(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude, maxDistance, offset, types, query, searchType);
+    }
+    else{
+      if(actual.query != ""){
+        queries.add(actual);
+      }
+      resultEntry = await SearchService().queryEntry(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude, searchType, queries);
+    }
   }
 
   Future _searchMore() async{
@@ -90,17 +99,17 @@ class _SearchState extends State<Search> {
 
     else {
       return ListView(
-        children: DBService.userF.recently.map((restaurant) => Padding(
+        children: resultEntry.keys.map((restaurant) => Padding(
           padding: EdgeInsets.symmetric(vertical: 25.h),
           child: Container(
             height: 493.h,
             decoration: BoxDecoration(
-              color: Color.fromRGBO(255, 110, 117, 0.9),
+              color: Color.fromRGBO(255, 110, 117, 0.7),
             ),
             child: Column(
               children: [
                 Text(restaurant.name, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
-                Column(children: restaurant.menu.sublist(0,3).map((entry) =>
+                Column(children: restaurant.menu.where((entry) => resultEntry[restaurant].contains(entry.id)).map((entry) =>
                     Provider.value(value: restaurant, child: Provider.value(value: entry,
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 10.w),
@@ -252,7 +261,7 @@ class _SearchState extends State<Search> {
                               value: value,
                               child: Text(value, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                             );
-                          }).toList() : <String>['Sort by relevance', 'Sort by price lower first', 'Sort by price higher first'].map((String value) {
+                          }).toList() : <String>['Sort by relevance', 'Sort by price lower first', 'Sort by distance'].map((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(value, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
