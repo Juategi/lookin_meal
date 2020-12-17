@@ -89,15 +89,30 @@ class _SearchState extends State<Search> {
     }
 
     else {
-      Restaurant restaurant = DBService.userF.recently[1];
-      return ListView(children: restaurant.menu.map((entry) =>
-          Provider.value(value: restaurant, child: Provider.value(value: entry,
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 15.h),
-              child: SearchEntryTile(),
+      return ListView(
+        children: DBService.userF.recently.map((restaurant) => Padding(
+          padding: EdgeInsets.symmetric(vertical: 25.h),
+          child: Container(
+            height: 493.h,
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(255, 110, 117, 0.9),
             ),
-          ))
-      ).toList());
+            child: Column(
+              children: [
+                Text(restaurant.name, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+                Column(children: restaurant.menu.sublist(0,3).map((entry) =>
+                    Provider.value(value: restaurant, child: Provider.value(value: entry,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 10.w),
+                        child: SearchEntryTile(),
+                      ),
+                    ))
+                ).toList()),
+              ],
+            ),
+          ),
+        )).toList(),
+      );
     }
   }
 
@@ -273,7 +288,7 @@ class _SearchState extends State<Search> {
       ),
       backgroundColor: CommonData.backgroundColor,
       body: searching? CircularLoading()  : Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.w),
+        padding: EdgeInsets.symmetric(horizontal: 0.w),
         child: isSearching? _buildList() :  SingleChildScrollView(
           child: Column(
             children: <Widget>[

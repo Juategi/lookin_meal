@@ -226,10 +226,10 @@ class _SearchEntryTileState extends State<SearchEntryTile> {
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.black.withOpacity(0.3),
             spreadRadius: 2,
             blurRadius: 3,
-            offset: Offset(2, 1),
+            offset: Offset(0, 3),
           ),],
         ),
         child: Row(
@@ -239,48 +239,20 @@ class _SearchEntryTileState extends State<SearchEntryTile> {
               child: Column(
                 children: [
                   Container(
-                    height: 47.h,
-                    width: 222.w,
-                    child: Text(entry.name,  maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+                    height: 107.h,
+                    width: 226.w,
+                    child: Text(entry.name,  maxLines: 3, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
                   ),
                   Row( mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: entry.rating, size: ScreenUtil().setSp(16),),
-                      SizedBox(width: 10.w,),
-                      Text("${entry.numReviews} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
-                      SizedBox(width: 68.w,),
-                    ],
-                  ),
-                  SizedBox(height: 10.h,),
-                  Row( mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
+                      StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: entry.rating, size: ScreenUtil().setSp(11),),
+                      SizedBox(width: 8.w,),
+                      Text("${entry.numReviews} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(13),),)),
+                      SizedBox(width: 15.w,),
                       Container(
-                        height: 44.h,
-                        width: 131.w,
-                        child: Text(restaurant.name,  maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
+                        child: SvgPicture.asset("assets/markerMini.svg", height: 20.h, width: 20.w,),
                       ),
-                      Column(
-                        children: [
-                          /*Container(
-                            width: 60.w,
-                            height: 23.h,
-                            decoration: BoxDecoration(
-                                color: Color.fromRGBO(255, 110, 117, 0.9),
-                                borderRadius: BorderRadius.all(Radius.circular(12))
-                            ),
-                            child: Align( alignment: Alignment.center, child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(15),),))),
-                          ),*/
-                          SizedBox(height: 30.h,),
-                          Row(
-                            children: [
-                              Container(
-                                child: SvgPicture.asset("assets/markerMini.svg", height: 20.h, width: 20.w,),
-                              ),
-                              Text("${restaurant.distance.toString()} km", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(13),),))
-                            ],
-                          )
-                        ],
-                      ),
+                      Text("${restaurant.distance.toString()} km", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(13),),)),
                       SizedBox(width: 20.w,),
                     ],
                   )
