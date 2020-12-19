@@ -55,15 +55,16 @@ class SearchService{
 
   Future<Map<Restaurant, List<String>>> queryEntry(double latitude, double longitude, String valoration, List<DishQuery> queries) async{
     List<String> allergensString = [];
+    List<String> textQueries = [];
     //transformar 'platero:* &utopi:* &fo:*'
     for(DishQuery query in queries){
       List aux = query.query.split(" ");
       for(int i = 0; i < aux.length; i++){
         aux[i] = aux[i] + ":*";
         if(i != 0)
-          aux[i] = "|" + aux[i];
+          aux[i] = "&" + aux[i];
       }
-      query.query = aux.join(" ");
+      textQueries.add(aux.join(" "));
       List<String> newAllergens = Functions.copyList(query.allergens);
       for(int i = 0; i < newAllergens.length; i++){
         newAllergens[i] = "'" + newAllergens[i] + "'";
@@ -80,7 +81,7 @@ class SearchService{
           "${StaticStrings.api}/searchentry",
           headers: {
             "latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": valoration,
-            "query1": queries.first.query, "query2": queries[1].query, "query3": queries.last.query,
+            "query1": textQueries.first, "query2": textQueries.first[1], "query3": textQueries.last,
             "rating1": queries.first.rating.toString(), "rating2": queries[1].rating.toString(), "rating3": queries.last.rating.toString(),
             "price1": queries.first.price.toString(), "price2": queries[1].price.toString(), "price3": queries.last.price.toString(),
             "allergens1": allergensString.first, "allergens2": allergensString[1], "allergens3": allergensString.last
@@ -103,7 +104,7 @@ class SearchService{
           "${StaticStrings.api}/searchentry",
           headers: {
             "latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": valoration,
-            "query1": queries.first.query, "query2": queries[1].query, "query3": "",
+            "query1": textQueries.first, "query2": textQueries[1], "query3": "",
             "rating1": queries.first.rating.toString(), "rating2": queries[1].rating.toString(), "rating3": "",
             "price1": queries.first.price.toString(), "price2": queries[1].price.toString(), "price3": "",
             "allergens1": allergensString.first, "allergens2": allergensString[1], "allergens3": ""
@@ -125,7 +126,7 @@ class SearchService{
           "${StaticStrings.api}/searchentry",
           headers: {
             "latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": valoration,
-            "query1": queries.first.query, "query2": "", "query3": "",
+            "query1": textQueries.first, "query2": "", "query3": "",
             "rating1": queries.first.rating.toString(), "rating2": "", "rating3": "",
             "price1": queries.first.price.toString(), "price2": "", "price3": "",
             "allergens1": allergensString.first, "allergens2": "", "allergens3": ""
@@ -141,6 +142,97 @@ class SearchService{
         finalMap[parsed[i]] = aux;
       }
     }
+    //HACER BUSQUEDA MEZCLANDO ANDS Y ORS PARA MAYOR EXACTITUD EN LA BUSQUEDA
+    //QUITAR STOP SI ES > 2
+    //stop_words_es = ['a', 'al', 'con', 'de', 'del', 'e', 'el', 'en', 'la', 'las', 'lo', 'los', 'y']
+    //stop_words_en = ['a', 'an', 'and', 'the', 'of', 'with']
+    /*
+    if(finalMap.keys.length < 12){
+      List<String> allergensString = [];
+      List<String> textQueries = [];
+      //transformar 'platero:* |utopi:* |fo:*'
+      for(DishQuery query in queries){
+        List aux = query.query.split(" ");
+        for(int i = 0; i < aux.length; i++){
+          aux[i] = aux[i] + ":*";
+          if(i != 0)
+            aux[i] = "|" + aux[i];
+        }
+        textQueries.add(aux.join(" "));
+        List<String> newAllergens = Functions.copyList(query.allergens);
+        for(int i = 0; i < newAllergens.length; i++){
+          newAllergens[i] = "'" + newAllergens[i] + "'";
+          if(newAllergens[i].split(" ").length > 1){
+            newAllergens[i] = '"' + newAllergens[i] + '"';
+          }
+        }
+        allergensString.add(newAllergens.toString().replaceAll("[", "{").replaceAll("]", "}"));
+      }
+      var response;
+      if(queries.length == 3){
+        response = await http.get(
+            "${StaticStrings.api}/searchentry",
+            headers: {
+              "latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": valoration,
+              "query1": textQueries.first, "query2": textQueries[1], "query3": textQueries.last,
+              "rating1": queries.first.rating.toString(), "rating2": queries[1].rating.toString(), "rating3": queries.last.rating.toString(),
+              "price1": queries.first.price.toString(), "price2": queries[1].price.toString(), "price3": queries.last.price.toString(),
+              "allergens1": allergensString.first, "allergens2": allergensString[1], "allergens3": allergensString.last
+            });
+        print(response.body);
+        List<Restaurant> parsed = await DBService().parseResponse(response);
+        List<dynamic> result = json.decode(response.body);
+        for(int i = 0; i < result.length; i++){
+          var element = result[i];
+          List<String> aux = [];
+          aux.add(element['id1'].toString());
+          aux.add(element['id2'].toString());
+          aux.add(element['id3'].toString());
+          finalMap[parsed[i]] = aux;
+        }
+      }
+      else if(queries.length == 2){
+        response = await http.get(
+            "${StaticStrings.api}/searchentry",
+            headers: {
+              "latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": valoration,
+              "query1": textQueries.first, "query2": textQueries[1], "query3": "",
+              "rating1": queries.first.rating.toString(), "rating2": queries[1].rating.toString(), "rating3": "",
+              "price1": queries.first.price.toString(), "price2": queries[1].price.toString(), "price3": "",
+              "allergens1": allergensString.first, "allergens2": allergensString[1], "allergens3": ""
+            });
+        print(response.body);
+        List<Restaurant> parsed = await DBService().parseResponse(response);
+        List<dynamic> result = json.decode(response.body);
+        for(int i = 0; i < result.length; i++){
+          var element = result[i];
+          List<String> aux = [];
+          aux.add(element['id1'].toString());
+          aux.add(element['id2'].toString());
+          finalMap[parsed[i]] = aux;
+        }
+      }
+      else{
+        response = await http.get(
+            "${StaticStrings.api}/searchentry",
+            headers: {
+              "latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": valoration,
+              "query1": textQueries.first, "query2": "", "query3": "",
+              "rating1": queries.first.rating.toString(), "rating2": "", "rating3": "",
+              "price1": queries.first.price.toString(), "price2": "", "price3": "",
+              "allergens1": allergensString.first, "allergens2": "", "allergens3": ""
+            });
+        print(response.body);
+        List<Restaurant> parsed = await DBService().parseResponse(response);
+        List<dynamic> result = json.decode(response.body);
+        for(int i = 0; i < result.length; i++){
+          var element = result[i];
+          List<String> aux = [];
+          aux.add(element['id1'].toString());
+          finalMap[parsed[i]] = aux;
+        }
+      }
+    }*/
     return finalMap;
   }
 }

@@ -101,7 +101,7 @@ class _SearchState extends State<Search> {
         children: resultEntry.keys.map((restaurant) => Padding(
           padding: EdgeInsets.symmetric(vertical: 25.h),
           child: Container(
-            height: 493.h,
+            height: (186*queries.length).h,
             decoration: BoxDecoration(
               color: Color.fromRGBO(255, 110, 117, 0.7),
             ),
@@ -225,6 +225,7 @@ class _SearchState extends State<Search> {
                               ),
                             ),
                             IconButton(icon: Icon(Icons.search), iconSize: ScreenUtil().setSp(30), onPressed: ()async{
+                              //EN BUSQUEDA UNICA NO GUARDAR EL DISHQUERY
                               FocusScopeNode currentFocus = FocusScope.of(context);
                               if (!currentFocus.hasPrimaryFocus) {
                                 currentFocus.unfocus();
@@ -433,6 +434,11 @@ class _SearchState extends State<Search> {
                                filledIconData: Icons.star,
                                halfFilledIconData: Icons.star_half,
                                size: ScreenUtil().setSp(45),
+                               onRated: (rate){
+                                 setState(() {
+                                   actual.rating = rate;
+                                 });
+                               },
                              )
                            ],
                          )

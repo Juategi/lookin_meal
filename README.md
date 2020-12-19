@@ -4,6 +4,7 @@ TODO
 
 //Revisar crear horario en json tripad, y limitar tipos comida
 
+EN BUSQUEDA UNICA NO GUARDAR EL DISHQUERY
 info revisar mapa
 listener en nombre y tipos de restaurante para los tiles
 a veces el rating no guarda bien en local
