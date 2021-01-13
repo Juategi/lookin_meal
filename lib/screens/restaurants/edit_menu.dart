@@ -56,6 +56,7 @@ class _EditMenuState extends State<EditMenu> {
                 image: entry.image,
                 pos: entry.pos,
                 description: entry.description,
+                hide: entry.hide,
                 allergens: allergens
             ));
             ids.add(int.parse(entry.id));
@@ -136,6 +137,10 @@ class _EditMenuState extends State<EditMenu> {
                       image:  Image.network(entry.image == null || entry.image == "" ? StaticStrings.defaultEntry : entry.image).image,),),),),
                 Column( mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
+                    IconButton(icon: Icon(entry.hide ? Icons.visibility : Icons.visibility_off), onPressed: (){
+                      entry.hide = !entry.hide;
+                      setState(() {});
+                    },),
                     GestureDetector(
                       child: Container(
                         height: 26.h,
@@ -658,6 +663,7 @@ class _EditMenuState extends State<EditMenu> {
                 numReviews: 0,
                 pos: menu.length == 0? 0 :  menu.last.pos + 1,
                 description: " ",
+                hide: true,
                 allergens: []
             ));
             ids.add(1);
@@ -673,6 +679,7 @@ class _EditMenuState extends State<EditMenu> {
                 numReviews: 0,
                 pos: menu.length == 0? 0 :  menu.last.pos + 1,
                 description: " ",
+                hide: true,
                 allergens: []
             ));
             ids.add(ids.last + 1);

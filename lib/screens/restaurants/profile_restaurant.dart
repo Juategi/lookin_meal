@@ -87,11 +87,11 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 	List<MenuEntry> _getTop(int index){
 		int max = 0;
 		for(MenuEntry entry in restaurant.menu){
-			if(entry.numReviews > max){
+			if(entry.numReviews > max && entry.hide){
 				max = entry.numReviews;
 			}
 		}
-		restaurant.menu.sort((e1, e2) =>(e2.rating*0.5 + (e2.numReviews*5/max)*0.5).compareTo((e1.rating*0.5 + (e1.numReviews*5/max)*0.5)));
+		restaurant.menu.sort((e1, e2) =>(e2.rating*0.5 + (e2.numReviews*5/max)*0.5 - (e1.hide ? 9999999 : 0)).compareTo((e1.rating*0.5 + (e1.numReviews*5/max)*0.5 - (e2.hide ? 9999999 : 0))));
 		if(index == 3){
 			return restaurant.menu.sublist(0,3);
 		}

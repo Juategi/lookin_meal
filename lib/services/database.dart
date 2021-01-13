@@ -288,7 +288,7 @@ class DBService {
 	}
 
 
-	Future<String> addMenuEntry(String restaurant_id, String name, String section, double price, String image, int pos, String description, List<String> allergens) async{
+	Future<String> addMenuEntry(String restaurant_id, String name, String section, double price, String image, int pos, String description, List<String> allergens, bool hide) async{
 		Map body = {
 			"restaurant_id": restaurant_id,
 			"name": name,
@@ -297,6 +297,7 @@ class DBService {
       "image" : image ?? "",
 			"pos" : pos.toString(),
 			"description": description,
+			"hide": hide,
 			"allergens": allergens.toString().replaceAll("[", "{").replaceAll("]", "}")
 		};
 		var response = await http.post(
@@ -311,7 +312,6 @@ class DBService {
 				"${StaticStrings.api}/menus",
 				headers: {"restaurant_id": restaurant_id});
 		List<dynamic> result = json.decode(response.body);
-		//print(result);
 		for(var element in result){
 			MenuEntry me = MenuEntry(
 				id: element['entry_id'].toString(),
@@ -324,6 +324,7 @@ class DBService {
 				image: element['image'],
 				pos: element['pos'],
 				description: element['description'],
+				hide: element['hide'].toString() == "true",
 				allergens: element['allergens'] == null ? [] : List<String>.from(element['allergens'])
 			);
 			menu.add(me);
@@ -358,7 +359,8 @@ class DBService {
       ratings.add(Rating(
         entry_id: element["entry_id"].toString(),
         rating: element["rating"].toDouble(),
-        date: element["ratedate"].toString().substring(0,10)
+        date: element["ratedate"].toString().substring(0,10),
+				comment: element["comment"] == null? " " : element["comment"]
       ));
 		}
 		print(ratings);
@@ -371,10 +373,10 @@ class DBService {
     print(response.body);
   }
 
-  Future addRate(String user_id, String entry_id, num rating) async{
+  Future addRate(String user_id, String entry_id, num rating, String comment) async{
 		final formatter = new DateFormat('yyyy-MM-dd');
     var response = await http.post(
-        "${StaticStrings.api}/rating", body: {"user_id" : user_id, "entry_id" : entry_id, "rating" : rating.toString(), "ratedate" : formatter.format(DateTime.now())});
+        "${StaticStrings.api}/rating", body: {"user_id" : user_id, "entry_id" : entry_id, "rating" : rating.toString(), "ratedate" : formatter.format(DateTime.now()), "comment": comment});
     print(response.body);
   }
 
@@ -389,12 +391,12 @@ class DBService {
 		//print(response.body);
 		for(MenuEntry entry in menu){
 			if(!notNews.contains(entry.id)){
-				entry.id = await addMenuEntry(entry.restaurant_id, entry.name, entry.section, entry.price, entry.image, entry.pos, entry.description, entry.allergens);
+				entry.id = await addMenuEntry(entry.restaurant_id, entry.name, entry.section, entry.price, entry.image, entry.pos, entry.description, entry.allergens, entry.hide);
 			}
 			else{
 				for(MenuEntry entryR in restaurant.menu){
 					if(entry.id == entryR.id) {
-						if (!(entry.price == entryR.price && entry.name == entryR.name && entry.section == entryR.section && entry.image == entryR.image && entry.description == entryR.description && Functions.compareList(entry.allergens, entryR.allergens))) {
+						if (!(entry.price == entryR.price && entry.name == entryR.name && entry.section == entryR.section && entry.image == entryR.image && entry.hide == entryR.hide && entry.description == entryR.description && Functions.compareList(entry.allergens, entryR.allergens))) {
 							var response = await http.put("${StaticStrings.api}/menus",
 									body: {
 										"entry_id": entry.id,
@@ -404,6 +406,7 @@ class DBService {
 										"image": entry.image ?? "",
 										"pos": entry.pos.toString(),
 										"description": entry.description ?? "",
+										"hide": entry.hide.toString(),
 										"allergens": entry.allergens.toString().replaceAll("[", "{").replaceAll("]", "}")
 									});
 							print("${response.body}    ${entry.name}");

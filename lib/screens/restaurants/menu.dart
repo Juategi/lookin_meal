@@ -103,7 +103,7 @@ class _MenuState extends State<Menu> {
                     Column(
                       children: expanded[section]  ?
                         restaurant.menu.map((entry){
-                          if(section == entry.section)
+                          if(section == entry.section && entry.hide)
                             return Provider<Restaurant>.value(
                               key: UniqueKey(),
                               value: restaurant,

@@ -211,7 +211,7 @@ class _SearchState extends State<Search> {
                                   }
                                 },
                                 maxLines: 1,
-                                maxLength: 20,
+                                maxLength: 35,
                                 autofocus: false,
                                 style: TextStyle(
                                   color: Colors.black54,
