@@ -6,6 +6,7 @@ import 'package:lookinmeal/screens/authenticate/sign_in.dart';
 import 'package:lookinmeal/screens/favorites/favorites.dart';
 import 'package:lookinmeal/screens/home/home.dart';
 import 'package:lookinmeal/screens/profile/edit_profile.dart';
+import 'package:lookinmeal/screens/profile/rating_history.dart';
 import 'package:lookinmeal/screens/restaurants/admin.dart';
 import 'package:lookinmeal/screens/restaurants/edit_daily.dart';
 import 'package:lookinmeal/screens/restaurants/edit_menu.dart';
@@ -48,7 +49,8 @@ class MyApp extends StatelessWidget {
           "/favs" : (context) => Favorites(),
           "/gallery" : (context) => Gallery(),
           "/info" : (context) => RestaurantInfo(),
-          "/admin": (context) => AdminPage()
+          "/admin": (context) => AdminPage(),
+          "/ratinghistory": (context) => RatingHistory()
         },
         home: Wrapper(),
         //initialRoute:"/",

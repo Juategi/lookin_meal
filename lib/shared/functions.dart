@@ -62,4 +62,9 @@ class Functions{
     }
     return aux;
   }
+
+  static String formatDate(String date){
+    String date2 = date.substring(8) + "/" + date.substring(5,7) + "/" + date.substring(0,4);
+    return date2;
+  }
 }

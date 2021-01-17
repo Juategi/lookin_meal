@@ -220,7 +220,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 										),
 										onTap: ()async{
 											backToOriginal();
-											Navigator.pushNamed(context, "/admin",arguments: restaurant).then((value) => setState(() {}));
+
 										},
 									),
 								),
