@@ -74,7 +74,11 @@ class _RatingTileState extends State<RatingTile> {
                   SizedBox(height: 10.h,),
                   Row( mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(restaurant.name, textAlign: TextAlign.end, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(16),),)),
+                      Container(
+                          height: 21.h,
+                          width: 206.w,
+                          child: Text(restaurant.name, textAlign: TextAlign.end, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(16),),))
+                      ),
                     ],
                   ),
                 ],

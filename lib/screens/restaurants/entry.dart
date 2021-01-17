@@ -230,6 +230,7 @@ class _EntryRatingState extends State<EntryRating> {
                         date: formatter.format(DateTime.now()),
                         comment: comment
                     ));
+                    DBService.userF.history[entry.id] = restaurant;
                     _dbService.addRate(DBService.userF.uid, entry.id, rate, comment);
                     double aux = (entry.rating*entry.numReviews + rate)/(entry.numReviews+1);
                     //entry.rating = double.parse(aux.toStringAsFixed(2));
