@@ -5,6 +5,7 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/profile/ratings_tile.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -46,6 +47,10 @@ class _RatingHistoryState extends State<RatingHistory> {
 
   List<Widget> getListItems(){
    List<Widget> items = [];
+   //ORDENAR EL MAP
+   print(DBService.userF.history.keys.toList());
+   DBService.userF.history.keys.toList().sort((a,b) => Functions.compareDates(DBService.userF.ratings.firstWhere((r) => r.entry_id == b).date, DBService.userF.ratings.firstWhere((r) => r.entry_id == a).date));
+   print(DBService.userF.history.keys.toList());
    items.addAll(DBService.userF.history.keys.map((r) =>
        Provider.value(value: DBService.userF.history[r], child: Provider.value(value: DBService.userF.ratings.firstWhere((rating) => rating.entry_id == r),
          child: Padding(

@@ -67,4 +67,16 @@ class Functions{
     String date2 = date.substring(8) + "/" + date.substring(5,7) + "/" + date.substring(0,4);
     return date2;
   }
+
+  static int compareDates(String date1, String date2){
+    if(date1 == date2)
+      return 0;
+    if(int.parse(date1.substring(0,4)) - int.parse(date2.substring(0,4)) != 0)
+      return int.parse(date1.substring(0,4)) - int.parse(date2.substring(0,4));
+    if(int.parse(date1.substring(5,7)) - int.parse(date2.substring(5,7)) != 0)
+      return int.parse(date1.substring(5,7)) - int.parse(date2.substring(5,7));
+    if(int.parse(date1.substring(8)) - int.parse(date2.substring(8)) != 0)
+      return int.parse(date1.substring(8)) - int.parse(date2.substring(8));
+    return 0;
+  }
 }
