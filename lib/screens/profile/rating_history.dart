@@ -14,7 +14,9 @@ class RatingHistory extends StatefulWidget {
 }
 
 class _RatingHistoryState extends State<RatingHistory> {
-
+  bool loading = false;
+  int offset = 0;
+  int limit = 15;
   void _timer() {
     if(DBService.userF.history == null) {
       Future.delayed(Duration(seconds: 2)).then((_) {
@@ -30,13 +32,55 @@ class _RatingHistoryState extends State<RatingHistory> {
     if(DBService.userF.history == null){
       DBService.userF.history = await DBService.dbService.getRatingsHistory(DBService.userF.uid, DBService.userF.ratings.map((r) => r.entry_id).toList(), offset, limit);
     }
+    else{
+      DBService.userF.history.addAll(await DBService.dbService.getRatingsHistory(DBService.userF.uid, DBService.userF.ratings.map((r) => r.entry_id).toList(), offset, limit));
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    _update(0,50);
+    _update(offset, limit);
     _timer();
+  }
+
+  List<Widget> getListItems(){
+   List<Widget> items = [];
+   items.addAll(DBService.userF.history.keys.map((r) =>
+       Provider.value(value: DBService.userF.history[r], child: Provider.value(value: DBService.userF.ratings.firstWhere((rating) => rating.entry_id == r),
+         child: Padding(
+           padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 10.w),
+           child: RatingTile(),
+         ),
+       ))).toList());
+   items.add(SizedBox(height: 30.h,));
+   items.add(loading? Loading() : DBService.userF.ratings.length == DBService.userF.history.keys.length ? Container() : Padding(
+     padding: EdgeInsets.symmetric(horizontal: 12.w),
+     child: GestureDetector(
+       onTap: () async{
+         setState(() {
+           loading = true;
+         });
+         offset += 15;
+         await _update(offset, limit);
+         setState(() {
+           loading = false;
+         });
+       },
+       child: Container(
+         height: 50.h,
+         width: 50.w,
+         color: Color.fromRGBO(255, 110, 117, 0.9),
+         child: Center(child: Text("Show more", maxLines: 1,
+             textAlign: TextAlign.center,
+             style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white,
+               letterSpacing: .3,
+               fontWeight: FontWeight.normal,
+               fontSize: ScreenUtil().setSp(22),),))),
+       ),
+     ),
+   ));
+   return items;
   }
 
   @override
@@ -55,14 +99,7 @@ class _RatingHistoryState extends State<RatingHistory> {
           ),
           SizedBox(height: 10.h,),
           DBService.userF.history == null? Loading() : Expanded(child: ListView(
-            children: DBService.userF.history.keys.map((r) =>
-                Provider.value(value: DBService.userF.history[r], child: Provider.value(value: DBService.userF.ratings.firstWhere((rating) => rating.entry_id == r),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 10.w),
-                    child: RatingTile(),
-                  ),
-                ))
-            ).toList(),
+            children: getListItems(),
           ))
         ],
       ),
