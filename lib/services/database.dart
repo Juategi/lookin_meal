@@ -5,6 +5,7 @@ import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/screens/restaurants/info.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:geolocator/geolocator.dart';
@@ -429,6 +430,23 @@ class DBService {
 	Future updateDailyMenu(String restaurant_id, List<String> dailyMenu) async{
 		var response = await http.put("${StaticStrings.api}/daily", body: {"restaurant_id": restaurant_id, "dailymenu":dailyMenu.toString().replaceAll("[", "").replaceAll("]", "")});
 		print(response.body);
+	}
+
+	Future<Map<String,Restaurant>> getRatingsHistory(String id, List<String> ratings, int offset, int limit) async {
+		var response = await http.get("${StaticStrings.api}/ratingshistory", headers: {
+			"user_id" : id,
+			"ratings": ratings.toString().replaceAll("[", "{").replaceAll("]", "}"),
+			"limit": limit.toString(),
+			"offset": offset.toString()
+		});
+		List<Restaurant> restaurants = await parseResponse(response);
+		List<dynamic> result = json.decode(response.body);
+		Map<String,Restaurant> finalMap = {};
+		for(int i = 0; i < result.length; i++){
+			var element = result[i];
+			finalMap[element['entry_id'].toString()] = restaurants.firstWhere((restaurant) => restaurant.restaurant_id == element['restaurant_id'].toString());
+		}
+		return finalMap;
 	}
 
 	Future<List<Restaurant>> parseResponse(var response) async{

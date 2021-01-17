@@ -87,7 +87,7 @@ class _RatingTileState extends State<RatingTile> {
                 borderRadius: BorderRadius.only(bottomRight: Radius.circular(30), topRight: Radius.circular(30)),
                 image: DecorationImage(
                   image: Image.network(
-                      StaticStrings.defaultEntry).image,
+                      entry.image).image,
                   fit: BoxFit.cover,
                 ),
               ),
