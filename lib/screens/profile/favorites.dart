@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:provider/provider.dart';
 
 class Favorites extends StatefulWidget {
   @override
@@ -26,7 +27,7 @@ class _FavoritesState extends State<Favorites> {
           SizedBox(height: 170.h,),
           GestureDetector(
             onTap: (){
-
+              Navigator.pushNamed(context, "/favslists", arguments: 'R');
             },
             child: Container(
                 height: 113,
@@ -50,7 +51,7 @@ class _FavoritesState extends State<Favorites> {
           SizedBox(height: 100.h,),
           GestureDetector(
             onTap: (){
-
+              Navigator.pushNamed(context, "/favslists", arguments: 'E');
             },
             child: Container(
                 height: 113,
@@ -77,3 +78,31 @@ class _FavoritesState extends State<Favorites> {
   }
 }
 
+class FavoriteLists extends StatefulWidget {
+  @override
+  _FavoriteListsState createState() => _FavoriteListsState();
+}
+
+class _FavoriteListsState extends State<FavoriteLists> {
+  String type;
+
+  @override
+  Widget build(BuildContext context) {
+    type = ModalRoute.of(context).settings.arguments;
+    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    return Scaffold(
+      body: Column(
+        children: [
+          Container(
+            height: 42.h,
+            width: 411.w,
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(255, 110, 117, 0.9),
+            ),
+            child:Text("Favorite ${type == 'R'? 'restaurants' : 'dishes'}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+          ),
+        ],
+      ),
+    );
+  }
+}

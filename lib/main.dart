@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/screens/authenticate/authenticate.dart';
 import 'package:lookinmeal/screens/authenticate/email_pass.dart';
 import 'package:lookinmeal/screens/authenticate/log_in.dart';
@@ -50,7 +51,8 @@ class MyApp extends StatelessWidget {
           "/gallery" : (context) => Gallery(),
           "/info" : (context) => RestaurantInfo(),
           "/admin": (context) => AdminPage(),
-          "/ratinghistory": (context) => RatingHistory()
+          "/ratinghistory": (context) => RatingHistory(),
+          "/favslists" : (context) => FavoriteLists(),
         },
         home: Wrapper(),
         //initialRoute:"/",
