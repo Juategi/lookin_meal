@@ -17,7 +17,7 @@ class RatingHistory extends StatefulWidget {
 class _RatingHistoryState extends State<RatingHistory> {
   bool loading = false;
   int offset = 0;
-  int limit = 15;
+  int limit = 15; 
   void _timer() {
     if(DBService.userF.history == null) {
       Future.delayed(Duration(seconds: 2)).then((_) {
@@ -47,11 +47,9 @@ class _RatingHistoryState extends State<RatingHistory> {
 
   List<Widget> getListItems(){
    List<Widget> items = [];
-   //ORDENAR EL MAP
-   print(DBService.userF.history.keys.toList());
-   DBService.userF.history.keys.toList().sort((a,b) => Functions.compareDates(DBService.userF.ratings.firstWhere((r) => r.entry_id == b).date, DBService.userF.ratings.firstWhere((r) => r.entry_id == a).date));
-   print(DBService.userF.history.keys.toList());
-   items.addAll(DBService.userF.history.keys.map((r) =>
+   List<String> aux = DBService.userF.history.keys.toList();
+   aux.sort((a,b) => Functions.compareDates(DBService.userF.ratings.firstWhere((r) => r.entry_id == b).date, DBService.userF.ratings.firstWhere((r) => r.entry_id == a).date));
+   items.addAll(aux.map((r) =>
        Provider.value(value: DBService.userF.history[r], child: Provider.value(value: DBService.userF.ratings.firstWhere((rating) => rating.entry_id == r),
          child: Padding(
            padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 10.w),

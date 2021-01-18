@@ -39,7 +39,7 @@ class DBService {
 						picture: result.first["image"],
 						country: result.first["country"],
 						username: result.first["username"],
-						favorites: await this.getUserFavorites(id, myPos.latitude, myPos.longitude),
+						//favorites: await this.getUserFavorites(id, myPos.latitude, myPos.longitude),
 						ratings: await this.getAllRating(id),
 						recently: await this.getRecently(result.first["user_id"].toString())
 				);

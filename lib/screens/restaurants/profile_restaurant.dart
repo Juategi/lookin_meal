@@ -178,7 +178,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							child: Row( mainAxisAlignment: MainAxisAlignment.end,
 								crossAxisAlignment: CrossAxisAlignment.start,
 								children: <Widget>[
-									IconButton(
+									/*IconButton(
 										icon: user.favorites.contains(restaurant) ? Icon(Icons.favorite) :Icon(Icons.favorite_border),
 										iconSize: ScreenUtil().setSp(45),
 										color: Color.fromRGBO(255, 65, 112, 1),
@@ -194,7 +194,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 											setState(() {});
 										},
 
-									),
+									),*/
 								],
 							),
 						),

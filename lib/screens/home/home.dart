@@ -5,7 +5,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
-import 'package:lookinmeal/screens/favorites/favorites.dart';
 import 'package:lookinmeal/screens/home/home_screen.dart';
 import 'package:lookinmeal/screens/profile/profile.dart';
 import 'package:lookinmeal/screens/search/search.dart';

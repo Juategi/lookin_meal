@@ -127,7 +127,7 @@ class _ProfileState extends State<Profile> {
               Divider(thickness: 2,),
               GestureDetector(
                 onTap:(){
-
+                  Navigator.pushNamed(context, "/favs");
                 },
                 child: Container(
                   width: 365.w,

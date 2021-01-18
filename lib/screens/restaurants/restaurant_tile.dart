@@ -66,7 +66,7 @@ class _RestaurantTileState extends State<RestaurantTile> {
                 child: Row( mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    IconButton(
+                  /*IconButton(
                       icon:  Icon(user.favorites.contains(restaurant) ? Icons.favorite : Icons.favorite_border, color: user.favorites.contains(restaurant) ? Color.fromRGBO(255, 110, 117, 1) : Color.fromRGBO(255, 110, 117, 1),),
                       iconSize: ScreenUtil().setSp(32),
                       onPressed: ()async{
@@ -81,7 +81,7 @@ class _RestaurantTileState extends State<RestaurantTile> {
                         setState(() {});
                       },
 
-                    ),
+                    ),*/
                   ],
                 ),
               ),
