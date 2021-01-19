@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/restaurant.dart';
@@ -448,6 +449,53 @@ class DBService {
 		}
 		return finalMap;
 	}
+
+	Future<FavoriteList> createList(String name, String image, String type) async{
+		var response = await http.post("${StaticStrings.api}/lists", body: {
+			"user_id" : userF.uid,
+			"name": name,
+			"image": image,
+			"type": type
+		});
+		List<dynamic> result = json.decode(response.body);
+		return FavoriteList(name: name, image: image, type: type, items: [], id: result.first['id'].toString());
+	}
+
+	Future<List<FavoriteList>> getLists() async{
+		var response = await http.get("${StaticStrings.api}/lists", headers: {
+			"user_id" : userF.uid,
+		});
+		List<dynamic> result = json.decode(response.body);
+		List<FavoriteList> lists = [];
+		for (dynamic element in result) {
+			lists.add(FavoriteList(
+				id: element['id'].toString(),
+				name: element['name'],
+				image: element['image'],
+				type: element['type'],
+				items: element['list']  == null ? null : List<String>.from(element['list']),
+			));
+		}
+		return lists;
+	}
+
+	Future updateList (FavoriteList list) async{
+		var response = await http.put("${StaticStrings.api}/lists", body: {
+			"id" : list.id,
+			"name": list.name,
+			"image": list.image,
+			"list": list.items.toString().replaceAll("[", "{").replaceAll("]", "}"),
+		});
+		print(response.body);
+	}
+
+	Future deleteList(String id) async{
+		var response = await http.delete("${StaticStrings.api}/lists", headers: {
+			"id" : id
+		});
+		print(response.body);
+	}
+
 
 	Future<List<Restaurant>> parseResponse(var response) async{
 		List<Restaurant> restaurants = List<Restaurant>();

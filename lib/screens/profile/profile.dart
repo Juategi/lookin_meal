@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
@@ -8,6 +9,7 @@ import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lookinmeal/shared/strings.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -146,7 +148,15 @@ class _ProfileState extends State<Profile> {
               Divider(thickness: 2,),
               GestureDetector(
                 onTap:(){
-
+                  //DBService.dbService.createList("favorites", StaticStrings.defaultEntry, "R");
+                  //DBService.dbService.getLists();
+                  //DBService.dbService.deleteList(3.toString());
+                  DBService.dbService.updateList(FavoriteList(
+                    id: "4",
+                    name: "a",
+                    image: "ii",
+                    items: ["PRUEBA", "PRUEBA2"]
+                  ));
                 },
                 child: Container(
                   width: 365.w,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:lookinmeal/shared/strings.dart';
 import 'package:provider/provider.dart';
 
 class Favorites extends StatefulWidget {
@@ -86,6 +87,43 @@ class FavoriteLists extends StatefulWidget {
 class _FavoriteListsState extends State<FavoriteLists> {
   String type;
 
+  List<Widget> _loadLists(){
+    List<Widget> items = [];
+    items.add(Container(
+      height: 113,
+      width: 336,
+      decoration: new BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          boxShadow: [BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 3,
+            offset: Offset(1, 1), // changes position of shadow
+          ),],
+      ),
+      child: Row(
+        children: [
+          Container(
+            height: 100.h,
+            width: 100.w,
+            decoration: new BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(topRight: Radius.circular(15), bottomRight: Radius.circular(15)),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: Image.network(StaticStrings.defaultEntry).image
+              )
+            ),
+          ),
+          SizedBox(width: 40.w,),
+          Text("Favorites", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+        ],
+      ),
+    ),);
+    return items;
+  }
+
   @override
   Widget build(BuildContext context) {
     type = ModalRoute.of(context).settings.arguments;
@@ -101,6 +139,14 @@ class _FavoriteListsState extends State<FavoriteLists> {
             ),
             child:Text("Favorite ${type == 'R'? 'restaurants' : 'dishes'}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
           ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              child: ListView(
+                children: _loadLists()
+              ),
+            ),
+          )
         ],
       ),
     );
