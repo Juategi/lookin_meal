@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/shared/common_data.dart';
-import 'package:lookinmeal/shared/strings.dart';
-import 'package:provider/provider.dart';
+import 'package:lookinmeal/shared/decos.dart';
 
 class Favorites extends StatefulWidget {
   @override
@@ -89,10 +89,12 @@ class _FavoriteListsState extends State<FavoriteLists> {
 
   List<Widget> _loadLists(){
     List<Widget> items = [];
-    items.add(Container(
-      height: 113,
-      width: 336,
-      decoration: new BoxDecoration(
+    items.addAll(DBService.userF.lists.map((list) => list.type != type? Container() : Padding(
+      padding: EdgeInsets.symmetric(vertical: 15.h),
+      child: Container(
+        height: 113.h,
+        width: 336.w,
+        decoration: new BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(15)),
           boxShadow: [BoxShadow(
@@ -101,24 +103,49 @@ class _FavoriteListsState extends State<FavoriteLists> {
             blurRadius: 3,
             offset: Offset(1, 1), // changes position of shadow
           ),],
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: 100.h,
-            width: 100.w,
-            decoration: new BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(topRight: Radius.circular(15), bottomRight: Radius.circular(15)),
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: Image.network(StaticStrings.defaultEntry).image
-              )
+        ),
+        child: Row(
+          children: [
+            Container(
+              height: 100.h,
+              width: 100.w,
+              decoration: new BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(15), bottomRight: Radius.circular(15)),
+                  image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: Image.network(list.image).image
+                  )
+              ),
             ),
+            SizedBox(width: 40.w,),
+            Text(list.name, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+          ],
+        ),
+      ),
+    )));
+    items.add(Padding(
+      padding: EdgeInsets.symmetric(vertical: 15.h),
+      child: GestureDetector(
+        onTap: (){
+          Navigator.pushNamed(context, "/createlist", arguments: type);
+        },
+        child: Container(
+          height: 100.h,
+          width: 100.w,
+          decoration: new BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            //borderRadius: BorderRadius.all(Radius.circular(15)),
+            boxShadow: [BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 3,
+              offset: Offset(1, 1), // changes position of shadow
+            ),],
           ),
-          SizedBox(width: 40.w,),
-          Text("Favorites", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
-        ],
+          child: Icon(Icons.add, size: ScreenUtil().setSp(65),),
+        ),
       ),
     ),);
     return items;
@@ -147,6 +174,93 @@ class _FavoriteListsState extends State<FavoriteLists> {
               ),
             ),
           )
+        ],
+      ),
+    );
+  }
+}
+
+class CreateList extends StatefulWidget {
+  @override
+  _CreateListState createState() => _CreateListState();
+}
+
+class _CreateListState extends State<CreateList> {
+  Icon _icon = Icon(Icons.image_outlined, size: ScreenUtil().setSp(120),);
+  String iconImage;
+  String type, name;
+  @override
+  Widget build(BuildContext context) {
+    type = ModalRoute.of(context).settings.arguments;
+    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    return Scaffold(
+      body: Column(
+        children: [
+          Container(
+            height: 42.h,
+            width: 411.w,
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(255, 110, 117, 0.9),
+            ),
+            child:Text("Favorite ${type == 'R'? 'restaurants' : 'dishes'}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+          ),
+          SizedBox(height: 100.h,),
+          Text("Add image", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30),),)),
+          SizedBox(height: 30.h,),
+          GestureDetector(
+            onTap: ()async{
+                /*IconData icon = await FlutterIconPicker.showIconPicker(
+                  context,
+                  adaptiveDialog: true,
+                  showTooltips: true,
+                  showSearchBar: true,
+                  iconPickerShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  iconPackMode: IconPack.fontAwesomeIcons,
+                );
+                //icon = 
+                if (icon != null) {
+                  _icon = Icon(icon, size: ScreenUtil().setSp(120),);
+                  setState(() {});
+                }
+                iconImage = icon.codePoint.toString() + icon.fontFamily;
+                 */
+              },
+              child: _icon
+          ),
+          SizedBox(height: 80.h,),
+          Text("Name of the list", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30),),)),
+          SizedBox(height: 30.h,),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.w),
+            child: TextField(
+              maxLines: 1,
+              maxLength: 60,
+              decoration: textInputDeco,
+              onChanged: (v){
+                name = v;
+              },
+            ),
+          ),
+          SizedBox(height: 30.h,),
+          GestureDetector(
+            onTap: (){
+              
+            },
+            child: Container(
+              height: 65.h,
+              width: 150.w,
+              decoration: new BoxDecoration(
+                  color: Color.fromRGBO(255, 110, 117, 0.9),
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+              child: Center(child: Text("Save", maxLines: 1,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white,
+                    letterSpacing: .3,
+                    fontWeight: FontWeight.normal,
+                    fontSize: ScreenUtil().setSp(22),),))),
+            ),
+          ),
         ],
       ),
     );

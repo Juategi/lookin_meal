@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
     return StreamProvider<String>.value(
       value: AuthService().user,
       child: MaterialApp(
+        darkTheme: ThemeData(brightness: Brightness.dark),
         routes:{
           "/wrapper":(context) => Wrapper(),
           "/home":(context) => Home(),
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
           "/admin": (context) => AdminPage(),
           "/ratinghistory": (context) => RatingHistory(),
           "/favslists" : (context) => FavoriteLists(),
+          "/createlist" : (context) => CreateList()
         },
         home: Wrapper(),
         //initialRoute:"/",
