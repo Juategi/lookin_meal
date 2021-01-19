@@ -42,10 +42,11 @@ class DBService {
 						username: result.first["username"],
 						//favorites: await this.getUserFavorites(id, myPos.latitude, myPos.longitude),
 						ratings: await this.getAllRating(id),
-						recently: await this.getRecently(result.first["user_id"].toString())
+						recently: await this.getRecently(result.first["user_id"].toString()),
 				);
 				print("User obtained: ${result.first}");
 				userF = user;
+				user.lists = await dbService.getLists();
 				return user;
 			}
 		}
@@ -88,6 +89,8 @@ class DBService {
 		var response = await http.post(
 				"${StaticStrings.api}/users", body: body);
 		print(response.body);
+		await DBService.dbService.createList(id, "favorites", StaticStrings.defaultEntry, "R");
+		await DBService.dbService.createList(id, "favorites", StaticStrings.defaultEntry, "E");
 	}
 
 	Future<String> getCountry()async{
@@ -450,9 +453,9 @@ class DBService {
 		return finalMap;
 	}
 
-	Future<FavoriteList> createList(String name, String image, String type) async{
+	Future<FavoriteList> createList(String user, String name, String image, String type) async{
 		var response = await http.post("${StaticStrings.api}/lists", body: {
-			"user_id" : userF.uid,
+			"user_id" : user,
 			"name": name,
 			"image": image,
 			"type": type

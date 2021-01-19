@@ -148,15 +148,16 @@ class _ProfileState extends State<Profile> {
               Divider(thickness: 2,),
               GestureDetector(
                 onTap:(){
-                  //DBService.dbService.createList("favorites", StaticStrings.defaultEntry, "R");
+                  DBService.dbService.createList(DBService.userF.uid, "favorites", StaticStrings.defaultEntry, "R");
+                  DBService.dbService.createList(DBService.userF.uid, "favorites", StaticStrings.defaultEntry, "E");
                   //DBService.dbService.getLists();
-                  //DBService.dbService.deleteList(3.toString());
-                  DBService.dbService.updateList(FavoriteList(
+                  // DBService.dbService.deleteList(4.toString());
+                  /*DBService.dbService.updateList(FavoriteList(
                     id: "4",
                     name: "a",
                     image: "ii",
                     items: ["PRUEBA", "PRUEBA2"]
-                  ));
+                  ));*/
                 },
                 child: Container(
                   width: 365.w,
