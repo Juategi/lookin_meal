@@ -109,12 +109,13 @@ class _FavoriteListsState extends State<FavoriteLists> {
         ),
         child: Row(
           children: [
+            SizedBox(width: 1.w,),
             Container(
               height: 100.h,
               width: 100.w,
               decoration: new BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(15), bottomRight: Radius.circular(15)),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15)),
                   image: DecorationImage(
                       fit: BoxFit.cover,
                       image: Image.network(list.image).image
