@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/services/database.dart';
+import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/decos.dart';
+import 'package:lookinmeal/shared/strings.dart';
 
 class Favorites extends StatefulWidget {
   @override
@@ -118,8 +121,16 @@ class _FavoriteListsState extends State<FavoriteLists> {
                   )
               ),
             ),
-            SizedBox(width: 40.w,),
-            Text(list.name, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+            SizedBox(width: 10.w,),
+            Container(height: 100.h, width: 200.w, child: Text(list.name, maxLines: 2, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
+            Column(
+              children: [
+                SizedBox(height: 2.h,),
+                Icon(Icons.share_outlined, size: ScreenUtil().setSp(45), color: Color.fromRGBO(255, 110, 117, 0.6),),
+                SizedBox(height: 19.h,),
+                Icon(Icons.delete_outline, size: ScreenUtil().setSp(45), color: Colors.black87)
+              ],
+            )
           ],
         ),
       ),
@@ -127,8 +138,10 @@ class _FavoriteListsState extends State<FavoriteLists> {
     items.add(Padding(
       padding: EdgeInsets.symmetric(vertical: 15.h),
       child: GestureDetector(
-        onTap: (){
-          Navigator.pushNamed(context, "/createlist", arguments: type);
+        onTap: ()async{
+         await Navigator.pushNamed(context, "/createlist", arguments: type);
+         setState(() {
+         });
         },
         child: Container(
           height: 100.h,
@@ -204,9 +217,9 @@ class _CreateListState extends State<CreateList> {
             ),
             child:Text("Favorite ${type == 'R'? 'restaurants' : 'dishes'}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
           ),
-          SizedBox(height: 100.h,),
-          Text("Add image", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30),),)),
           SizedBox(height: 30.h,),
+          Text("Add image", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30),),)),
+          SizedBox(height: 20.h,),
           GestureDetector(
             onTap: ()async{
                 /*IconData icon = await FlutterIconPicker.showIconPicker(
@@ -227,9 +240,9 @@ class _CreateListState extends State<CreateList> {
               },
               child: _icon
           ),
-          SizedBox(height: 80.h,),
+          SizedBox(height: 50.h,),
           Text("Name of the list", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30),),)),
-          SizedBox(height: 30.h,),
+          SizedBox(height: 20.h,),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w),
             child: TextField(
@@ -241,10 +254,17 @@ class _CreateListState extends State<CreateList> {
               },
             ),
           ),
-          SizedBox(height: 30.h,),
+          SizedBox(height: 20.h,),
           GestureDetector(
-            onTap: (){
-              
+            onTap: ()async{
+              if(name == null || name == ""){
+                Alerts.toast("Write a name");
+              }
+              else{
+                FavoriteList list = await DBService.dbService.createList(DBService.userF.uid, name, StaticStrings.defaultEntry, type);
+                DBService.userF.lists.add(list);
+                Navigator.pop(context);
+              }
             },
             child: Container(
               height: 65.h,
