@@ -449,7 +449,9 @@ class DBService {
 			"user_id" : id,
 			"ratings": ratings.toString().replaceAll("[", "{").replaceAll("]", "}"),
 			"limit": limit.toString(),
-			"offset": offset.toString()
+			"offset": offset.toString(),
+			"latitude": GeolocationService.myPos.latitude.toString(),
+			"longitude": GeolocationService.myPos.longitude.toString()
 		});
 		List<Restaurant> restaurants = await parseResponse(response);
 		List<dynamic> result = json.decode(response.body);
@@ -507,6 +509,21 @@ class DBService {
 		print(response.body);
 	}
 
+	Future<Map<String,Restaurant>> getEntriesById(List<String> ids) async {
+		var response = await http.get("${StaticStrings.api}/entriesbyid", headers: {
+			"ids": ids.toString().replaceAll("[", "{").replaceAll("]", "}"),
+			"latitude": GeolocationService.myPos.latitude.toString(),
+			"longitude": GeolocationService.myPos.longitude.toString()
+		});
+		List<Restaurant> restaurants = await parseResponse(response);
+		List<dynamic> result = json.decode(response.body);
+		Map<String,Restaurant> finalMap = {};
+		for(int i = 0; i < result.length; i++){
+			var element = result[i];
+			finalMap[element['entry_id'].toString()] = restaurants.firstWhere((restaurant) => restaurant.restaurant_id == element['restaurant_id'].toString());
+		}
+		return finalMap;
+	}
 
 	Future<List<Restaurant>> parseResponse(var response) async{
 		List<Restaurant> restaurants = List<Restaurant>();

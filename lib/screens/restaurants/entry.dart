@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/restaurant.dart';
@@ -35,6 +36,49 @@ class _EntryRatingState extends State<EntryRating> {
   String comment = "";
   final DBService _dbService = DBService();
   final formatter = new DateFormat('yyyy-MM-dd');
+
+  List<DropdownMenuItem> _loadItems(){
+    List<DropdownMenuItem> items = DBService.userF.lists.where((FavoriteList list) => list.type == 'E').map((list) =>
+        DropdownMenuItem<FavoriteList>(
+            value: list,
+            child: Row( mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  height: 40.h,
+                  width: 40.w,
+                  decoration: new BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15)),
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: Image.network(list.image).image
+                      )
+                  ),
+                ),
+                SizedBox(width: 13.w,),
+                Container(width: 120.w, child: Text(list.name, maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),))),
+                Icon(list.items.contains(entry.id) ? Icons.favorite_outlined : Icons.favorite_outline, size: ScreenUtil().setSp(40),color: Color.fromRGBO(255, 65, 112, 1)),
+              ],
+            )
+        )).toList();
+    items.add(DropdownMenuItem<FavoriteList>(
+        value: FavoriteList(),
+        child: Row( mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 40.h,
+              width: 40.w,
+              child: Icon(Icons.add, size: ScreenUtil().setSp(45),color: Colors.black),
+              decoration: new BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15)),
+              ),
+            ),
+          ],
+        )
+    ));
+    return items;
+  }
 
 
   @override
@@ -93,6 +137,29 @@ class _EntryRatingState extends State<EntryRating> {
                               width: 45.w,
                               child: SvgPicture.asset("assets/menu.svg", color: Color.fromRGBO(255, 110, 117, 0.9), fit: BoxFit.contain,)
                           ),
+                        ),
+                        SizedBox(width: 50.w,),
+                        DropdownButton<FavoriteList>(
+                          icon: Icon(DBService.userF.lists.firstWhere((list) => list.type == 'E' && list.items.contains(entry.id), orElse: () => null) != null ? Icons.favorite_outlined : Icons.favorite_outline, size: ScreenUtil().setSp(45),color: Color.fromRGBO(255, 65, 112, 1)),
+                          items: _loadItems(),
+                          onChanged: (list)async{
+                            if(list.id == null){
+                              await Navigator.pushNamed(context, "/createlist", arguments: 'E');
+                            }
+                            else{
+                              if(!list.items.contains(entry.id)){
+                                list.items.add(entry.id);
+                                Alerts.toast("${entry.name} added to ${list.name}");
+                              }
+                              else{
+                                list.items.remove(entry.id);
+                                Alerts.toast("${entry.name} removed from ${list.name}");
+                              }
+                              await DBService.dbService.updateList(list);
+                            }
+                            setState(() {
+                            });
+                          },
                         ),
                       ],
                     ) : Container(),

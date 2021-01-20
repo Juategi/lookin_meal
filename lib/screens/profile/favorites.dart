@@ -364,6 +364,9 @@ class _ListDisplayState extends State<ListDisplay> {
       setState(() {
       });
     }
+    else{
+      //await DBService.dbService.getEntriesById(list.items);
+    }
   }
 
 
