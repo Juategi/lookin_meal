@@ -20,26 +20,24 @@ class RestaurantTile extends StatefulWidget {
 
 class _RestaurantTileState extends State<RestaurantTile> {
   Restaurant restaurant;
-  User user;
 
   Future updateRecent() async{
-    for(Restaurant r in user.recently){
+    for(Restaurant r in DBService.userF.recently){
       if(r.restaurant_id == restaurant.restaurant_id){
         return;
       }
     }
-    if(user.recently.length == 5){
-      user.recently.removeAt(0);
+    if(DBService.userF.recently.length == 5){
+      DBService.userF.recently.removeAt(0);
     }
-    user.recently.add(restaurant);
-    user.recent = user.recently;
+    DBService.userF.recently.add(restaurant);
+    DBService.userF.recent = DBService.userF.recently;
     DBService.dbService.updateRecently();
   }
 
   @override
   Widget build(BuildContext context) {
     restaurant = Provider.of<Restaurant>(context);
-    user = DBService.userF;
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -140,5 +138,3 @@ class _RestaurantTileState extends State<RestaurantTile> {
     );
   }
 }
-
-//Navigator.pushNamed(context, "/restaurant",arguments: restaurant);

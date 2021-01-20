@@ -171,6 +171,13 @@ class DBService {
 		print(response.body);
 	}
 
+	Future<List<Restaurant>> getRestaurantsById(List<String> ids, latitude, longitude) async {
+		var response = await http.get(
+				"${StaticStrings.api}/restbyid",
+				headers: {"ids": ids.toString().replaceAll("[", "{").replaceAll("]", "}"), "latitude": latitude.toString(), "longitude": longitude.toString()});
+		return parseResponse(response);
+	}
+
 	Future<List<Restaurant>> getUserFavorites(String id, latitude, longitude) async {
 		var response = await http.get(
 				"${StaticStrings.api}/userfavs",

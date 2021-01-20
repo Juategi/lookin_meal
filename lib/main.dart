@@ -54,7 +54,8 @@ class MyApp extends StatelessWidget {
           "/admin": (context) => AdminPage(),
           "/ratinghistory": (context) => RatingHistory(),
           "/favslists" : (context) => FavoriteLists(),
-          "/createlist" : (context) => CreateList()
+          "/createlist" : (context) => CreateList(),
+          "/displaylist" : (context) => ListDisplay(),
         },
         home: Wrapper(),
         //initialRoute:"/",
