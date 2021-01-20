@@ -129,7 +129,15 @@ class _FavoriteListsState extends State<FavoriteLists> {
                 SizedBox(height: 2.h,),
                 Icon(Icons.share_outlined, size: ScreenUtil().setSp(45), color: Color.fromRGBO(255, 110, 117, 0.6),),
                 SizedBox(height: 19.h,),
-                Icon(Icons.delete_outline, size: ScreenUtil().setSp(45), color: Colors.black87)
+                DBService.userF.lists.first.id == list.id? Container() : GestureDetector(
+                    onTap: () async{
+                      await DBService.dbService.deleteList(list.id);
+                      DBService.userF.lists.remove(list);
+                      setState(() {
+                      });
+                    },
+                    child: Icon(Icons.delete_outline, size: ScreenUtil().setSp(45), color: Colors.black87)
+                )
               ],
             )
           ],

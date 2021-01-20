@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/translate.dart';
@@ -17,6 +18,7 @@ import 'package:lookinmeal/services/currency_converter.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/services/translator.dart';
+import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/widgets.dart';
@@ -139,6 +141,49 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
     super.dispose();
   }
 
+  List<DropdownMenuItem> _loadItems(){
+		List<DropdownMenuItem> items = DBService.userF.lists.where((FavoriteList list) => list.type == 'R').map((list) =>
+				DropdownMenuItem<FavoriteList>(
+						value: list,
+						child: Row( mainAxisAlignment: MainAxisAlignment.start,
+							children: [
+								Container(
+									height: 40.h,
+									width: 40.w,
+									decoration: new BoxDecoration(
+											color: Colors.white,
+											borderRadius: BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15)),
+											image: DecorationImage(
+													fit: BoxFit.cover,
+													image: Image.network(list.image).image
+											)
+									),
+								),
+								SizedBox(width: 13.w,),
+								Container(width: 120.w, child: Text(list.name, maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),))),
+								Icon(list.items.contains(restaurant.restaurant_id) ? Icons.favorite_outlined : Icons.favorite_outline, size: ScreenUtil().setSp(40),color: Color.fromRGBO(255, 65, 112, 1)),
+							],
+						)
+				)).toList();
+				items.add(DropdownMenuItem<FavoriteList>(
+						value: FavoriteList(),
+						child: Row( mainAxisAlignment: MainAxisAlignment.center,
+							children: [
+								Container(
+									height: 40.h,
+									width: 40.w,
+									child: Icon(Icons.add, size: ScreenUtil().setSp(45),color: Colors.black),
+									decoration: new BoxDecoration(
+										color: Colors.white,
+										borderRadius: BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15)),
+									),
+								),
+							],
+						)
+				));
+				return items;
+	}
+
   @override
   Widget build(BuildContext context) {
   	restaurant = ModalRoute.of(context).settings.arguments;
@@ -195,6 +240,24 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 										},
 
 									),*/
+									DropdownButton<FavoriteList>(
+											icon: Icon(user.lists.firstWhere((list) => list.type == 'R' && list.items.contains(restaurant.restaurant_id), orElse: () => null) != null ? Icons.favorite_outlined : Icons.favorite_outline, size: ScreenUtil().setSp(45),color: Color.fromRGBO(255, 65, 112, 1)),
+											items: _loadItems(),
+											onChanged: (list)async{
+												if(!list.items.contains(restaurant.restaurant_id)){
+													list.items.add(restaurant.restaurant_id);
+													Alerts.toast("${restaurant.name} added to ${list.name}");
+												}
+												else{
+													list.items.remove(restaurant.restaurant_id);
+													Alerts.toast("${restaurant.name} removed from ${list.name}");
+												}
+												await DBService.dbService.updateList(list);
+												setState(() {
+												});
+											},
+										),
+										SizedBox(width: 20.w,),
 								],
 							),
 						),
