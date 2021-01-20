@@ -244,15 +244,20 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 											icon: Icon(user.lists.firstWhere((list) => list.type == 'R' && list.items.contains(restaurant.restaurant_id), orElse: () => null) != null ? Icons.favorite_outlined : Icons.favorite_outline, size: ScreenUtil().setSp(45),color: Color.fromRGBO(255, 65, 112, 1)),
 											items: _loadItems(),
 											onChanged: (list)async{
-												if(!list.items.contains(restaurant.restaurant_id)){
-													list.items.add(restaurant.restaurant_id);
-													Alerts.toast("${restaurant.name} added to ${list.name}");
+												if(list.id == null){
+													await Navigator.pushNamed(context, "/createlist", arguments: 'R');
 												}
 												else{
-													list.items.remove(restaurant.restaurant_id);
-													Alerts.toast("${restaurant.name} removed from ${list.name}");
+													if(!list.items.contains(restaurant.restaurant_id)){
+														list.items.add(restaurant.restaurant_id);
+														Alerts.toast("${restaurant.name} added to ${list.name}");
+													}
+													else{
+														list.items.remove(restaurant.restaurant_id);
+														Alerts.toast("${restaurant.name} removed from ${list.name}");
+													}
+													await DBService.dbService.updateList(list);
 												}
-												await DBService.dbService.updateList(list);
 												setState(() {
 												});
 											},
