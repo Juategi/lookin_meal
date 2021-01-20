@@ -320,7 +320,7 @@ class ListDisplay extends StatefulWidget {
 class _ListDisplayState extends State<ListDisplay> {
   String type, id;
   List<Restaurant> restaurants;
-  List<MenuEntry> entries;
+  Map<String, Restaurant> entries;
   FavoriteList list;
   bool init = true;
 
@@ -365,7 +365,8 @@ class _ListDisplayState extends State<ListDisplay> {
       });
     }
     else{
-      //await DBService.dbService.getEntriesById(list.items);
+      entries = await DBService.dbService.getEntriesById(list.items);
+      print(entries);
     }
   }
 
@@ -408,106 +409,104 @@ class _ListDisplayState extends State<ListDisplay> {
             ),
             child:Text("${list.name}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
           ),
-          restaurants == null ? Center(child: Loading()) : Expanded(
+          (type == 'R' && restaurants == null) || (type == 'E' && entries == null) ? Center(child: Loading()) : Expanded(
             child: Container(
               width: 300.w,
               child: ListView(
                   shrinkWrap: true,
-                  children: restaurants.map((restaurant) =>
+                  children: type == 'R' ? restaurants.map((restaurant) =>
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.w),
-                          child: GestureDetector(
-                            onTap: (){
-                              updateRecent(restaurant);
-                              Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
-                            },
-                            child: Container(
-                              width: 300.w,
-                              height: 160.h,
-                              decoration: new BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(Radius.circular(15)),
-                                boxShadow: [BoxShadow(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 3,
-                                  offset: Offset(1, 1), // changes position of shadow
-                                ),],
-                              ),
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
-                                    height: 103.h,
-                                    width: 300.w,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: Image.network(
-                                            restaurant.images.first).image,
-                                        fit: BoxFit.cover,
-                                      ),
+                        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                        child: GestureDetector(
+                          onTap: (){
+                            updateRecent(restaurant);
+                            Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
+                          },
+                          child: Container(
+                            width: 300.w,
+                            height: 160.h,
+                            decoration: new BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.all(Radius.circular(15)),
+                              boxShadow: [BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 3,
+                                offset: Offset(1, 1), // changes position of shadow
+                              ),],
+                            ),
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  height: 103.h,
+                                  width: 300.w,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: Image.network(
+                                          restaurant.images.first).image,
+                                      fit: BoxFit.cover,
                                     ),
-                                    child: Row( mainAxisAlignment: MainAxisAlignment.end,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                  ),
+                                  child: Row( mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      IconButton(
+                                        icon:  Icon(Icons.delete, color: Colors.black,),
+                                        iconSize: ScreenUtil().setSp(32),
+                                        onPressed: ()async{
+                                          list.items.remove(restaurant.restaurant_id);
+                                          restaurants.remove(restaurant);
+                                          Alerts.toast("${restaurant.name} removed from ${list.name}");
+                                          await DBService.dbService.updateList(list);
+                                          setState(() {
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 1.h,),
+                                Row( crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    SizedBox(width: 5.w,),
+                                    Container(width: 165.w, child: Text(restaurant.name,  maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(13),),))),
+                                    //SizedBox(width: 1.w,),
+                                    Column(
                                       children: <Widget>[
-                                        IconButton(
-                                          icon:  Icon(Icons.delete, color: Colors.black,),
-                                          iconSize: ScreenUtil().setSp(32),
-                                          onPressed: ()async{
-                                            list.items.remove(restaurant.restaurant_id);
-                                            restaurants.remove(restaurant);
-                                            Alerts.toast("${restaurant.name} removed from ${list.name}");
-                                            await DBService.dbService.updateList(list);
-                                            setState(() {
-                                            });
-                                          },
-                                        ),
+                                        SizedBox(height: 4.h,),
+                                        StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: Functions.getRating(restaurant), size: ScreenUtil().setSp(10),),
                                       ],
                                     ),
-                                  ),
-                                  SizedBox(height: 1.h,),
-                                  Row( crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      SizedBox(width: 5.w,),
-                                      Container(width: 165.w, child: Text(restaurant.name,  maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(13),),))),
-                                      //SizedBox(width: 1.w,),
-                                      Column(
-                                        children: <Widget>[
-                                          SizedBox(height: 4.h,),
-                                          StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: Functions.getRating(restaurant), size: ScreenUtil().setSp(10),),
-                                        ],
-                                      ),
-                                      SizedBox(width: 3.w,),
-                                      Column(
-                                        children: <Widget>[
-                                          SizedBox(height: 2.h,),
-                                          Text("${Functions.getVotes(restaurant)} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),)),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Spacer(),
-                                  Row(
-                                    children: <Widget>[
-                                      SizedBox(width: 5.w,),
-                                      Container(width: 165.w, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : "${restaurant.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
-                                      SizedBox(width: 40.w,),
-                                      Container(
-                                        child: SvgPicture.asset("assets/markerMini.svg"),
-                                      ),
-                                      //Icon(Icons.location_on, color: Colors.black, size: ScreenUtil().setSp(16),),
-                                      Text("${restaurant.distance.toString()} km", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),))
-                                    ],
-                                  ),
-                                  SizedBox(height: 2.h,)
-                                ],
-                              ),
+                                    SizedBox(width: 3.w,),
+                                    Column(
+                                      children: <Widget>[
+                                        SizedBox(height: 2.h,),
+                                        Text("${Functions.getVotes(restaurant)} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),)),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Spacer(),
+                                Row(
+                                  children: <Widget>[
+                                    SizedBox(width: 5.w,),
+                                    Container(width: 165.w, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : "${restaurant.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
+                                    SizedBox(width: 40.w,),
+                                    Container(
+                                      child: SvgPicture.asset("assets/markerMini.svg"),
+                                    ),
+                                    //Icon(Icons.location_on, color: Colors.black, size: ScreenUtil().setSp(16),),
+                                    Text("${restaurant.distance.toString()} km", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),))
+                                  ],
+                                ),
+                                SizedBox(height: 2.h,)
+                              ],
                             ),
                           ),
                         ),
                       )
-              ).toList()
+              ).toList() :
+                      entries.keys.map((entry) => Text(entry)).toList()
               ),
             ),
           )
