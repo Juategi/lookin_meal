@@ -9,7 +9,8 @@ Terminar busqueda platos compleja, menos exacta,
 actualizar pagina inicial despues de cambiar ubi
 hacer trim() en la busqueda da error
 añadir limite de nombre lista, limite de listas, elementos por lista
-inicializar history
+checkear favs o guardar lista de restaurantes de las listas
+añadir confirmacion de borrado en listas
 info revisar mapa
 listener en nombre y tipos de restaurante para los tiles
 a veces el rating no guarda bien en local

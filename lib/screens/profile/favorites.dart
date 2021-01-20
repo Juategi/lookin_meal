@@ -8,6 +8,7 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/restaurant_tile.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/geolocation.dart';
+import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/decos.dart';
@@ -347,8 +348,21 @@ class _ListDisplayState extends State<ListDisplay> {
   }
 
   void _updateLists() async{
+    List<String> aux = [];
+    restaurants = [];
     if(type == 'R'){
-      restaurants = await DBService.dbService.getRestaurantsById(list.items, GeolocationService.myPos.latitude, GeolocationService.myPos.longitude);
+      for(String id in list.items){
+        Restaurant restaurant = Pool.getRestaurant(id);
+        if(restaurant != null) {
+          restaurants.add(restaurant);
+        }
+        else{
+          aux.add(id);
+        }
+      }
+      restaurants.addAll(await DBService.dbService.getRestaurantsById(aux, GeolocationService.myPos.latitude, GeolocationService.myPos.longitude));
+      setState(() {
+      });
     }
   }
 
@@ -391,7 +405,7 @@ class _ListDisplayState extends State<ListDisplay> {
             ),
             child:Text("${list.name}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
           ),
-          restaurants == null? Center(child: Loading()) : Expanded(
+          restaurants == null ? Center(child: Loading()) : Expanded(
             child: Container(
               width: 300.w,
               child: ListView(

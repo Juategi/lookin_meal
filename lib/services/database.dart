@@ -47,6 +47,7 @@ class DBService {
 				print("User obtained: ${result.first}");
 				userF = user;
 				user.lists = await dbService.getLists();
+				user.history = await DBService.dbService.getRatingsHistory(DBService.userF.uid, DBService.userF.ratings.map((r) => r.entry_id).toList(), 0, 15);
 				return user;
 			}
 		}
