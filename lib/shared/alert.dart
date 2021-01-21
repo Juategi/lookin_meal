@@ -22,6 +22,35 @@ class Alerts{
     );
   }
 
+  static Future<bool> confirmation(String message, BuildContext context)async{
+    bool confirm = false;
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Confirmation'),
+            content: Text(message),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Yes'),
+                onPressed: () {
+                  confirm = true;
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text('No'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        }
+    );
+    return confirm;
+  }
+
   static void toast(String message){
     Fluttertoast.showToast(
         msg: message,

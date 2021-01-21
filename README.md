@@ -8,8 +8,7 @@ EN BUSQUEDA UNICA NO GUARDAR EL DISHQUERY,
 Terminar busqueda platos compleja, menos exacta,
 actualizar pagina inicial despues de cambiar ubi
 hacer trim() en la busqueda da error
-añadir limite de nombre lista, limite de listas, elementos por lista
-añadir confirmacion de borrado en listas
+mantener bottombar en perfil
 info revisar mapa
 listener en nombre y tipos de restaurante para los tiles
 a veces el rating no guarda bien en local

@@ -249,8 +249,13 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 												}
 												else{
 													if(!list.items.contains(restaurant.restaurant_id)){
-														list.items.add(restaurant.restaurant_id);
-														Alerts.toast("${restaurant.name} added to ${list.name}");
+														if(list.items.length < CommonData.maxElementsList) {
+															list.items.add(restaurant.restaurant_id);
+															Alerts.toast("${restaurant.name} added to ${list.name}");
+														}
+														else{
+															Alerts.toast("${list.name} full");
+														}
 													}
 													else{
 														list.items.remove(restaurant.restaurant_id);
@@ -288,7 +293,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 										),
 										onTap: ()async{
 											backToOriginal();
-
+											Navigator.pushNamed(context, "/admin", arguments: restaurant);
 										},
 									),
 								),

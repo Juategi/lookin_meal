@@ -146,10 +146,13 @@ class _FavoriteListsState extends State<FavoriteLists> {
                   SizedBox(height: 19.h,),
                   DBService.userF.lists.first.id == list.id? Container() : GestureDetector(
                       onTap: () async{
-                        await DBService.dbService.deleteList(list.id);
-                        DBService.userF.lists.remove(list);
-                        setState(() {
-                        });
+                        bool delete = await Alerts.confirmation("Are you sure you want to delete this list?", context);
+                        if(delete){
+                          await DBService.dbService.deleteList(list.id);
+                          DBService.userF.lists.remove(list);
+                          setState(() {
+                          });
+                        }
                       },
                       child: Icon(Icons.delete_outline, size: ScreenUtil().setSp(45), color: Colors.black87)
                   )
@@ -160,32 +163,33 @@ class _FavoriteListsState extends State<FavoriteLists> {
         ),
       ),
     )));
-    items.add(Padding(
-      padding: EdgeInsets.symmetric(vertical: 15.h),
-      child: GestureDetector(
-        onTap: ()async{
-         await Navigator.pushNamed(context, "/createlist", arguments: type);
-         setState(() {
-         });
-        },
-        child: Container(
-          height: 100.h,
-          width: 100.w,
-          decoration: new BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-            //borderRadius: BorderRadius.all(Radius.circular(15)),
-            boxShadow: [BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 2,
-              blurRadius: 3,
-              offset: Offset(1, 1), // changes position of shadow
-            ),],
+    if(DBService.userF.lists.where((list) => list.type == type).length < 15)
+      items.add(Padding(
+        padding: EdgeInsets.symmetric(vertical: 15.h),
+        child: GestureDetector(
+          onTap: ()async{
+           await Navigator.pushNamed(context, "/createlist", arguments: type);
+           setState(() {
+           });
+          },
+          child: Container(
+            height: 100.h,
+            width: 100.w,
+            decoration: new BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              //borderRadius: BorderRadius.all(Radius.circular(15)),
+              boxShadow: [BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 3,
+                offset: Offset(1, 1), // changes position of shadow
+              ),],
+            ),
+            child: Icon(Icons.add, size: ScreenUtil().setSp(65),),
           ),
-          child: Icon(Icons.add, size: ScreenUtil().setSp(65),),
         ),
-      ),
-    ),);
+      ),);
     return items;
   }
 
@@ -272,7 +276,7 @@ class _CreateListState extends State<CreateList> {
             padding: EdgeInsets.symmetric(horizontal: 10.w),
             child: TextField(
               maxLines: 1,
-              maxLength: 60,
+              maxLength: 40,
               decoration: textInputDeco,
               onChanged: (v){
                 name = v;
@@ -455,12 +459,15 @@ class _ListDisplayState extends State<ListDisplay> {
                                         icon:  Icon(Icons.delete, color: Colors.black,),
                                         iconSize: ScreenUtil().setSp(32),
                                         onPressed: ()async{
-                                          list.items.remove(restaurant.restaurant_id);
-                                          restaurants.remove(restaurant);
-                                          Alerts.toast("${restaurant.name} removed from ${list.name}");
-                                          await DBService.dbService.updateList(list);
-                                          setState(() {
-                                          });
+                                          bool delete = await Alerts.confirmation("Are you sure you want to delete this restaurant?", context);
+                                          if(delete){
+                                            list.items.remove(restaurant.restaurant_id);
+                                            restaurants.remove(restaurant);
+                                            Alerts.toast("${restaurant.name} removed from ${list.name}");
+                                            await DBService.dbService.updateList(list);
+                                            setState(() {
+                                            });
+                                          }
                                         },
                                       ),
                                     ],
@@ -544,41 +551,69 @@ class _ListDisplayState extends State<ListDisplay> {
                                 ),
                                 child: entry.price == 0.0 ? Container() : Column( mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Row( mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
-                                          child: Container(
-                                            width: 58.w,
-                                            height: 20.h,
-                                            decoration: BoxDecoration(
-                                                color: Color.fromRGBO(255, 110, 117, 0.9),
-                                                borderRadius: BorderRadius.all(Radius.circular(12))
-                                            ),
-                                            child: Align( alignment: Alignment.center, child: Text("${entry.price} ${entries[entryId].currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 0.h, horizontal: 5.w),
+                                      child: Column( mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Row( mainAxisAlignment: MainAxisAlignment.end,
+                                            children: <Widget>[
+                                              IconButton(
+                                                icon:  Icon(Icons.delete, color: Colors.black,),
+                                                iconSize: ScreenUtil().setSp(32),
+                                                onPressed: ()async{
+                                                  bool delete = await Alerts.confirmation("Are you sure you want to delete this dish?", context);
+                                                  if(delete){
+                                                    list.items.remove(entry.id);
+                                                    entries.remove(entryId);
+                                                    Alerts.toast("${entry.name} removed from ${list.name}");
+                                                    await DBService.dbService.updateList(list);
+                                                    setState(() {
+                                                    });
+                                                  }
+                                                },
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
+                                          //SizedBox(height: 50.h,)
+                                          Row( mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              Container(
+                                                width: 58.w,
+                                                height: 20.h,
+                                                decoration: BoxDecoration(
+                                                    color: Color.fromRGBO(255, 110, 117, 0.9),
+                                                    borderRadius: BorderRadius.all(Radius.circular(12))
+                                                ),
+                                                child: Align( alignment: Alignment.center, child: Text("${entry.price} ${entries[entryId].currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 10.h,),
-                              Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: <Widget>[
-                                  Container(width: 100.w, height: 32.h, child: Text("${entry.name}", maxLines: 2, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3,  fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
-                                  SizedBox(width: 7.w,),
-                                  Column( mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: <Widget>[
-                                      //SmoothStarRating(rating: entry.rating, spacing: -3, isReadOnly: true, allowHalfRating: true, color: Color.fromRGBO(250, 201, 53, 1), borderColor: Color.fromRGBO(250, 201, 53, 1), size: ScreenUtil().setSp(10),),
-                                      StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: entry.rating, size: ScreenUtil().setSp(9),),
-                                      Text("${entry.numReviews} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(10),),)),
-                                    ],
-                                  ),
-                                ],
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
+                                child: Container(width: 190.w, height: 28.h, child: Text("${entry.name}", maxLines: 2, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3,  fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),))),
                               ),
-                              SizedBox(height: 12.h,),
-                              Container(width: 210.w, child: Text(entries[entryId].name, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),)))
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
+                                child: Row( crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Column( mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        //SmoothStarRating(rating: entry.rating, spacing: -3, isReadOnly: true, allowHalfRating: true, color: Color.fromRGBO(250, 201, 53, 1), borderColor: Color.fromRGBO(250, 201, 53, 1), size: ScreenUtil().setSp(10),),
+                                        StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: entry.rating, size: ScreenUtil().setSp(7),),
+                                        Text("${entry.numReviews} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(9),),)),
+                                      ],
+                                    ),
+                                    SizedBox(width: 5.w,),
+                                    Container(width: 120.w, height: 28.h, child: Text(entries[entryId].name, maxLines: 2, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(11),),))),
+                                  ],
+                                ),
+                              )
                             ],
                           ),
                         )

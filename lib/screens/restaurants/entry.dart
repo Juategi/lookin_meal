@@ -148,8 +148,13 @@ class _EntryRatingState extends State<EntryRating> {
                             }
                             else{
                               if(!list.items.contains(entry.id)){
-                                list.items.add(entry.id);
-                                Alerts.toast("${entry.name} added to ${list.name}");
+                                if(list.items.length < CommonData.maxElementsList) {
+                                  list.items.add(entry.id);
+                                  Alerts.toast("${entry.name} added to ${list.name}");
+                                }
+                                else{
+                                  Alerts.toast("${list.name} full");
+                                }
                               }
                               else{
                                 list.items.remove(entry.id);
@@ -164,22 +169,78 @@ class _EntryRatingState extends State<EntryRating> {
                       ],
                     ) : Container(),
                     SizedBox(height: 240.h,),
-                    entry.price == 0.0 ? Container():Row( mainAxisAlignment: entry.image == null || entry.image == ""?  MainAxisAlignment.center : MainAxisAlignment.start,
+                    Row(
                       children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
-                          child: Container(
-                            width: 100.w,
-                            height: 33.h,
-                            decoration: BoxDecoration(
-                                color: Color.fromRGBO(255, 110, 117, 0.9),
-                                borderRadius: BorderRadius.all(Radius.circular(12))
+                        entry.price == 0.0 ? Container():Row( mainAxisAlignment: entry.image == null || entry.image == ""?  MainAxisAlignment.center : MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
+                              child: Container(
+                                width: 100.w,
+                                height: 33.h,
+                                decoration: BoxDecoration(
+                                    color: Color.fromRGBO(255, 110, 117, 0.9),
+                                    borderRadius: BorderRadius.all(Radius.circular(12))
+                                ),
+                                child: Align( alignment: Alignment.center, child: Text("${entry.price} ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(22),),))),
+                              ),
                             ),
-                            child: Align( alignment: Alignment.center, child: Text("${entry.price} ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(22),),))),
+                          ],
+                        ),
+                        SizedBox(width: 190.w,),
+                        entry.allergens.length == 0 ? Container() : Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          child: GestureDetector(
+                            child: Container(
+                                height: 45.h,
+                                width: 45.w,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: Image.asset("assets/allergens/cacahuetes.png").image))
+                            ),
+                            onTap: (){
+                              showModalBottomSheet(context: context,  builder: (BuildContext bc){
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 40.h),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text("Alérgenos", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: ScreenUtil().setSp(22),),),
+                                      SizedBox(height: 10.h,),
+                                      Center(
+                                        child: Container(
+                                          height: 320.h,
+                                          //width: 300.w,
+                                          child: Wrap(
+                                            direction: Axis.vertical,
+                                            children: CommonData.allergens.map((allergen) => Row(
+                                              children: <Widget>[
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                                  child: Container(
+                                                      height: 40.h,
+                                                      width: 40.w,
+                                                      decoration: BoxDecoration(
+                                                          image: DecorationImage(
+                                                              colorFilter: entry.allergens.contains(allergen)? ColorFilter.srgbToLinearGamma() : ColorFilter.linearToSrgbGamma(),
+                                                              image: Image.asset("assets/allergens/$allergen.png").image))
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10.w,),
+                                                Text("${allergen[0].toUpperCase()}${allergen.substring(1)}", style: TextStyle(fontWeight: entry.allergens.contains(allergen)? FontWeight.bold :FontWeight.normal, color: entry.allergens.contains(allergen)? Colors.black :  Colors.grey[200], fontSize: ScreenUtil().setSp(13),),),
+                                              ],
+                                            )).toList(),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              });
+                            },
                           ),
                         ),
                       ],
-                    ),
+                    )
                   ],
                 ),
             ),
@@ -189,64 +250,6 @@ class _EntryRatingState extends State<EntryRating> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Text("${entry.description}", maxLines: 6, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
-            ),
-            SizedBox(height: 10.h,),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.w),
-              child: GestureDetector(
-                child: Container(
-                  height: 100.h,
-                  child: Wrap(
-                    //crossAxisCount: 8,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: entry.allergens.map((allergen) => Container(
-                        height: 40.h,
-                        width: 40.w,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: Image.asset("assets/allergens/${allergen}.png").image))
-                    ),).toList(),
-                  ),
-                ),
-                onTap: (){
-                  showModalBottomSheet(context: context,  builder: (BuildContext bc){
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 40.h),
-                      child: Column(
-                        children: <Widget>[
-                          Text("Alérgenos", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: ScreenUtil().setSp(22),),),
-                          SizedBox(height: 10.h,),
-                          Center(
-                            child: Container(
-                              height: 320.h,
-                              //width: 300.w,
-                              child: Wrap(
-                                direction: Axis.vertical,
-                                children: CommonData.allergens.map((allergen) => Row(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                                      child: Container(
-                                          height: 40.h,
-                                          width: 40.w,
-                                          decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                  image: Image.asset("assets/allergens/$allergen.png").image))
-                                      ),
-                                    ),
-                                    SizedBox(width: 10.w,),
-                                    Text("${allergen[0].toUpperCase()}${allergen.substring(1)}", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(13),),),
-                                  ],
-                                )).toList(),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  });
-                },
-              ),
             ),
             SizedBox(height: 10.h,),
             Container(

@@ -148,7 +148,7 @@ class _ProfileState extends State<Profile> {
               Divider(thickness: 2,),
               GestureDetector(
                 onTap:(){
-                  
+
                 },
                 child: Container(
                   width: 365.w,
