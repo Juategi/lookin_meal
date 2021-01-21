@@ -226,7 +226,7 @@ class _EntryRatingState extends State<EntryRating> {
                                                   ),
                                                 ),
                                                 SizedBox(width: 10.w,),
-                                                Text("${allergen[0].toUpperCase()}${allergen.substring(1)}", style: TextStyle(fontWeight: entry.allergens.contains(allergen)? FontWeight.bold :FontWeight.normal, color: entry.allergens.contains(allergen)? Colors.black :  Colors.grey[200], fontSize: ScreenUtil().setSp(13),),),
+                                                Text("${allergen[0].toUpperCase()}${allergen.substring(1)}", style: TextStyle(fontWeight: entry.allergens.contains(allergen)? FontWeight.bold :FontWeight.normal, color: entry.allergens.contains(allergen)? Colors.black :  Colors.grey[500], fontSize: ScreenUtil().setSp(13),),),
                                               ],
                                             )).toList(),
                                           ),
@@ -313,7 +313,21 @@ class _EntryRatingState extends State<EntryRating> {
                 },
               ),
             ),
-            SizedBox(height: 15.h,),
+            SizedBox(height: 40.h,),
+            GestureDetector(
+              onTap: (){
+                Navigator.pushNamed(context, "/comments", arguments: entry);
+              },
+              child: Container(
+                child: Row( mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("View comments ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black45, fontSize: ScreenUtil().setSp(22),),),
+                    SizedBox(width: 7.w,),
+                    Icon(Icons.comment, size: ScreenUtil().setSp(32),color: Colors.black45),
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),
