@@ -249,7 +249,7 @@ class _EntryRatingState extends State<EntryRating> {
             SizedBox(height: 10.h,),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Text("${entry.description}", maxLines: 6, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+              child: Container(height: 100.h,child: Text("${entry.description}", maxLines: 4, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
             ),
             SizedBox(height: 10.h,),
             Container(
@@ -265,7 +265,7 @@ class _EntryRatingState extends State<EntryRating> {
                 comment = v;
               },),
             ),
-            SizedBox(height: 15.h,),
+            //SizedBox(height: 5.h,),
             Center(
               child: SmoothStarRating(
                 allowHalfRating: true,
@@ -313,7 +313,7 @@ class _EntryRatingState extends State<EntryRating> {
                 },
               ),
             ),
-            SizedBox(height: 40.h,),
+            SizedBox(height: 5.h,),
             GestureDetector(
               onTap: (){
                 Navigator.pushNamed(context, "/comments", arguments: entry);

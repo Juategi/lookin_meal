@@ -525,6 +525,30 @@ class DBService {
 		return finalMap;
 	}
 
+	Future<Map<Rating, User>> getEntryRatings(String entry_id) async{
+		Map<Rating, User> ratings = {};
+		var response = await http.get(
+				"${StaticStrings.api}/comments", headers: {"entry_id" : entry_id});
+		List<dynamic> result = json.decode(response.body);
+		for(var element in result){
+			Rating rating = Rating(
+					entry_id: element["entry_id"].toString(),
+					rating: element["rating"].toDouble(),
+					date: element["ratedate"].toString().substring(0,10),
+					comment: element["comment"] == null? " " : element["comment"]
+			);
+			User user = User(
+				name: element["name"],
+				uid: element["user_id"],
+				email: element["email"],
+				picture: element["image"],
+				username: element["username"]
+			);
+			ratings[rating] = user;
+		}
+		return ratings;
+	}
+
 	Future<List<Restaurant>> parseResponse(var response) async{
 		List<Restaurant> restaurants = List<Restaurant>();
 		List<dynamic> result = json.decode(response.body);

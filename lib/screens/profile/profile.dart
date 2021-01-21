@@ -37,7 +37,7 @@ class _ProfileState extends State<Profile> {
             width: 255.w,
             child: Row( mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(height: 67, width: 67,
+                Container(height: 67.h, width: 67.w,
                     decoration: new BoxDecoration(
                         shape: BoxShape.circle,
                         boxShadow: [BoxShadow(
