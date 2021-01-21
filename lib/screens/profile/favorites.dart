@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/screens/restaurants/entry.dart';
 import 'package:lookinmeal/screens/restaurants/restaurant_tile.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/geolocation.dart';
@@ -349,8 +350,8 @@ class _ListDisplayState extends State<ListDisplay> {
 
   void _updateLists() async{
     List<String> aux = [];
-    restaurants = [];
     if(type == 'R'){
+      restaurants = [];
       for(String id in list.items){
         Restaurant restaurant = Pool.getRestaurant(id);
         if(restaurant != null) {
@@ -410,11 +411,11 @@ class _ListDisplayState extends State<ListDisplay> {
             child:Text("${list.name}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
           ),
           (type == 'R' && restaurants == null) || (type == 'E' && entries == null) ? Center(child: Loading()) : Expanded(
-            child: Container(
+            child: type == 'R' ? Container(
               width: 300.w,
               child: ListView(
                   shrinkWrap: true,
-                  children: type == 'R' ? restaurants.map((restaurant) =>
+                  children: restaurants.map((restaurant) =>
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
                         child: GestureDetector(
@@ -505,16 +506,94 @@ class _ListDisplayState extends State<ListDisplay> {
                           ),
                         ),
                       )
-              ).toList() :
-                      entries.keys.map((entry) => Text(entry)).toList()
+              ).toList()
               ),
-            ),
+            ) : Container(
+              width: 200.w,
+              child: ListView(
+                children: entries.keys.map((entryId) {
+                  MenuEntry entry = entries[entryId].menu.singleWhere((element) => element.id == entryId);
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                    child: GestureDetector(
+                        onTap: () async{
+                          await showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
+                            return Provider<Restaurant>.value(value: entries[entryId], child: Provider<MenuEntry>.value(value: entry, child: EntryRating()));
+                          }).then((value){setState(() {});});
+                        },
+                        child: Container(
+                          height: 170.h,
+                          width: 200.w,
+                          decoration: new BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            boxShadow: [BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 3,
+                              offset: Offset(1, 1), // changes position of shadow
+                            ),],
+                          ),
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                width: 200.w,
+                                height: 100.h,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(image: Image.network(entry.image == null || entry.image == "" ? StaticStrings.defaultEntry : entry.image, fit: BoxFit.cover).image)
+                                ),
+                                child: entry.price == 0.0 ? Container() : Column( mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Row( mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
+                                          child: Container(
+                                            width: 58.w,
+                                            height: 20.h,
+                                            decoration: BoxDecoration(
+                                                color: Color.fromRGBO(255, 110, 117, 0.9),
+                                                borderRadius: BorderRadius.all(Radius.circular(12))
+                                            ),
+                                            child: Align( alignment: Alignment.center, child: Text("${entry.price} ${entries[entryId].currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10.h,),
+                              Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+                                  Container(width: 100.w, height: 32.h, child: Text("${entry.name}", maxLines: 2, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3,  fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
+                                  SizedBox(width: 7.w,),
+                                  Column( mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: <Widget>[
+                                      //SmoothStarRating(rating: entry.rating, spacing: -3, isReadOnly: true, allowHalfRating: true, color: Color.fromRGBO(250, 201, 53, 1), borderColor: Color.fromRGBO(250, 201, 53, 1), size: ScreenUtil().setSp(10),),
+                                      StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: entry.rating, size: ScreenUtil().setSp(9),),
+                                      Text("${entry.numReviews} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(10),),)),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 12.h,),
+                              Container(width: 210.w, child: Text(entries[entryId].name, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),)))
+                            ],
+                          ),
+                        )
+                    ),
+                  );
+                }).toList(),
+              ),
+            )
           )
         ],
       ),
     );
   }
 }
+
 
 
 
