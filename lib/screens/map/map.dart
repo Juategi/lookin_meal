@@ -9,6 +9,7 @@ import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
+import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:fluster/fluster.dart';
@@ -27,7 +28,8 @@ class MapSampleState extends State<MapSample> {
 	Completer<GoogleMapController> _controller = Completer();
 	final GeolocationService _geolocationService = GeolocationService();
 	final _key = GlobalKey();
-	BitmapDescriptor pinLocationIcon;
+	Map<String,BitmapDescriptor> pinLocationIcons;
+	BitmapDescriptor basic;
 	List<Restaurant> _restaurants = [];
 	List<RestaurantMarker> _markers = List<RestaurantMarker>();
 	CameraPosition _cameraPosition;
@@ -50,10 +52,16 @@ class MapSampleState extends State<MapSample> {
 	@override
 	initState(){
 		BitmapDescriptor.fromAssetImage(
-			ImageConfiguration(devicePixelRatio: 2.5),
-			'assets/marker.png').then((onValue) {
-			pinLocationIcon = onValue;
+				ImageConfiguration(devicePixelRatio: 2.5),
+				'assets/marker.png').then((onValue) {
+			basic = onValue;
 		});
+		pinLocationIcons = {};
+		for(String type in CommonData.typesImage.keys){
+			BitmapDescriptor.fromAssetImage(
+					ImageConfiguration(devicePixelRatio: 2.5),
+					'assets/food/${CommonData.typesImage[type]}.png').then((value) => pinLocationIcons[type] = value);
+		}
 		_getUserLocation();
 		//_loadMarkers();
 		_timer();
@@ -75,7 +83,7 @@ class MapSampleState extends State<MapSample> {
 					) => RestaurantMarker(
 				id: cluster.id.toString(),
 				position: LatLng(lat, lng),
-				icon: pinLocationIcon,
+				//icon: pinLocationIcon,
 				isCluster: cluster.isCluster,
 				clusterId: cluster.id,
 				pointsSize: cluster.pointsSize,
@@ -99,7 +107,7 @@ class MapSampleState extends State<MapSample> {
 			_markers.add(RestaurantMarker(
 				id: restaurant.restaurant_id,
 				position: LatLng(restaurant.latitude,restaurant.longitude),
-				icon: pinLocationIcon,
+				//icon: pinLocationIcon,
 				infoWindow: InfoWindow(
 					title: "${restaurant.name}   ${restaurant.rating}/5.0",
 					snippet: restaurant.address,
@@ -123,7 +131,7 @@ class MapSampleState extends State<MapSample> {
 			_markersNoCluster.add(Marker(
 				markerId: MarkerId(restaurant.restaurant_id),
 				position: LatLng(restaurant.latitude,restaurant.longitude),
-				icon: pinLocationIcon,
+				icon:restaurant.types.length > 0 ? pinLocationIcons[restaurant.types[0]] : basic,
 				infoWindow: InfoWindow(
 						title: "${restaurant.name}   ${restaurant.rating}/5.0",
 						snippet: "${restaurant.distance} km",
