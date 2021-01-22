@@ -261,7 +261,7 @@ class MapSampleState extends State<MapSample> {
 					Positioned(
 						top: 110.h,
 						right: 20.w,
-						child: RaisedButton(child: Text("Load restaurants"), onPressed: ()async{
+						child: RaisedButton(child: Text("Load Restaurants", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),)), onPressed: ()async{
 							Size _widgetSize = _key.currentContext.size;
 							var _correctZoom = math.pow(2, _cameraPosition.zoom) * 2;
 							var _width = _widgetSize.width.toInt() / _correctZoom;
@@ -278,7 +278,7 @@ class MapSampleState extends State<MapSample> {
 					Positioned(
 						top: 60.h,
 						right: 20.w,
-						child: RaisedButton(child: Text("Clear"), onPressed: (){
+						child: RaisedButton(child: Text("Clear", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),)), onPressed: (){
 								_markersNoCluster.clear();
 								_restaurants.clear();
 								setState(() {});
@@ -326,12 +326,12 @@ class MapSampleState extends State<MapSample> {
 							  			  						)
 							  			  				)
 							  			  		),
-							  						SizedBox(width: 10.w,),
+							  						SizedBox(width: 15.w,),
 							  						Column( crossAxisAlignment: CrossAxisAlignment.start,
 							  							children: [
 							  								SizedBox(height: 10.w,),
-							  								Container(width: 175.w,child: Text(selected.name, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),))),
-							  								Container(width: 175.w,child: Text(selected.types.length > 1 ? "${selected.types[0]}, ${selected.types[1]}" : "${selected.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.8), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
+							  								Container(width: 170.w,child: Text(selected.name, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),))),
+							  								Container(width: 170.w,child: Text(selected.types.length > 1 ? "${selected.types[0]}, ${selected.types[1]}" : "${selected.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.8), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
 							  								SizedBox(height: 4.h,),
 							  								Row(
 							  								  children: [
