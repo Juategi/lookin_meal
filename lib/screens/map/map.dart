@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/models/restaurant.dart';
@@ -13,7 +14,9 @@ import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/loading.dart';
+import 'package:lookinmeal/shared/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:fluster/fluster.dart';
 import 'dart:math' as math;
@@ -29,6 +32,8 @@ class MapSampleState extends State<MapSample> {
 	String _mapStyle;
 	int size;
 	double latTo, latFrom, longTo, longFrom;
+	bool loading = false;
+	Restaurant selected;
 	Completer<GoogleMapController> _controller = Completer();
 	final GeolocationService _geolocationService = GeolocationService();
 	final _key = GlobalKey();
@@ -53,13 +58,27 @@ class MapSampleState extends State<MapSample> {
 		}
 	}
 
+	Future updateRecent() async{
+		for(Restaurant r in DBService.userF.recently){
+			if(r.restaurant_id == selected.restaurant_id){
+				return;
+			}
+		}
+		if(DBService.userF.recently.length == 5){
+			DBService.userF.recently.removeAt(0);
+		}
+		DBService.userF.recently.add(selected);
+		DBService.userF.recent = DBService.userF.recently;
+		DBService.dbService.updateRecently();
+	}
+
 	int calculateMarkerSize(){
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
-		if(_cameraPosition.zoom > ScreenUtil().setSp(15.5)){
-			return (_cameraPosition.zoom * ScreenUtil().setSp(5)).toInt();
+		if(_cameraPosition.zoom > ScreenUtil().setSp(14)){
+			return (_cameraPosition.zoom * ScreenUtil().setSp(4.5)).toInt();
 		}
-		else if(_cameraPosition.zoom < ScreenUtil().setSp(14)){
-			return (_cameraPosition.zoom * ScreenUtil().setSp(3)).toInt();
+		else if(_cameraPosition.zoom < ScreenUtil().setSp(13)){
+			return (_cameraPosition.zoom * ScreenUtil().setSp(3.2)).toInt();
 		}
 		else if(_cameraPosition.zoom < ScreenUtil().setSp(12)){
 			return (_cameraPosition.zoom).toInt();
@@ -161,6 +180,9 @@ class MapSampleState extends State<MapSample> {
 	}
 
 	Future _loadMarkersNoCluster() async {
+		setState(() {
+			loading = true;
+		});
 		_restaurants = await DBService().getRestaurantsSquare(pos.latitude, pos.longitude, latFrom, latTo, longFrom, longTo);
 		_markersNoCluster.clear();
 		for(Restaurant restaurant in _restaurants){
@@ -168,7 +190,12 @@ class MapSampleState extends State<MapSample> {
 				markerId: MarkerId(restaurant.restaurant_id),
 				position: LatLng(restaurant.latitude,restaurant.longitude),
 				icon:restaurant.types.length > 0 ? pinLocationIcons[restaurant.types[0]] : basic,
-				infoWindow: InfoWindow(
+				onTap: (){
+					setState(() {
+					  selected = restaurant;
+					});
+				}
+				/*infoWindow: InfoWindow(
 						title: "${restaurant.name}   ${restaurant.rating}/5.0",
 						snippet: "${restaurant.distance} km",
 						onTap: ()async{
@@ -178,9 +205,12 @@ class MapSampleState extends State<MapSample> {
 							Pool.addRestaurant(restaurant);
 							Navigator.pushNamed(context, "/restaurant",arguments: args);
 						}
-				),
+				),*/
 			));
 		}
+		setState(() {
+			loading = false;
+		});
 	}
 
 	@override
@@ -199,6 +229,11 @@ class MapSampleState extends State<MapSample> {
 						onMapCreated: (GoogleMapController controller) async{
 							_controller.complete(controller);
 							controller.setMapStyle(_mapStyle);
+						},
+						onTap: (pos){
+							setState(() {
+								selected = null;
+							});
 						},
 						onCameraMove: (CameraPosition pos) async{
 							double lastZoom = _cameraPosition.zoom;
@@ -219,18 +254,14 @@ class MapSampleState extends State<MapSample> {
 								_markersNoCluster.clear();
 								_markersNoCluster.addAll(aux);
 							}
-							if(pos.zoom < 13 && pos.zoom < lastZoom) {
-								_markersNoCluster.clear();
-								_restaurants.clear();
-							}
 							setState(() {
 							});
 						},
 					),
 					Positioned(
-						top: 550,
-						left: 140,
-						child: RaisedButton(child: Text("Cargar restaurantes"), onPressed: ()async{
+						top: 110.h,
+						right: 20.w,
+						child: RaisedButton(child: Text("Load restaurants"), onPressed: ()async{
 							Size _widgetSize = _key.currentContext.size;
 							var _correctZoom = math.pow(2, _cameraPosition.zoom) * 2;
 							var _width = _widgetSize.width.toInt() / _correctZoom;
@@ -243,7 +274,80 @@ class MapSampleState extends State<MapSample> {
 							setState((){
 							});
 						},),
-					)
+					),
+					Positioned(
+						top: 60.h,
+						right: 20.w,
+						child: RaisedButton(child: Text("Clear"), onPressed: (){
+								_markersNoCluster.clear();
+								_restaurants.clear();
+								setState(() {});
+						},),
+					),
+					Positioned(
+						top: 60.h,
+						left: 30.w,
+						child: loading ? Loading() : Container()
+					),
+					selected == null ? Container() : AnimatedPositioned(
+							bottom: 70.h,
+							left: 0.w,
+							right: 0.w,
+							child: GestureDetector(
+								onTap: (){
+									updateRecent();
+									Navigator.pushNamed(context, "/restaurant",arguments: selected).then((value) => setState(() {}));
+								},
+							  child: Center(
+							  		child: Container(
+							  			height: 100.h,
+							  			width: 270.w,
+							  			decoration: new BoxDecoration(
+							  				color: Colors.white,
+							  				borderRadius: BorderRadius.all(Radius.circular(25)),
+							  				boxShadow: [BoxShadow(
+							  					color: Colors.grey.withOpacity(0.2),
+							  					spreadRadius: 2,
+							  					blurRadius: 3,
+							  					offset: Offset(1, 1), // changes position of shadow
+							  				),],
+							  			),
+							  			child: Padding(
+							  			  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+							  			  child: Row(
+							  			  	children: [
+							  			  		Container(height: 65.h, width: 65.w,
+							  			  				decoration: new BoxDecoration(
+							  			  						shape: BoxShape.circle,
+							  			  						image: new DecorationImage(
+							  			  								fit: BoxFit.cover,
+							  			  								image: new NetworkImage(
+							  			  										selected.images.first)
+							  			  						)
+							  			  				)
+							  			  		),
+							  						SizedBox(width: 10.w,),
+							  						Column( crossAxisAlignment: CrossAxisAlignment.start,
+							  							children: [
+							  								SizedBox(height: 10.w,),
+							  								Container(width: 175.w,child: Text(selected.name, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),))),
+							  								Container(width: 175.w,child: Text(selected.types.length > 1 ? "${selected.types[0]}, ${selected.types[1]}" : "${selected.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.8), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
+							  								SizedBox(height: 4.h,),
+							  								Row(
+							  								  children: [
+							  								    StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: Functions.getRating(selected), size: ScreenUtil().setSp(12),),
+							  										SizedBox(width: 10.w,),
+							  										Text("${Functions.getVotes(selected)} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),)),
+							  									],
+							  								),
+							  							],
+							  						)
+							  			  	],
+							  			  ),
+							  			),
+							  		)
+							  ),
+							), duration: Duration(seconds: 1)),
 				],
 			)
 		);
