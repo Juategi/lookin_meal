@@ -1,7 +1,9 @@
-
+import 'dart:ui' as ui;
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/models/restaurant.dart';
@@ -24,11 +26,12 @@ class MapSampleState extends State<MapSample> {
 	User user;
 	Position pos;
 	String _mapStyle;
+	int size;
 	double latTo, latFrom, longTo, longFrom;
 	Completer<GoogleMapController> _controller = Completer();
 	final GeolocationService _geolocationService = GeolocationService();
 	final _key = GlobalKey();
-	Map<String,BitmapDescriptor> pinLocationIcons;
+	Map<String,BitmapDescriptor> pinLocationIcons = {};
 	BitmapDescriptor basic;
 	List<Restaurant> _restaurants = [];
 	List<RestaurantMarker> _markers = List<RestaurantMarker>();
@@ -49,6 +52,36 @@ class MapSampleState extends State<MapSample> {
 		}
 	}
 
+	int calculateMarkerSize(){
+		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+		if(_cameraPosition.zoom > ScreenUtil().setSp(14.5)){
+			return (_cameraPosition.zoom * ScreenUtil().setSp(8)).toInt();
+		}
+		else if(_cameraPosition.zoom < ScreenUtil().setSp(12)){
+			return (_cameraPosition.zoom * ScreenUtil().setSp(3)).toInt();
+		}
+		else if(_cameraPosition.zoom < ScreenUtil().setSp(10.5)){
+			return (_cameraPosition.zoom).toInt();
+		}
+		else{
+			return (_cameraPosition.zoom * ScreenUtil().setSp(6)).toInt();
+		}
+	}
+
+	Future<Uint8List> getBytesFromAsset(String path, int width) async {
+		ByteData data = await rootBundle.load(path);
+		ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+		ui.FrameInfo fi = await codec.getNextFrame();
+		return (await fi.image.toByteData(format: ui.ImageByteFormat.png)).buffer.asUint8List();
+	}
+
+	Future updateMarkersSize() async{
+		for(String type in CommonData.typesImage.keys){
+			Uint8List markerIcon = await getBytesFromAsset('assets/food/${CommonData.typesImage[type]}.png', calculateMarkerSize());;
+			pinLocationIcons[type] = BitmapDescriptor.fromBytes(markerIcon);
+		}
+	}
+
 	@override
 	initState(){
 		BitmapDescriptor.fromAssetImage(
@@ -56,7 +89,6 @@ class MapSampleState extends State<MapSample> {
 				'assets/marker.png').then((onValue) {
 			basic = onValue;
 		});
-		pinLocationIcons = {};
 		for(String type in CommonData.typesImage.keys){
 			BitmapDescriptor.fromAssetImage(
 					ImageConfiguration(devicePixelRatio: 2.5),
@@ -164,10 +196,25 @@ class MapSampleState extends State<MapSample> {
 							_controller.complete(controller);
 							controller.setMapStyle(_mapStyle);
 						},
-						onCameraMove: (CameraPosition pos){
+						onCameraMove: (CameraPosition pos) async{
 							double lastZoom = _cameraPosition.zoom;
 							_cameraPosition = pos;
-							if(pos.zoom < 15 && pos.zoom < lastZoom) {
+							List<Marker> aux = [];
+							if(pos.zoom != lastZoom){
+								updateMarkersSize();
+								for(Marker marker in _markersNoCluster.toSet()){
+									Restaurant r = _restaurants.singleWhere((r) => r.restaurant_id == marker.markerId.value);
+									aux.add(Marker(
+										markerId: MarkerId(marker.markerId.toString()),
+										icon: r.types.length > 0 ? pinLocationIcons[r.types[0]] : basic,
+										position: LatLng(marker.position.latitude, marker.position.longitude),
+										infoWindow: marker.infoWindow,
+									));
+								}
+								_markersNoCluster.clear();
+								_markersNoCluster.addAll(aux);
+							}
+							if(pos.zoom < 5 && pos.zoom < lastZoom) {
 								_markersNoCluster.clear();
 								_restaurants.clear();
 							}
@@ -187,10 +234,6 @@ class MapSampleState extends State<MapSample> {
 							latTo = _cameraPosition.target.latitude + _width;
 							longFrom = _cameraPosition.target.longitude - _height;
 							longTo = _cameraPosition.target.longitude + _height;
-							print(latFrom);
-							print(latTo);
-							print(longFrom);
-							print(longTo);
 							await _loadMarkersNoCluster();
 							setState((){
 							});
