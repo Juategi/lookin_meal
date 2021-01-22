@@ -29,11 +29,11 @@ class MapSample extends StatefulWidget {
 class MapSampleState extends State<MapSample> {
 	User user;
 	Position pos;
-	String _mapStyle;
 	int size;
 	double latTo, latFrom, longTo, longFrom;
 	bool loading = false;
 	Restaurant selected;
+	String _mapStyle = '[{"featureType": "poi","stylers": [{"visibility": "off"}]}]';
 	Completer<GoogleMapController> _controller = Completer();
 	final GeolocationService _geolocationService = GeolocationService();
 	final _key = GlobalKey();
@@ -121,9 +121,6 @@ class MapSampleState extends State<MapSample> {
 		//_loadMarkers();
 		_timer();
 		super.initState();
-		rootBundle.loadString('assets/map_style.txt').then((string) {
-			_mapStyle = string;
-		});
 		fluster = Fluster<RestaurantMarker>(
 			minZoom: 14, // The min zoom at clusters will show
 			maxZoom: 30, // The max zoom at clusters will show
@@ -285,9 +282,10 @@ class MapSampleState extends State<MapSample> {
 						},),
 					),
 					Positioned(
-						top: 60.h,
-						left: 30.w,
-						child: loading ? Loading() : Container()
+							bottom: 350.h,
+							left: 0.w,
+							right: 0.w,
+						child: loading ? Center(child: Container(width: 50.w, child: Loading())) : Container()
 					),
 					selected == null ? Container() : AnimatedPositioned(
 							bottom: 70.h,
@@ -331,7 +329,7 @@ class MapSampleState extends State<MapSample> {
 							  							children: [
 							  								SizedBox(height: 10.w,),
 							  								Container(width: 170.w,child: Text(selected.name, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),))),
-							  								Container(width: 170.w,child: Text(selected.types.length > 1 ? "${selected.types[0]}, ${selected.types[1]}" : "${selected.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.8), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
+																Container(width: 170.w,child: Text(selected.types.length == 0 ? "" : selected.types.length > 1 ? "${selected.types[0]}, ${selected.types[1]}" : "${selected.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.8), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
 							  								SizedBox(height: 4.h,),
 							  								Row(
 							  								  children: [
