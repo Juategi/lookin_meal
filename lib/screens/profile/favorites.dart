@@ -498,8 +498,16 @@ class _ListDisplayState extends State<ListDisplay> {
                                 Row(
                                   children: <Widget>[
                                     SizedBox(width: 5.w,),
-                                    Container(width: 165.w, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : "${restaurant.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
-                                    SizedBox(width: 40.w,),
+                                    restaurant.types.length == 0 ? Container() : Container(
+                                        height: 15.h,
+                                        width: 15.w,
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: Image.asset("assets/food/${CommonData.typesImage[restaurant.types[0]]}.png").image))
+                                    ),
+                                    SizedBox(width: 5.w,),
+                                    Container(width: 155.w, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : "${restaurant.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
+                                    SizedBox(width: 35.w,),
                                     Container(
                                       child: SvgPicture.asset("assets/markerMini.svg"),
                                     ),

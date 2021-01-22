@@ -306,7 +306,19 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							children: <Widget>[
 								Column(crossAxisAlignment: CrossAxisAlignment.start,
 									children: <Widget>[
-										Container(width: 210.w, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : restaurant.types.length > 0 ? "${restaurant.types[0]}" : "", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
+										Row(
+										  children: [
+												restaurant.types.length == 0 ? Container() : Container(
+														height: 25.h,
+														width: 25.w,
+														decoration: BoxDecoration(
+																image: DecorationImage(
+																		image: Image.asset("assets/food/${CommonData.typesImage[restaurant.types[0]]}.png").image))
+												),
+										    SizedBox(width: 5.w,),
+										    Container(width: 180.w, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : restaurant.types.length > 0 ? "${restaurant.types[0]}" : "", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
+										  ],
+										),
 										Row(
 											children: <Widget>[
 												Container(

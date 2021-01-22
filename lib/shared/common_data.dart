@@ -76,6 +76,7 @@ class CommonData{
     "Greek" : "yogurt",
     "Grill" : "carne",
     "Gourmet" : "gourmet",
+    "Mediterranean" : "paella",
     "Hamburgers" : "burguer",
     "Hawaiian" : "bowl",
     "Healthy" : "ensalada",

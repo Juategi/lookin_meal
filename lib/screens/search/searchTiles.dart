@@ -61,26 +61,6 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
                   fit: BoxFit.cover,
                 ),
               ),
-              child: Row( mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  IconButton(
-                    icon:  Icon(DBService.userF.favorites.contains(restaurant) ? Icons.favorite : Icons.favorite_border, color: DBService.userF.favorites.contains(restaurant) ? Color.fromRGBO(255, 110, 117, 1) : Color.fromRGBO(255, 110, 117, 1),),
-                    iconSize: ScreenUtil().setSp(32),
-                    onPressed: ()async{
-                      if(DBService.userF.favorites.contains(restaurant)) {
-                        DBService.userF.favorites.remove(restaurant);
-                        DBService.dbService.deleteFromUserFavorites(DBService.userF.uid, restaurant);
-                      }
-                      else {
-                        DBService.userF.favorites.add(restaurant);
-                        DBService.dbService.addToUserFavorites(DBService.userF.uid, restaurant);
-                      }
-                      setState(() {});
-                    },
-                  ),
-                ],
-              ),
             ),
             SizedBox(height: 1.h,),
             Row( crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,6 +86,14 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
             SizedBox(height: 10.h,),
             Row(
               children: <Widget>[
+                SizedBox(width: 5.w,),
+                restaurant.types.length == 0 ? Container() : Container(
+                    height: 15.h,
+                    width: 15.w,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: Image.asset("assets/food/${CommonData.typesImage[restaurant.types[0]]}.png").image))
+                ),
                 SizedBox(width: 5.w,),
                 restaurant.types.length == 0? Container(width: 214.w) : Container(width: 214.w, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : "${restaurant.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
                 SizedBox(width: 66.w,),
