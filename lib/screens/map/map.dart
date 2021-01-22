@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/material.dart';
@@ -54,13 +55,13 @@ class MapSampleState extends State<MapSample> {
 
 	int calculateMarkerSize(){
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
-		if(_cameraPosition.zoom > ScreenUtil().setSp(14.5)){
-			return (_cameraPosition.zoom * ScreenUtil().setSp(8)).toInt();
+		if(_cameraPosition.zoom > ScreenUtil().setSp(15.5)){
+			return (_cameraPosition.zoom * ScreenUtil().setSp(5)).toInt();
 		}
-		else if(_cameraPosition.zoom < ScreenUtil().setSp(12)){
+		else if(_cameraPosition.zoom < ScreenUtil().setSp(14)){
 			return (_cameraPosition.zoom * ScreenUtil().setSp(3)).toInt();
 		}
-		else if(_cameraPosition.zoom < ScreenUtil().setSp(10.5)){
+		else if(_cameraPosition.zoom < ScreenUtil().setSp(12)){
 			return (_cameraPosition.zoom).toInt();
 		}
 		else{
@@ -76,8 +77,11 @@ class MapSampleState extends State<MapSample> {
 	}
 
 	Future updateMarkersSize() async{
+		int size = calculateMarkerSize();
+		print(size);
+		print(_cameraPosition.zoom );
 		for(String type in CommonData.typesImage.keys){
-			Uint8List markerIcon = await getBytesFromAsset('assets/food/${CommonData.typesImage[type]}.png', calculateMarkerSize());;
+			Uint8List markerIcon = await getBytesFromAsset('assets/food/${CommonData.typesImage[type]}.png', size);
 			pinLocationIcons[type] = BitmapDescriptor.fromBytes(markerIcon);
 		}
 	}
@@ -202,8 +206,9 @@ class MapSampleState extends State<MapSample> {
 							List<Marker> aux = [];
 							if(pos.zoom != lastZoom){
 								updateMarkersSize();
-								for(Marker marker in _markersNoCluster.toSet()){
-									Restaurant r = _restaurants.singleWhere((r) => r.restaurant_id == marker.markerId.value);
+								for(int i = 0; i < _markersNoCluster.length; i++){
+									Marker marker = _markersNoCluster[i];
+									Restaurant r = _restaurants[i];
 									aux.add(Marker(
 										markerId: MarkerId(marker.markerId.toString()),
 										icon: r.types.length > 0 ? pinLocationIcons[r.types[0]] : basic,
@@ -214,7 +219,7 @@ class MapSampleState extends State<MapSample> {
 								_markersNoCluster.clear();
 								_markersNoCluster.addAll(aux);
 							}
-							if(pos.zoom < 5 && pos.zoom < lastZoom) {
+							if(pos.zoom < 13 && pos.zoom < lastZoom) {
 								_markersNoCluster.clear();
 								_restaurants.clear();
 							}
