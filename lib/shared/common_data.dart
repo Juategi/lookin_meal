@@ -56,9 +56,9 @@ class CommonData{
   ];
 
   static final Map typesImage =  {
-    "African": "",
+    "African": "couscous",
     "American": "burguer",
-    "Morocco": "",
+    "Morocco": "couscous",
     "Argentinean": "carne",
     "Asian": "ramen",
     "Bar": "birra",
@@ -66,7 +66,7 @@ class CommonData{
     "Bistro" : "wine",
     "Brazilian" : "carne",
     "Cafe" : "cafe",
-     "Canadian" : "" ,
+     "Canadian" : "fritas" ,
     "Chinese" : "china",
     "Dessert" : "tarta",
     "English" : "fishchips",
@@ -83,8 +83,8 @@ class CommonData{
     "Indonesian" : "ramen",
     "Japanese" : "ramen",
     "Italian" : "pasta",
-    "Korean" : "",
-    "Lebanese" : "",
+    "Korean" : "couscous",
+    "Lebanese" : "couscous",
     "Mexican" : "taco",
     "Organic" : "ensalada",
     "Pizza" : "pizza",
