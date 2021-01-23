@@ -16,6 +16,7 @@ import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/loading.dart';
+import 'package:lookinmeal/shared/strings.dart';
 import 'package:lookinmeal/shared/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:fluster/fluster.dart';
@@ -190,6 +191,7 @@ class MapSampleState extends State<MapSample> {
 				onTap: (){
 					setState(() {
 					  selected = restaurant;
+					  print(selected.name);
 					});
 				}
 				/*infoWindow: InfoWindow(
@@ -245,6 +247,7 @@ class MapSampleState extends State<MapSample> {
 										markerId: MarkerId(marker.markerId.toString()),
 										icon: r.types.length > 0 ? pinLocationIcons[r.types[0]] : basic,
 										position: LatLng(marker.position.latitude, marker.position.longitude),
+										onTap: marker.onTap,
 										infoWindow: marker.infoWindow,
 									));
 								}
@@ -320,7 +323,7 @@ class MapSampleState extends State<MapSample> {
 							  			  						image: new DecorationImage(
 							  			  								fit: BoxFit.cover,
 							  			  								image: new NetworkImage(
-							  			  										selected.images.first)
+																						selected.images.length == 0? StaticStrings.defaultImage :	selected.images.first)
 							  			  						)
 							  			  				)
 							  			  		),

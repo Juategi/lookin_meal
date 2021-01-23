@@ -110,7 +110,7 @@ class _CommentsState extends State<Comments> {
                                       style: GoogleFonts.niramit(
                                         textStyle: TextStyle(color: Colors.black,
                                           letterSpacing: .3,
-                                          fontWeight: FontWeight.normal,
+                                          fontWeight: FontWeight.bold,
                                           fontSize: ScreenUtil().setSp(14),),))),
                             ],
                           ),
@@ -126,10 +126,10 @@ class _CommentsState extends State<Comments> {
                                   child: Text(rating.comment, maxLines: 3,
                                       textAlign: TextAlign.start,
                                       style: GoogleFonts.niramit(
-                                        textStyle: TextStyle(color: Colors.black,
+                                        textStyle: TextStyle(color: Colors.black87,
                                           letterSpacing: .3,
                                           fontWeight: FontWeight.normal,
-                                          fontSize: ScreenUtil().setSp(18),),))),
+                                          fontSize: ScreenUtil().setSp(16),),))),
                             ],
                           )
                         ],
