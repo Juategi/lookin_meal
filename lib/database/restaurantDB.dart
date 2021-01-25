@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:lookinmeal/database/userDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
@@ -8,7 +7,6 @@ import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/strings.dart';
-
 import 'entryDB.dart';
 
 class DBServiceRestaurant{
