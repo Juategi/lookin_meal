@@ -22,6 +22,7 @@ class DBServiceUser {
 	//String api = "https://lookinmeal-dcf41.firebaseapp.com";//"http://localhost:5001/lookinmeal-dcf41/us-central1/app";//
 
 	Future<User> getUserData(String id) async{
+		await GeolocationService().getLocation();
 		if(userF == null){
 			var response = await http.get(
 					"${StaticStrings.api}/users", headers: {"id": id});
@@ -32,8 +33,6 @@ class DBServiceUser {
 			}
 			if(response.body != "[]") {
 				List<dynamic> result = json.decode(response.body);
-				GeolocationService _geolocationService = GeolocationService();
-				Position myPos = await _geolocationService.getLocation();
 				User user = User(
 						uid: result.first["user_id"],
 						name: result.first["name"],
@@ -42,14 +41,13 @@ class DBServiceUser {
 						picture: result.first["image"],
 						country: result.first["country"],
 						username: result.first["username"],
-						//favorites: await this.getUserFavorites(id, myPos.latitude, myPos.longitude),
 						ratings: await DBServiceEntry.dbServiceEntry.getAllRating(id),
-						recently: await DBServiceRestaurant.dbServiceRestaurant.getRecently(result.first["user_id"].toString()),
+						recently: await DBServiceRestaurant.dbServiceRestaurant.getRecently(id),
 				);
+				user.lists = await dbServiceUser.getLists();
+				user.history = await DBServiceEntry.dbServiceEntry.getRatingsHistory(user.uid, user.ratings.map((r) => r.entry_id).toList(), 0, 15);
 				print("User obtained: ${result.first}");
 				userF = user;
-				user.lists = await dbServiceUser.getLists();
-				user.history = await DBServiceEntry.dbServiceEntry.getRatingsHistory(DBServiceUser.userF.uid, DBServiceUser.userF.ratings.map((r) => r.entry_id).toList(), 0, 15);
 				return user;
 			}
 		}
@@ -183,6 +181,7 @@ class DBServiceUser {
 				items: element['list']  == null ? null : List<String>.from(element['list']),
 			));
 		}
+		print("Lists gotten");
 		return lists;
 	}
 

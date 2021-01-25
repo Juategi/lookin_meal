@@ -91,7 +91,7 @@ class DBServiceEntry{
           comment: element["comment"] == null? " " : element["comment"]
       ));
     }
-    print(ratings);
+    //print(ratings);
     return ratings;
   }
 

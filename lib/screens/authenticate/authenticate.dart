@@ -92,7 +92,7 @@ class _AuthenticateState extends State<Authenticate> {
 									onTap: () async{
 										PermissionStatus permission = await LocationPermissions().requestPermissions();
 										if(permission == PermissionStatus.granted)
-											dynamic result = await _auth.loginFB();
+											await _auth.loginFB();
 									},
 								),
 								SizedBox(height: 30.h,),
@@ -138,7 +138,7 @@ class _AuthenticateState extends State<Authenticate> {
 									onTap: () async{
 										PermissionStatus permission = await LocationPermissions().requestPermissions();
 										if(permission == PermissionStatus.granted)
-											dynamic result = await _auth.loginGoogle();
+											await _auth.loginGoogle();
 									}
 								),
 								SizedBox(height: 30.h,),
@@ -184,7 +184,7 @@ class _AuthenticateState extends State<Authenticate> {
 										onTap: ()async{
 											PermissionStatus permission = await LocationPermissions().requestPermissions();
 											if(permission == PermissionStatus.granted)
-											await Navigator.pushNamed(context, "/login");
+												await Navigator.pushNamed(context, "/login");
 									},
 								),
 								SizedBox(height: 40.h,),
