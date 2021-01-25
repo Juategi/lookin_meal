@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/edit_images.dart';
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -85,7 +86,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                           }
                           delivery[i] = delivery[i].trim();
                         }
-                        await DBService().updateRestaurantData(restaurant.restaurant_id, name, phone, web, address, email, types, schedule, delivery, currency);
+                        await DBServiceRestaurant.dbServiceRestaurant.updateRestaurantData(restaurant.restaurant_id, name, phone, web, address, email, types, schedule, delivery, currency);
                         restaurant.currency = currency;
                         restaurant.name = name;
                         restaurant.phone = phone;

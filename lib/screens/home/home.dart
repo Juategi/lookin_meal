@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
@@ -11,7 +12,7 @@ import 'package:lookinmeal/screens/search/search.dart';
 import 'package:lookinmeal/screens/top/top.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -28,8 +29,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with WidgetsBindingObserver {
-	final AuthService _auth = AuthService();
-	final DBService _dbService = DBService();
 	final GeolocationService _geolocationService = GeolocationService();
 	User user;
 	String id;
@@ -63,11 +62,11 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		myPos = await _geolocationService.getLocation();
 		locality = await _geolocationService.getLocality(myPos.latitude, myPos.longitude);
 		country = await _geolocationService.getCountry(myPos.latitude, myPos.longitude);
-		nearRestaurants= await _dbService.getNearRestaurants(myPos.latitude, myPos.longitude, locality.toUpperCase());
+		nearRestaurants= await DBServiceRestaurant.dbServiceRestaurant.getNearRestaurants(myPos.latitude, myPos.longitude, locality.toUpperCase());
 		/*for(Restaurant restaurant in restaurants){
 			distances.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));
 		}*/
-		popular = await DBService.dbService.getPopular();
+		popular = await DBServiceRestaurant.dbServiceRestaurant.getPopular();
 		ready = true;
 	}
 

@@ -2,7 +2,8 @@ import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
+import 'package:lookinmeal/database/restaurantDB.dart';
 
 
 class JsonUpdate{
@@ -17,7 +18,6 @@ class JsonUpdate{
 		String jsonString = await rootBundle.loadString('dbjson/$jsonFile');
 		List<dynamic> restaurants = json.decode(jsonString);
 		Map<String, dynamic> place = restaurants.elementAt(index);
-    DBService _dbService = DBService();
 		id = place['id'];
 		name = place['name'];
 		rating = double.parse(place['rating']);
@@ -62,7 +62,7 @@ class JsonUpdate{
 			images.add(image);
 		}
 		images = images.toSet().toList();
-		dynamic result = await _dbService.uploadRestaurantData(id,name, phone, website, webUrl, address, email, city, country, latitude, longitude, rating, numberViews, images, types, schedule, "€",[]);
+		dynamic result = await DBServiceRestaurant.dbServiceRestaurant.uploadRestaurantData(id,name, phone, website, webUrl, address, email, city, country, latitude, longitude, rating, numberViews, images, types, schedule, "€",[]);
 		print("Update completed ");
 	}
 }

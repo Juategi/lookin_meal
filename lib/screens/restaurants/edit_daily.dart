@@ -4,9 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/database/entryDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -205,7 +206,7 @@ class _EditDailyState extends State<EditDaily> {
                     restaurant.dailymenu.add(description);
                     restaurant.dailymenu.add(price.toString());
                     restaurant.dailymenu.addAll(dailyMenu);
-                    await DBService().updateDailyMenu(restaurant.restaurant_id, restaurant.dailymenu);
+                    await DBServiceEntry.dbServiceEntry.updateDailyMenu(restaurant.restaurant_id, restaurant.dailymenu);
                     Alerts.toast("Menu saved");
                     Navigator.pop(context);
                   },

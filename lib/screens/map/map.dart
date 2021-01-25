@@ -8,9 +8,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:lookinmeal/database/restaurantDB.dart';
+import 'package:lookinmeal/database/userDB.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
-import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -57,20 +58,6 @@ class MapSampleState extends State<MapSample> {
 				_timer();
 			});
 		}
-	}
-
-	Future updateRecent() async{
-		for(Restaurant r in DBService.userF.recently){
-			if(r.restaurant_id == selected.restaurant_id){
-				return;
-			}
-		}
-		if(DBService.userF.recently.length == 5){
-			DBService.userF.recently.removeAt(0);
-		}
-		DBService.userF.recently.add(selected);
-		DBService.userF.recent = DBService.userF.recently;
-		DBService.dbService.updateRecently();
 	}
 
 	int calculateMarkerSize(){
@@ -155,7 +142,7 @@ class MapSampleState extends State<MapSample> {
 	}
 
 	Future _loadMarkers() async {
-		_restaurants = await DBService().getRestaurantsSquare(pos.latitude, pos.longitude, latFrom, latTo, longFrom, longTo);
+		_restaurants = await DBServiceRestaurant.dbServiceRestaurant.getRestaurantsSquare(pos.latitude, pos.longitude, latFrom, latTo, longFrom, longTo);
 		for(Restaurant restaurant in _restaurants){
 			_markers.add(RestaurantMarker(
 				id: restaurant.restaurant_id,
@@ -181,7 +168,7 @@ class MapSampleState extends State<MapSample> {
 		setState(() {
 			loading = true;
 		});
-		_restaurants = await DBService().getRestaurantsSquare(pos.latitude, pos.longitude, latFrom, latTo, longFrom, longTo);
+		_restaurants = await DBServiceRestaurant.dbServiceRestaurant.getRestaurantsSquare(pos.latitude, pos.longitude, latFrom, latTo, longFrom, longTo);
 		_markersNoCluster.clear();
 		for(Restaurant restaurant in _restaurants){
 			_markersNoCluster.add(Marker(
@@ -296,7 +283,7 @@ class MapSampleState extends State<MapSample> {
 							right: 0.w,
 							child: GestureDetector(
 								onTap: (){
-									updateRecent();
+									DBServiceRestaurant.dbServiceRestaurant.updateRecently(selected);
 									Navigator.pushNamed(context, "/restaurant",arguments: selected).then((value) => setState(() {}));
 								},
 							  child: Center(

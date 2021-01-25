@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/database/entryDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/user.dart';
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:lookinmeal/shared/widgets.dart';
@@ -38,7 +39,7 @@ class _CommentsState extends State<Comments> {
   }
 
   Future _update() async{
-    ratings = await DBService.dbService.getEntryRatings(entry.id);
+    ratings = await DBServiceEntry.dbServiceEntry.getEntryRatings(entry.id);
   }
 
   @override

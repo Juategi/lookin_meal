@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/decos.dart';
 import 'package:lookinmeal/shared/loading.dart';
@@ -128,7 +128,7 @@ class _EmailPasswordState extends State<EmailPassword> {
                           setState(() {
                             loading = true;
                           });
-                          if((await DBService.dbService.checkUsernameEmail(user.username, user.email)).contains("e") == false){
+                          if((await DBServiceUser.dbServiceUser.checkUsernameEmail(user.username, user.email)).contains("e") == false){
                             dynamic result = AuthService().registerEP(user.email, password, user.name, user.country, user.username);
                             if(result == null){
                               setState(() {

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/decos.dart';
 import 'package:lookinmeal/shared/loading.dart';
@@ -170,7 +170,7 @@ class _SignInState extends State<SignIn> {
 													setState(() {
 														loading = true;
 													});
-													if(await DBService.dbService.checkUsername(username) == false){
+													if(await DBServiceUser.dbServiceUser.checkUsername(username) == false){
 														Navigator.pushNamed(context, "/emailpass", arguments: User(
 															name: name,
 															username: username,

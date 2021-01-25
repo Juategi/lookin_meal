@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/database/entryDB.dart';
+import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/entry.dart';
 import 'package:lookinmeal/screens/restaurants/restaurant_tile.dart';
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/alert.dart';
@@ -103,7 +105,7 @@ class _FavoriteListsState extends State<FavoriteLists> {
 
   List<Widget> _loadLists(){
     List<Widget> items = [];
-    items.addAll(DBService.userF.lists.map((list) => list.type != type? Container() : Padding(
+    items.addAll(DBServiceUser.userF.lists.map((list) => list.type != type? Container() : Padding(
       padding: EdgeInsets.symmetric(vertical: 15.h),
       child: GestureDetector(
         onTap: (){
@@ -144,12 +146,12 @@ class _FavoriteListsState extends State<FavoriteLists> {
                   SizedBox(height: 2.h,),
                   Icon(Icons.share_outlined, size: ScreenUtil().setSp(45), color: Color.fromRGBO(255, 110, 117, 0.6),),
                   SizedBox(height: 19.h,),
-                  DBService.userF.lists.first.id == list.id? Container() : GestureDetector(
+                  DBServiceUser.userF.lists.first.id == list.id? Container() : GestureDetector(
                       onTap: () async{
                         bool delete = await Alerts.confirmation("Are you sure you want to delete this list?", context);
                         if(delete){
-                          await DBService.dbService.deleteList(list.id);
-                          DBService.userF.lists.remove(list);
+                          await DBServiceUser.dbServiceUser.deleteList(list.id);
+                          DBServiceUser.userF.lists.remove(list);
                           setState(() {
                           });
                         }
@@ -163,7 +165,7 @@ class _FavoriteListsState extends State<FavoriteLists> {
         ),
       ),
     )));
-    if(DBService.userF.lists.where((list) => list.type == type).length < 15)
+    if(DBServiceUser.userF.lists.where((list) => list.type == type).length < 15)
       items.add(Padding(
         padding: EdgeInsets.symmetric(vertical: 15.h),
         child: GestureDetector(
@@ -290,8 +292,8 @@ class _CreateListState extends State<CreateList> {
                 Alerts.toast("Write a name");
               }
               else{
-                FavoriteList list = await DBService.dbService.createList(DBService.userF.uid, name, StaticStrings.defaultEntry, type);
-                DBService.userF.lists.add(list);
+                FavoriteList list = await DBServiceUser.dbServiceUser.createList(DBServiceUser.userF.uid, name, StaticStrings.defaultEntry, type);
+                DBServiceUser.userF.lists.add(list);
                 Navigator.pop(context);
               }
             },
@@ -365,29 +367,14 @@ class _ListDisplayState extends State<ListDisplay> {
           aux.add(id);
         }
       }
-      restaurants.addAll(await DBService.dbService.getRestaurantsById(aux, GeolocationService.myPos.latitude, GeolocationService.myPos.longitude));
+      restaurants.addAll(await DBServiceRestaurant.dbServiceRestaurant.getRestaurantsById(aux, GeolocationService.myPos.latitude, GeolocationService.myPos.longitude));
       setState(() {
       });
     }
     else{
-      entries = await DBService.dbService.getEntriesById(list.items);
+      entries = await DBServiceEntry.dbServiceEntry.getEntriesById(list.items);
       print(entries);
     }
-  }
-
-
-  Future updateRecent(Restaurant restaurant) async{
-    for(Restaurant r in DBService.userF.recently){
-      if(r.restaurant_id == restaurant.restaurant_id){
-        return;
-      }
-    }
-    if(DBService.userF.recently.length == 5){
-      DBService.userF.recently.removeAt(0);
-    }
-    DBService.userF.recently.add(restaurant);
-    DBService.userF.recent = DBService.userF.recently;
-    DBService.dbService.updateRecently();
   }
 
 
@@ -396,7 +383,7 @@ class _ListDisplayState extends State<ListDisplay> {
     String aux = ModalRoute.of(context).settings.arguments;
     type = aux.substring(0,1);
     id = aux.substring(1);
-    list = DBService.userF.lists.singleWhere((element) => element.id == id);
+    list = DBServiceUser.userF.lists.singleWhere((element) => element.id == id);
     if(init){
       _timer();
       _updateLists();
@@ -424,7 +411,7 @@ class _ListDisplayState extends State<ListDisplay> {
                         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
                         child: GestureDetector(
                           onTap: (){
-                            updateRecent(restaurant);
+                            DBServiceRestaurant.dbServiceRestaurant.updateRecently(restaurant);
                             Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
                           },
                           child: Container(
@@ -464,7 +451,7 @@ class _ListDisplayState extends State<ListDisplay> {
                                             list.items.remove(restaurant.restaurant_id);
                                             restaurants.remove(restaurant);
                                             Alerts.toast("${restaurant.name} removed from ${list.name}");
-                                            await DBService.dbService.updateList(list);
+                                            await DBServiceUser.dbServiceUser.updateList(list);
                                             setState(() {
                                             });
                                           }
@@ -574,7 +561,7 @@ class _ListDisplayState extends State<ListDisplay> {
                                                     list.items.remove(entry.id);
                                                     entries.remove(entryId);
                                                     Alerts.toast("${entry.name} removed from ${list.name}");
-                                                    await DBService.dbService.updateList(list);
+                                                    await DBServiceUser.dbServiceUser.updateList(list);
                                                     setState(() {
                                                     });
                                                   }

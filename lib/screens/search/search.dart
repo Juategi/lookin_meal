@@ -9,7 +9,7 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:lookinmeal/screens/search/searchTiles.dart';
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/search.dart';
 import 'package:lookinmeal/shared/common_data.dart';

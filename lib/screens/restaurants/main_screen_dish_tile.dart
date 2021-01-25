@@ -6,7 +6,7 @@ import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/entry.dart';
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/strings.dart';
 import 'package:lookinmeal/shared/widgets.dart';
@@ -23,25 +23,10 @@ class _DishTileState extends State<DishTile> {
   User user;
   Restaurant restaurant;
 
-  Future updateRecent() async{
-    for(Restaurant r in user.recently){
-      if(r.restaurant_id == restaurant.restaurant_id){
-        return;
-      }
-    }
-    if(user.recently.length == 5){
-      user.recently.removeAt(0);
-    }
-    user.recently.add(restaurant);
-    user.recent = user.recently;
-    DBService.dbService.updateRecently();
-  }
-
   @override
   Widget build(BuildContext context) {
     entry = Provider.of<MenuEntry>(context);
     restaurant = Provider.of<Restaurant>(context);
-    user = DBService.userF;
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return GestureDetector(
         onTap: () async{

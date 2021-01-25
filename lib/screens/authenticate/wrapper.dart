@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'authenticate.dart';
 import 'package:lookinmeal/screens/home/home.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +16,7 @@ class Wrapper extends StatelessWidget {
 			return Authenticate();
 		else
 			return FutureProvider<User>.value(
-					value: DBService().getUserData(user),
+					value: DBServiceUser.dbServiceUser.getUserData(user),
 					catchError: (_, __) => null,
 					child: Home()
 			);

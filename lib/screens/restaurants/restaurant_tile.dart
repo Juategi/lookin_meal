@@ -4,9 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/widgets.dart';
@@ -21,20 +22,6 @@ class RestaurantTile extends StatefulWidget {
 class _RestaurantTileState extends State<RestaurantTile> {
   Restaurant restaurant;
 
-  Future updateRecent() async{
-    for(Restaurant r in DBService.userF.recently){
-      if(r.restaurant_id == restaurant.restaurant_id){
-        return;
-      }
-    }
-    if(DBService.userF.recently.length == 5){
-      DBService.userF.recently.removeAt(0);
-    }
-    DBService.userF.recently.add(restaurant);
-    DBService.userF.recent = DBService.userF.recently;
-    DBService.dbService.updateRecently();
-  }
-
   @override
   Widget build(BuildContext context) {
     restaurant = Provider.of<Restaurant>(context);
@@ -43,7 +30,7 @@ class _RestaurantTileState extends State<RestaurantTile> {
       padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: GestureDetector(
         onTap: (){
-          updateRecent();
+          DBServiceRestaurant.dbServiceRestaurant.updateRecently(restaurant);
           Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
         },
         child: Container(

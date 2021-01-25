@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -43,7 +43,7 @@ class AuthService{
 		try{
 			AuthResult result =	await _auth.createUserWithEmailAndPassword(email: email, password: password);
 			FirebaseUser user = result.user;
-			await DBService.dbService.createUser(user.uid,email,name,StaticStrings.defaultImage,"EP", country, username);
+			await DBServiceUser.dbServiceUser.createUser(user.uid,email,name,StaticStrings.defaultImage,"EP", country, username);
 			return _userFromFirebaseUser(user);
 		} catch(e){
 			print(e);
@@ -74,21 +74,21 @@ class AuthService{
 		final facebookAuthCred = FacebookAuthProvider.getCredential(accessToken: token);
 		final credential = await _auth.signInWithCredential(facebookAuthCred);
 		String picture = profile["picture"]["data"]["url"];
-		User finalUser = await DBService().getUserDataChecker(credential.user.uid);
+		User finalUser = await DBServiceUser.dbServiceUser.getUserDataChecker(credential.user.uid);
 		if(finalUser == null) {
 			while(true){
 				String username = profile["first_name"].toString().trim() + profile["last_name"].toString().trim() + (Random().nextInt(10000).toString());
-				if(await DBService.dbService.checkUsername(username)){
+				if(await DBServiceUser.dbServiceUser.checkUsername(username)){
 					username = profile["first_name"].toString().trim() + profile["last_name"].toString().trim() + (Random().nextInt(10000).toString());
 				}
 				else{
-					await DBService.dbService.createUser(credential.user.uid,credential.user.email, profile["name"],picture,"FB", await DBService.dbService.getCountry(), username);
+					await DBServiceUser.dbServiceUser.createUser(credential.user.uid,credential.user.email, profile["name"],picture,"FB", await DBServiceUser.dbServiceUser.getCountry(), username);
 					return _userFromFirebaseUser(credential.user);
 				}
 			}
 		}
 		else{
-			await DBService.dbService.updateUserData(credential.user.uid,credential.user.email, profile["name"],picture,"FB");
+			await DBServiceUser.dbServiceUser.updateUserData(credential.user.uid,credential.user.email, profile["name"],picture,"FB");
 			return _userFromFirebaseUser(credential.user);
 		}
 
@@ -115,23 +115,23 @@ class AuthService{
 		assert(await user.getIdToken() != null);
 		final FirebaseUser currentUser = await _auth.currentUser();
 		assert(user.uid == currentUser.uid);
-		User finalUser = await DBService().getUserDataChecker(user.uid);
+		User finalUser = await DBServiceUser.dbServiceUser.getUserDataChecker(user.uid);
 		if(finalUser == null) {
 			while(true){
 				String username = authResult.additionalUserInfo.profile['given_name'].toString().trim() + authResult.additionalUserInfo.profile['family_name'].toString().trim() + (Random().nextInt(10000).toString());
-				if(await DBService.dbService.checkUsername(username)){
+				if(await DBServiceUser.dbServiceUser.checkUsername(username)){
 					username = authResult.additionalUserInfo.profile['given_name'].toString().trim() + authResult.additionalUserInfo.profile['family_name'].toString().trim() + (Random().nextInt(10000).toString());
 				}
 				else {
-					await DBService.dbService.createUser(
+					await DBServiceUser.dbServiceUser.createUser(
 							user.uid, user.email, authResult.additionalUserInfo.profile['name'],
-							authResult.additionalUserInfo.profile['picture'], "GM", await DBService.dbService.getCountry(), username);
+							authResult.additionalUserInfo.profile['picture'], "GM", await DBServiceUser.dbServiceUser.getCountry(), username);
 					return _userFromFirebaseUser(user);
 				}
 			}
 		}
 		else{
-			await DBService.dbService.updateUserData(
+			await DBServiceUser.dbServiceUser.updateUserData(
 					user.uid, user.email, authResult.additionalUserInfo.profile['name'],
 					authResult.additionalUserInfo.profile['picture'], "GM");
 			return _userFromFirebaseUser(user);
@@ -139,12 +139,12 @@ class AuthService{
 	}
 
 	void reBirth(BuildContext context){
-		DBService.userF = null;
+		DBServiceUser.userF = null;
 		Phoenix.rebirth(context);
 	}
 
 	Future signOut() async{
-		DBService.userF = null;
+		DBServiceUser.userF = null;
 		//Pool.ids.clear();
 		Pool.restaurants.clear();
 		try{

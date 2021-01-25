@@ -6,13 +6,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
+import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/main_screen_dish_tile.dart';
 import 'package:lookinmeal/screens/restaurants/restaurant_tile.dart';
 import 'package:lookinmeal/screens/search/search.dart';
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -144,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
 																	print(result.formattedAddress);
 																	GeolocationService.myPos = Position(latitude: result.geometry.location.lat, longitude: result.geometry.location.lng);
 																	String locality = await GeolocationService().getLocality(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude);
-																	nearRestaurants = await DBService.dbService.getNearRestaurants(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude, locality.toUpperCase());
+																	nearRestaurants = await DBServiceRestaurant.dbServiceRestaurant.getNearRestaurants(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude, locality.toUpperCase());
 																	setState(() {
 																	});
 																	Navigator.of(context).pop();

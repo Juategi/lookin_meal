@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/restaurant.dart';
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -114,7 +115,7 @@ class _EditImagesState extends State<EditImages> {
               loading = true;
             });
             restaurant.images = images;
-            await DBService().updateRestaurantImages(restaurant.restaurant_id,restaurant.images);
+            await DBServiceRestaurant.dbServiceRestaurant.updateRestaurantImages(restaurant.restaurant_id,restaurant.images);
             Alerts.toast("images updated!");
             Navigator.pop(context);
           },

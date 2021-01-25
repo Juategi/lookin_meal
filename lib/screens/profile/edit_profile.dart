@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/decos.dart';
 import 'package:lookinmeal/shared/strings.dart';
@@ -13,7 +13,6 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   final _formKey = GlobalKey<FormState>();
-  final DBService _dbService = DBService();
   final StorageService _storageService = StorageService();
   String email, password, name = " ";
   String error = " ";
@@ -37,7 +36,7 @@ class _EditProfileState extends State<EditProfile> {
                           onPressed: () async{
                             image = await _storageService.uploadImage(context,"images");
                             if(image != null){
-                              await _dbService.updateUserData(user.uid, user.email, user.name, image, user.service);
+                              //await _dbService.updateUserData(user.uid, user.email, user.name, image, user.service);
                               if(user.picture != StaticStrings.defaultImage)
                                 await _storageService.removeFile(user.picture);
                               user.picture = image;

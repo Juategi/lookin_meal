@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:lookinmeal/database/entryDB.dart';
+import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/rating.dart';
@@ -11,7 +13,7 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/menu_tile.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/translator.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -34,11 +36,10 @@ class _EntryRatingState extends State<EntryRating> {
   bool init = true;
   Rating actual;
   String comment = "";
-  final DBService _dbService = DBService();
   final formatter = new DateFormat('yyyy-MM-dd');
 
   List<DropdownMenuItem> _loadItems(){
-    List<DropdownMenuItem> items = DBService.userF.lists.where((FavoriteList list) => list.type == 'E').map((list) =>
+    List<DropdownMenuItem> items = DBServiceUser.userF.lists.where((FavoriteList list) => list.type == 'E').map((list) =>
         DropdownMenuItem<FavoriteList>(
             value: list,
             child: Row( mainAxisAlignment: MainAxisAlignment.start,
@@ -93,7 +94,7 @@ class _EntryRatingState extends State<EntryRating> {
     if(init){
       rate = 0.0;
       hasRate = false;
-      for(Rating r in DBService.userF.ratings){
+      for(Rating r in DBServiceUser.userF.ratings){
         if(r.entry_id == entry.id){
           rate = r.rating;
           oldRate = rate;
@@ -130,6 +131,7 @@ class _EntryRatingState extends State<EntryRating> {
                       children: [
                         GestureDetector(
                           onTap:(){
+                            DBServiceRestaurant.dbServiceRestaurant.updateRecently(restaurant);
                             Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
                           },
                           child: Container(
@@ -140,7 +142,7 @@ class _EntryRatingState extends State<EntryRating> {
                         ),
                         SizedBox(width: 50.w,),
                         DropdownButton<FavoriteList>(
-                          icon: Icon(DBService.userF.lists.firstWhere((list) => list.type == 'E' && list.items.contains(entry.id), orElse: () => null) != null ? Icons.favorite_outlined : Icons.favorite_outline, size: ScreenUtil().setSp(45),color: Color.fromRGBO(255, 65, 112, 1)),
+                          icon: Icon(DBServiceUser.userF.lists.firstWhere((list) => list.type == 'E' && list.items.contains(entry.id), orElse: () => null) != null ? Icons.favorite_outlined : Icons.favorite_outline, size: ScreenUtil().setSp(45),color: Color.fromRGBO(255, 65, 112, 1)),
                           items: _loadItems(),
                           onChanged: (list)async{
                             if(list.id == null){
@@ -160,7 +162,7 @@ class _EntryRatingState extends State<EntryRating> {
                                 list.items.remove(entry.id);
                                 Alerts.toast("${entry.name} removed from ${list.name}");
                               }
-                              await DBService.dbService.updateList(list);
+                              await DBServiceUser.dbServiceUser.updateList(list);
                             }
                             setState(() {
                             });
@@ -283,8 +285,8 @@ class _EntryRatingState extends State<EntryRating> {
                     actual.rating = rate;
                     actual.date = formatter.format(DateTime.now());
                     actual.comment = comment;
-                    await _dbService.deleteRate(DBService.userF.uid, entry.id);
-                    _dbService.addRate(DBService.userF.uid, entry.id, rate, comment);
+                    await DBServiceEntry.dbServiceEntry.deleteRate(DBServiceUser.userF.uid, entry.id);
+                    DBServiceEntry.dbServiceEntry.addRate(DBServiceUser.userF.uid, entry.id, rate, comment);
                     double aux = (entry.rating*entry.numReviews + rate - oldRate)/(entry.numReviews);
                     //entry.rating = double.parse(aux.toStringAsFixed(2));
                     entry.rate = double.parse(aux.toStringAsFixed(2));
@@ -294,14 +296,14 @@ class _EntryRatingState extends State<EntryRating> {
                     Navigator.pop(context);
                   }
                   else{
-                    DBService.userF.ratings.add(Rating(
+                    DBServiceUser.userF.ratings.add(Rating(
                         entry_id: entry.id,
                         rating: rate,
                         date: formatter.format(DateTime.now()),
                         comment: comment
                     ));
-                    DBService.userF.history[entry.id] = restaurant;
-                    _dbService.addRate(DBService.userF.uid, entry.id, rate, comment);
+                    DBServiceUser.userF.history[entry.id] = restaurant;
+                    DBServiceEntry.dbServiceEntry.addRate(DBServiceUser.userF.uid, entry.id, rate, comment);
                     double aux = (entry.rating*entry.numReviews + rate)/(entry.numReviews+1);
                     //entry.rating = double.parse(aux.toStringAsFixed(2));
                     //entry.numReviews += 1;

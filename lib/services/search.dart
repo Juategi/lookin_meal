@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/dish_query.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:http/http.dart' as http;
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/strings.dart';
@@ -31,7 +32,7 @@ class SearchService{
     var response = await http.get(
         "${StaticStrings.api}/search",
         headers: {"query": query, "distance" : maxDistance.toString(), "latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": searchType, "offset" :offset.toString(), "types":finalTypes});
-    List<Restaurant> parsed = await DBService().parseResponse(response);
+    List<Restaurant> parsed = await DBServiceRestaurant.dbServiceRestaurant.parseResponse(response);
     if(parsed.length == 0 || (parsed.length < 10 && offset < 20)){
       //transformar 'platero:* |utopi:* |fo:*'
       query = originalQuery;
@@ -45,7 +46,7 @@ class SearchService{
       var response = await http.get(
           "${StaticStrings.api}/search",
           headers: {"query": query, "distance" : maxDistance.toString(), "latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": searchType, "offset" :offset.toString(), "types":finalTypes});
-      for(Restaurant restaurant in await DBService().parseResponse(response)){
+      for(Restaurant restaurant in await DBServiceRestaurant.dbServiceRestaurant.parseResponse(response)){
         if(!parsed.contains(restaurant))
           parsed.add(restaurant);
       }
@@ -87,7 +88,7 @@ class SearchService{
             "allergens1": allergensString.first, "allergens2": allergensString[1], "allergens3": allergensString.last
           });
       print(response.body);
-      List<Restaurant> parsed = await DBService().parseResponse(response);
+      List<Restaurant> parsed = await DBServiceRestaurant.dbServiceRestaurant.parseResponse(response);
       List<dynamic> result = json.decode(response.body);
       finalMap = {};
       for(int i = 0; i < result.length; i++){
@@ -110,7 +111,7 @@ class SearchService{
             "allergens1": allergensString.first, "allergens2": allergensString[1], "allergens3": ""
           });
       print(response.body);
-      List<Restaurant> parsed = await DBService().parseResponse(response);
+      List<Restaurant> parsed = await DBServiceRestaurant.dbServiceRestaurant.parseResponse(response);
       List<dynamic> result = json.decode(response.body);
       finalMap = {};
       for(int i = 0; i < result.length; i++){
@@ -132,7 +133,7 @@ class SearchService{
             "allergens1": allergensString.first, "allergens2": "", "allergens3": ""
           });
       print(response.body);
-      List<Restaurant> parsed = await DBService().parseResponse(response);
+      List<Restaurant> parsed = await DBServiceRestaurant.dbServiceRestaurant.parseResponse(response);
       List<dynamic> result = json.decode(response.body);
       finalMap = {};
       for(int i = 0; i < result.length; i++){

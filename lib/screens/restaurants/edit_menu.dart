@@ -5,9 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/database/entryDB.dart';
+import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
-import 'package:lookinmeal/services/database.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -784,7 +786,7 @@ class _EditMenuState extends State<EditMenu> {
                     entry.price = entry.price.toDouble();
                     //print("${entry.section} / ${entry.name} / ${entry.price}/ ${entry.allergens}");
                   }
-                  await DBService().uploadMenu(sections, menu, restaurant);
+                  await DBServiceEntry.dbServiceEntry.uploadMenu(sections, menu, restaurant);
                   Alerts.toast("Menu saved");
                   setState(() {
                   });

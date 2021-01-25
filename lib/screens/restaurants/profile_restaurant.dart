@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/database/entryDB.dart';
+import 'package:lookinmeal/database/userDB.dart';
 import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
@@ -15,7 +17,6 @@ import 'package:lookinmeal/screens/restaurants/info.dart';
 import 'package:lookinmeal/screens/restaurants/menu.dart';
 import 'package:lookinmeal/screens/restaurants/top_dishes_tile.dart';
 import 'package:lookinmeal/services/currency_converter.dart';
-import 'package:lookinmeal/services/database.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/services/translator.dart';
 import 'package:lookinmeal/shared/alert.dart';
@@ -35,7 +36,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 	bool loading = false;
 	String language;
 	void _loadMenu()async{
-		restaurant.menu = await DBService().getMenu(restaurant.restaurant_id);
+		restaurant.menu = await DBServiceEntry.dbServiceEntry.getMenu(restaurant.restaurant_id);
 	}
 
 	void _timer() {
@@ -142,7 +143,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   }
 
   List<DropdownMenuItem> _loadItems(){
-		List<DropdownMenuItem> items = DBService.userF.lists.where((FavoriteList list) => list.type == 'R').map((list) =>
+		List<DropdownMenuItem> items = DBServiceUser.userF.lists.where((FavoriteList list) => list.type == 'R').map((list) =>
 				DropdownMenuItem<FavoriteList>(
 						value: list,
 						child: Row( mainAxisAlignment: MainAxisAlignment.start,
@@ -204,7 +205,6 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 		}
   	//if(restaurant.menu == null)
   		//_loadMenu();
-		User user = DBService.userF;
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return Scaffold(
 			//backgroundColor: CommonData.backgroundColor,
@@ -241,7 +241,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 
 									),*/
 									DropdownButton<FavoriteList>(
-											icon: Icon(user.lists.firstWhere((list) => list.type == 'R' && list.items.contains(restaurant.restaurant_id), orElse: () => null) != null ? Icons.favorite_outlined : Icons.favorite_outline, size: ScreenUtil().setSp(45),color: Color.fromRGBO(255, 65, 112, 1)),
+											icon: Icon(DBServiceUser.userF.lists.firstWhere((list) => list.type == 'R' && list.items.contains(restaurant.restaurant_id), orElse: () => null) != null ? Icons.favorite_outlined : Icons.favorite_outline, size: ScreenUtil().setSp(45),color: Color.fromRGBO(255, 65, 112, 1)),
 											items: _loadItems(),
 											onChanged: (list)async{
 												if(list.id == null){
@@ -261,7 +261,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 														list.items.remove(restaurant.restaurant_id);
 														Alerts.toast("${restaurant.name} removed from ${list.name}");
 													}
-													await DBService.dbService.updateList(list);
+													await DBServiceUser.dbServiceUser.updateList(list);
 												}
 												setState(() {
 												});
