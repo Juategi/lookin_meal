@@ -4,9 +4,9 @@ import 'package:lookinmeal/models/reservation.dart';
 import 'package:lookinmeal/models/table.dart';
 import 'package:lookinmeal/shared/strings.dart';
 
-class DBServiceReservations{
+class DBServiceReservation{
 
-  static final DBServiceReservations dbServiceReservations = DBServiceReservations();
+  static final DBServiceReservation dbServiceReservation = DBServiceReservation();
 
 
   //TABLES
