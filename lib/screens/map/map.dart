@@ -34,7 +34,7 @@ class MapSampleState extends State<MapSample> {
 	double latTo, latFrom, longTo, longFrom;
 	bool loading = false;
 	Restaurant selected;
-	String _mapStyle = '[{"featureType": "poi","stylers": [{"visibility": "off"}]}]';
+	String _mapStyle = '[{"featureType": "poi", elementType: "labels","stylers": [{"visibility": "off"}]}]';
 	Completer<GoogleMapController> _controller = Completer();
 	final GeolocationService _geolocationService = GeolocationService();
 	final _key = GlobalKey();

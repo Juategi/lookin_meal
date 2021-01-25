@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
@@ -51,6 +52,9 @@ class _TopState extends State<Top> {
           children: <Widget>[
             Text('Top dishes', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
             SizedBox(height: 10.h,),
+            DropdownButton(items: <int>[1,2,3,5].map((e) => DropdownMenuItem(child: Text(e.toString()))).toList(), onChanged: (e){
+
+              }, dropdownColor: Colors.grey, focusColor: Colors.grey,)
           ],
         ),
       ),
