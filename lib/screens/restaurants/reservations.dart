@@ -29,15 +29,6 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
     if(restaurant.reservations[dateString] == null){
       restaurant.reservations[dateString] = await DBServiceReservation.dbServiceReservation.getReservationsDay(restaurant.restaurant_id, dateString);
     }
-    restaurant.reservations[dateString].add(Reservation(
-        table_id: "1",
-        restaurant_id: restaurant.restaurant_id,
-        user_id: DBServiceUser.userF.uid,
-        people: 3,
-        username: "juan",
-        reservationdate: dateSelected.toString().substring(0,10),
-        reservationtime: "12:00"
-    ));
     setState(() {
       loading = false;
     });
@@ -77,12 +68,17 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
                       offset: Offset(0, 3),
                     ),],
                   ),
-                  child: Row(
-                    children: [
-                      Text(reservation.username, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
-                      Text("People: ${reservation.people}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
-                      Text("Time: ${reservation.reservationtime}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
-                    ],
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                    child: Row(
+                      children: [
+                        Container(width: 177.w, child: Text(reservation.username, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                        SizedBox(width: 10.w,),
+                        Text("People: ${reservation.people}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+                        SizedBox(width: 20.w,),
+                        Text("Time: ${reservation.reservationtime}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+                      ],
+                    ),
                   ),
                 ),
               )).toList(),
