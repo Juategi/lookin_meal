@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/reservationDB.dart';
+import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/table.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -43,6 +44,7 @@ class _EditTablesState extends State<EditTables> {
         table.edited = false;
       }
     }
+    await DBServiceRestaurant.dbServiceRestaurant.updateRestaurantMealTime(restaurant.restaurant_id, restaurant.mealtime);
   }
 
   Future _getTables() async{
