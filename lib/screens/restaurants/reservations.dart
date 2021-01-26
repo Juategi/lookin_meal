@@ -18,6 +18,7 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
   DateTime dateSelected = DateTime.now();
   String dateString;
   bool loading = false;
+  bool init = true;
 
   Future _getReservations() async{
     setState(() {
@@ -26,9 +27,7 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
     if(restaurant.reservations == null)
       restaurant.reservations = {};
     dateString = dateSelected.toString().substring(0,10);
-    if(restaurant.reservations[dateString] == null){
-      restaurant.reservations[dateString] = await DBServiceReservation.dbServiceReservation.getReservationsDay(restaurant.restaurant_id, dateString);
-    }
+    restaurant.reservations[dateString] = await DBServiceReservation.dbServiceReservation.getReservationsDay(restaurant.restaurant_id, dateString);
     setState(() {
       loading = false;
     });
@@ -39,7 +38,10 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     restaurant = ModalRoute.of(context).settings.arguments;
     dateString = dateSelected.toString().substring(0,10);
-    _getReservations();
+    if(init){
+      _getReservations();
+      init = false;
+    }
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 15.w),
@@ -52,6 +54,11 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
               dateSelected = date;
               await _getReservations();
             }, currentDate: dateSelected,),
+            SizedBox(height: 5.h,),
+            IconButton(icon: Icon(Icons.refresh,  size: ScreenUtil().setSp(45),), onPressed: (){
+              _getReservations();
+            }),
+            SizedBox(height: 5.h,),
             loading ? Loading() : Expanded(child: ListView(
               children: restaurant.reservations[dateString].map((reservation) => Padding(
                 padding: EdgeInsets.symmetric(vertical: 5.h),
