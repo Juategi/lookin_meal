@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:lookinmeal/database/userDB.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/services/geolocation.dart';

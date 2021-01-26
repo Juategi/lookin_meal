@@ -1,21 +1,19 @@
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
+import 'package:lookinmeal/database/userDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/main_screen_dish_tile.dart';
 import 'package:lookinmeal/screens/restaurants/restaurant_tile.dart';
 import 'package:lookinmeal/screens/search/search.dart';
-import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/geolocation.dart';
-import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:provider/provider.dart';
 
