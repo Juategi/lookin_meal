@@ -292,6 +292,16 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 										},
 									),
 								),
+								Align(
+									alignment: AlignmentDirectional.topCenter,
+									child: GestureDetector(
+										child: Icon(Icons.calendar_today_outlined),
+										onTap: ()async{
+											backToOriginal();
+											Navigator.pushNamed(context, "/reservations", arguments: restaurant);
+										},
+									),
+								),
 							],
 						),
 					),

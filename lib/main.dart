@@ -18,6 +18,7 @@ import 'file:///C:/D/lookin_meal/lib/screens/restaurants/admin/edit_restaurant.d
 import 'package:lookinmeal/screens/restaurants/gallery.dart';
 import 'package:lookinmeal/screens/restaurants/info.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
+import 'package:lookinmeal/screens/restaurants/reservations.dart';
 import 'services/app_localizations.dart';
 import 'screens/authenticate/wrapper.dart';
 import 'services/auth.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
           "/createlist" : (context) => CreateList(),
           "/displaylist" : (context) => ListDisplay(),
           "/comments" : (context) => Comments(),
+          "/reservations" : (context) => ReservationsChecker(),
         },
         home: Wrapper(),
         //initialRoute:"/",

@@ -95,6 +95,7 @@ class DBServiceReservation{
         reservationdate: element['reservationdate'],
         reservationtime: element['reservationtime'],
         user_id: element['user_id'],
+        username: element['name']
       );
       reservations.add(reservation);
     }
@@ -115,6 +116,7 @@ class DBServiceReservation{
         reservationdate: element['reservationdate'],
         reservationtime: element['reservationtime'],
         user_id: element['user_id'],
+        username: element['name']
       );
       reservations.add(reservation);
     }
