@@ -12,7 +12,7 @@ class DBServiceReservation{
   //TABLES
 
 
-  Future<String> createTable(Table table) async{
+  Future<String> createTable(RestaurantTable table) async{
     Map body = {
       "restaurant_id": table.restaurant_id,
       "capmax" : table.capmax.toString(),
@@ -22,29 +22,31 @@ class DBServiceReservation{
     var response = await http.post(
         "${StaticStrings.api}/table", body: body);
     List<dynamic> result = json.decode(response.body);
+    print("table created" + result.first["table_id"].toString());
     return result.first["table_id"].toString();
   }
 
-  Future<List<Table>> getTables(String restaurant_id) async {
-    List<Table> tables = [];
+  Future<List<RestaurantTable>> getTables(String restaurant_id) async {
+    List<RestaurantTable> tables = [];
     var response = await http.get(
         "${StaticStrings.api}/tables",
         headers: {"restaurant_id":restaurant_id});
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
-      Table table = Table(
+      RestaurantTable table = RestaurantTable(
         table_id: element['table_id'].toString(),
         restaurant_id: element['restaurant_id'].toString(),
         amount: element['amount'],
         capmax: element['capmax'],
         capmin: element['capmin'],
+        edited: false,
       );
       tables.add(table);
     }
     return tables;
   }
 
-  Future updateTable(Table table) async{
+  Future updateTable(RestaurantTable table) async{
     Map body = {
       "id": table.table_id,
       "capmax" : table.capmax.toString(),

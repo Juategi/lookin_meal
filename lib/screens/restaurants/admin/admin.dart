@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/restaurant.dart';
-import 'package:lookinmeal/screens/restaurants/edit_images.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+
+import 'edit_images.dart';
 
 class AdminPage extends StatefulWidget {
   @override
@@ -88,6 +90,19 @@ class _AdminPageState extends State<AdminPage> {
                 showModalBottomSheet(context: context, isScrollControlled: true,  builder: (BuildContext bc){
                   return EditImages(restaurant: restaurant,);
                 }).then((value){setState(() {});});
+              },
+            ),
+            SizedBox(height: 50.h,),
+            GestureDetector(
+              child: Row(
+                children: [
+                  Icon(FontAwesomeIcons.calendarAlt, size: ScreenUtil().setSp(32),),
+                  SizedBox(width: 30.w,),
+                  Text("Edit tables and reservation", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                ],
+              ),
+              onTap:()async{
+                Navigator.pushNamed(context, "/edittables",arguments: restaurant).then((value) => setState(() {}));
               },
             ),
           ],

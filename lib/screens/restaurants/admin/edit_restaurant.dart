@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
-import 'package:lookinmeal/screens/restaurants/edit_images.dart';
+import 'file:///C:/D/lookin_meal/lib/screens/restaurants/admin/edit_images.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/alert.dart';
@@ -84,6 +84,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                           if(delivery[i] == "" || delivery[i] == " "){
                             delivery[i] = "-";
                           }
+                          delivery[i] = delivery[i].trim();
                           delivery[i] = delivery[i].trim();
                         }
                         await DBServiceRestaurant.dbServiceRestaurant.updateRestaurantData(restaurant.restaurant_id, name, phone, web, address, email, types, schedule, delivery, currency);

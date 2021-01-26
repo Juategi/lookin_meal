@@ -11,7 +11,7 @@ class Restaurant{
 	Map<String,List<String>> schedule;
 	List<MenuEntry> menu;
 	List<Translate> english, italian, german, french, spanish, original;
-	List<Table> tables;
+	List<RestaurantTable> tables;
 	Map<String, Reservation> reservations;
 
 	Restaurant({this.restaurant_id, this.mealtime, this.reservations, this.tables, this.dailymenu, this.ta_id,this.name,this.phone,this.website,this.webUrl,this.address,this.email,this.city,this.country,this.latitude,this.longitude,this.distance,this.rating,this.numrevta,this.images,this.types,this.schedule, this.currency,this.sections, this.menu, this.delivery});

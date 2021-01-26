@@ -162,6 +162,12 @@ class DBServiceRestaurant{
     print(response.body);
   }
 
+  updateRestaurantMealTime(String restaurant_id, double mealtime) async{
+    var response = await http.put(
+        "${StaticStrings.api}/restaurantmeal", body: {"id" : restaurant_id, "mealtime": mealtime.toString()});
+    print(response.body);
+  }
+
   updateRestaurantImages(String restaurant_id, List<String> images) async{
     var response = await http.put(
         "${StaticStrings.api}/restaurantimages", body: {"id" : restaurant_id, "images": images.toString().replaceAll("[", "{").replaceAll("]", "}") ?? List<String>().toString()});

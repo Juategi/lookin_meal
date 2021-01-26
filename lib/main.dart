@@ -8,12 +8,13 @@ import 'package:lookinmeal/screens/home/home.dart';
 import 'package:lookinmeal/screens/profile/edit_profile.dart';
 import 'package:lookinmeal/screens/profile/favorites.dart';
 import 'package:lookinmeal/screens/profile/rating_history.dart';
-import 'package:lookinmeal/screens/restaurants/admin.dart';
+import 'package:lookinmeal/screens/restaurants/admin/edit_tables.dart';
+import 'file:///C:/D/lookin_meal/lib/screens/restaurants/admin/admin.dart';
 import 'package:lookinmeal/screens/restaurants/comments.dart';
-import 'package:lookinmeal/screens/restaurants/edit_daily.dart';
-import 'package:lookinmeal/screens/restaurants/edit_menu.dart';
-import 'package:lookinmeal/screens/restaurants/edit_order.dart';
-import 'package:lookinmeal/screens/restaurants/edit_restaurant.dart';
+import 'file:///C:/D/lookin_meal/lib/screens/restaurants/admin/edit_daily.dart';
+import 'file:///C:/D/lookin_meal/lib/screens/restaurants/admin/edit_menu.dart';
+import 'file:///C:/D/lookin_meal/lib/screens/restaurants/admin/edit_order.dart';
+import 'file:///C:/D/lookin_meal/lib/screens/restaurants/admin/edit_restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/gallery.dart';
 import 'package:lookinmeal/screens/restaurants/info.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
           "/editorder" : (context) => EditOrder(),
           "/editrestaurant" : (context) => EditRestaurant(),
           "/editdaily" : (context) => EditDaily(),
+          "/edittables" : (context) => EditTables(),
           "/favs" : (context) => Favorites(),
           "/gallery" : (context) => Gallery(),
           "/info" : (context) => RestaurantInfo(),
