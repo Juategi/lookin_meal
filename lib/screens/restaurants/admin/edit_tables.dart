@@ -120,7 +120,7 @@ class _EditTablesState extends State<EditTables> {
                                   Row( mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text("Minimum capacity:   ", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
-                                      DropdownButton(items: <num>[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map((n) => DropdownMenuItem(value: n, child:
+                                      DropdownButton(items: List<int>.generate(50, (i) => i + 1).map((n) => DropdownMenuItem(value: n, child:
                                       Text(n.toString() + " people", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),)),
                                       )).toList(), onChanged: (s){
                                         setState(() {
@@ -133,7 +133,7 @@ class _EditTablesState extends State<EditTables> {
                                   Row( mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text("Maximum capacity:   ", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
-                                      DropdownButton(items: <num>[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map((n) => DropdownMenuItem(value: n, child:
+                                      DropdownButton(items: List<int>.generate(50, (i) => i + 1).map((n) => DropdownMenuItem(value: n, child:
                                       Text(n.toString() + " people", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),)),
                                       )).toList(), onChanged: (s){
                                         setState(() {
@@ -145,7 +145,7 @@ class _EditTablesState extends State<EditTables> {
                                   ),
                                 ],
                               ),
-                              SizedBox(width: 10.w,),
+                              SizedBox(width: 8.w,),
                               Column(
                                 children: [
                                   SizedBox(height: 15.h,),
@@ -160,7 +160,7 @@ class _EditTablesState extends State<EditTables> {
                                   },  value: table.amount,),
                                 ],
                               ),
-                              SizedBox(width: 2.w,),
+                              SizedBox(width: 0.w,),
                               IconButton(icon: Icon(Icons.delete, size: ScreenUtil().setSp(28),), onPressed: (){
                                 setState(() {
                                   restaurant.tables.remove(table);

@@ -1,8 +1,8 @@
 import 'package:back_button_interceptor/back_button_interceptor.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/entryDB.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
@@ -334,7 +334,20 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 												//Icon(Icons.location_on, color: Colors.black, size: ScreenUtil().setSp(16),),
 												Text("${restaurant.distance.toString()} km", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))
 											],
-										)
+										),
+										GestureDetector(
+											onTap: (){
+													Navigator.pushNamed(context, "/tablereservations", arguments: restaurant);
+											},
+										  child: Row(
+										  	children: <Widget>[
+										  		SizedBox(width: 5.w,),
+										  		Icon(FontAwesomeIcons.calendarAlt, color: Colors.black87, size: ScreenUtil().setSp(20),),
+										  		SizedBox(width: 5.w,),
+										  		Text("Reserve a table", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))
+										  	],
+										  ),
+										),
 									],
 								),
 								Column( crossAxisAlignment:  CrossAxisAlignment.end,
