@@ -198,7 +198,15 @@ class _TableReservationState extends State<TableReservation> {
             setState(() {
               pos = 1;
             });
-          }, currentDate: dateSelected,),
+          }, currentDate: dateSelected,
+          selectableDayPredicate: (day){
+            int weekday = day.weekday == 7? 0 : day.weekday;
+            if(restaurant.schedule[weekday.toString()].every((element) => element == "-1")){
+              return false;
+            }
+            return true;
+          },
+          ),
           pos != 1 ? Container() : DropdownButton(items: List<int>.generate(50, (i) => i + 1).map((n) => DropdownMenuItem(value: n, child:
           Text(n.toString(), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
           )).toList(), onChanged: (s){

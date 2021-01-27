@@ -54,7 +54,14 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
             CalendarDatePicker(initialDate: DateTime.now(), firstDate: DateTime.now(), lastDate: DateTime.now().add(Duration(days: 30)), onDateChanged: (date) async{
               dateSelected = date;
               await _getReservations();
-            }, currentDate: dateSelected,),
+            }, currentDate: dateSelected,
+              selectableDayPredicate: (day){
+                int weekday = day.weekday == 7? 0 : day.weekday;
+                if(restaurant.schedule[weekday.toString()].every((element) => element == "-1")){
+                  return false;
+                }
+                return true;
+              },),
             SizedBox(height: 5.h,),
             loading ? Loading() : IconButton(icon: Icon(Icons.refresh,  size: ScreenUtil().setSp(45), color: Color.fromRGBO(255, 110, 117, 0.7),), onPressed: (){
               _getReservations();
