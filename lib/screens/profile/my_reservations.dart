@@ -94,9 +94,6 @@ class _UserReservationsState extends State<UserReservations> {
                             child: IconButton(icon: Icon(Icons.delete,  size: ScreenUtil().setSp(35), color: Color.fromRGBO(255, 110, 117, 0.7),), onPressed: ()async{
                               if(await Alerts.confirmation("Remove reservation, are you sure?", context)){
                                 DBServiceUser.userF.reservations.remove(reservation);
-                                print(reservation.reservationtime);
-                                print(reservation.reservationdate.substring(0,10));
-                                print(reservation.table_id);
                                 DBServiceReservation.dbServiceReservation.deleteReservation(reservation.table_id, reservation.reservationdate.substring(0,10), reservation.reservationtime);
                                 setState(() {
                                 });

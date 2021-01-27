@@ -113,7 +113,7 @@ class DBServiceReservation{
         table_id: element['table_id'].toString(),
         restaurant_id: element['restaurant_id'].toString(),
         people: element['people'],
-        reservationdate: element['reservationdate'],
+        reservationdate: element['reservationdate'].toString().substring(0,9) + (int.parse(element['reservationdate'].toString()[9]) + 1 == 10 ? 0 : int.parse(element['reservationdate'].toString()[9]) + 1).toString(),
         reservationtime: element['reservationtime'],
         user_id: element['user_id'],
         username: element['name'],
@@ -126,7 +126,7 @@ class DBServiceReservation{
 
   Future deleteReservation(String table_id, String reservationdate, String reservationtime) async{
     var response = await http.delete(
-        "${StaticStrings.api}/reservation", headers: {"table_id" : table_id, "reservationsdate" : reservationdate, "reservationstime" : reservationtime});
+        "${StaticStrings.api}/reservation", headers: {"table_id" : table_id, "reservationdate" : reservationdate, "reservationtime" : reservationtime});
     print(response.body);
   }
 
