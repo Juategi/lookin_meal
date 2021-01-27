@@ -149,6 +149,25 @@ class _ProfileState extends State<Profile> {
               Divider(thickness: 2,),
               GestureDetector(
                 onTap:(){
+                  Navigator.pushNamed(context, "/userreservations");
+                },
+                child: Container(
+                  width: 365.w,
+                  height: 60.h,
+                  child: Row(mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(width: 20.w,),
+                      Container(width: 37.w, height: 37.h, child: Icon(Icons.calendar_today_outlined, size: ScreenUtil().setSp(35),)),
+                      SizedBox(width: 30.w,),
+                      Container(width: 250.w, child: Text("Reservations", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                      Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
+                    ],
+                  ),
+                ),
+              ),
+              Divider(thickness: 2,),
+              GestureDetector(
+                onTap:(){
 
                 },
                 child: Container(
@@ -179,25 +198,6 @@ class _ProfileState extends State<Profile> {
                       SvgPicture.asset("assets/points.svg", width: 37.w, height: 37.h,),
                       SizedBox(width: 30.w,),
                       Container(width: 250.w, child: Text("Points Program", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
-                      Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
-                    ],
-                  ),
-                ),
-              ),
-              Divider(thickness: 2,),
-              GestureDetector(
-                onTap:(){
-
-                },
-                child: Container(
-                  width: 365.w,
-                  height: 60.h,
-                  child: Row(mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(width: 20.w,),
-                      Container(width: 37.w, height: 37.h, child: Icon(Icons.calendar_today_outlined, size: ScreenUtil().setSp(35),)),
-                      SizedBox(width: 30.w,),
-                      Container(width: 250.w, child: Text("Reservations", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                       Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                     ],
                   ),

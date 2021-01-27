@@ -60,7 +60,7 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
               _getReservations();
             }),
             SizedBox(height: 5.h,),
-            Expanded(child: ListView(
+            loading ? Container() : Expanded(child: ListView(
               children: restaurant.reservations[dateString].map((reservation) => Padding(
                 padding: EdgeInsets.symmetric(vertical: 5.h),
                 child: Container(
