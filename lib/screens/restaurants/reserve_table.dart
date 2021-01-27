@@ -29,8 +29,9 @@ class _TableReservationState extends State<TableReservation> {
       reservations = await DBServiceReservation.dbServiceReservation.getReservationsDay(restaurant.restaurant_id, dateSelected.toString().substring(0,10));
       List<String> schedule = restaurant.schedule[weekday.toString()];
       List<int> checkHours = [];
+      int mealtime = (double.parse(restaurant.mealtime.toString().replaceAll("5", "3"))*100).toInt();
       int start1 = int.parse(schedule[0]);
-      int limit1 = (int.parse(schedule[1]) - (double.parse(restaurant.mealtime.toString().replaceAll("5", "3")))*100).toInt();;
+      int limit1 = int.parse(schedule[1]) - mealtime;
       while(start1 <= limit1){
         checkHours.add(start1);
         if(start1.toString().substring(2) == "00"){
@@ -42,7 +43,7 @@ class _TableReservationState extends State<TableReservation> {
       }
       if(schedule[2] != "-1"){
         int start2 = int.parse(schedule[2]);
-        int limit2 = (int.parse(schedule[3]) - (double.parse(restaurant.mealtime.toString().replaceAll("5", "3")))*100).toInt();
+        int limit2 = int.parse(schedule[3]) - mealtime;
         while(start2 <= limit2){
           checkHours.add(start2);
           if(start2.toString().substring(2) == "00"){
@@ -53,9 +54,38 @@ class _TableReservationState extends State<TableReservation> {
           }
         }
       }
-      List<RestaurantTable> compatibleTables = restaurant.tables.where((table) => table.capmin <= people && table.capmax >= people);
-      List<Reservation> compatibleReservations = reservations.where((reservation) => compatibleTables.firstWhere((table) => reservation.table_id == table.table_id, orElse: () => null) != null);
-      
+      List<RestaurantTable> compatibleTables = restaurant.tables.where((table) => table.capmin <= people && table.capmax >= people).toList();
+      List<Reservation> compatibleReservations = reservations.where((reservation) => compatibleTables.firstWhere((table) => reservation.table_id == table.table_id, orElse: () => null) != null).toList();
+      Map<int, String> available = {};
+      for(int hour in checkHours){
+        Map<String, int> counter = {};
+        for(RestaurantTable table in compatibleTables){
+          counter[table.table_id] = table.amount;
+        }
+        for(Reservation reservation in compatibleReservations){
+          if(!(int.parse(reservation.reservationtime.replaceAll(":", "")) >= hour + mealtime && int.parse(reservation.reservationtime.replaceAll(":", "")) + mealtime <= hour)){
+            counter[reservation.table_id] --;
+          }
+        }
+        int max = -0;
+        String finalTable;
+        for(String table_id in counter.keys){
+          if(counter[table_id] > 0){
+            int dif = compatibleTables.firstWhere((table) => table.table_id == table_id).capmax - people;
+            if(dif > max){
+              max = dif;
+              finalTable = table_id;
+            }
+          }
+        }
+        if(finalTable != null){
+          available[hour] = finalTable;
+        }
+      }
+      for(int hour in available.keys){
+        print(hour);
+        print(available[hour]);
+      }
     }
   }
 

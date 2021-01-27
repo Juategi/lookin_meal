@@ -164,6 +164,7 @@ class _EditTablesState extends State<EditTables> {
                               IconButton(icon: Icon(Icons.delete, size: ScreenUtil().setSp(28),), onPressed: (){
                                 setState(() {
                                   restaurant.tables.remove(table);
+                                  DBServiceReservation.dbServiceReservation.deleteTable(table.table_id);
                                 });
                               })
                             ],
