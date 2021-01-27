@@ -72,7 +72,7 @@ class DBServiceReservation{
       "restaurant_id": reservation.restaurant_id,
       "user_id" : reservation.user_id,
       "table_id": reservation.table_id,
-      "people": reservation.people,
+      "people": reservation.people.toString(),
       "reservationdate" : reservation.reservationdate,
       "reservationtime": reservation.reservationtime
     };
@@ -85,7 +85,7 @@ class DBServiceReservation{
     List<Reservation> reservations = [];
     var response = await http.get(
         "${StaticStrings.api}/reservationsday",
-        headers: {"restaurant_id":restaurant_id, "reservationsdate" : reservationdate});
+        headers: {"restaurant_id":restaurant_id, "reservationdate" : reservationdate});
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
       Reservation reservation = Reservation(
@@ -106,7 +106,7 @@ class DBServiceReservation{
     List<Reservation> reservations = [];
     var response = await http.get(
         "${StaticStrings.api}/reservationsuser",
-        headers: {"user_id": user_id, "reservationsdate" : reservationdate});
+        headers: {"user_id": user_id, "reservationdate" : reservationdate});
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
       Reservation reservation = Reservation(
