@@ -95,6 +95,9 @@ class _TableReservationState extends State<TableReservation> {
         print(hour);
       }
     }
+    else{
+      available = {};
+    }
     setState(() {});
   }
 
@@ -228,7 +231,7 @@ class _TableReservationState extends State<TableReservation> {
               ),
             ),
           ),*/
-          pos != 2 ? Container() : available == null? Loading() : Expanded(
+          pos != 2 ? Container() : available == null? Loading() : available.keys.length == 0? Center(child: Text("No hours available this day for that number of people", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.redAccent, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(21),),))) :  Expanded(
             child: GridView.count(crossAxisCount: 4, padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
               children: (available.keys).map((hour) => Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 32.h),
