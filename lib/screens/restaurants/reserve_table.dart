@@ -193,7 +193,7 @@ class _TableReservationState extends State<TableReservation> {
             pos == 2? "Hour" : "Confirm"
           , maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(24),),))),
           SizedBox(height: 10.h,),
-          pos != 0 ? Container() : CalendarDatePicker(initialDate: DateTime.now(), firstDate: DateTime.now(), lastDate: DateTime.now().add(Duration(days: 30)), onDateChanged: (date) async{
+          pos != 0 ? Container() : CalendarDatePicker(initialDate: dateSelected, firstDate: DateTime.now(), lastDate: DateTime.now().add(Duration(days: 30)), onDateChanged: (date) async{
             dateSelected = date;
             setState(() {
               pos = 1;

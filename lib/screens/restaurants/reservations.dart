@@ -16,7 +16,7 @@ class ReservationsChecker extends StatefulWidget {
 
 class _ReservationsCheckerState extends State<ReservationsChecker> {
   Restaurant restaurant;
-  DateTime dateSelected = DateTime.now();
+  DateTime dateSelected;
   String dateString;
   bool loading = false;
   bool init = true;
@@ -35,10 +35,17 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
   }
 
   @override
+  void initState() {
+    dateSelected = DateTime.now();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     restaurant = ModalRoute.of(context).settings.arguments;
     dateString = dateSelected.toString().substring(0,10);
+    print(dateString);
     if(init){
       _getReservations();
       init = false;
@@ -51,9 +58,11 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
             SizedBox(height: 32.h,),
             Center(child: Text("Check reservations", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24),),))),
             SizedBox(height: 32.h,),
-            CalendarDatePicker(initialDate: DateTime.now(), firstDate: DateTime.now(), lastDate: DateTime.now().add(Duration(days: 30)), onDateChanged: (date) async{
+            CalendarDatePicker(initialDate: dateSelected, firstDate: DateTime.now(), lastDate: DateTime.now().add(Duration(days: 30)), onDateChanged: (date) async{
               dateSelected = date;
               await _getReservations();
+              setState(() {
+              });
             }, currentDate: dateSelected,
               selectableDayPredicate: (day){
                 int weekday = day.weekday == 7? 0 : day.weekday;
