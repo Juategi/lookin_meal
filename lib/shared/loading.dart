@@ -9,7 +9,7 @@ class Loading extends StatelessWidget {
 			color: Colors.white,
 			child: Center(
 				child: SpinKitCircle(
-					color: Color.fromRGBO(255, 65, 112, 1),
+					color: Color.fromRGBO(255, 110, 117, 0.8),
 					size: 50.0,
 				),
 			),
@@ -25,7 +25,7 @@ class CircularLoading extends StatelessWidget {
 		  child: Row(
 		  	mainAxisAlignment: MainAxisAlignment.center,
 		  	children: <Widget>[
-		  		CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color.fromRGBO(255, 65, 112, 1)),),
+		  		CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>( Color.fromRGBO(255, 110, 117, 1),),),
 		  	],
 		  ),
 		);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/reservationDB.dart';
 import 'package:lookinmeal/models/reservation.dart';
@@ -55,11 +56,11 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
               await _getReservations();
             }, currentDate: dateSelected,),
             SizedBox(height: 5.h,),
-            IconButton(icon: Icon(Icons.refresh,  size: ScreenUtil().setSp(45),), onPressed: (){
+            loading ? Loading() : IconButton(icon: Icon(Icons.refresh,  size: ScreenUtil().setSp(45), color: Color.fromRGBO(255, 110, 117, 0.7),), onPressed: (){
               _getReservations();
             }),
             SizedBox(height: 5.h,),
-            loading ? Loading() : Expanded(child: ListView(
+            Expanded(child: ListView(
               children: restaurant.reservations[dateString].map((reservation) => Padding(
                 padding: EdgeInsets.symmetric(vertical: 5.h),
                 child: Container(
@@ -79,7 +80,7 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
                     padding: EdgeInsets.symmetric(horizontal: 10.w),
                     child: Row(
                       children: [
-                        Container(width: 177.w, child: Text(reservation.username, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                        Container(width: 170.w, child: Text(reservation.username, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
                         SizedBox(width: 10.w,),
                         Text("People: ${reservation.people}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
                         SizedBox(width: 20.w,),

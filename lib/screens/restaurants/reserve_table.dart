@@ -7,8 +7,11 @@ import 'package:lookinmeal/database/reservationDB.dart';
 import 'package:lookinmeal/models/reservation.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/table.dart';
+import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:lookinmeal/shared/functions.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
+import 'package:lookinmeal/shared/loading.dart';
 
 class TableReservation extends StatefulWidget {
   @override
@@ -18,9 +21,12 @@ class TableReservation extends StatefulWidget {
 class _TableReservationState extends State<TableReservation> {
   Restaurant restaurant;
   int pos = 0;
-  DateTime dateSelected;
   int people = 1;
-  List<String> hours;
+  int hour;
+  DateTime dateSelected;
+  Map<int, String> available;
+  bool init = true;
+  bool loading = false;
 
   Future _calculateAvailable() async{
     List<Reservation> reservations;
@@ -56,19 +62,21 @@ class _TableReservationState extends State<TableReservation> {
       }
       List<RestaurantTable> compatibleTables = restaurant.tables.where((table) => table.capmin <= people && table.capmax >= people).toList();
       List<Reservation> compatibleReservations = reservations.where((reservation) => compatibleTables.firstWhere((table) => reservation.table_id == table.table_id, orElse: () => null) != null).toList();
-      Map<int, String> available = {};
+      available = {};
       for(int hour in checkHours){
         Map<String, int> counter = {};
         for(RestaurantTable table in compatibleTables){
           counter[table.table_id] = table.amount;
         }
         for(Reservation reservation in compatibleReservations){
-          if(!(int.parse(reservation.reservationtime.replaceAll(":", "")) >= hour + mealtime && int.parse(reservation.reservationtime.replaceAll(":", "")) + mealtime <= hour)){
+          if(!(int.parse(reservation.reservationtime.replaceAll(":", "")) >= hour + mealtime || int.parse(reservation.reservationtime.replaceAll(":", "")) + mealtime <= hour)){
+            print("descarted");
+            print(hour);
             counter[reservation.table_id] --;
           }
         }
-        int max = -0;
-        String finalTable;
+        int max = -1;
+        String finalTable = "";
         for(String table_id in counter.keys){
           if(counter[table_id] > 0){
             int dif = compatibleTables.firstWhere((table) => table.table_id == table_id).capmax - people;
@@ -78,21 +86,26 @@ class _TableReservationState extends State<TableReservation> {
             }
           }
         }
-        if(finalTable != null){
+        if(finalTable != ""){
           available[hour] = finalTable;
         }
       }
       for(int hour in available.keys){
+        print("available");
         print(hour);
-        print(available[hour]);
       }
     }
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     restaurant = ModalRoute.of(context).settings.arguments;
+    if(init){
+      dateSelected = DateTime.now();
+      init = false;
+    }
     return Scaffold(
       body: Column(
         children: [
@@ -153,6 +166,7 @@ class _TableReservationState extends State<TableReservation> {
                   Container(height: 10.h, width: 10.w, decoration: BoxDecoration(color: Color.fromRGBO(255, 110, 117, 0.6), shape: BoxShape.circle),),
                   SizedBox(width: 25.w,),
                   GestureDetector(onTap: (){
+                    _calculateAvailable();
                     setState(() {
                       pos = 2;
                     });
@@ -169,7 +183,7 @@ class _TableReservationState extends State<TableReservation> {
               ),
             ),
           ),
-          SizedBox(height: 30.h,),
+          SizedBox(height: 20.h,),
           Center(child: Text(
             pos == 0? "Day" :
             pos == 1? "Number of people" :
@@ -191,7 +205,7 @@ class _TableReservationState extends State<TableReservation> {
               pos = 2;
             });
           },  value: people,),
-          pos != 2 ? Container() :GestureDetector(
+          /*pos != 2 ? Container() :GestureDetector(
             onTap:(){
               DBServiceReservation.dbServiceReservation.createReservation(Reservation(
                   username: DBServiceUser.userF.name,
@@ -200,7 +214,7 @@ class _TableReservationState extends State<TableReservation> {
                   restaurant_id: 833.toString(),
                   reservationdate: "2021-01-27",
                   reservationtime: "12:00",
-                  table_id: 2.toString()
+                  table_id: 4.toString()
               ));
             },
             child: Container(
@@ -213,7 +227,91 @@ class _TableReservationState extends State<TableReservation> {
                 ],
               ),
             ),
+          ),*/
+          pos != 2 ? Container() : available == null? Loading() : Expanded(
+            child: GridView.count(crossAxisCount: 4, padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
+              children: (available.keys).map((hour) => Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 32.h),
+                child: GestureDetector(
+                  onTap: (){
+                    this.hour = hour;
+                    setState(() {
+                      pos = 3;
+                    });
+                  },
+                  child: Container(
+                    width: 60.w,
+                    height: 20.h,
+                    decoration: BoxDecoration(
+                      color: Color.fromRGBO(255, 110, 117, 0.6),
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                    ),
+                    child: Center(child: Text(hour.toString().substring(0,2) + ":" + hour.toString().substring(2), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),)))
+                  ),
+                ),
+              )).toList(),
+            ),
           ),
+          SizedBox(height: 20.h,),
+          pos != 3 ? Container() : Column(
+            children: [
+              Container(
+                width: 170.w,
+                height: 200.h,
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(255, 110, 117, 0.7),
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(height: 35.h,),
+                    Text(Functions.formatDate(dateSelected.toString().substring(0,10)), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(22),),)),
+                    SizedBox(height: 20.h,),
+                    Text(hour.toString().substring(0,2) + ":" + hour.toString().substring(2), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)),
+                    SizedBox(height: 20.h,),
+                    Text(people.toString() + " people", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(22),),)),
+                    SizedBox(height: 20.h,),
+                  ],
+                ),
+              ),
+              SizedBox(height: 40.h,),
+              loading? Loading() : Container(
+                width: 200.w,
+                height: 55.h,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                  //border: Border.all(color: Colors.black45)
+                ),
+                child: IconButton(icon: Icon(FontAwesomeIcons.check, size: ScreenUtil().setSp(60), color: Colors.green,), onPressed: ()async{
+                  setState(() {
+                    loading = true;
+                  });
+                  await _calculateAvailable();
+                  if(available.keys.contains(hour)){
+                    await DBServiceReservation.dbServiceReservation.createReservation(Reservation(
+                      table_id: available[hour],
+                      reservationtime: hour.toString().substring(0,2) + ":" + hour.toString().substring(2),
+                      reservationdate: dateSelected.toString().substring(0,10),
+                      restaurant_id: restaurant.restaurant_id,
+                      people: people,
+                      user_id: DBServiceUser.userF.uid,
+                      username: DBServiceUser.userF.name
+                    ));
+                    Alerts.toast("Table reserved!");
+                    Navigator.pop(context);
+                  }
+                  else{
+                    pos = 1;
+                    Alerts.dialog("Error on reservation, try again.", context);
+                  }
+                  setState(() {
+                    loading = false;
+                  });
+                },),
+              )
+            ],
+          )
         ],
       ),
     );
