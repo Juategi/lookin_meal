@@ -93,7 +93,8 @@ class DBServiceUser {
     String ip = json.decode(result.body)['ip'];
     result = await http.get("$locIpUrl${ip}/json/", headers: {});
     dynamic iplocalization = json.decode(result.body);
-    return iplocalization["country_name"];
+    //return iplocalization["country_name"];
+    return "Spain";
   }
 
   Future<bool> checkUsername(String username) async{

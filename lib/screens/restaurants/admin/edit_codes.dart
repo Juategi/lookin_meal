@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:permission/permission.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +13,9 @@ import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/decos.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:path_provider/path_provider.dart';
 
 class EditCodes extends StatefulWidget {
   @override
@@ -61,8 +67,27 @@ class _EditCodesState extends State<EditCodes> {
                         children: [
                           Container(width: 140.w, child: Text("Table: " + code.code_id, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
                           GestureDetector(
-                            onTap: (){
-                              
+                            onTap: () async{
+                              Permission.requestPermissions([PermissionName.Storage]);
+                              final pdf = pw.Document();
+                              //final Uint8List fontData = File('open-sans.ttf').readAsBytesSync();
+                              //final ttf = pw.Font.ttf(fontData.buffer.asByteData());
+                              pdf.addPage(pw.Page(
+                                  pageFormat: PdfPageFormat.a4,
+                                  build: (pw.Context context) {
+                                    return pw.Center(
+                                      child: pw.Text('Hello World'),
+                                    ); // Center
+                                  }));
+                              final output = await getApplicationSupportDirectory();
+                              final output2 = Directory("/storage/emulated/0/Download/");
+                              final file = File("${output2.path}/example.pdf");
+                              await file.writeAsBytes(await pdf.save());
+                              /*Directory documentDirectory = await getApplicationDocumentsDirectory();
+                              String documentPath = documentDirectory.path;
+                              File file = File("$documentPath/example.pdf");
+                              file.writeAsBytesSync(await pdf.save());*/
+                              print(output2.path);
                             },
                             child: Row(
                               children: [
@@ -172,6 +197,7 @@ class _NewQRCodeState extends State<NewQRCode> {
                   );
                   restaurant.codes.add(code);
                   await DBServiceReservation.dbServiceReservation.createCode(code);
+                  //FIREBASE CODE
                   Navigator.pop(context);
                 }
                 else{
