@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:lookinmeal/models/code.dart';
 import 'package:lookinmeal/models/reservation.dart';
 import 'package:lookinmeal/models/table.dart';
 import 'package:lookinmeal/shared/strings.dart';
@@ -113,7 +114,7 @@ class DBServiceReservation{
         table_id: element['table_id'].toString(),
         restaurant_id: element['restaurant_id'].toString(),
         people: element['people'],
-        reservationdate: element['reservationdate'].toString().substring(0,9) + (int.parse(element['reservationdate'].toString()[9]) + 1 == 10 ? 0 : int.parse(element['reservationdate'].toString()[9]) + 1).toString(),
+        reservationdate: DateTime.parse(element['reservationdate']).add(Duration(days: 1)).toString(),
         reservationtime: element['reservationtime'],
         user_id: element['user_id'],
         username: element['name'],
@@ -129,5 +130,44 @@ class DBServiceReservation{
         "${StaticStrings.api}/reservation", headers: {"table_id" : table_id, "reservationdate" : reservationdate, "reservationtime" : reservationtime});
     print(response.body);
   }
+
+  //CODES
+
+
+  Future createCode(Code code) async{
+    Map body = {
+      "restaurant_id": code.restaurant_id,
+      "code_id" : code.code_id,
+      "link" : code.link
+    };
+    var response = await http.post(
+        "${StaticStrings.api}/codes", body: body);
+    print(response.body);
+  }
+
+  Future<List<Code>> getCodes(String restaurant_id) async {
+    List<Code> codes = [];
+    var response = await http.get(
+        "${StaticStrings.api}/codes",
+        headers: {"restaurant_id":restaurant_id});
+    List<dynamic> result = json.decode(response.body);
+    for(var element in result){
+      Code code = Code(
+          restaurant_id: element['restaurant_id'].toString(),
+          code_id: element['code_id'].toString(),
+          link: element['link'].toString()
+      );
+      codes.add(code);
+    }
+    return codes;
+  }
+
+  Future deleteCode(String code_id, String restauratnt_id) async{
+    var response = await http.delete(
+        "${StaticStrings.api}/codes", headers: {"restaurant_id" : restauratnt_id, "code_id" : code_id});
+    print(response.body);
+  }
+
+
 
 }

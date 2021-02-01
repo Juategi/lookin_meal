@@ -256,7 +256,8 @@ class DBServiceRestaurant{
                 element['dailymenu']),
             delivery: delivery,
             menu: await DBServiceEntry.dbServiceEntry.getMenu(element['restaurant_id'].toString()),
-            tables: await DBServiceReservation.dbServiceReservation.getTables(element['restaurant_id'].toString())
+            tables: await DBServiceReservation.dbServiceReservation.getTables(element['restaurant_id'].toString()),
+            codes: await DBServiceReservation.dbServiceReservation.getCodes(element['restaurant_id'].toString())
         );
         restaurants.add(restaurant);
         Pool.addRestaurant(restaurant);
@@ -358,7 +359,8 @@ class DBServiceRestaurant{
             delivery: element['delivery'] == null ? null : List<String>.from(
                 element['delivery']),
             menu: await DBServiceEntry.dbServiceEntry.getMenu(element['restaurant_id'].toString()),
-            tables: await DBServiceReservation.dbServiceReservation.getTables(element['restaurant_id'].toString())
+            tables: await DBServiceReservation.dbServiceReservation.getTables(element['restaurant_id'].toString()),
+            codes: await DBServiceReservation.dbServiceReservation.getCodes(element['restaurant_id'].toString())
         );
         MenuEntry entry;
         for(MenuEntry e in restaurant.menu){
