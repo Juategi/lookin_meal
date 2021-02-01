@@ -111,8 +111,10 @@ class _EditCodesState extends State<EditCodes> {
                                                     pw.Positioned(
                                                         child: pw.Container(
                                                           width: 170,
+                                                          height: 50,
+                                                          //color: PdfColor.fromHex("FFFFFF"),
                                                           child: pw.Center(
-                                                            child: pw.Text(restaurant.name, maxLines: 1, textAlign: pw.TextAlign.center, style: pw.TextStyle(color: PdfColor.fromHex("FFFFFF"), letterSpacing: .3, fontWeight: pw.FontWeight.bold, fontSize: ScreenUtil().setSp(15))),
+                                                            child: pw.Text(restaurant.name, maxLines: 2, textAlign: pw.TextAlign.center, style: pw.TextStyle(color: PdfColor.fromHex("FFFFFF"), letterSpacing: .3, fontWeight: pw.FontWeight.bold, fontSize: ScreenUtil().setSp(15))),
                                                           )
                                                         ),
                                                         top: 20,
@@ -126,7 +128,7 @@ class _EditCodesState extends State<EditCodes> {
                                                             child: pw.Text("Table: " + code.code_id, maxLines: 1,  textAlign: pw.TextAlign.center, style: pw.TextStyle(color: PdfColor.fromHex("FFFFFF"), letterSpacing: .3, fontWeight: pw.FontWeight.normal, fontSize: ScreenUtil().setSp(15))),
                                                           )
                                                         ),
-                                                        top: 70,
+                                                        top: 80,
                                                         left: 280
                                                     ),
                                                   ]
