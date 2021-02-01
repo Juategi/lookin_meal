@@ -9,6 +9,7 @@ import 'package:lookinmeal/screens/profile/edit_profile.dart';
 import 'package:lookinmeal/screens/profile/favorites.dart';
 import 'package:lookinmeal/screens/profile/my_reservations.dart';
 import 'package:lookinmeal/screens/profile/rating_history.dart';
+import 'package:lookinmeal/screens/restaurants/admin/edit_codes.dart';
 import 'package:lookinmeal/screens/restaurants/admin/edit_tables.dart';
 import 'file:///C:/D/lookin_meal/lib/screens/restaurants/admin/admin.dart';
 import 'package:lookinmeal/screens/restaurants/comments.dart';
@@ -65,7 +66,9 @@ class MyApp extends StatelessWidget {
           "/comments" : (context) => Comments(),
           "/reservations" : (context) => ReservationsChecker(),
           "/tablereservations" : (context) => TableReservation(),
-          "/userreservations" : (context) => UserReservations()
+          "/userreservations" : (context) => UserReservations(),
+          "/editcodes" : (context) => EditCodes(),
+          "/newcode" : (context) => NewQRCode()
         },
         home: Wrapper(),
         //initialRoute:"/",

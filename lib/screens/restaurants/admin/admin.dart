@@ -105,6 +105,19 @@ class _AdminPageState extends State<AdminPage> {
                 Navigator.pushNamed(context, "/edittables",arguments: restaurant).then((value) => setState(() {}));
               },
             ),
+            SizedBox(height: 50.h,),
+            GestureDetector(
+              child: Row(
+                children: [
+                  Icon(FontAwesomeIcons.qrcode, size: ScreenUtil().setSp(32),),
+                  SizedBox(width: 30.w,),
+                  Text("Edit order codes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                ],
+              ),
+              onTap:()async{
+                Navigator.pushNamed(context, "/editcodes",arguments: restaurant).then((value) => setState(() {}));
+              },
+            ),
           ],
         )
       ),
