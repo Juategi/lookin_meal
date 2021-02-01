@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 import 'package:permission/permission.dart';
 import 'package:flutter/material.dart';
@@ -70,16 +71,36 @@ class _EditCodesState extends State<EditCodes> {
                             onTap: () async{
                               Permission.requestPermissions([PermissionName.Storage]);
                               final pdf = pw.Document();
-                              //final Uint8List fontData = File('open-sans.ttf').readAsBytesSync();
-                              //final ttf = pw.Font.ttf(fontData.buffer.asByteData());
+                              Directory directory = await getApplicationDocumentsDirectory();
+                              var dbPath = directory.path + "PDF.png";
+                              ByteData data = await rootBundle.load("assets/PDF.png");
+                              List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+                              File i = await File(dbPath).writeAsBytes(bytes);
+                              final image = pw.MemoryImage(
+                                i.readAsBytesSync(),
+                              );
                               pdf.addPage(pw.Page(
                                   pageFormat: PdfPageFormat.a4,
                                   build: (pw.Context context) {
-                                    return pw.Center(
-                                      child: pw.Text('Hello World'),
-                                    ); // Center
+                                    return pw.Transform.rotate(
+                                      child: pw.Center(
+                                          child: pw.Container(
+                                              height: 333.333,
+                                              width: 500,
+                                              decoration: pw.BoxDecoration(
+                                                  image:  pw.DecorationImage(
+                                                      fit: pw.BoxFit.cover,
+                                                      image: pw.Image(image).image
+                                                  )
+                                              ),
+                                              child: pw.Stack(
+                                                  children: []
+                                              )
+                                          )),
+                                      //transform: Matrix4.rotationZ(1)
+                                      angle: pi/2
+                                    );// Center
                                   }));
-                              final output = await getApplicationSupportDirectory();
                               final output2 = Directory("/storage/emulated/0/Download/");
                               final file = File("${output2.path}/example.pdf");
                               await file.writeAsBytes(await pdf.save());
