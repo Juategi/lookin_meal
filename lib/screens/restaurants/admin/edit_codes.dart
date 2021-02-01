@@ -94,7 +94,21 @@ class _EditCodesState extends State<EditCodes> {
                                                   )
                                               ),
                                               child: pw.Stack(
-                                                  children: []
+                                                  children: [
+                                                    pw.Positioned(
+                                                      child: pw.Container(
+                                                        height: 140,
+                                                        width: 140,
+                                                        child: pw.BarcodeWidget(
+                                                          color: PdfColor.fromHex("#000000"),
+                                                          barcode: pw.Barcode.qrCode(),
+                                                          data: restaurant.restaurant_id + "/" + code.code_id,
+                                                        ),
+                                                      ),
+                                                      top: 127,
+                                                      left: 287
+                                                    )
+                                                  ]
                                               )
                                           )),
                                       //transform: Matrix4.rotationZ(1)
@@ -104,10 +118,6 @@ class _EditCodesState extends State<EditCodes> {
                               final output2 = Directory("/storage/emulated/0/Download/");
                               final file = File("${output2.path}/example.pdf");
                               await file.writeAsBytes(await pdf.save());
-                              /*Directory documentDirectory = await getApplicationDocumentsDirectory();
-                              String documentPath = documentDirectory.path;
-                              File file = File("$documentPath/example.pdf");
-                              file.writeAsBytesSync(await pdf.save());*/
                               print(output2.path);
                             },
                             child: Row(
