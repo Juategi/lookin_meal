@@ -107,7 +107,28 @@ class _EditCodesState extends State<EditCodes> {
                                                       ),
                                                       top: 127,
                                                       left: 287
-                                                    )
+                                                    ),
+                                                    pw.Positioned(
+                                                        child: pw.Container(
+                                                          width: 170,
+                                                          child: pw.Center(
+                                                            child: pw.Text(restaurant.name, maxLines: 1, textAlign: pw.TextAlign.center, style: pw.TextStyle(color: PdfColor.fromHex("FFFFFF"), letterSpacing: .3, fontWeight: pw.FontWeight.bold, fontSize: ScreenUtil().setSp(15))),
+                                                          )
+                                                        ),
+                                                        top: 20,
+                                                        left: 280
+                                                    ),
+                                                    pw.Positioned(
+                                                        child: pw.Container(
+                                                          //color: PdfColor.fromHex("FFFFFF"),
+                                                          width: 170,
+                                                          child: pw.Center(
+                                                            child: pw.Text("Table: " + code.code_id, maxLines: 1,  textAlign: pw.TextAlign.center, style: pw.TextStyle(color: PdfColor.fromHex("FFFFFF"), letterSpacing: .3, fontWeight: pw.FontWeight.normal, fontSize: ScreenUtil().setSp(15))),
+                                                          )
+                                                        ),
+                                                        top: 70,
+                                                        left: 280
+                                                    ),
                                                   ]
                                               )
                                           )),
