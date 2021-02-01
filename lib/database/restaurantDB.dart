@@ -7,6 +7,7 @@ import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/strings.dart';
+import 'package:lookinmeal/database/reservationDB.dart';
 import 'entryDB.dart';
 
 class DBServiceRestaurant{
@@ -162,7 +163,7 @@ class DBServiceRestaurant{
     print(response.body);
   }
 
-  updateRestaurantMealTime(String restaurant_id, double mealtime) async{
+  updateRestaurantMealTime(String restaurant_id, num mealtime) async{
     var response = await http.put(
         "${StaticStrings.api}/restaurantmeal", body: {"id" : restaurant_id, "mealtime": mealtime.toString()});
     print(response.body);
@@ -254,7 +255,8 @@ class DBServiceRestaurant{
             dailymenu: element['dailymenu'] == null ? null : List<String>.from(
                 element['dailymenu']),
             delivery: delivery,
-            menu: await DBServiceEntry.dbServiceEntry.getMenu(element['restaurant_id'].toString())
+            menu: await DBServiceEntry.dbServiceEntry.getMenu(element['restaurant_id'].toString()),
+            tables: await DBServiceReservation.dbServiceReservation.getTables(element['restaurant_id'].toString())
         );
         restaurants.add(restaurant);
         Pool.addRestaurant(restaurant);
@@ -355,7 +357,8 @@ class DBServiceRestaurant{
                 element['dailymenu']),
             delivery: element['delivery'] == null ? null : List<String>.from(
                 element['delivery']),
-            menu: await DBServiceEntry.dbServiceEntry.getMenu(element['restaurant_id'].toString())
+            menu: await DBServiceEntry.dbServiceEntry.getMenu(element['restaurant_id'].toString()),
+            tables: await DBServiceReservation.dbServiceReservation.getTables(element['restaurant_id'].toString())
         );
         MenuEntry entry;
         for(MenuEntry e in restaurant.menu){

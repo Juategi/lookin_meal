@@ -5,7 +5,8 @@ import 'package:lookinmeal/models/translate.dart';
 
 class Restaurant{
 	String restaurant_id, ta_id, name, phone, website, webUrl, address, email, city, country,currency;
-	double latitude, longitude, rating, distance, mealtime;
+	double latitude, longitude, rating, distance;
+	num mealtime;
 	int numrevta;
 	List<String> types, images, sections, dailymenu, delivery;
 	Map<String,List<String>> schedule;

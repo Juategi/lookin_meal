@@ -23,8 +23,6 @@ class DBServiceUser {
         response = await http.get(
             "${StaticStrings.api}/users", headers: {"id": id});
       }
-      print(id);
-      print(GeolocationService.myPos);
       if(response.body != "[]") {
         List<dynamic> result = json.decode(response.body);
         User user = User(

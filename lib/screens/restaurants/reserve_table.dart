@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:math';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/reservationDB.dart';
@@ -22,11 +22,13 @@ class _TableReservationState extends State<TableReservation> {
   Restaurant restaurant;
   int pos = 0;
   int people = 1;
+  int minTimeDif = 10;
   int hour;
   DateTime dateSelected;
   Map<int, String> available;
   bool init = true;
   bool loading = false;
+  bool noSchedule = true;
 
   Future _calculateAvailable() async{
     List<Reservation> reservations;
@@ -87,12 +89,16 @@ class _TableReservationState extends State<TableReservation> {
           }
         }
         if(finalTable != ""){
-          available[hour] = finalTable;
+          String h = DateTime.now().hour.toString().length == 1? "0" + DateTime.now().hour.toString() : DateTime.now().hour.toString();
+          String m = DateTime.now().minute.toString().length == 1? "0" + DateTime.now().minute.toString() : DateTime.now().minute.toString();
+          if(int.parse(h+m) + minTimeDif < hour){
+            available[hour] = finalTable;
+          }
         }
       }
       for(int hour in available.keys){
-        print("available");
-        print(hour);
+        //print("available");
+        //print(hour);
       }
     }
     else{
@@ -106,7 +112,29 @@ class _TableReservationState extends State<TableReservation> {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     restaurant = ModalRoute.of(context).settings.arguments;
     if(init){
+      for(int i = 0; i <= 6; i++){
+        if(!restaurant.schedule[i.toString()].every((element) => element.replaceAll("[", "".replaceAll("]", ""))  == "-1")){
+          noSchedule = false;
+        }
+      }
       dateSelected = DateTime.now();
+      int weekday = dateSelected.weekday == 7? 0 : dateSelected.weekday;
+      print(restaurant.schedule[weekday.toString()][0]);
+      if(restaurant.schedule[weekday.toString()].every((element) => element == "-1")){
+        bool loop = true;
+        int day = weekday;
+        int check = 0;
+        while(loop){
+          day = (weekday+1) == 7? 0 : (weekday+1);
+          if(!restaurant.schedule[day.toString()].every((element) => element == "-1")){
+            dateSelected = dateSelected.add(Duration(days: weekday < day ? day-weekday : 7 - (weekday - day)));
+            loop = false;
+          }
+          check += day;
+          if(check >= 21)
+            loop = false;
+        }
+      }
       init = false;
     }
     return Scaffold(
@@ -193,7 +221,7 @@ class _TableReservationState extends State<TableReservation> {
             pos == 2? "Hour" : "Confirm"
           , maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(24),),))),
           SizedBox(height: 10.h,),
-          pos != 0 ? Container() : CalendarDatePicker(initialDate: dateSelected, firstDate: DateTime.now(), lastDate: DateTime.now().add(Duration(days: 30)), onDateChanged: (date) async{
+          pos != 0 || noSchedule ? Container() : CalendarDatePicker(initialDate: dateSelected, firstDate: DateTime.now(), lastDate: DateTime.now().add(Duration(days: 30)), onDateChanged: (date) async{
             dateSelected = date;
             setState(() {
               pos = 1;
