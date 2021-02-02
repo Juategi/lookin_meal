@@ -10,6 +10,7 @@ import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lookinmeal/services/realtime_orders.dart';
 import 'package:lookinmeal/shared/strings.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -186,8 +187,9 @@ class _ProfileState extends State<Profile> {
               ),
               Divider(thickness: 2,),
               GestureDetector(
-                onTap:(){
-
+                onTap:()async{
+                  RealTimeOrders r = RealTimeOrders();
+                  print(await r.updateOrderData("833", "1", "18", "7sBBcSpcN3nUfiBfLxNI", 4, false));
                 },
                 child: Container(
                   width: 365.w,
