@@ -15,6 +15,7 @@ import 'package:lookinmeal/services/auth.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
+import 'package:lookinmeal/services/scanner.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
@@ -123,13 +124,20 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 									offstage: _selectedIndex != 2,
 									child: TickerMode(
 											enabled: _selectedIndex == 2,
-											child: Top()
+											child: QRScanner()
 									),
 								),
 								Offstage(
 									offstage: _selectedIndex != 3,
 									child: TickerMode(
-										enabled: _selectedIndex == 3,
+											enabled: _selectedIndex == 3,
+											child: Top()
+									),
+								),
+								Offstage(
+									offstage: _selectedIndex != 4,
+									child: TickerMode(
+										enabled: _selectedIndex == 4,
 											child: Profile()
 									),
 								),
@@ -147,6 +155,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 								BottomNavigationBarItem(
 									icon: Icon(FontAwesomeIcons.mapMarkedAlt, size: ScreenUtil().setSp(22),),
 									title: Text(tr.translate("map")),
+								),
+								BottomNavigationBarItem(
+									icon: Icon(Icons.camera, size: ScreenUtil().setSp(22),),
+									title: Text("Order"),
 								),
 								BottomNavigationBarItem(
 									icon: Icon(Icons.star, size: ScreenUtil().setSp(25),),
