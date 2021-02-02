@@ -140,7 +140,7 @@ class _EditCodesState extends State<EditCodes> {
                                     );// Center
                                   }));
                               final output2 = Directory("/storage/emulated/0/Download/");
-                              final file = File("${output2.path}/example.pdf");
+                              final file = File("${output2.path}/${code.code_id}.pdf");
                               await file.writeAsBytes(await pdf.save());
                               print(output2.path);
                             },
