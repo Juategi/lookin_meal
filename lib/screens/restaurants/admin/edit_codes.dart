@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
+import 'package:lookinmeal/services/realtime_orders.dart';
 import 'package:permission/permission.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -152,9 +153,10 @@ class _EditCodesState extends State<EditCodes> {
                           ),
                           SizedBox(width: 42.w,),
                           IconButton(icon: Icon(Icons.delete, size: ScreenUtil().setSp(28),), onPressed: ()async{
-                            await DBServiceReservation.dbServiceReservation.deleteCode(code.code_id, code.restaurant_id);
+                            DBServiceReservation.dbServiceReservation.deleteCode(code.code_id, code.restaurant_id);
+                            RealTimeOrders().deleteOrder(restaurant.restaurant_id, code.code_id);
+                            restaurant.codes.remove(code);
                             setState(() {
-                              restaurant.codes.remove(code);
                             });
                             Alerts.toast("QR deleted!");
                           })
@@ -252,6 +254,7 @@ class _NewQRCodeState extends State<NewQRCode> {
                   restaurant.codes.add(code);
                   await DBServiceReservation.dbServiceReservation.createCode(code);
                   //FIREBASE CODE
+                  RealTimeOrders().createOrder(restaurant.restaurant_id, name);
                   Navigator.pop(context);
                 }
                 else{

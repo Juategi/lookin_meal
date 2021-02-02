@@ -4,6 +4,7 @@ import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/database/reservationDB.dart';
 import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
+import 'package:lookinmeal/models/order.dart';
 import 'package:lookinmeal/models/reservation.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
@@ -189,7 +190,9 @@ class _ProfileState extends State<Profile> {
               GestureDetector(
                 onTap:()async{
                   RealTimeOrders r = RealTimeOrders();
-                  print(await r.updateOrderData("833", "1", "18", "7sBBcSpcN3nUfiBfLxNI", 4, false));
+                  //print(await r.updateOrderData("833", "1", "18", "7sBBcSpcN3nUfiBfLxNI", 4, false));
+                 List<Order> o = await r.getOrder("833", "1").first;
+
                 },
                 child: Container(
                   width: 365.w,
