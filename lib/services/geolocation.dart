@@ -8,14 +8,14 @@ class GeolocationService{
 	static Position myPos;
 
 	Future<double> distanceBetween(double startLatitude, double startLongitude, double endLatitude, double endLongitude)async{ //optimizable
-		double distance = await Geolocator().distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude);
+		double distance = await Geolocator.distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude);
 		return num.parse((distance/1000).toStringAsFixed(1));
 	}
 
 	Future<Position> getLocation() async{
-		Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+		Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 		if(position == null) {
-			myPos = await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
+			myPos = await Geolocator.getLastKnownPosition();
 			return myPos;
 		}
 		else {

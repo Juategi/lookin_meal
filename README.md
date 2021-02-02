@@ -3,7 +3,8 @@
 TODO
 EN BUSQUEDA UNICA NO GUARDAR EL DISHQUERY,
 el horario llega mal,
-arreglar el getCountry de users
+arreglar el getCountry de users,
+problemas inicio sesion priemra vez con permisos
 revisar siguiente dia valido en el calendario,
 Terminar busqueda platos compleja, menos exacta,
 Revisar types en restaurante no caben, poner primero y los otros en info?
