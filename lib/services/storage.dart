@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:lookinmeal/shared/strings.dart';
 import 'package:uuid/uuid.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -136,15 +137,24 @@ class StorageService{
 
 
    Future<String> _uploadImage(File file, String filename, String folder) async {
-     StorageReference storageReference = FirebaseStorage.instance.ref().child("$folder/$filename");
-     final StorageUploadTask uploadTask = storageReference.putFile(file);
-     final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+     firebase_storage.FirebaseStorage storage =
+         firebase_storage.FirebaseStorage.instance;
+     Reference storageReference = storage.ref("$folder/$filename");
+     UploadTask uploadTask = storageReference.putFile(file);
+     final TaskSnapshot downloadUrl = (await uploadTask.whenComplete(() => null));
+     //OLD
+     //StorageReference storageReference = FirebaseStorage.instance.ref().child("$folder/$filename");
+     //final StorageUploadTask uploadTask = storageReference.putFile(file);
+     //final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
      final String url = (await downloadUrl.ref.getDownloadURL());
      return url;
    }
 
    Future removeFile(String url) async {
-     StorageReference storageReference = await FirebaseStorage.instance.getReferenceFromUrl(url);
+     firebase_storage.FirebaseStorage storage =
+         firebase_storage.FirebaseStorage.instance;
+     Reference storageReference = storage.refFromURL(url);
+     //StorageReference storageReference = await FirebaseStorage.instance.getReferenceFromUrl(url);
      storageReference.delete();
      print("removed $url");
    }
