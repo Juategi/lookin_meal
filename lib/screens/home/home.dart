@@ -8,13 +8,11 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/home/home_screen.dart';
 import 'package:lookinmeal/screens/profile/profile.dart';
-import 'package:lookinmeal/screens/search/search.dart';
 import 'package:lookinmeal/screens/top/top.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
-import 'package:lookinmeal/services/auth.dart';
-import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
+import 'package:flutter/services.dart';
 import 'package:lookinmeal/services/geolocation.dart';
-import 'package:lookinmeal/services/pool.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:lookinmeal/services/scanner.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
@@ -71,6 +69,30 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		ready = true;
 	}
 
+	Future<void> scanQR() async {
+		String barcodeScanRes;
+		// Platform messages may fail, so we use a try/catch PlatformException.
+		try {
+			barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+					"#FF6E75", "Cancel", true, ScanMode.QR);
+			print(barcodeScanRes);
+		} on PlatformException {
+			barcodeScanRes = 'Failed to get platform version.';
+		}
+		// If the widget was removed from the tree while the asynchronous platform
+		// message was in flight, we want to discard the reply rather than calling
+		// setState to update our non-existent appearance.
+		if (!mounted) return;
+
+		if(barcodeScanRes != "-1")
+			if(RegExp(r'[a-zA-Z0-9]+/+[a-zA-Z0-9]').hasMatch(barcodeScanRes))
+				Navigator.pushNamed(context, "/order",arguments: barcodeScanRes).then((value) => setState(() {}));
+		else
+			setState(() {
+				_selectedIndex = 0;
+			});
+	}
+
 	@override
 	Future<bool> didPopRoute() async {
 		if(_selectedIndex == 0)
@@ -120,13 +142,13 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 											child: MapSample()
 									),
 								),
-								Offstage(
+								/*Offstage(
 									offstage: _selectedIndex != 2,
 									child: TickerMode(
 											enabled: _selectedIndex == 2,
 											child: QRScanner()
 									),
-								),
+								),*/
 								Offstage(
 									offstage: _selectedIndex != 3,
 									child: TickerMode(
@@ -157,8 +179,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 									title: Text(tr.translate("map")),
 								),
 								BottomNavigationBarItem(
-									icon: Icon(Icons.camera, size: ScreenUtil().setSp(22),),
-									title: Text("Order"),
+									icon: GestureDetector(onTap: scanQR, child: Icon(Icons.camera, size: ScreenUtil().setSp(22),)),
+									title: GestureDetector(onTap: scanQR, child: Text("Order")),
 								),
 								BottomNavigationBarItem(
 									icon: Icon(Icons.star, size: ScreenUtil().setSp(25),),

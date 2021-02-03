@@ -68,7 +68,7 @@ dependencies:
   pdf: ^2.0.0
   permission: ^0.1.7
   path_provider: ^1.6.27
-  qr_code_scanner: ^0.3.0
+  flutter_barcode_scanner: ^1.0.2
 
 dev_dependencies:
   flutter_test:
