@@ -33,6 +33,7 @@ class DBServiceUser {
           picture: result.first["image"],
           country: result.first["country"],
           username: result.first["username"],
+          inOrder: false,
           ratings: await DBServiceEntry.dbServiceEntry.getAllRating(id),
           recently: await DBServiceRestaurant.dbServiceRestaurant.getRecently(id),
         );

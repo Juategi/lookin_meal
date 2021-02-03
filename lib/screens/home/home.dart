@@ -13,7 +13,6 @@ import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:lookinmeal/services/scanner.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';

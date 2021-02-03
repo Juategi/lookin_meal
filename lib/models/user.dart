@@ -14,11 +14,12 @@ class User with ChangeNotifier{
 	Map<String,Restaurant> history;
 	List<FavoriteList> lists;
 	List<Reservation> reservations;
+	bool inOrder;
 
 	set recent(List<Restaurant> l){
 		recently = l;
 		notifyListeners();
 	}
 
-	User({this.uid, this.reservations, this.email, this.name,this.picture,this.favorites,this.service, this.ratings, this.username, this.country, this.favoriteEntry, this.recently, this.history, this.lists});
+	User({this.uid, this.reservations, this.inOrder, this.email, this.name,this.picture,this.favorites,this.service, this.ratings, this.username, this.country, this.favoriteEntry, this.recently, this.history, this.lists});
 }

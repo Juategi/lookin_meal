@@ -39,6 +39,7 @@ class RealTimeOrders{
     });
   }
 
+  //No necesario aun
   Stream<Order> getOrderItem(String restaurant_id, String order_id, String item_id) {
     return orders.document(restaurant_id).collection(order_id).document(item_id).snapshots().map((s) => Order(
       order_id: s.documentID,
