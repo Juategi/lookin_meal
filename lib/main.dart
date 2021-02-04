@@ -73,7 +73,8 @@ class MyApp extends StatelessWidget {
           "/newcode" : (context) => NewQRCode(),
           "/order" : (context) => OrderScreen(),
           "/addorder" : (context) => AddMoreOrder(),
-          "/manageorder" : (context) => ManageOrders()
+          "/manageorder" : (context) => ManageOrders(),
+          "/detailorder" : (context) => OrderDetail()
         },
         home: Wrapper(),
         //initialRoute:"/",

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -37,13 +38,13 @@ class _ManageOrdersState extends State<ManageOrders> {
                       builder: (context, snapshot){
                         print(snapshot.data);
                         if(snapshot.data == null)
-                          return Text("1");
+                          return Loading();
                         if(!snapshot.data){
                           return StreamBuilder<List<Order>>(
                               stream: controller.getOrder(restaurant.restaurant_id, code.code_id),
                               builder: (context, snapshot){
                                 if(snapshot.data == null)
-                                  return Text("2");
+                                  return Loading();
                                 List<Order> items = snapshot.data;
                                 double bill = 0.0;
                                 RealTimeOrders.items.where((element) => element.send).forEach((order) {
@@ -52,7 +53,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                                 });
                                 return GestureDetector(
                                   onTap: (){
-                                    
+                                    Navigator.pushNamed(context, "/detailorder", arguments: [restaurant, code.code_id]);
                                   },
                                   child: Container(
                                     width: 400.w,
@@ -68,8 +69,8 @@ class _ManageOrdersState extends State<ManageOrders> {
                                       ),],),
                                     child: Row(
                                       children: [
-                                        Container(width: 190.w, child: Text("Mesa: ${code.code_id}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
-                                        Container(width: 180.w, child: Text("Cuenta: $bill  ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                                        Container(width: 190.w, child: Text("Table: ${code.code_id}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                                        Container(width: 180.w, child: Text("Total: $bill  ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                                       ],
                                     ),
                                   ),
@@ -84,6 +85,105 @@ class _ManageOrdersState extends State<ManageOrders> {
           ),
         ],
       )
+    );
+  }
+}
+
+class OrderDetail extends StatefulWidget {
+  @override
+  _OrderDetailState createState() => _OrderDetailState();
+}
+
+class _OrderDetailState extends State<OrderDetail> {
+  Restaurant restaurant;
+  String code_id;
+  @override
+  Widget build(BuildContext context) {
+    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    List arg = ModalRoute.of(context).settings.arguments;
+    restaurant = arg.first;
+    code_id = arg.last;
+    double bill = 0.0;
+    RealTimeOrders.items.where((element) => element.send).forEach((order) {
+      MenuEntry entry = restaurant.menu.firstWhere((entry) => entry.id == order.entry_id);
+      bill += entry.price*order.amount;
+    });
+    return Scaffold(
+      body: Column(
+        children: [
+          Text("Table: $code_id", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+          SizedBox(height: 30.h,),
+          Text("Total: $bill  ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+          SizedBox(height: 30.h,),
+          Row( mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text("Price", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),)),
+              SizedBox(width: 15.w,),
+              Text("Amount", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),)),
+              SizedBox(width: 10.w,),
+            ],
+          ),
+          //SizedBox(height: 10.h,),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.w),
+            child: Container(
+              height: 600.h,
+              //color: Colors.blue,
+              child: StreamBuilder<List<Order>>(
+                  stream: RealTimeOrders().getOrder(restaurant.restaurant_id, code_id),
+                  builder: (context, snapshot) {
+                    if(snapshot.data == null)
+                      return Loading();
+                    List<Order> items = snapshot.data;
+                    return ListView(
+                        children: items.where((element) => element.send).map((order) =>
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 5.h),
+                            child: Container(
+                              width: 400.w,
+                              height: 80.h,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 250.w,
+                                    height: 80.h,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                                        border: Border.all(color: Colors.black, width: 1)
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
+                                          child: Container(
+                                            width: 190,
+                                            height: 80.h,
+                                            child: Text("${restaurant.menu.firstWhere((element) => element.id == order.entry_id).name}}", maxLines: 3, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+                                          ),
+                                        ),
+                                        order.note != "" ? IconButton(icon: Icon(Icons.message_outlined, size: ScreenUtil().setSp(30),), onPressed: (){
+                                          
+                                        }) : Container()
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(width: 14.w,),
+                                  Text("${restaurant.menu.firstWhere((element) => element.id == order.entry_id).price} ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
+                                  SizedBox(width: 28.w,),
+                                  Text(order.amount.toString(), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
+                                ],
+                              ),
+                            ),
+                          )
+                        ).toList()
+                    );
+                  }
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
