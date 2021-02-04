@@ -10,7 +10,9 @@ import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/screens/restaurants/orders/order_screen.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
+import 'package:lookinmeal/services/realtime_orders.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +31,7 @@ class _EntryRatingState extends State<EntryRating> {
   bool hasRate;
   bool indicator = false;
   bool init = true;
+  bool order;
   Rating actual;
   String comment = "";
   final formatter = new DateFormat('yyyy-MM-dd');
@@ -83,8 +86,8 @@ class _EntryRatingState extends State<EntryRating> {
     try {
       restaurant = Provider.of<Restaurant>(context);
     }catch(e){
-
     }
+    order = Provider.of<bool>(context);
     entry = Provider.of<MenuEntry>(context);
     if(init){
       rate = 0.0;
@@ -124,7 +127,7 @@ class _EntryRatingState extends State<EntryRating> {
                   children: [
                     restaurant != null ? Row( mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        GestureDetector(
+                        order ? Container() : GestureDetector(
                           onTap:(){
                             DBServiceRestaurant.dbServiceRestaurant.updateRecently(restaurant);
                             Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
@@ -136,7 +139,7 @@ class _EntryRatingState extends State<EntryRating> {
                           ),
                         ),
                         SizedBox(width: 50.w,),
-                        DropdownButton<FavoriteList>(
+                        order ? Container() : DropdownButton<FavoriteList>(
                           icon: Icon(DBServiceUser.userF.lists.firstWhere((list) => list.type == 'E' && list.items.contains(entry.id), orElse: () => null) != null ? Icons.favorite_outlined : Icons.favorite_outline, size: ScreenUtil().setSp(45),color: Color.fromRGBO(255, 65, 112, 1)),
                           items: _loadItems(),
                           onChanged: (list)async{
@@ -264,7 +267,25 @@ class _EntryRatingState extends State<EntryRating> {
             ),
             //SizedBox(height: 5.h,),
             Center(
-              child: SmoothStarRating(
+              child: order ? GestureDetector(
+                onTap: (){
+                  print(RealTimeOrders.items);
+                },
+                child: Container(
+                  height: 50.h,
+                  width: 200.w,
+                  decoration: BoxDecoration(
+                      color: Color.fromRGBO(255, 110, 117, 0.9),
+                      borderRadius: BorderRadius.all(Radius.circular(12))
+                  ),
+                  child: Center(child: Text("Add", maxLines: 1,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white,
+                        letterSpacing: .3,
+                        fontWeight: FontWeight.normal,
+                        fontSize: ScreenUtil().setSp(22),),))),
+                ),
+              ) :SmoothStarRating(
                 allowHalfRating: true,
                 rating: rate,
                 color: Color.fromRGBO(250, 201, 53, 1),

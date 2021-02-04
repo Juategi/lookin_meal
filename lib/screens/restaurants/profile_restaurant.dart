@@ -515,7 +515,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							],
 						),
 					) : Container(),
-					restaurant.menu.length != 0 ? Menu(restaurant: restaurant) : Container(),
+					restaurant.menu.length != 0 ? Provider.value(value: false, child: Provider.value(value: restaurant, child: Menu())) : Container(),
 					restaurant.dailymenu != null? Container(
 						height: 42.h,
 						width: 411.w,

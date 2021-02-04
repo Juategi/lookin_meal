@@ -70,7 +70,8 @@ class MyApp extends StatelessWidget {
           "/userreservations" : (context) => UserReservations(),
           "/editcodes" : (context) => EditCodes(),
           "/newcode" : (context) => NewQRCode(),
-          "/order" : (context) => OrderScreen()
+          "/order" : (context) => OrderScreen(),
+          "/addorder" : (context) => AddMoreOrder()
         },
         home: Wrapper(),
         //initialRoute:"/",

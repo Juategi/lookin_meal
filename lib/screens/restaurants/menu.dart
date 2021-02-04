@@ -10,11 +10,9 @@ import 'package:lookinmeal/shared/functions.dart';
 import 'package:provider/provider.dart';
 
 class Menu extends StatefulWidget {
-  Restaurant restaurant;
-  Menu({this.restaurant});
 
   @override
-  _MenuState createState() => _MenuState(restaurant: restaurant);
+  _MenuState createState() => _MenuState();
 }
 
 class _MenuState extends State<Menu> {
@@ -22,6 +20,7 @@ class _MenuState extends State<Menu> {
   Restaurant restaurant;
   Map<String,bool> expanded = {};
   bool init = true;
+  bool order;
   _MenuState({this.restaurant});
 
   List<Widget> _initList(BuildContext context) {
@@ -68,6 +67,8 @@ class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    restaurant = Provider.of<Restaurant>(context);
+    order = Provider.of<bool>(context);
     if(init){
       for(String section in restaurant.sections){
         expanded[section] = true;
@@ -104,12 +105,16 @@ class _MenuState extends State<Menu> {
                       children: expanded[section]  ?
                         restaurant.menu.map((entry){
                           if(section == entry.section && entry.hide)
-                            return Provider<Restaurant>.value(
+                            return Provider.value(
+                              value: order,
                               key: UniqueKey(),
-                              value: restaurant,
-                              child: Provider<MenuEntry>.value(
-                                  key: UniqueKey(),
-                                  value: entry, child: MenuTile(daily: false,)),
+                              child: Provider<Restaurant>.value(
+                                key: UniqueKey(),
+                                value: restaurant,
+                                child: Provider<MenuEntry>.value(
+                                    key: UniqueKey(),
+                                    value: entry, child: MenuTile(daily: false,)),
+                              ),
                             );
                           else
                             return Container();

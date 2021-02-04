@@ -5,6 +5,7 @@ class RealTimeOrders{
   RealTimeOrders();
 
   final CollectionReference orders = Firestore.instance.collection('orders');
+  static List<Order> items;
 
   Future createOrder(String restaurant_id, String order_id) async{
     orders.document(restaurant_id).collection(order_id).document("closed").setData({

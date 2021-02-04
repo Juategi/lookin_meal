@@ -22,6 +22,7 @@ class _MenuTileState extends State<MenuTile> with TickerProviderStateMixin {
   _MenuTileState({this.daily = false});
   MenuEntry entry;
   Restaurant restaurant;
+  bool order;
   bool daily = false;
 
 
@@ -29,6 +30,7 @@ class _MenuTileState extends State<MenuTile> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     entry = Provider.of<MenuEntry>(context);
     restaurant = Provider.of<Restaurant>(context);
+    order = Provider.of<bool>(context);
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return GestureDetector(
       child: Padding(
@@ -85,8 +87,11 @@ class _MenuTileState extends State<MenuTile> with TickerProviderStateMixin {
       ),
       onTap: () async{
         await showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
-          return Provider<Restaurant>.value(
-              value: restaurant, child: Provider<MenuEntry>.value(value: entry, child: EntryRating()));
+          return Provider.value(
+            value: order,
+            child: Provider<Restaurant>.value(
+                value: restaurant, child: Provider<MenuEntry>.value(value: entry, child: EntryRating())),
+          );
         }).then((value){setState(() {});});
       },
     );

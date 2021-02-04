@@ -6,11 +6,14 @@ import 'package:lookinmeal/models/menu_entry.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/models/order.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/screens/restaurants/menu.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/realtime_orders.dart';
+import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/widgets.dart';
+import 'package:provider/provider.dart';
 
 class OrderScreen extends StatefulWidget {
   @override
@@ -21,7 +24,6 @@ class _OrderScreenState extends State<OrderScreen> {
   Restaurant restaurant;
   String restaurant_id, table_id;
   bool init = true;
-  List<Order> items = [];
   final RealTimeOrders controller = RealTimeOrders();
 
   Future getRestaurant() async{
@@ -47,7 +49,7 @@ class _OrderScreenState extends State<OrderScreen> {
         ],
       )
     );
-    widgets.addAll(items.where((order) => order.send).map((order) {
+    widgets.addAll(RealTimeOrders.items.where((order) => order.send).map((order) {
       MenuEntry entry = restaurant.menu.firstWhere((element) => element.id == order.entry_id);
       return Row(
         children: [
@@ -144,6 +146,7 @@ class _OrderScreenState extends State<OrderScreen> {
       );
     }
     ));
+    widgets.add(SizedBox(height: 12.h,));
     widgets.add(Container(
       height: 42.h,
       width: 411.w,
@@ -159,7 +162,7 @@ class _OrderScreenState extends State<OrderScreen> {
       ],
     )
     );
-    widgets.addAll(items.where((order) => !order.send).map((order) {
+    widgets.addAll(RealTimeOrders.items.where((order) => !order.send).map((order) {
       MenuEntry entry = restaurant.menu.firstWhere((element) => element.id == order.entry_id);
       return Row(
         children: [
@@ -279,7 +282,7 @@ class _OrderScreenState extends State<OrderScreen> {
     return StreamBuilder<List<Order>>(
       stream: controller.getOrder(restaurant_id, table_id),
       builder: (context, snapshot){
-        items = snapshot.data;
+        RealTimeOrders.items = snapshot.data;
         return Scaffold(
           body: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -316,14 +319,97 @@ class _OrderScreenState extends State<OrderScreen> {
                     ),
                   ],
                 ),
-                Expanded(child: ListView(
-                  children: _loadOrder()
-                ))
+                Container(
+                  height: 550.h,
+                  child: ListView(
+                    children: _loadOrder()
+                  ),
+                ),
+                //SizedBox(height: 10.h,),
+                GestureDetector(
+                  onTap: () async {
+                    if(await Alerts.confirmation("If you send the order you won't be able to change it back, are you sure?", context))
+                      setState(() {
+                        RealTimeOrders.items.where((element) => !element.send).forEach((order) {
+                          order.send = true;
+                          controller.updateOrderData(restaurant_id, table_id, order);
+                        });
+                      });
+                  },
+                  child: Container(
+                    height: 50.h,
+                    width: 200.w,
+                    decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 110, 117, 0.9),
+                        borderRadius: BorderRadius.all(Radius.circular(12))
+                    ),
+                    child: Center(child: Text("Send order", maxLines: 1,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white,
+                          letterSpacing: .3,
+                          fontWeight: FontWeight.normal,
+                          fontSize: ScreenUtil().setSp(22),),))),
+                  ),
+                ),
+                SizedBox(height: 20.h,),
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pushNamed(context, "/addorder", arguments: [restaurant, table_id]);
+                  },
+                  child: Container(
+                    height: 50.h,
+                    width: 200.w,
+                    decoration: BoxDecoration(
+                        color: Colors.white54,
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        border: Border.all(color: Color.fromRGBO(255, 110, 117, 0.9),)
+                    ),
+                    child: Center(child: Text("Add more", maxLines: 1,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black,
+                          letterSpacing: .3,
+                          fontWeight: FontWeight.normal,
+                          fontSize: ScreenUtil().setSp(22),),))),
+                  ),
+                ),
               ],
             ),
           ),
         );
       }
+    );
+  }
+}
+
+
+class AddMoreOrder extends StatefulWidget {
+  @override
+  _AddMoreOrderState createState() => _AddMoreOrderState();
+}
+
+class _AddMoreOrderState extends State<AddMoreOrder> {
+  Restaurant restaurant;
+  String table_id;
+
+  @override
+  Widget build(BuildContext context) {
+    List arg = ModalRoute.of(context).settings.arguments;
+    restaurant = arg.first;
+    table_id = arg.last;
+    return Scaffold(
+      body: ListView(
+        children: [
+          Container(
+            height: 42.h,
+            width: 411.w,
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(255, 110, 117, 0.9),
+            ),
+            child: Align( alignment: AlignmentDirectional.topCenter, child: Text("Add more to the order", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
+          ),
+          Provider.value(value: true, child: Provider.value(value: restaurant, child: Menu()))
+        ],
+      ),
     );
   }
 }
