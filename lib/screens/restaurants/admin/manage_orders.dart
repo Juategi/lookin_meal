@@ -6,6 +6,7 @@ import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/order.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/services/realtime_orders.dart';
+import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
 
@@ -159,11 +160,11 @@ class _OrderDetailState extends State<OrderDetail> {
                                           child: Container(
                                             width: 190,
                                             height: 80.h,
-                                            child: Text("${restaurant.menu.firstWhere((element) => element.id == order.entry_id).name}}", maxLines: 3, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+                                            child: Text("${restaurant.menu.firstWhere((element) => element.id == order.entry_id).name}", maxLines: 3, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
                                           ),
                                         ),
                                         order.note != "" ? IconButton(icon: Icon(Icons.message_outlined, size: ScreenUtil().setSp(30),), onPressed: (){
-                                          
+                                          Alerts.dialog(order.note, context);
                                         }) : Container()
                                       ],
                                     ),
