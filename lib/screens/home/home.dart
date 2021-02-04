@@ -17,6 +17,7 @@ import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:lookinmeal/screens/map/map.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 
 
 
@@ -69,27 +70,32 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	}
 
 	Future<void> scanQR() async {
-		String barcodeScanRes;
-		// Platform messages may fail, so we use a try/catch PlatformException.
-		try {
-			barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-					"#FF6E75", "Cancel", true, ScanMode.QR);
-			print(barcodeScanRes);
-		} on PlatformException {
-			barcodeScanRes = 'Failed to get platform version.';
-		}
-		// If the widget was removed from the tree while the asynchronous platform
-		// message was in flight, we want to discard the reply rather than calling
-		// setState to update our non-existent appearance.
-		if (!mounted) return;
+		if(DBServiceUser.userF.inOrder == null){
+			String barcodeScanRes;
+			// Platform messages may fail, so we use a try/catch PlatformException.
+			try {
+				barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+						"#FF6E75", "Cancel", true, ScanMode.QR);
+				print(barcodeScanRes);
+			} on PlatformException {
+				barcodeScanRes = 'Failed to get platform version.';
+			}
+			// If the widget was removed from the tree while the asynchronous platform
+			// message was in flight, we want to discard the reply rather than calling
+			// setState to update our non-existent appearance.
+			if (!mounted) return;
 
-		if(barcodeScanRes != "-1")
-			if(RegExp(r'[a-zA-Z0-9]+/+[a-zA-Z0-9]').hasMatch(barcodeScanRes))
-				Navigator.pushNamed(context, "/order",arguments: barcodeScanRes).then((value) => setState(() {}));
-		else
-			setState(() {
-				_selectedIndex = 0;
-			});
+			if(barcodeScanRes != "-1")
+				if(RegExp(r'[a-zA-Z0-9]+/+[a-zA-Z0-9]').hasMatch(barcodeScanRes))
+					Navigator.pushNamed(context, "/order",arguments: barcodeScanRes).then((value) => setState(() {}));
+				else
+					setState(() {
+						_selectedIndex = 0;
+					});
+		}
+		else{
+			Navigator.pushNamed(context, "/order",arguments: DBServiceUser.userF.inOrder).then((value) => setState(() {}));
+		}
 	}
 
 	@override
@@ -178,7 +184,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 									title: Text(tr.translate("map")),
 								),
 								BottomNavigationBarItem(
-									icon: GestureDetector(onTap: scanQR, child: Icon(Icons.camera, size: ScreenUtil().setSp(22),)),
+									icon: GestureDetector(onTap: scanQR, child: Icon(DBServiceUser.userF.inOrder == null? Icons.camera : FontAwesomeIcons.shoppingCart, size: ScreenUtil().setSp(22),)),
 									title: GestureDetector(onTap: scanQR, child: Text("Order")),
 								),
 								BottomNavigationBarItem(

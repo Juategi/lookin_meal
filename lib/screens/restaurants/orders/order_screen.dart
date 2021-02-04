@@ -12,6 +12,7 @@ import 'package:lookinmeal/services/realtime_orders.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/services/pool.dart';
+import 'package:lookinmeal/shared/loading.dart';
 import 'package:lookinmeal/shared/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -286,9 +287,11 @@ class _OrderScreenState extends State<OrderScreen> {
         getRestaurant();
       init = false;
     }
-    return StreamBuilder<List<Order>>(
+    return restaurant == null ? Loading() : StreamBuilder<List<Order>>(
       stream: controller.getOrder(restaurant_id, table_id),
       builder: (context, snapshot){
+        if(snapshot.data == null)
+          return Loading();
         RealTimeOrders.items = snapshot.data;
         bill = 0.0;
         RealTimeOrders.items.where((element) => element.send).forEach((order) {
@@ -303,19 +306,25 @@ class _OrderScreenState extends State<OrderScreen> {
                 SizedBox(height: 50.h,),
                 Row(
                   children: [
-                    Container(
-                      width: 100.w,
-                      height: 20.h,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                        boxShadow: [BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 3,
-                          offset: Offset(0, 3),
-                        ),],),
-                      child: Center(child: Text("Exit", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(12),),))),
+                    GestureDetector(
+                      onTap: (){
+                        DBServiceUser.userF.inOrder = null;
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: 100.w,
+                        height: 20.h,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(30)),
+                          boxShadow: [BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 3,
+                            offset: Offset(0, 3),
+                          ),],),
+                        child: Center(child: Text("Exit", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(12),),))),
+                      ),
                     ),
                     SizedBox(width: 40.w,),
                     Text("Total cost: ", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(20),),)),
