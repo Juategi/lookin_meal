@@ -14,7 +14,7 @@ class User with ChangeNotifier{
 	Map<String,Restaurant> history;
 	List<FavoriteList> lists;
 	List<Reservation> reservations;
-	bool inOrder;
+	String inOrder;
 
 	set recent(List<Restaurant> l){
 		recently = l;

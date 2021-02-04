@@ -281,7 +281,7 @@ class _OrderScreenState extends State<OrderScreen> {
       table_id = code.split("/").last;
       RealTimeOrders.actualTable = table_id;
       restaurant = Pool.getRestaurant(restaurant_id);
-      DBServiceUser.userF.inOrder = true;
+      DBServiceUser.userF.inOrder = code;
       if(restaurant == null)
         getRestaurant();
       init = false;
@@ -379,7 +379,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 SizedBox(height: 20.h,),
                 GestureDetector(
                   onTap: (){
-                    Navigator.pushNamed(context, "/addorder", arguments: [restaurant, table_id]);
+                    Navigator.pushNamed(context, "/addorder", arguments: restaurant);
                   },
                   child: Container(
                     height: 50.h,
@@ -414,13 +414,10 @@ class AddMoreOrder extends StatefulWidget {
 
 class _AddMoreOrderState extends State<AddMoreOrder> {
   Restaurant restaurant;
-  String table_id;
 
   @override
   Widget build(BuildContext context) {
-    List arg = ModalRoute.of(context).settings.arguments;
-    restaurant = arg.first;
-    table_id = arg.last;
+    restaurant = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       body: ListView(
         children: [
