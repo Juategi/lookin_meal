@@ -30,12 +30,12 @@ class RealTimeOrders{
     return ref.documentID;
   }
 
-  Future updateOrderData(String restaurant_id, String order_id, String entry_id, String item_id, int amount, bool send) async {
-    DocumentReference ref = orders.document(restaurant_id).collection(order_id).document(item_id);
+  Future updateOrderData(String restaurant_id, String table_id, Order order) async {
+    DocumentReference ref = orders.document(restaurant_id).collection(table_id).document(order.order_id);
     await ref.setData({
-      'amount': amount,
-      'entry_id': entry_id,
-      'send': send,
+      'amount': order.amount,
+      'entry_id': order.entry_id,
+      'send': order.send,
     });
   }
 
