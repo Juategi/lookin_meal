@@ -81,7 +81,10 @@ class RealTimeOrders{
   }
 
   Stream<bool> checkClose(String restaurant_id, String table_id) {
-    return orders.document(restaurant_id).collection(table_id).document("closed").snapshots().map((s) => s.data['closed']);
+    return orders.document(restaurant_id).collection(table_id).document("closed").snapshots().map((s){
+      bool closed =  s.data['closed'];
+      return closed;
+    });
   }
 
 }

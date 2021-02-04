@@ -302,6 +302,15 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 										},
 									),
 								),
+								Align(
+									alignment: AlignmentDirectional.topCenter,
+									child: GestureDetector(
+										child: Icon(Icons.shopping_cart),
+										onTap: ()async{
+											Navigator.pushNamed(context, "/manageorder", arguments: restaurant);
+										},
+									),
+								),
 							],
 						),
 					),

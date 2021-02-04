@@ -23,6 +23,7 @@ import 'package:lookinmeal/screens/restaurants/orders/order_screen.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/reservations.dart';
 import 'package:lookinmeal/screens/restaurants/reserve_table.dart';
+import 'screens/restaurants/admin/manage_orders.dart';
 import 'services/app_localizations.dart';
 import 'screens/authenticate/wrapper.dart';
 import 'services/auth.dart';
@@ -71,7 +72,8 @@ class MyApp extends StatelessWidget {
           "/editcodes" : (context) => EditCodes(),
           "/newcode" : (context) => NewQRCode(),
           "/order" : (context) => OrderScreen(),
-          "/addorder" : (context) => AddMoreOrder()
+          "/addorder" : (context) => AddMoreOrder(),
+          "/manageorder" : (context) => ManageOrders()
         },
         home: Wrapper(),
         //initialRoute:"/",
