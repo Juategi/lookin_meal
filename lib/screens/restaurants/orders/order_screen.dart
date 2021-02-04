@@ -352,7 +352,7 @@ class _OrderScreenState extends State<OrderScreen> {
                     if(await Alerts.confirmation("If you send the order you won't be able to change it back, are you sure?", context))
                       setState(() {
                         RealTimeOrders.items.where((element) => !element.send).forEach((order) {
-                          bool found = false;
+                          /*bool found = false;
                           RealTimeOrders.items.where((element) => element.send).forEach((o) {
                             if(o.entry_id == order.entry_id){
                               found = true;
@@ -361,8 +361,8 @@ class _OrderScreenState extends State<OrderScreen> {
                               controller.updateOrderData(restaurant_id, table_id, o);
                               controller.deleteOrderData(restaurant_id, table_id, order);
                             }
-                          });
-                          if(!found) {
+                          });*/
+                          if(true) {
                             order.send = true;
                             controller.updateOrderData(
                                 restaurant_id, table_id, order);

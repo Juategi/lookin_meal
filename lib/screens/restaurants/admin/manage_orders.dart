@@ -128,7 +128,7 @@ class _OrderDetailState extends State<OrderDetail> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w),
             child: Container(
-              height: 600.h,
+              height: 540.h,
               //color: Colors.blue,
               child: StreamBuilder<List<Order>>(
                   stream: RealTimeOrders().getOrder(restaurant.restaurant_id, code_id),
@@ -163,9 +163,27 @@ class _OrderDetailState extends State<OrderDetail> {
                                             child: Text("${restaurant.menu.firstWhere((element) => element.id == order.entry_id).name}", maxLines: 3, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
                                           ),
                                         ),
-                                        order.note != "" ? IconButton(icon: Icon(Icons.message_outlined, size: ScreenUtil().setSp(30),), onPressed: (){
-                                          Alerts.dialog(order.note, context);
-                                        }) : Container()
+                                        Column(
+                                          children: [
+                                            SizedBox(height: 5.h,),
+                                            Container(
+                                              height: 30.h,
+                                              child: Checkbox(value: order.check, activeColor: Color.fromRGBO(255, 110, 117, 0.9) , onChanged: (value){
+                                                setState(() {
+                                                  order.check = value;
+                                                  RealTimeOrders().updateOrderData(
+                                                      restaurant.restaurant_id, code_id, order);
+                                                });
+                                              }),
+                                            ),
+                                            order.note != "" ? Container(
+                                              height: 30.h,
+                                              child: IconButton(icon: Icon(Icons.message_outlined, size: ScreenUtil().setSp(26),), onPressed: (){
+                                                Alerts.dialog(order.note, context);
+                                              }),
+                                            ) : Container(),
+                                          ],
+                                        )
                                       ],
                                     ),
                                   ),
@@ -180,6 +198,24 @@ class _OrderDetailState extends State<OrderDetail> {
                         ).toList()
                     );
                   }
+              ),
+            ),
+          ),
+          SizedBox(height: 20.h,),
+          GestureDetector(
+            onTap: (){
+
+            },
+            child: Container(
+              width: 200.w,
+              height: 40.h,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  border: Border.all(color: Colors.black, width: 1)
+              ),
+              child: Center(
+                child: Text("Close order", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
               ),
             ),
           )

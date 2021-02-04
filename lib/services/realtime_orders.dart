@@ -47,7 +47,8 @@ class RealTimeOrders{
         'amount': order.amount,
         'entry_id': order.entry_id,
         'send': order.send,
-        'note': order.note
+        'note': order.note,
+         'check': order.check
       });
       order.order_id = ref.documentID;
     }
@@ -60,7 +61,8 @@ class RealTimeOrders{
       'amount': order.amount,
       'entry_id': order.entry_id,
       'send': order.send,
-      'note' : order.note
+      'note' : order.note,
+      'check': order.check
     });
   }
 
@@ -75,7 +77,8 @@ class RealTimeOrders{
             amount: s.data['amount'],
             entry_id: s.data['entry_id'],
             send: s.data['send'],
-           note: s.data['note']
+           note: s.data['note'],
+          check: s.data['check']
         );
     }).toList());
   }

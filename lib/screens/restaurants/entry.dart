@@ -294,6 +294,7 @@ class _EntryRatingState extends State<EntryRating> {
                 onTap: (){
                   RealTimeOrders().createOrderData(restaurant.restaurant_id, Order(
                     send: false,
+                    check: false,
                     entry_id: entry.id,
                     amount: amount,
                     note: note,
