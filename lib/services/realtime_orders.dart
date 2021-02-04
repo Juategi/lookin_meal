@@ -8,17 +8,26 @@ class RealTimeOrders{
   static List<Order> items;
   static String actualTable;
 
-  Future createOrder(String restaurant_id, String order_id) async{
-    orders.document(restaurant_id).collection(order_id).document("closed").setData({
+  Future createOrder(String restaurant_id, String table_id) async{
+    orders.document(restaurant_id).collection(table_id).document("closed").setData({
       "closed" : false
     });
   }
 
-  Future deleteOrder(String restaurant_id, String order_id) async{
-    orders.document(restaurant_id).collection(order_id).getDocuments().then((snapshot) {
+  Future deleteOrder(String restaurant_id, String table_id) async{
+    orders.document(restaurant_id).collection(table_id).getDocuments().then((snapshot) {
         for (DocumentSnapshot ds in snapshot.documents) {
           ds.reference.delete();
         }
+    });
+  }
+
+  Future closeOrder(String restaurant_id, String table_id) async{
+    orders.document(restaurant_id).collection(table_id).getDocuments().then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.documents) {
+        if(ds.documentID != "closed")
+          ds.reference.delete();
+      }
     });
   }
 
@@ -71,8 +80,8 @@ class RealTimeOrders{
     }).toList());
   }
 
-  Stream<bool> checkClose(String restaurant_id, String order_id) {
-    return orders.document(restaurant_id).collection(order_id).document("closed").snapshots().map((s) => s.data['closed']);
+  Stream<bool> checkClose(String restaurant_id, String table_id) {
+    return orders.document(restaurant_id).collection(table_id).document("closed").snapshots().map((s) => s.data['closed']);
   }
 
 }
