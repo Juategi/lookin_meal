@@ -24,6 +24,7 @@ class _OrderScreenState extends State<OrderScreen> {
   Restaurant restaurant;
   String restaurant_id, table_id;
   bool init = true;
+  double bill = 0.0;
   final RealTimeOrders controller = RealTimeOrders();
 
   Future getRestaurant() async{
@@ -251,12 +252,17 @@ class _OrderScreenState extends State<OrderScreen> {
             ),
           ),
           SizedBox(width: 15.w,),
-          DropdownButton(items: List<int>.generate(30, (i) => i + 1).map((n) => DropdownMenuItem(value: n, child:
+          DropdownButton(items: List<int>.generate(31, (i) => i).map((n) => DropdownMenuItem(value: n, child:
           Text(n.toString(), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)),
           )).toList(), onChanged: (s){
             setState(() {
-              order.amount = s;
-              controller.updateOrderData(restaurant_id, table_id, order);
+              if(s == 0){
+                controller.deleteOrderData(restaurant_id, table_id, order);
+              }
+              else{
+                order.amount = s;
+                controller.updateOrderData(restaurant_id, table_id, order);
+              }
             });
           }, value: order.amount,),
         ],
@@ -273,6 +279,7 @@ class _OrderScreenState extends State<OrderScreen> {
     if(init){
       restaurant_id = code.split("/").first;
       table_id = code.split("/").last;
+      RealTimeOrders.actualTable = table_id;
       restaurant = Pool.getRestaurant(restaurant_id);
       DBServiceUser.userF.inOrder = true;
       if(restaurant == null)
@@ -283,6 +290,11 @@ class _OrderScreenState extends State<OrderScreen> {
       stream: controller.getOrder(restaurant_id, table_id),
       builder: (context, snapshot){
         RealTimeOrders.items = snapshot.data;
+        bill = 0.0;
+        RealTimeOrders.items.where((element) => element.send).forEach((order) {
+          MenuEntry entry = restaurant.menu.firstWhere((entry) => entry.id == order.entry_id);
+          bill += entry.price*order.amount;
+        });
         return Scaffold(
           body: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -315,7 +327,7 @@ class _OrderScreenState extends State<OrderScreen> {
                           color: Color.fromRGBO(255, 110, 117, 0.9),
                           borderRadius: BorderRadius.all(Radius.circular(12))
                       ),
-                      child: Align( alignment: Alignment.center, child: Text("0 ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
+                      child: Align( alignment: Alignment.center, child: Text("${bill} ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
                     ),
                   ],
                 ),
@@ -331,8 +343,21 @@ class _OrderScreenState extends State<OrderScreen> {
                     if(await Alerts.confirmation("If you send the order you won't be able to change it back, are you sure?", context))
                       setState(() {
                         RealTimeOrders.items.where((element) => !element.send).forEach((order) {
-                          order.send = true;
-                          controller.updateOrderData(restaurant_id, table_id, order);
+                          bool found = false;
+                          RealTimeOrders.items.where((element) => element.send).forEach((o) {
+                            if(o.entry_id == order.entry_id){
+                              found = true;
+                              o.amount += order.amount;
+                              o.note = o.note + " / " + order.note;
+                              controller.updateOrderData(restaurant_id, table_id, o);
+                              controller.deleteOrderData(restaurant_id, table_id, order);
+                            }
+                          });
+                          if(!found) {
+                            order.send = true;
+                            controller.updateOrderData(
+                                restaurant_id, table_id, order);
+                          }
                         });
                       });
                   },

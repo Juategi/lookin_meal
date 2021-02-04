@@ -8,6 +8,7 @@ import 'package:lookinmeal/database/restaurantDB.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
+import 'package:lookinmeal/models/order.dart';
 import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/orders/order_screen.dart';
@@ -32,8 +33,10 @@ class _EntryRatingState extends State<EntryRating> {
   bool indicator = false;
   bool init = true;
   bool order;
+  num amount = 1;
   Rating actual;
   String comment = "";
+  String note = "";
   final formatter = new DateFormat('yyyy-MM-dd');
 
   List<DropdownMenuItem> _loadItems(){
@@ -113,11 +116,11 @@ class _EntryRatingState extends State<EntryRating> {
           children: <Widget>[
             SizedBox(height: 40.h,),
             Container(
-                height: 342.h,
-                width: 342.w,
-                decoration: entry.image == null || entry.image == "" ? null: BoxDecoration(
+                height: order ? 260.h  :  342.h,
+                width: order ? 260.w : 342.w,
+                decoration: entry.image == null || entry.image == "" ? null : BoxDecoration(
                     border: Border.all(color: Colors.black54, width: 1),
-                  image: entry.image == null || entry.image == ""? null: DecorationImage(
+                  image: entry.image == null || entry.image == ""? null : DecorationImage(
                     image: Image.network(
                         entry.image).image,
                     fit: BoxFit.cover,
@@ -168,7 +171,7 @@ class _EntryRatingState extends State<EntryRating> {
                         ),
                       ],
                     ) : Container(),
-                    SizedBox(height: 240.h,),
+                    SizedBox(height: 180.h,),
                     Row(
                       children: [
                         entry.price == 0.0 ? Container():Row( mainAxisAlignment: entry.image == null || entry.image == ""?  MainAxisAlignment.center : MainAxisAlignment.start,
@@ -249,9 +252,25 @@ class _EntryRatingState extends State<EntryRating> {
             SizedBox(height: 10.h,),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Container(height: 100.h,child: Text("${entry.description}", maxLines: 4, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
+              child: Container(height: entry.description == "" ? 0 : 100.h,child: Text("${entry.description}", maxLines: 4, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
             ),
             SizedBox(height: 10.h,),
+            !order ? Container()  :
+                Row( mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Amount", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.9), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+                    SizedBox(width: 20.w,),
+                    DropdownButton(items: List<int>.generate(30, (i) => i + 1).map((n) => DropdownMenuItem(value: n, child:
+                    Text(n.toString(), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)),
+                    )).toList(), onChanged: (s){
+                      setState(() {
+                        amount = s;
+                      });
+                    }, value: amount,),
+                  ],
+                ),
+            SizedBox(height: !order ? 0 :  10.h,),
+            !order ? Container() : Text("Add a note", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.9), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(15),),)),
             Container(
               //color: Color.fromRGBO(255, 110, 117, 0.1),
               height: 150.h,
@@ -261,15 +280,25 @@ class _EntryRatingState extends State<EntryRating> {
                 maxLength: 250,
                 maxLines: 8,
                 decoration: textInputDeco,
-                controller: TextEditingController()..text = comment..selection = TextSelection.fromPosition(TextPosition(offset: comment.length)) , onChanged: (v) {
-                comment = v;
+                controller: order ? (TextEditingController()..text = note..selection = TextSelection.fromPosition(TextPosition(offset: note.length)))  :  (TextEditingController()..text = comment..selection = TextSelection.fromPosition(TextPosition(offset: comment.length))) ,
+                onChanged: (v) {
+                  if(order)
+                    note = v;
+                  else
+                    comment = v;
               },),
             ),
             //SizedBox(height: 5.h,),
             Center(
               child: order ? GestureDetector(
                 onTap: (){
-                  print(RealTimeOrders.items);
+                  RealTimeOrders().createOrderData(restaurant.restaurant_id, Order(
+                    send: false,
+                    entry_id: entry.id,
+                    amount: amount,
+                    note: note,
+                  ));
+                  Navigator.pop(context);
                 },
                 child: Container(
                   height: 50.h,
