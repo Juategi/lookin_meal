@@ -37,7 +37,6 @@ class _ManageOrdersState extends State<ManageOrders> {
                       StreamBuilder<bool>(
                       stream: controller.checkClose(restaurant.restaurant_id, code.code_id),
                       builder: (context, snapshot){
-                        print(snapshot.data);
                         if(snapshot.data == null)
                           return Loading();
                         if(!snapshot.data){
@@ -56,23 +55,26 @@ class _ManageOrdersState extends State<ManageOrders> {
                                   onTap: (){
                                     Navigator.pushNamed(context, "/detailorder", arguments: [restaurant, code.code_id]);
                                   },
-                                  child: Container(
-                                    width: 400.w,
-                                    height: 80.h,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                                      boxShadow: [BoxShadow(
-                                        color: Colors.black.withOpacity(0.2),
-                                        spreadRadius: 2,
-                                        blurRadius: 3,
-                                        offset: Offset(0, 3),
-                                      ),],),
-                                    child: Row(
-                                      children: [
-                                        Container(width: 190.w, child: Text("Table: ${code.code_id}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
-                                        Container(width: 180.w, child: Text("Total: $bill  ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
-                                      ],
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 5.h),
+                                    child: Container(
+                                      width: 400.w,
+                                      height: 80.h,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                                        boxShadow: [BoxShadow(
+                                          color: Colors.black.withOpacity(0.2),
+                                          spreadRadius: 2,
+                                          blurRadius: 3,
+                                          offset: Offset(0, 3),
+                                        ),],),
+                                      child: Row(
+                                        children: [
+                                          Container(width: 190.w, child: Text("Table: ${code.code_id}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                                          Container(width: 180.w, child: Text("Total: $bill  ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );

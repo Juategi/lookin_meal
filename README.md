@@ -2,6 +2,7 @@
 
 TODO
 EN BUSQUEDA UNICA NO GUARDAR EL DISHQUERY,
+checkear varios pedidos a la vez, close order y checkclosed
 el horario llega mal,
 arreglar el getCountry de users,
 problemas inicio sesion priemra vez con permisos
