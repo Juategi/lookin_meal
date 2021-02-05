@@ -7,6 +7,7 @@ class RealTimeOrders{
   final CollectionReference orders = Firestore.instance.collection('orders');
   static List<Order> items;
   static String actualTable;
+  static bool sent = false;
 
   Future createOrder(String restaurant_id, String table_id) async{
     orders.document(restaurant_id).collection(table_id).document("closed").setData({
@@ -23,12 +24,19 @@ class RealTimeOrders{
   }
 
   Future closeOrder(String restaurant_id, String table_id) async{
-    orders.document(restaurant_id).collection(table_id).getDocuments().then((snapshot) {
+    await orders.document(restaurant_id).collection(table_id).getDocuments().then((snapshot) {
       for (DocumentSnapshot ds in snapshot.documents) {
         if(ds.documentID != "closed")
           ds.reference.delete();
+        else
+          ds.reference.setData({'closed' : true});
       }
     });
+    openOrder(restaurant_id, table_id);
+  }
+
+  Future openOrder(String restaurant_id, String table_id) async{
+    orders.document(restaurant_id).collection(table_id).document("closed").setData({'closed' : false});
   }
 
   Future createOrderData(String restaurant_id, Order order) async {
@@ -84,6 +92,9 @@ class RealTimeOrders{
   }
 
   Stream<bool> checkClose(String restaurant_id, String table_id) {
+    if(restaurant_id == ""){
+      return null;
+    }
     return orders.document(restaurant_id).collection(table_id).document("closed").snapshots().map((s){
       bool closed =  s.data['closed'];
       return closed;

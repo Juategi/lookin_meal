@@ -9,6 +9,8 @@ import 'package:lookinmeal/services/realtime_orders.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
+
 
 class ManageOrders extends StatefulWidget {
   @override
@@ -203,8 +205,11 @@ class _OrderDetailState extends State<OrderDetail> {
                   ),
                 SizedBox(height: 20.h,),
                 GestureDetector(
-                  onTap: (){
-
+                  onTap: () async{
+                    if(await Alerts.confirmation("You will lose all the data, are you sure?", context)){
+                      RealTimeOrders().closeOrder(restaurant.restaurant_id, code_id);
+                      Navigator.pop(context);
+                    }
                   },
                   child: Container(
                     width: 200.w,
