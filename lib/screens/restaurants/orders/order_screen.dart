@@ -329,6 +329,7 @@ class _OrderScreenState extends State<OrderScreen> {
                           GestureDetector(
                             onTap: () {
                               DBServiceUser.userF.inOrder = null;
+                              RealTimeOrders.sent = false;
                               Navigator.pop(context);
                             },
                             child: Container(

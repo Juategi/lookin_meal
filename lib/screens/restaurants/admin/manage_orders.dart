@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/order.dart';
@@ -73,8 +74,10 @@ class _ManageOrdersState extends State<ManageOrders> {
                                         ),],),
                                       child: Row(
                                         children: [
-                                          Container(width: 190.w, child: Text("Table: ${code.code_id}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
-                                          Container(width: 180.w, child: Text("Total: $bill  ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                                          Container(width: 150.w, child: Text("Table: ${code.code_id}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                                          Container(width: 150.w, child: Text("Total: $bill  ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                                          SizedBox(width: 10.w,),
+                                          items.every((element) => element.check) ? Container() : Icon(Icons.add_alert_rounded, size: ScreenUtil().setSp(28), color: Colors.redAccent,)
                                         ],
                                       ),
                                     ),
