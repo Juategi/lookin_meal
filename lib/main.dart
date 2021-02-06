@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/screens/authenticate/authenticate.dart';
@@ -23,6 +24,7 @@ import 'package:lookinmeal/screens/restaurants/orders/order_screen.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/reservations.dart';
 import 'package:lookinmeal/screens/restaurants/reserve_table.dart';
+import 'package:lookinmeal/services/push_notifications.dart';
 import 'screens/restaurants/admin/manage_orders.dart';
 import 'services/app_localizations.dart';
 import 'screens/authenticate/wrapper.dart';
@@ -35,10 +37,13 @@ void main() { Provider.debugCheckInvalidValueType = null; runApp(MyApp()); }
 
 class MyApp extends StatelessWidget {
 
+  static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
   Widget build(BuildContext context) {
     AppLocalizations tr = AppLocalizations.of(context);
+    final pushNotificationService = PushNotificationService(_firebaseMessaging);
+    pushNotificationService.initialise();
     return StreamProvider<String>.value(
       value: AuthService().user,
       child: MaterialApp(

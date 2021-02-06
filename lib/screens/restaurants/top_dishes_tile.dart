@@ -77,8 +77,11 @@ class _TopDishesTileState extends State<TopDishesTile> with TickerProviderStateM
       ),
       onTap: () async{
         await showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
-          return Provider<Restaurant>.value(
-              value: restaurant, child: Provider<MenuEntry>.value(value: entry, child: EntryRating()));
+          return Provider.value(
+            value: false,
+            child: Provider<Restaurant>.value(
+                value: restaurant, child: Provider<MenuEntry>.value(value: entry, child: EntryRating())),
+          );
         }).then((value){setState(() {});});
       },
     );
