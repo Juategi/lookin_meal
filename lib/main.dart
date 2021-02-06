@@ -37,13 +37,11 @@ void main() { Provider.debugCheckInvalidValueType = null; runApp(MyApp()); }
 
 class MyApp extends StatelessWidget {
 
-  static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
   Widget build(BuildContext context) {
     AppLocalizations tr = AppLocalizations.of(context);
-    final pushNotificationService = PushNotificationService(_firebaseMessaging);
-    pushNotificationService.initialise();
+    PushNotificationService.initialise(context);
     return StreamProvider<String>.value(
       value: AuthService().user,
       child: MaterialApp(

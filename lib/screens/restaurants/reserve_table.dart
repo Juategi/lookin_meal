@@ -4,9 +4,11 @@ import 'dart:math';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/reservationDB.dart';
+import 'package:lookinmeal/models/owner.dart';
 import 'package:lookinmeal/models/reservation.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/table.dart';
+import 'package:lookinmeal/services/push_notifications.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
@@ -38,7 +40,7 @@ class _TableReservationState extends State<TableReservation> {
       List<String> schedule = restaurant.schedule[weekday.toString()];
       List<int> checkHours = [];
       int mealtime = (double.parse(restaurant.mealtime.toString().replaceAll("5", "3"))*100).toInt();
-      int start1 = int.parse(schedule[0]);
+      int start1 = int.parse(schedule[0].replaceAll("[", ""));
       int limit1 = int.parse(schedule[1]) - mealtime;
       while(start1 <= limit1){
         checkHours.add(start1);
@@ -51,7 +53,7 @@ class _TableReservationState extends State<TableReservation> {
       }
       if(schedule[2] != "-1"){
         int start2 = int.parse(schedule[2]);
-        int limit2 = int.parse(schedule[3]) - mealtime;
+        int limit2 = int.parse(schedule[3].replaceAll("]", "")) - mealtime;
         while(start2 <= limit2){
           checkHours.add(start2);
           if(start2.toString().substring(2) == "00"){
@@ -318,7 +320,7 @@ class _TableReservationState extends State<TableReservation> {
                 width: 200.w,
                 height: 55.h,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  //color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(30)),
                   //border: Border.all(color: Colors.black45)
                 ),
@@ -338,6 +340,9 @@ class _TableReservationState extends State<TableReservation> {
                       username: DBServiceUser.userF.name
                     ));
                     Alerts.toast("Table reserved!");
+                    for(Owner owner in await DBServiceUser.dbServiceUser.getOwners(restaurant.restaurant_id)){
+                      PushNotificationService.sendNotification("Reservation", "On date: ${dateSelected.toString().substring(0,10)}", restaurant.restaurant_id, owner.token);
+                    }
                     Navigator.pop(context);
                   }
                   else{

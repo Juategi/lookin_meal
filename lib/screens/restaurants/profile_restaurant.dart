@@ -183,6 +183,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   @override
   Widget build(BuildContext context) {
   	restaurant = ModalRoute.of(context).settings.arguments;
+  	print(restaurant.restaurant_id);
 		_timer();
 		if(first){
 			if(restaurant.original == null){
