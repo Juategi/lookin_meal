@@ -1,4 +1,4 @@
-package com.wt.lookin_meal
+package com.wt.lookinmeal
 
 import io.flutter.app.FlutterApplication
 import io.flutter.plugin.common.PluginRegistry
