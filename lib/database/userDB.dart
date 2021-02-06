@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:lookinmeal/database/entryDB.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/list.dart';
+import 'package:lookinmeal/models/owner.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/shared/strings.dart';
@@ -192,6 +193,43 @@ class DBServiceUser {
     var response = await http.delete("${StaticStrings.api}/lists", headers: {
       "id" : id
     });
+    print(response.body);
+  }
+
+  //CODES
+
+
+  Future createOwner(Owner owner) async{
+    Map body = {
+      "user_id": owner.user_id,
+      "restaurant_id": owner.restaurant_id,
+      "token": owner.token,
+    };
+    var response = await http.post(
+        "${StaticStrings.api}/owner", body: body);
+    print(response.body);
+  }
+
+  Future<List<Owner>> getOwners(String restaurant_id) async {
+    List<Owner> owners = [];
+    var response = await http.get(
+        "${StaticStrings.api}/ownerres",
+        headers: {"restaurant_id":restaurant_id});
+    List<dynamic> result = json.decode(response.body);
+    for(var element in result){
+      Owner owner = Owner(
+          restaurant_id: element['restaurant_id'].toString(),
+          user_id: element['user_id'].toString(),
+          token: element['token'].toString()
+      );
+      owners.add(owner);
+    }
+    return owners;
+  }
+
+  Future deleteCode(String user_id, String restauratnt_id) async{
+    var response = await http.delete(
+        "${StaticStrings.api}/owner", headers: {"user_id" : user_id, "restaurant_id" : restauratnt_id});
     print(response.body);
   }
 

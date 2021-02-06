@@ -70,7 +70,6 @@ dependencies:
   path_provider: ^1.6.27
   flutter_barcode_scanner: ^1.0.2
   firebase_messaging: ^6.0.16
-  overlay_support: ^1.0.5
 
 dev_dependencies:
   flutter_test:
