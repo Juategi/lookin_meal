@@ -5,9 +5,11 @@ import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/models/order.dart';
+import 'package:lookinmeal/models/owner.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/menu.dart';
 import 'package:lookinmeal/services/geolocation.dart';
+import 'package:lookinmeal/services/push_notifications.dart';
 import 'package:lookinmeal/services/realtime_orders.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -394,9 +396,7 @@ class _OrderScreenState extends State<OrderScreen> {
                       GestureDetector(
                         onTap: () async {
                           if(!(RealTimeOrders.items.where((element) => !element.send).length == 0))
-                            if (await Alerts.confirmation(
-                                "If you send the order you won't be able to change it back, are you sure?",
-                                context))
+                            if (await Alerts.confirmation("If you send the order you won't be able to change it back, are you sure?", context)) {
                               setState(() {
                                 RealTimeOrders.items.where((element) =>
                                 !element.send).forEach((order) {
@@ -417,6 +417,10 @@ class _OrderScreenState extends State<OrderScreen> {
                                   }
                                 });
                               });
+                              for(Owner owner in await DBServiceUser.dbServiceUser.getOwners(restaurant.restaurant_id)){
+                                PushNotificationService.sendNotification("Order sent", "On restaurant: ${restaurant.name}", restaurant.restaurant_id, "order", owner.token);
+                              }
+                            }
                         },
                         child: Container(
                           height: 50.h,

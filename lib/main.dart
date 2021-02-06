@@ -41,7 +41,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppLocalizations tr = AppLocalizations.of(context);
-    PushNotificationService.initialise(context);
     return StreamProvider<String>.value(
       value: AuthService().user,
       child: MaterialApp(

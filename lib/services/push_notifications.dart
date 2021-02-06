@@ -51,7 +51,7 @@ class PushNotificationService {
     );
   }
 
-  static Future<Map<String, dynamic>>sendNotification(String title, String body, String restaurant_id, String token) async{
+  static Future<Map<String, dynamic>>sendNotification(String title, String body, String restaurant_id, String type, String token) async{
     final String serverToken = 'AAAAuKZsomY:APA91bFrOQ5dK5nZlrPdbXHHIr19OF1yvVKAwve9xNpR9b_bTL3ZLjpnI2JvvGxHcs7pLHqD-RN2i-fWtutB-WYBk_QF7lZ8MjV-EueMKtyT01JLQP-dlxiYYEkSl5u3IsI_-WYC1dGI';
     final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
     await firebaseMessaging.requestNotificationPermissions(
@@ -74,7 +74,8 @@ class PushNotificationService {
             'click_action': 'FLUTTER_NOTIFICATION_CLICK',
             'id': '1',
             'status': 'done',
-            'restaurant_id' : restaurant_id
+            'restaurant_id' : restaurant_id,
+            'type' : type
           },
           'to': token,
         },

@@ -13,6 +13,7 @@ import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:lookinmeal/services/push_notifications.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
@@ -122,6 +123,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
 	  user = Provider.of<User>(context);
 	  AppLocalizations tr = AppLocalizations.of(context);
+		PushNotificationService.initialise(context);
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
 	  if(ready && user != null) {
 			return Scaffold(

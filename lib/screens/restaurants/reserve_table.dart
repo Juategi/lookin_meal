@@ -341,7 +341,7 @@ class _TableReservationState extends State<TableReservation> {
                     ));
                     Alerts.toast("Table reserved!");
                     for(Owner owner in await DBServiceUser.dbServiceUser.getOwners(restaurant.restaurant_id)){
-                      PushNotificationService.sendNotification("Reservation", "On date: ${dateSelected.toString().substring(0,10)}", restaurant.restaurant_id, owner.token);
+                      PushNotificationService.sendNotification("Reservation", "On date: ${dateSelected.toString().substring(0,10)}", restaurant.restaurant_id, "reservation", owner.token);
                     }
                     Navigator.pop(context);
                   }
