@@ -13,6 +13,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/strings.dart';
 
+import 'geolocation.dart';
+
 class AuthService{
 
 	final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -81,7 +83,7 @@ class AuthService{
 					username = profile["first_name"].toString().trim() + profile["last_name"].toString().trim() + (Random().nextInt(10000).toString());
 				}
 				else{
-					await DBServiceUser.dbServiceUser.createUser(credential.user.uid,credential.user.email, profile["name"],picture,"FB", await DBServiceUser.dbServiceUser.getCountry(), username);
+					await DBServiceUser.dbServiceUser.createUser(credential.user.uid,credential.user.email, profile["name"],picture,"FB", await GeolocationService().getCountry(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude), username);
 					return _userFromFirebaseUser(credential.user);
 				}
 			}
@@ -124,7 +126,7 @@ class AuthService{
 				else {
 					await DBServiceUser.dbServiceUser.createUser(
 							user.uid, user.email, authResult.additionalUserInfo.profile['name'],
-							authResult.additionalUserInfo.profile['picture'], "GM", await DBServiceUser.dbServiceUser.getCountry(), username);
+							authResult.additionalUserInfo.profile['picture'], "GM", await GeolocationService().getCountry(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude), username);
 					return _userFromFirebaseUser(user);
 				}
 			}

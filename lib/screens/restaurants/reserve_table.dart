@@ -115,20 +115,20 @@ class _TableReservationState extends State<TableReservation> {
     restaurant = ModalRoute.of(context).settings.arguments;
     if(init){
       for(int i = 0; i <= 6; i++){
-        if(!restaurant.schedule[i.toString()].every((element) => element.replaceAll("[", "".replaceAll("]", ""))  == "-1")){
+        if(!restaurant.schedule[i.toString()].every((element) => element.replaceAll("[", "").replaceAll("]", "")  == "-1")){
           noSchedule = false;
         }
       }
       dateSelected = DateTime.now();
       int weekday = dateSelected.weekday == 7? 0 : dateSelected.weekday;
-      print(restaurant.schedule[weekday.toString()][0]);
-      if(restaurant.schedule[weekday.toString()].every((element) => element == "-1")){
+      if(restaurant.schedule[weekday.toString()].every((element) => element.replaceAll("[", "").replaceAll("]", "") == "-1")){
         bool loop = true;
         int day = weekday;
         int check = 0;
+        day = (weekday+1) == 7? 0 : (weekday+1);
         while(loop){
-          day = (weekday+1) == 7? 0 : (weekday+1);
-          if(!restaurant.schedule[day.toString()].every((element) => element == "-1")){
+          day = (day+1) == 7? 0 : (day+1);
+          if(!restaurant.schedule[day.toString()].every((element) => element.replaceAll("[", "").replaceAll("]", "") == "-1")){
             dateSelected = dateSelected.add(Duration(days: weekday < day ? day-weekday : 7 - (weekday - day)));
             loop = false;
           }
@@ -231,7 +231,7 @@ class _TableReservationState extends State<TableReservation> {
           }, currentDate: dateSelected,
           selectableDayPredicate: (day){
             int weekday = day.weekday == 7? 0 : day.weekday;
-            if(restaurant.schedule[weekday.toString()].every((element) => element == "-1")){
+            if(restaurant.schedule[weekday.toString()].every((element) => element.replaceAll("[", "").replaceAll("]", "").replaceAll("[", "").replaceAll("]", "") == "-1")){
               return false;
             }
             return true;

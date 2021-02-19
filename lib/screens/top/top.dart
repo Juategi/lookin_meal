@@ -9,7 +9,7 @@ import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/services/search.dart';
 import 'package:lookinmeal/shared/common_data.dart';
-import 'package:provider/provider.dart';
+import 'package:lookinmeal/services/geolocation.dart';
 
 class Top extends StatefulWidget {
   @override
@@ -52,9 +52,9 @@ class _TopState extends State<Top> {
           children: <Widget>[
             Text('Top dishes', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
             SizedBox(height: 10.h,),
-            DropdownButton(items: <int>[1,2,3,5].map((e) => DropdownMenuItem(child: Text(e.toString()))).toList(), onChanged: (e){
-
-              }, dropdownColor: Colors.grey, focusColor: Colors.grey,)
+            RaisedButton(onPressed: () async{
+                print(await GeolocationService().getCountry(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude));
+            },)
           ],
         ),
       ),

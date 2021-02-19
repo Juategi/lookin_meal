@@ -7,6 +7,7 @@ import 'package:lookinmeal/models/owner.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/shared/strings.dart';
+import 'package:lookinmeal/services/geolocation.dart';
 
 class DBServiceUser {
 
@@ -85,17 +86,6 @@ class DBServiceUser {
     print(response.body);
     await DBServiceUser.dbServiceUser.createList(id, "favorites", StaticStrings.defaultEntry, "R");
     await DBServiceUser.dbServiceUser.createList(id, "favorites", StaticStrings.defaultEntry, "E");
-  }
-
-  Future<String> getCountry()async{
-    String ipUrl = "https://api.ipify.org?format=json";
-    String locIpUrl = "https://ipapi.co/";
-    var result = await http.get(ipUrl, headers: {});
-    String ip = json.decode(result.body)['ip'];
-    result = await http.get("$locIpUrl${ip}/json/", headers: {});
-    dynamic iplocalization = json.decode(result.body);
-    //return iplocalization["country_name"];
-    return "Spain";
   }
 
   Future<bool> checkUsername(String username) async{

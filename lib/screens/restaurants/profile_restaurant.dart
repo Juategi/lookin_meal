@@ -270,48 +270,82 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 						onTap: () => Navigator.pushNamed(context, "/gallery", arguments: restaurant),
       		),
 					Container(
+						height: 105.h,
+						width: 411.w,
+						color: Colors.white54,
+						child: Padding(
+						  padding: EdgeInsets.symmetric(vertical: 10.h),
+						  child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
+						  	children: [
+						  		Align(
+						  			alignment: AlignmentDirectional.topCenter,
+						  			child: GestureDetector(
+						  				child: Column(
+						  				  children: [
+						  				    Container(
+															height: 55.h,
+															width: 55.w,
+															child: Icon(FontAwesomeIcons.calendarAlt, size:  ScreenUtil().setSp(55),)),
+													Text("Reservations", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),)),
+												],
+						  				),
+						  				onTap: ()async{
+						  					backToOriginal();
+						  					Navigator.pushNamed(context, "/reservations", arguments: restaurant);
+						  				},
+						  			),
+						  		),
+
+						  		Align(
+						  			alignment: AlignmentDirectional.topCenter,
+						  			child: GestureDetector(
+						  				child: Column(
+						  				  children: [
+						  				    Container(
+						  				    	child: SvgPicture.asset("assets/pedido.svg",),
+						  				    	height: 55.h,
+						  				    	width: 55.w,
+						  				    ),
+													Text("Orders", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),)),
+												],
+						  				),
+						  				onTap: ()async{
+						  					Navigator.pushNamed(context, "/manageorder", arguments: restaurant);
+						  				},
+						  			),
+						  		),
+									Align(
+										alignment: AlignmentDirectional.topCenter,
+										child: GestureDetector(
+											child: Column(
+											  children: [
+											    Container(
+															height: 55.h,
+															width: 55.w,
+															child: Icon(Icons.settings, size:  ScreenUtil().setSp(60),)),
+													Text("Settings", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),)),
+												],
+											),
+											onTap: ()async{
+												backToOriginal();
+												Navigator.pushNamed(context, "/admin", arguments: restaurant);
+											},
+										),
+									),
+						  	],
+						  ),
+						),
+					),
+					Container(
 						height: 42.h,
 						width: 411.w,
 						decoration: BoxDecoration(
 							color: Color.fromRGBO(255, 110, 117, 0.9),
 						),
-						child: Row(
+						child: Row( mainAxisAlignment: MainAxisAlignment.center,
 							children: <Widget>[
-								Expanded(child: Align( alignment: AlignmentDirectional.topCenter, child: Text(restaurant.name, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)))),
+								Text(restaurant.name, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
 								//Spacer(),
-								Align(
-									alignment: AlignmentDirectional.topCenter,
-									child: GestureDetector(
-										child: Container(
-											child: SvgPicture.asset("assets/admin.svg"),
-											height: 35.h,
-											width: 35.w,
-										),
-										onTap: ()async{
-											backToOriginal();
-											Navigator.pushNamed(context, "/admin", arguments: restaurant);
-										},
-									),
-								),
-								Align(
-									alignment: AlignmentDirectional.topCenter,
-									child: GestureDetector(
-										child: Icon(Icons.calendar_today_outlined),
-										onTap: ()async{
-											backToOriginal();
-											Navigator.pushNamed(context, "/reservations", arguments: restaurant);
-										},
-									),
-								),
-								Align(
-									alignment: AlignmentDirectional.topCenter,
-									child: GestureDetector(
-										child: Icon(Icons.shopping_cart),
-										onTap: ()async{
-											Navigator.pushNamed(context, "/manageorder", arguments: restaurant);
-										},
-									),
-								),
 							],
 						),
 					),
@@ -331,7 +365,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 																		image: Image.asset("assets/food/${CommonData.typesImage[restaurant.types[0]]}.png").image))
 												),
 										    SizedBox(width: 5.w,),
-										    Container(width: 180.w, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : restaurant.types.length > 0 ? "${restaurant.types[0]}" : "", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
+										    Container(width: 180.w, height: 25.h, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : restaurant.types.length > 0 ? "${restaurant.types[0]}" : "", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(17),),))),
 										  ],
 										),
 										Row(

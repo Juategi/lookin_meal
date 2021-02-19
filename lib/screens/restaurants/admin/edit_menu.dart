@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -27,6 +28,7 @@ class _EditMenuState extends State<EditMenu> {
   Restaurant restaurant;
   bool init = false;
   bool indicator = false;
+  ScrollController _scrollController =  ScrollController();
   final StorageService _storageService = StorageService();
 
   void _copyLists(){
@@ -721,16 +723,41 @@ class _EditMenuState extends State<EditMenu> {
               decoration: BoxDecoration(
                 color: Color.fromRGBO(255, 110, 117, 0.9),
               ),
-              child: Row( mainAxisAlignment: MainAxisAlignment.center,
+              child: Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
+                  IconButton(icon: Icon(Icons.arrow_downward_outlined, color: Colors.white54,), onPressed: (){
+                    SchedulerBinding.instance.addPostFrameCallback((_) {
+                      _scrollController.animateTo(
+                        _scrollController.position.maxScrollExtent,
+                        duration: const Duration(milliseconds: 2200),
+                        curve: Curves.easeOut,
+                      );
+                    });
+                  }),
                   Align( alignment: AlignmentDirectional.topCenter, child: Text("Editar carta", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
+                  IconButton(icon: Icon(Icons.arrow_upward, color: Colors.white54,), onPressed: (){
+                    SchedulerBinding.instance.addPostFrameCallback((_) {
+                      _scrollController.animateTo(
+                        _scrollController.position.minScrollExtent,
+                        duration: const Duration(milliseconds: 2000),
+                        curve: Curves.easeOut,
+                      );
+                    });
+                  }),
                 ],
               ),
             ),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
-                child: ListView(children: _initMenu()),
+                child: Center(
+                  child: ListView(
+                      //reverse: true,
+                      //shrinkWrap: true,
+                      controller: _scrollController,
+                      children: _initMenu()
+                  ),
+                ),
               ),
             ),
           ],

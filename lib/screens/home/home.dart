@@ -125,6 +125,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	  AppLocalizations tr = AppLocalizations.of(context);
 		PushNotificationService.initialise(context);
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+		print(user);
+		print(ready);
+		print(myPos);
 	  if(ready && user != null) {
 			return Scaffold(
 						body: Stack(

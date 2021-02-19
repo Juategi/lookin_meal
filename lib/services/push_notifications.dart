@@ -9,6 +9,7 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:flutter/material.dart';
+import 'package:lookinmeal/shared/strings.dart';
 
 class PushNotificationService {
 
@@ -67,7 +68,8 @@ class PushNotificationService {
         <String, dynamic>{
           'notification': <String, dynamic>{
             'body': body,
-            'title': title
+            'title': title,
+            "image" : StaticStrings.defaultImage
           },
           'priority': 'high',
           'data': <String, dynamic>{

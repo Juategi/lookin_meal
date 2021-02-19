@@ -5,6 +5,7 @@ import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:lookinmeal/services/auth.dart';
 import 'package:location_permissions/location_permissions.dart';
+import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -91,8 +92,10 @@ class _AuthenticateState extends State<Authenticate> {
 								  ),
 									onTap: () async{
 										PermissionStatus permission = await LocationPermissions().requestPermissions();
-										if(permission == PermissionStatus.granted)
+										if(permission == PermissionStatus.granted) {
+											await GeolocationService().getLocation();
 											await _auth.loginFB();
+										}
 									},
 								),
 								SizedBox(height: 30.h,),
@@ -137,8 +140,10 @@ class _AuthenticateState extends State<Authenticate> {
 									),
 									onTap: () async{
 										PermissionStatus permission = await LocationPermissions().requestPermissions();
-										if(permission == PermissionStatus.granted)
+										if(permission == PermissionStatus.granted) {
+											await GeolocationService().getLocation();
 											await _auth.loginGoogle();
+										}
 									}
 								),
 								SizedBox(height: 30.h,),
@@ -183,8 +188,10 @@ class _AuthenticateState extends State<Authenticate> {
 										),
 										onTap: ()async{
 											PermissionStatus permission = await LocationPermissions().requestPermissions();
-											if(permission == PermissionStatus.granted)
+											if(permission == PermissionStatus.granted) {
+												await GeolocationService().getLocation();
 												await Navigator.pushNamed(context, "/login");
+											}
 									},
 								),
 								SizedBox(height: 40.h,),
