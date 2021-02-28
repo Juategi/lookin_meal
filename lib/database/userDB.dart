@@ -35,6 +35,7 @@ class DBServiceUser {
           picture: result.first["image"],
           country: result.first["country"],
           username: result.first["username"],
+          about: result.first["about"],
           ratings: await DBServiceEntry.dbServiceEntry.getAllRating(id),
           recently: await DBServiceRestaurant.dbServiceRestaurant.getRecently(id),
         );

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
@@ -94,7 +96,7 @@ class _ProfileState extends State<Profile> {
             child: Column(children: [
               GestureDetector(
                 onTap:(){
-
+                  Navigator.pushNamed(context, "/editprofile");
                 },
                 child: Container(
                   width: 365.w,
@@ -211,8 +213,68 @@ class _ProfileState extends State<Profile> {
               ),
               Divider(thickness: 2,),
               GestureDetector(
-                onTap:(){
-                  _auth.signOut();
+                onTap:() async{
+                  BuildContext dialogContext;
+                  await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        dialogContext = context;
+                    return BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                      child: Dialog(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+                        child: Container(
+                          width: 330.w,
+                          height: 180.h,
+                          decoration: BoxDecoration(
+                            color: Color.fromRGBO(251, 133, 162, 1),
+                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                          ),
+                          child: Column( mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(width: 230.w, height: 50.h,  child: Text("Are you sure that do you want to log out?", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                              SizedBox(height: 20.h,),
+                              GestureDetector(
+                                onTap: (){
+                                  _auth.signOut();
+                                  Navigator.pop(dialogContext);
+                                },
+                                child: Container(
+                                  width: 200.w,
+                                  height: 43.h,
+                                  decoration: BoxDecoration(
+                                  color: Color.fromRGBO(255, 65, 112, 1),
+                                    borderRadius: BorderRadius.all(Radius.circular(50)),
+                                  ),
+                                  child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Log out", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10.h,),
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.pop(dialogContext);
+                                },
+                                child: Container(
+                                  width: 200.w,
+                                  height: 23.h,
+                                  child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Cancel", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    );
+                  }
+                  );
                 },
                 child: Container(
                   width: 365.w,

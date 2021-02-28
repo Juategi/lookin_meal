@@ -171,6 +171,9 @@ class _SignInState extends State<SignIn> {
 														loading = true;
 													});
 													if(await DBServiceUser.dbServiceUser.checkUsername(username) == false){
+														setState(() {
+															loading = false;
+														});
 														Navigator.pushNamed(context, "/emailpass", arguments: User(
 															name: name,
 															username: username,

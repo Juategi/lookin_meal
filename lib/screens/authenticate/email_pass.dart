@@ -137,7 +137,7 @@ class _EmailPasswordState extends State<EmailPassword> {
                               });
                             }
                             else{
-                              Navigator.pushNamed(context, "/wrapper");
+                              Navigator.pushNamedAndRemoveUntil(context, "/wrapper",  (Route<dynamic> route) => false);
                             }
                           }
                           else{
