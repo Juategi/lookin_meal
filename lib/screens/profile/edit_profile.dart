@@ -1,3 +1,4 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,6 +20,7 @@ class _EditProfileState extends State<EditProfile> {
   final _formKey = GlobalKey<FormState>();
   final StorageService _storageService = StorageService();
   String username, name, about = " ";
+  String country;
   String error = " ";
 
   @override
@@ -164,6 +166,42 @@ class _EditProfileState extends State<EditProfile> {
                       validator: (val) => val.isEmpty ? tr.translate("entername") : null,
                       decoration: input,
                       initialValue: user.name,
+                    ),
+                    SizedBox(height: 20,),
+                    Text("Country", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                    SizedBox(height: 5,),
+                    Container(
+                      padding: EdgeInsets.only(left: 10.w),
+                      height: 60.h,
+                      decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(20)),
+                      child: CountryCodePicker(
+                        onChanged: (c){
+                          country = c.code;
+                          print(country);
+                        },
+                        initialSelection: user.country,
+                        showCountryOnly: true,
+                        showOnlyCountryWhenClosed: true,
+                        alignLeft: true,
+                        showFlag: true,
+                        showFlagDialog: true,
+                        dialogTextStyle: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),),
+                        searchStyle: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),),
+                        textStyle: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),),
+                      ),
+                    ),
+                    SizedBox(height: 20,),
+                    Text("About yourself", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                    SizedBox(height: 5,),
+                    TextFormField(
+                      onChanged: (value){
+                        setState(() => about = value);
+                      },
+                      //validator: (val) => val.isEmpty ? tr.translate("entername") : null,
+                      decoration: input,
+                      initialValue: user.about,
+                      maxLines: 4,
+                      maxLength: 300,
                     ),
                   ],
                 ),

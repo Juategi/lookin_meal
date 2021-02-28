@@ -135,7 +135,7 @@ class _SignInState extends State<SignIn> {
 											decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(20)),
 										  child: CountryCodePicker(
 										  	onChanged: (c){
-										  		country = c.name;
+										  		country = c.code;
 										  		print(country);
 										  	},
 										  	initialSelection: 'ES',
