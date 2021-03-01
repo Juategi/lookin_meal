@@ -202,12 +202,13 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   	//if(restaurant.menu == null)
   		//_loadMenu();
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
-    return Scaffold(
+    return SafeArea(
+      child: Scaffold(
 			//backgroundColor: CommonData.backgroundColor,
-      body: ListView(
-      	children: <Widget>[
-      		GestureDetector(
-      		  child: Container(
+        body: ListView(
+        	children: <Widget>[
+        		GestureDetector(
+        		  child: Container(
 							height: 230,
 							width: 400,
 							decoration: BoxDecoration(
@@ -268,7 +269,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							),
 						),
 						onTap: () => Navigator.pushNamed(context, "/gallery", arguments: restaurant),
-      		),
+        		),
 					Container(
 						height: 105.h,
 						width: 411.w,
@@ -575,7 +576,8 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 						),
 					): Container(),
 					restaurant.dailymenu != null ? DailyMenu(restaurant: restaurant, currency: restaurant.currency) : Container(),
-      	],
+        	],
+        ),
       ),
     );
   }

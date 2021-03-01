@@ -7,6 +7,7 @@ color scaffolds e iconos (barra) error
 bajar nivel de barra scaffolds
 quitar barra de arriba
 el horario llega mal,
+while en login por si hay dc,
 Terminar busqueda platos compleja, menos exacta,
 errores de login no sale
 actualizar pagina inicial despues de cambiar ubi (replantear el tema ubi)

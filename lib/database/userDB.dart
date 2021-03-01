@@ -125,15 +125,18 @@ class DBServiceUser {
     return result;
   }
 
-  Future updateUserData(String id, String email, String name, String picture,
-      String service) async {
+  Future updateUserData(String id, String name, String about, String picture,
+      String service, String country, String username,) async {
     Map body = {
       "id": id,
       "name": name,
-      "email": email,
+      "about": about,
+      "image": picture,
       "service": service,
-      "image": picture
+      "country": country,
+      "username" : username
     };
+    print(body);
     var response = await http.put(
         "${StaticStrings.api}/users", body: body);
     print(response.body);

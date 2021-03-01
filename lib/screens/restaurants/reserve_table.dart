@@ -139,224 +139,226 @@ class _TableReservationState extends State<TableReservation> {
       }
       init = false;
     }
-    return Scaffold(
-      body: Column(
-        children: [
-          Container(
-          height: 230,
-          width: 400,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(restaurant.images.elementAt(0)),
-              fit: BoxFit.cover,
-             ),
-            ),
-          ),
-          Container(
-            height: 42.h,
-            width: 411.w,
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            Container(
+            height: 230,
+            width: 400,
             decoration: BoxDecoration(
-              color: Color.fromRGBO(255, 110, 117, 0.9),
+              image: DecorationImage(
+                image: NetworkImage(restaurant.images.elementAt(0)),
+                fit: BoxFit.cover,
+               ),
+              ),
             ),
-            child: Row( mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Center(child: Text(restaurant.name, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
-              ],
-            ),
-          ),
-          SizedBox(height: 20.h,),
-          Container(
-            width: 370.w,
-            height: 55.h,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(30)),
-              boxShadow: [BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                spreadRadius: 2,
-                blurRadius: 3,
-                offset: Offset(0, 3),
-              ),],
-            ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.w),
-              child: Row(
-                children: [
-                  GestureDetector(onTap: (){
-                    setState(() {
-                      pos = 0;
-                    });
-                  }, child: Icon(FontAwesomeIcons.calendarAlt, color: pos == 0? Color.fromRGBO(255, 110, 117, 0.6) : Colors.black87, size: ScreenUtil().setSp(28),)),
-                  SizedBox(width: 25.w,),
-                  Container(height: 10.h, width: 10.w, decoration: BoxDecoration(color: Color.fromRGBO(255, 110, 117, 0.6), shape: BoxShape.circle),),
-                  SizedBox(width: 25.w,),
-                  GestureDetector(onTap: (){
-                    setState(() {
-                      pos = 1;
-                    });
-                  }, child: Icon(Icons.people, color:  pos == 1? Color.fromRGBO(255, 110, 117, 0.6) : Colors.black87, size: ScreenUtil().setSp(33),)),
-                  SizedBox(width: 25.w,),
-                  Container(height: 10.h, width: 10.w, decoration: BoxDecoration(color: Color.fromRGBO(255, 110, 117, 0.6), shape: BoxShape.circle),),
-                  SizedBox(width: 25.w,),
-                  GestureDetector(onTap: (){
-                    _calculateAvailable();
-                    setState(() {
-                      pos = 2;
-                    });
-                  }, child: Icon(Icons.access_time_outlined, color:  pos == 2? Color.fromRGBO(255, 110, 117, 0.6) : Colors.black87, size: ScreenUtil().setSp(33),)),
-                  SizedBox(width: 25.w,),
-                  Container(height: 10.h, width: 10.w, decoration: BoxDecoration(color: Color.fromRGBO(255, 110, 117, 0.6), shape: BoxShape.circle),),
-                  SizedBox(width: 25.w,),
-                  GestureDetector(onTap: (){
-                    setState(() {
-                      pos = 3;
-                    });
-                  }, child: Icon(Icons.check, color:  pos == 3? Color.fromRGBO(255, 110, 117, 0.6) : Colors.black87, size: ScreenUtil().setSp(33),)),
+            Container(
+              height: 42.h,
+              width: 411.w,
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 110, 117, 0.9),
+              ),
+              child: Row( mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Center(child: Text(restaurant.name, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
                 ],
               ),
             ),
-          ),
-          SizedBox(height: 20.h,),
-          Center(child: Text(
-            pos == 0? "Day" :
-            pos == 1? "Number of people" :
-            pos == 2? "Hour" : "Confirm"
-          , maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(24),),))),
-          SizedBox(height: 10.h,),
-          pos != 0 || noSchedule ? Container() : CalendarDatePicker(initialDate: dateSelected, firstDate: DateTime.now(), lastDate: DateTime.now().add(Duration(days: 30)), onDateChanged: (date) async{
-            dateSelected = date;
-            setState(() {
-              pos = 1;
-            });
-          }, currentDate: dateSelected,
-          selectableDayPredicate: (day){
-            int weekday = day.weekday == 7? 0 : day.weekday;
-            if(restaurant.schedule[weekday.toString()].every((element) => element.replaceAll("[", "").replaceAll("]", "").replaceAll("[", "").replaceAll("]", "") == "-1")){
-              return false;
-            }
-            return true;
-          },
-          ),
-          pos != 1 ? Container() : DropdownButton(items: List<int>.generate(50, (i) => i + 1).map((n) => DropdownMenuItem(value: n, child:
-          Text(n.toString(), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
-          )).toList(), onChanged: (s){
-            setState(() {
-              _calculateAvailable();
-              people = s;
-              pos = 2;
-            });
-          },  value: people,),
-          /*pos != 2 ? Container() :GestureDetector(
-            onTap:(){
-              DBServiceReservation.dbServiceReservation.createReservation(Reservation(
-                  username: DBServiceUser.userF.name,
-                  user_id: DBServiceUser.userF.uid,
-                  people: 3,
-                  restaurant_id: 833.toString(),
-                  reservationdate: "2021-01-27",
-                  reservationtime: "12:00",
-                  table_id: 4.toString()
-              ));
-            },
-            child: Container(
-              width: 365.w,
-              height: 60.h,
-              child: Row(mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(width: 20.w,),
-                  SvgPicture.asset("assets/propietario.svg", width: 37.w, height: 37.h,),
-                ],
+            SizedBox(height: 20.h,),
+            Container(
+              width: 370.w,
+              height: 55.h,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+                boxShadow: [BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 3,
+                  offset: Offset(0, 3),
+                ),],
               ),
-            ),
-          ),*/
-          pos != 2 ? Container() : available == null? Loading() : available.keys.length == 0? Center(child: Text("No hours available this day for that number of people", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.redAccent, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(21),),))) :  Expanded(
-            child: GridView.count(crossAxisCount: 4, padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
-              children: (available.keys).map((hour) => Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 32.h),
-                child: GestureDetector(
-                  onTap: (){
-                    this.hour = hour;
-                    setState(() {
-                      pos = 3;
-                    });
-                  },
-                  child: Container(
-                    width: 60.w,
-                    height: 20.h,
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(255, 110, 117, 0.6),
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                    ),
-                    child: Center(child: Text(hour.toString().substring(0,2) + ":" + hour.toString().substring(2), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),)))
-                  ),
-                ),
-              )).toList(),
-            ),
-          ),
-          SizedBox(height: 20.h,),
-          pos != 3 ? Container() : Column(
-            children: [
-              Container(
-                width: 170.w,
-                height: 200.h,
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(255, 110, 117, 0.7),
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                ),
-                child: Column(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30.w),
+                child: Row(
                   children: [
-                    SizedBox(height: 35.h,),
-                    Text(Functions.formatDate(dateSelected.toString().substring(0,10)), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(22),),)),
-                    SizedBox(height: 20.h,),
-                    Text(hour.toString().substring(0,2) + ":" + hour.toString().substring(2), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)),
-                    SizedBox(height: 20.h,),
-                    Text(people.toString() + " people", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(22),),)),
-                    SizedBox(height: 20.h,),
+                    GestureDetector(onTap: (){
+                      setState(() {
+                        pos = 0;
+                      });
+                    }, child: Icon(FontAwesomeIcons.calendarAlt, color: pos == 0? Color.fromRGBO(255, 110, 117, 0.6) : Colors.black87, size: ScreenUtil().setSp(28),)),
+                    SizedBox(width: 25.w,),
+                    Container(height: 10.h, width: 10.w, decoration: BoxDecoration(color: Color.fromRGBO(255, 110, 117, 0.6), shape: BoxShape.circle),),
+                    SizedBox(width: 25.w,),
+                    GestureDetector(onTap: (){
+                      setState(() {
+                        pos = 1;
+                      });
+                    }, child: Icon(Icons.people, color:  pos == 1? Color.fromRGBO(255, 110, 117, 0.6) : Colors.black87, size: ScreenUtil().setSp(33),)),
+                    SizedBox(width: 25.w,),
+                    Container(height: 10.h, width: 10.w, decoration: BoxDecoration(color: Color.fromRGBO(255, 110, 117, 0.6), shape: BoxShape.circle),),
+                    SizedBox(width: 25.w,),
+                    GestureDetector(onTap: (){
+                      _calculateAvailable();
+                      setState(() {
+                        pos = 2;
+                      });
+                    }, child: Icon(Icons.access_time_outlined, color:  pos == 2? Color.fromRGBO(255, 110, 117, 0.6) : Colors.black87, size: ScreenUtil().setSp(33),)),
+                    SizedBox(width: 25.w,),
+                    Container(height: 10.h, width: 10.w, decoration: BoxDecoration(color: Color.fromRGBO(255, 110, 117, 0.6), shape: BoxShape.circle),),
+                    SizedBox(width: 25.w,),
+                    GestureDetector(onTap: (){
+                      setState(() {
+                        pos = 3;
+                      });
+                    }, child: Icon(Icons.check, color:  pos == 3? Color.fromRGBO(255, 110, 117, 0.6) : Colors.black87, size: ScreenUtil().setSp(33),)),
                   ],
                 ),
               ),
-              SizedBox(height: 40.h,),
-              loading? Loading() : Container(
-                width: 200.w,
-                height: 55.h,
-                decoration: BoxDecoration(
-                  //color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                  //border: Border.all(color: Colors.black45)
+            ),
+            SizedBox(height: 20.h,),
+            Center(child: Text(
+              pos == 0? "Day" :
+              pos == 1? "Number of people" :
+              pos == 2? "Hour" : "Confirm"
+            , maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(24),),))),
+            SizedBox(height: 10.h,),
+            pos != 0 || noSchedule ? Container() : CalendarDatePicker(initialDate: dateSelected, firstDate: DateTime.now(), lastDate: DateTime.now().add(Duration(days: 30)), onDateChanged: (date) async{
+              dateSelected = date;
+              setState(() {
+                pos = 1;
+              });
+            }, currentDate: dateSelected,
+            selectableDayPredicate: (day){
+              int weekday = day.weekday == 7? 0 : day.weekday;
+              if(restaurant.schedule[weekday.toString()].every((element) => element.replaceAll("[", "").replaceAll("]", "").replaceAll("[", "").replaceAll("]", "") == "-1")){
+                return false;
+              }
+              return true;
+            },
+            ),
+            pos != 1 ? Container() : DropdownButton(items: List<int>.generate(50, (i) => i + 1).map((n) => DropdownMenuItem(value: n, child:
+            Text(n.toString(), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+            )).toList(), onChanged: (s){
+              setState(() {
+                _calculateAvailable();
+                people = s;
+                pos = 2;
+              });
+            },  value: people,),
+            /*pos != 2 ? Container() :GestureDetector(
+              onTap:(){
+                DBServiceReservation.dbServiceReservation.createReservation(Reservation(
+                    username: DBServiceUser.userF.name,
+                    user_id: DBServiceUser.userF.uid,
+                    people: 3,
+                    restaurant_id: 833.toString(),
+                    reservationdate: "2021-01-27",
+                    reservationtime: "12:00",
+                    table_id: 4.toString()
+                ));
+              },
+              child: Container(
+                width: 365.w,
+                height: 60.h,
+                child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(width: 20.w,),
+                    SvgPicture.asset("assets/propietario.svg", width: 37.w, height: 37.h,),
+                  ],
                 ),
-                child: IconButton(icon: Icon(FontAwesomeIcons.check, size: ScreenUtil().setSp(60), color: Colors.green,), onPressed: ()async{
-                  setState(() {
-                    loading = true;
-                  });
-                  await _calculateAvailable();
-                  if(available.keys.contains(hour)){
-                    await DBServiceReservation.dbServiceReservation.createReservation(Reservation(
-                      table_id: available[hour],
-                      reservationtime: hour.toString().substring(0,2) + ":" + hour.toString().substring(2),
-                      reservationdate: dateSelected.toString().substring(0,10),
-                      restaurant_id: restaurant.restaurant_id,
-                      people: people,
-                      user_id: DBServiceUser.userF.uid,
-                      username: DBServiceUser.userF.name
-                    ));
-                    Alerts.toast("Table reserved!");
-                    for(Owner owner in await DBServiceUser.dbServiceUser.getOwners(restaurant.restaurant_id)){
-                      PushNotificationService.sendNotification("Reservation", "On date: ${dateSelected.toString().substring(0,10)}", restaurant.restaurant_id, "reservation", owner.token);
+              ),
+            ),*/
+            pos != 2 ? Container() : available == null? Loading() : available.keys.length == 0? Center(child: Text("No hours available this day for that number of people", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.redAccent, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(21),),))) :  Expanded(
+              child: GridView.count(crossAxisCount: 4, padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
+                children: (available.keys).map((hour) => Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 32.h),
+                  child: GestureDetector(
+                    onTap: (){
+                      this.hour = hour;
+                      setState(() {
+                        pos = 3;
+                      });
+                    },
+                    child: Container(
+                      width: 60.w,
+                      height: 20.h,
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 110, 117, 0.6),
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                      ),
+                      child: Center(child: Text(hour.toString().substring(0,2) + ":" + hour.toString().substring(2), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),)))
+                    ),
+                  ),
+                )).toList(),
+              ),
+            ),
+            SizedBox(height: 20.h,),
+            pos != 3 ? Container() : Column(
+              children: [
+                Container(
+                  width: 170.w,
+                  height: 200.h,
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(255, 110, 117, 0.7),
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 35.h,),
+                      Text(Functions.formatDate(dateSelected.toString().substring(0,10)), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(22),),)),
+                      SizedBox(height: 20.h,),
+                      Text(hour.toString().substring(0,2) + ":" + hour.toString().substring(2), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)),
+                      SizedBox(height: 20.h,),
+                      Text(people.toString() + " people", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(22),),)),
+                      SizedBox(height: 20.h,),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 40.h,),
+                loading? Loading() : Container(
+                  width: 200.w,
+                  height: 55.h,
+                  decoration: BoxDecoration(
+                    //color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    //border: Border.all(color: Colors.black45)
+                  ),
+                  child: IconButton(icon: Icon(FontAwesomeIcons.check, size: ScreenUtil().setSp(60), color: Colors.green,), onPressed: ()async{
+                    setState(() {
+                      loading = true;
+                    });
+                    await _calculateAvailable();
+                    if(available.keys.contains(hour)){
+                      await DBServiceReservation.dbServiceReservation.createReservation(Reservation(
+                        table_id: available[hour],
+                        reservationtime: hour.toString().substring(0,2) + ":" + hour.toString().substring(2),
+                        reservationdate: dateSelected.toString().substring(0,10),
+                        restaurant_id: restaurant.restaurant_id,
+                        people: people,
+                        user_id: DBServiceUser.userF.uid,
+                        username: DBServiceUser.userF.name
+                      ));
+                      Alerts.toast("Table reserved!");
+                      for(Owner owner in await DBServiceUser.dbServiceUser.getOwners(restaurant.restaurant_id)){
+                        PushNotificationService.sendNotification("Reservation", "On date: ${dateSelected.toString().substring(0,10)}", restaurant.restaurant_id, "reservation", owner.token);
+                      }
+                      Navigator.pop(context);
                     }
-                    Navigator.pop(context);
-                  }
-                  else{
-                    pos = 1;
-                    Alerts.dialog("Error on reservation, try again.", context);
-                  }
-                  setState(() {
-                    loading = false;
-                  });
-                },),
-              )
-            ],
-          )
-        ],
+                    else{
+                      pos = 1;
+                      Alerts.dialog("Error on reservation, try again.", context);
+                    }
+                    setState(() {
+                      loading = false;
+                    });
+                  },),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

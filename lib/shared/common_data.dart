@@ -6,7 +6,8 @@ class CommonData{
   static final maxElementsList = 100;
   static final String defaultProfile = "https://firebasestorage.googleapis.com/v0/b/home-races.appspot.com/o/user%2FUsuario.png?alt=media&token=12f7cb55-8574-44aa-9cf7-50afb66516f4";
   static final List<String> allergens = ["altramuces", "apio", "cacahuetes", "crustaceos", "frutoscascara", "gluten", "huevos", "leche", "moluscos", "mostaza", "pescado", "sesamo", "soja", "sulfitos", "picante"];
-  static final Color backgroundColor = Color.fromRGBO(229, 229, 229, 0.3);
+  static final Color backgroundColor = Color.fromRGBO(196, 196, 196, 0.3);
+  //Color backgroundColor = Color(0xC4C4C4);
   static final List<String> typesList = ["African", "American", "Argentinean", "Asian", "Bar", "Barbeque", "Bistro", "Brazilian", "Cafe", "Canadian", "Chinese", "Dessert", "English", "French", "Fusion", "German", "Greek", "Grill", "Gourmet", "Hamburgers", "Hawaiian", "Healthy", "Indian", "Indonesian", "Italian", "Japanese", "Korean", "Lebanese", "Mexican", "Morocco", "Organic", "Pizza", "Pub", "Seafood", "South American", "Spanish", "Street Food", "Sushi", "Tapas", "Thai", "Turkish", "Vegan Options", "Vegetarian Friendly", "Wine Bar"];
   static final List<dynamic> types = [
     {"value": "Cafe"},

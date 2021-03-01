@@ -26,73 +26,75 @@ class _ManageOrdersState extends State<ManageOrders> {
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     restaurant = ModalRoute.of(context).settings.arguments;
-    return Scaffold(
-      body: Column(
-        children: [
-          Text("Orders online", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
-          SizedBox(height: 10.h,),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.w),
-            child: Container(
-              height: 730.h,
-              child: ListView(
-                  children: restaurant.codes.map((code) =>
-                      StreamBuilder<bool>(
-                      stream: controller.checkClose(restaurant.restaurant_id, code.code_id),
-                      builder: (context, snapshot){
-                        if(snapshot.data == null)
-                          return Loading();
-                        if(!snapshot.data){
-                          return StreamBuilder<List<Order>>(
-                              stream: controller.getOrder(restaurant.restaurant_id, code.code_id),
-                              builder: (context, snapshot){
-                                if(snapshot.data == null)
-                                  return Loading();
-                                List<Order> items = snapshot.data;
-                                double bill = 0.0;
-                                items.where((element) => element.send).forEach((order) {
-                                  MenuEntry entry = restaurant.menu.firstWhere((entry) => entry.id == order.entry_id);
-                                  bill += entry.price*order.amount;
-                                });
-                                return GestureDetector(
-                                  onTap: (){
-                                    Navigator.pushNamed(context, "/detailorder", arguments: [restaurant, code.code_id]);
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 5.h),
-                                    child: Container(
-                                      width: 400.w,
-                                      height: 80.h,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                                        boxShadow: [BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
-                                          spreadRadius: 2,
-                                          blurRadius: 3,
-                                          offset: Offset(0, 3),
-                                        ),],),
-                                      child: Row(
-                                        children: [
-                                          Container(width: 150.w, child: Text("Table: ${code.code_id}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
-                                          Container(width: 150.w, child: Text("Total: $bill  ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
-                                          SizedBox(width: 10.w,),
-                                          items.every((element) => element.check) ? Container() : Icon(Icons.add_alert_rounded, size: ScreenUtil().setSp(28), color: Colors.redAccent,)
-                                        ],
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            Text("Orders online", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+            SizedBox(height: 10.h,),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              child: Container(
+                height: 730.h,
+                child: ListView(
+                    children: restaurant.codes.map((code) =>
+                        StreamBuilder<bool>(
+                        stream: controller.checkClose(restaurant.restaurant_id, code.code_id),
+                        builder: (context, snapshot){
+                          if(snapshot.data == null)
+                            return Loading();
+                          if(!snapshot.data){
+                            return StreamBuilder<List<Order>>(
+                                stream: controller.getOrder(restaurant.restaurant_id, code.code_id),
+                                builder: (context, snapshot){
+                                  if(snapshot.data == null)
+                                    return Loading();
+                                  List<Order> items = snapshot.data;
+                                  double bill = 0.0;
+                                  items.where((element) => element.send).forEach((order) {
+                                    MenuEntry entry = restaurant.menu.firstWhere((entry) => entry.id == order.entry_id);
+                                    bill += entry.price*order.amount;
+                                  });
+                                  return GestureDetector(
+                                    onTap: (){
+                                      Navigator.pushNamed(context, "/detailorder", arguments: [restaurant, code.code_id]);
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 5.h),
+                                      child: Container(
+                                        width: 400.w,
+                                        height: 80.h,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(Radius.circular(30)),
+                                          boxShadow: [BoxShadow(
+                                            color: Colors.black.withOpacity(0.2),
+                                            spreadRadius: 2,
+                                            blurRadius: 3,
+                                            offset: Offset(0, 3),
+                                          ),],),
+                                        child: Row(
+                                          children: [
+                                            Container(width: 150.w, child: Text("Table: ${code.code_id}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                                            Container(width: 150.w, child: Text("Total: $bill  ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                                            SizedBox(width: 10.w,),
+                                            items.every((element) => element.check) ? Container() : Icon(Icons.add_alert_rounded, size: ScreenUtil().setSp(28), color: Colors.redAccent,)
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              });
-                        }
-                        return Container();
-                      })
-                  ).toList()
+                                  );
+                                });
+                          }
+                          return Container();
+                        })
+                    ).toList()
+                ),
               ),
             ),
-          ),
-        ],
-      )
+          ],
+        )
+      ),
     );
   }
 }

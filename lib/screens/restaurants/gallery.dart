@@ -19,35 +19,37 @@ class _GalleryState extends State<Gallery> {
   Widget build(BuildContext context) {
     restaurant = ModalRoute.of(context).settings.arguments;
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: GridView.count(
-        crossAxisCount: 3,
-        scrollDirection: Axis.vertical,
-        crossAxisSpacing: 6,
-        mainAxisSpacing: 6,
-        children: restaurant.images.map((image) =>
-            GestureDetector(
-              child: Container(
-                height: 230,
-                width: 400,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(image),
-                    fit: BoxFit.cover,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: GridView.count(
+          crossAxisCount: 3,
+          scrollDirection: Axis.vertical,
+          crossAxisSpacing: 6,
+          mainAxisSpacing: 6,
+          children: restaurant.images.map((image) =>
+              GestureDetector(
+                child: Container(
+                  height: 230,
+                  width: 400,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(image),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-                  return Container(
-                      child: PhotoView(
-                        imageProvider: NetworkImage(image),
-                      )
-                  );
-                }));
-              }
-            ),).toList(),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+                    return Container(
+                        child: PhotoView(
+                          imageProvider: NetworkImage(image),
+                        )
+                    );
+                  }));
+                }
+              ),).toList(),
+        ),
       ),
     );
   }

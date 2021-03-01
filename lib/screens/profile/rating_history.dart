@@ -90,22 +90,25 @@ class _RatingHistoryState extends State<RatingHistory> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
-    return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            height: 42.h,
-            width: 411.w,
-            decoration: BoxDecoration(
-              color: Color.fromRGBO(255, 110, 117, 0.9),
+    return SafeArea(
+      child: Scaffold(
+        //backgroundColor: CommonData().getColor(),
+        body: Column(
+          children: [
+            Container(
+              height: 42.h,
+              width: 411.w,
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 110, 117, 0.9),
+              ),
+              child:Text("Rating History", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
             ),
-            child:Text("Rating History", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
-          ),
-          SizedBox(height: 10.h,),
-          DBServiceUser.userF.history == null? Loading() : Expanded(child: ListView(
-            children: getListItems(),
-          ))
-        ],
+            SizedBox(height: 10.h,),
+            DBServiceUser.userF.history == null? Loading() : Expanded(child: ListView(
+              children: getListItems(),
+            ))
+          ],
+        ),
       ),
     );
   }

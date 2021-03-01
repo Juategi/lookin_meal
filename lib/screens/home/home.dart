@@ -181,7 +181,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 							type: BottomNavigationBarType.fixed,
 							items: <BottomNavigationBarItem>[
 								BottomNavigationBarItem(
-									icon: Icon(FontAwesomeIcons.compass, size: ScreenUtil().setSp(22),),
+									icon: Icon(FontAwesomeIcons.compass, size: ScreenUtil().setSp(22), ),
 									title: Text(tr.translate("home")),
 								),
 								BottomNavigationBarItem(
@@ -203,6 +203,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 							],
 							currentIndex: _selectedIndex,
 							selectedItemColor: Color.fromRGBO(255, 110, 117, 0.61),
+							unselectedItemColor: Color.fromRGBO(130, 130, 130, 1),
 							onTap: _onItemTapped,
 						)
 					);

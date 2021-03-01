@@ -79,8 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
 		}
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
 		return !search? Scaffold(
-			//backgroundColor: CommonData.backgroundColor,
-			backgroundColor: Colors.white,
+			//backgroundColor: CommonData().getColor(),
+			//backgroundColor: Colors.white,
 			appBar: PreferredSize(
 				preferredSize: Size.fromHeight(80.h),
 				child: AppBar(
@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
 					backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 					flexibleSpace: Column(
 						children: <Widget>[
-							SizedBox(height: 50.h,),
+							SizedBox(height: 42.h,),
 							Container(
 								padding: EdgeInsets.only(left: 8.w, right: 8.w),
 								margin: EdgeInsets.only(left: 30.w, right: 30.w),

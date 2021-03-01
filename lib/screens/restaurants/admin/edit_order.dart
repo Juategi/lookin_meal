@@ -153,47 +153,49 @@ class _EditOrderState extends State<EditOrder> {
       elements = _init();
       init = true;
     }
-    return Scaffold(
-      //backgroundColor: CommonData.backgroundColor,
-      bottomNavigationBar: BottomAppBar(
-        child: Container(
-          height: 80.h,
-          child: Row( mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                height: 50.h,
-                width: 260.w,
-                child: RaisedButton(
-                  elevation: 0,
-                  color: Color.fromRGBO(255, 110, 117, 0.9),
-                  child: Text("Guardar", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
-                  onPressed: () async{
-                    Navigator.pop(context, [sections, menu]);
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      body: Column(
-        children: <Widget>[
-          SizedBox(height: 32.h,),
-          Container(
-            height: 42.h,
-            width: 411.w,
-            decoration: BoxDecoration(
-              color: Color.fromRGBO(255, 110, 117, 0.9),
-            ),
+    return SafeArea(
+      child: Scaffold(
+        //backgroundColor: CommonData.backgroundColor,
+        bottomNavigationBar: BottomAppBar(
+          child: Container(
+            height: 80.h,
             child: Row( mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Align( alignment: AlignmentDirectional.topCenter, child: Text("Editar orden", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
+                Container(
+                  height: 50.h,
+                  width: 260.w,
+                  child: RaisedButton(
+                    elevation: 0,
+                    color: Color.fromRGBO(255, 110, 117, 0.9),
+                    child: Text("Guardar", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
+                    onPressed: () async{
+                      Navigator.pop(context, [sections, menu]);
+                    },
+                  ),
+                ),
               ],
             ),
           ),
-          SizedBox(height: 32.h,),
-          Expanded(child: ReorderableListView(children: elements, onReorder: _onReorder)),
-        ],
+        ),
+        body: Column(
+          children: <Widget>[
+            SizedBox(height: 32.h,),
+            Container(
+              height: 42.h,
+              width: 411.w,
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 110, 117, 0.9),
+              ),
+              child: Row( mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Align( alignment: AlignmentDirectional.topCenter, child: Text("Editar orden", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
+                ],
+              ),
+            ),
+            SizedBox(height: 32.h,),
+            Expanded(child: ReorderableListView(children: elements, onReorder: _onReorder)),
+          ],
+        ),
       ),
     );
   }

@@ -40,156 +40,158 @@ class _EditCodesState extends State<EditCodes> {
       _getCodes();
       init = false;
     }
-    return Scaffold(
-      body: Column(
-        children: [
-          SizedBox(height: 32.h,),
-          Center(child: Text("Orders configuration", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24),),))),
-          SizedBox(height: 32.h,),
-          Container(
-            height: 400.h,
-            child: Expanded(child: ListView(
-                children: restaurant.codes.map((code) => Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-                  child: Container(
-                    width: 395.w,
-                    height: 80.h,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                      boxShadow: [BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 3,
-                        offset: Offset(0, 3),
-                      ),],),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
-                      child: Row(
-                        children: [
-                          Container(width: 140.w, child: Text("Table: " + code.code_id, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
-                          GestureDetector(
-                            onTap: () async{
-                              Permission.requestPermissions([PermissionName.Storage]);
-                              final pdf = pw.Document();
-                              Directory directory = await getApplicationDocumentsDirectory();
-                              var dbPath = directory.path + "PDF.png";
-                              ByteData data = await rootBundle.load("assets/PDF.png");
-                              List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-                              File i = await File(dbPath).writeAsBytes(bytes);
-                              final image = pw.MemoryImage(
-                                i.readAsBytesSync(),
-                              );
-                              pdf.addPage(pw.Page(
-                                  pageFormat: PdfPageFormat.a4,
-                                  build: (pw.Context context) {
-                                    return pw.Transform.rotate(
-                                      child: pw.Center(
-                                          child: pw.Container(
-                                              height: 333.333,
-                                              width: 500,
-                                              decoration: pw.BoxDecoration(
-                                                  image:  pw.DecorationImage(
-                                                      fit: pw.BoxFit.cover,
-                                                      image: pw.Image(image).image
-                                                  )
-                                              ),
-                                              child: pw.Stack(
-                                                  children: [
-                                                    pw.Positioned(
-                                                      child: pw.Container(
-                                                        height: 140,
-                                                        width: 140,
-                                                        child: pw.BarcodeWidget(
-                                                          color: PdfColor.fromHex("#000000"),
-                                                          barcode: pw.Barcode.qrCode(),
-                                                          data: restaurant.restaurant_id + "/" + code.code_id,
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            SizedBox(height: 32.h,),
+            Center(child: Text("Orders configuration", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24),),))),
+            SizedBox(height: 32.h,),
+            Container(
+              height: 400.h,
+              child: Expanded(child: ListView(
+                  children: restaurant.codes.map((code) => Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                    child: Container(
+                      width: 395.w,
+                      height: 80.h,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        boxShadow: [BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 3,
+                          offset: Offset(0, 3),
+                        ),],),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
+                        child: Row(
+                          children: [
+                            Container(width: 140.w, child: Text("Table: " + code.code_id, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                            GestureDetector(
+                              onTap: () async{
+                                Permission.requestPermissions([PermissionName.Storage]);
+                                final pdf = pw.Document();
+                                Directory directory = await getApplicationDocumentsDirectory();
+                                var dbPath = directory.path + "PDF.png";
+                                ByteData data = await rootBundle.load("assets/PDF.png");
+                                List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+                                File i = await File(dbPath).writeAsBytes(bytes);
+                                final image = pw.MemoryImage(
+                                  i.readAsBytesSync(),
+                                );
+                                pdf.addPage(pw.Page(
+                                    pageFormat: PdfPageFormat.a4,
+                                    build: (pw.Context context) {
+                                      return pw.Transform.rotate(
+                                        child: pw.Center(
+                                            child: pw.Container(
+                                                height: 333.333,
+                                                width: 500,
+                                                decoration: pw.BoxDecoration(
+                                                    image:  pw.DecorationImage(
+                                                        fit: pw.BoxFit.cover,
+                                                        image: pw.Image(image).image
+                                                    )
+                                                ),
+                                                child: pw.Stack(
+                                                    children: [
+                                                      pw.Positioned(
+                                                        child: pw.Container(
+                                                          height: 140,
+                                                          width: 140,
+                                                          child: pw.BarcodeWidget(
+                                                            color: PdfColor.fromHex("#000000"),
+                                                            barcode: pw.Barcode.qrCode(),
+                                                            data: restaurant.restaurant_id + "/" + code.code_id,
+                                                          ),
                                                         ),
+                                                        top: 127,
+                                                        left: 287
                                                       ),
-                                                      top: 127,
-                                                      left: 287
-                                                    ),
-                                                    pw.Positioned(
-                                                        child: pw.Container(
-                                                          width: 170,
-                                                          height: 50,
-                                                          //color: PdfColor.fromHex("FFFFFF"),
-                                                          child: pw.Center(
-                                                            child: pw.Text(restaurant.name, maxLines: 2, textAlign: pw.TextAlign.center, style: pw.TextStyle(color: PdfColor.fromHex("FFFFFF"), letterSpacing: .3, fontWeight: pw.FontWeight.bold, fontSize: ScreenUtil().setSp(15))),
-                                                          )
-                                                        ),
-                                                        top: 20,
-                                                        left: 280
-                                                    ),
-                                                    pw.Positioned(
-                                                        child: pw.Container(
-                                                          //color: PdfColor.fromHex("FFFFFF"),
-                                                          width: 170,
-                                                          child: pw.Center(
-                                                            child: pw.Text("Table: " + code.code_id, maxLines: 1,  textAlign: pw.TextAlign.center, style: pw.TextStyle(color: PdfColor.fromHex("FFFFFF"), letterSpacing: .3, fontWeight: pw.FontWeight.normal, fontSize: ScreenUtil().setSp(15))),
-                                                          )
-                                                        ),
-                                                        top: 80,
-                                                        left: 280
-                                                    ),
-                                                  ]
-                                              )
-                                          )),
-                                      //transform: Matrix4.rotationZ(1)
-                                      angle: pi/2
-                                    );// Center
-                                  }));
-                              final output2 = Directory("/storage/emulated/0/Download/");
-                              final file = File("${output2.path}/${code.code_id}.pdf");
-                              await file.writeAsBytes(await pdf.save());
-                              print(output2.path);
-                            },
-                            child: Row(
-                              children: [
-                                Text("Download QR  ", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),)),
-                                Icon(FontAwesomeIcons.qrcode, size: ScreenUtil().setSp(25),),
-                              ],
+                                                      pw.Positioned(
+                                                          child: pw.Container(
+                                                            width: 170,
+                                                            height: 50,
+                                                            //color: PdfColor.fromHex("FFFFFF"),
+                                                            child: pw.Center(
+                                                              child: pw.Text(restaurant.name, maxLines: 2, textAlign: pw.TextAlign.center, style: pw.TextStyle(color: PdfColor.fromHex("FFFFFF"), letterSpacing: .3, fontWeight: pw.FontWeight.bold, fontSize: ScreenUtil().setSp(15))),
+                                                            )
+                                                          ),
+                                                          top: 20,
+                                                          left: 280
+                                                      ),
+                                                      pw.Positioned(
+                                                          child: pw.Container(
+                                                            //color: PdfColor.fromHex("FFFFFF"),
+                                                            width: 170,
+                                                            child: pw.Center(
+                                                              child: pw.Text("Table: " + code.code_id, maxLines: 1,  textAlign: pw.TextAlign.center, style: pw.TextStyle(color: PdfColor.fromHex("FFFFFF"), letterSpacing: .3, fontWeight: pw.FontWeight.normal, fontSize: ScreenUtil().setSp(15))),
+                                                            )
+                                                          ),
+                                                          top: 80,
+                                                          left: 280
+                                                      ),
+                                                    ]
+                                                )
+                                            )),
+                                        //transform: Matrix4.rotationZ(1)
+                                        angle: pi/2
+                                      );// Center
+                                    }));
+                                final output2 = Directory("/storage/emulated/0/Download/");
+                                final file = File("${output2.path}/${code.code_id}.pdf");
+                                await file.writeAsBytes(await pdf.save());
+                                print(output2.path);
+                              },
+                              child: Row(
+                                children: [
+                                  Text("Download QR  ", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),)),
+                                  Icon(FontAwesomeIcons.qrcode, size: ScreenUtil().setSp(25),),
+                                ],
+                              ),
                             ),
-                          ),
-                          SizedBox(width: 42.w,),
-                          IconButton(icon: Icon(Icons.delete, size: ScreenUtil().setSp(28),), onPressed: ()async{
-                            DBServiceReservation.dbServiceReservation.deleteCode(code.code_id, code.restaurant_id);
-                            RealTimeOrders().deleteOrder(restaurant.restaurant_id, code.code_id);
-                            restaurant.codes.remove(code);
-                            setState(() {
-                            });
-                            Alerts.toast("QR deleted!");
-                          })
-                        ],
+                            SizedBox(width: 42.w,),
+                            IconButton(icon: Icon(Icons.delete, size: ScreenUtil().setSp(28),), onPressed: ()async{
+                              DBServiceReservation.dbServiceReservation.deleteCode(code.code_id, code.restaurant_id);
+                              RealTimeOrders().deleteOrder(restaurant.restaurant_id, code.code_id);
+                              restaurant.codes.remove(code);
+                              setState(() {
+                              });
+                              Alerts.toast("QR deleted!");
+                            })
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ).toList(),
-            )),
-          ),
-          GestureDetector(
-            onTap: () async{
-              Navigator.pushNamed(context, "/newcode",arguments: restaurant).then((value) => setState(() {}));
-            },
-            child: Container(
-              height: 100.h,
-              width: 100.w,
-              decoration: new BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                //borderRadius: BorderRadius.all(Radius.circular(15)),
-                boxShadow: [BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 3,
-                  offset: Offset(1, 1), // changes position of shadow
-                ),],
-              ),
-              child: Icon(Icons.add, size: ScreenUtil().setSp(65),),
+                  )
+                ).toList(),
+              )),
             ),
-          ),
-        ],
+            GestureDetector(
+              onTap: () async{
+                Navigator.pushNamed(context, "/newcode",arguments: restaurant).then((value) => setState(() {}));
+              },
+              child: Container(
+                height: 100.h,
+                width: 100.w,
+                decoration: new BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  //borderRadius: BorderRadius.all(Radius.circular(15)),
+                  boxShadow: [BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 3,
+                    offset: Offset(1, 1), // changes position of shadow
+                  ),],
+                ),
+                child: Icon(Icons.add, size: ScreenUtil().setSp(65),),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -142,7 +142,7 @@ class _ProfileState extends State<Profile> {
                   child: Row(mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(width: 20.w,),
-                      Container(width: 37.w, height: 37.h, child: Icon(Icons.favorite_outline_sharp, size: ScreenUtil().setSp(35),)),
+                      Container(width: 37.w, height: 37.h, child: Icon(Icons.favorite_outline_sharp, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),)),
                       SizedBox(width: 30.w,),
                       Container(width: 250.w, child: Text("Favorites", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                       Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
@@ -161,7 +161,7 @@ class _ProfileState extends State<Profile> {
                   child: Row(mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(width: 20.w,),
-                      Container(width: 37.w, height: 37.h, child: Icon(Icons.calendar_today_outlined, size: ScreenUtil().setSp(35),)),
+                      Container(width: 37.w, height: 37.h, child: Icon(Icons.calendar_today_outlined, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),)),
                       SizedBox(width: 30.w,),
                       Container(width: 250.w, child: Text("Reservations", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                       Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
@@ -282,7 +282,7 @@ class _ProfileState extends State<Profile> {
                   child: Row(mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(width: 20.w,),
-                      Container(width: 37.w, height: 37.h, child: Icon(Icons.logout, size: ScreenUtil().setSp(35),)),
+                      Container(width: 37.w, height: 37.h, child: Icon(Icons.logout, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),)),
                       SizedBox(width: 30.w,),
                       Container(width: 250.w, child: Text("Log out", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                       Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),

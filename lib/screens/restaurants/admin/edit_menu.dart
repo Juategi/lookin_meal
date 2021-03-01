@@ -710,116 +710,118 @@ class _EditMenuState extends State<EditMenu> {
       _copyLists();
       init = true;
     }
-    return Scaffold(
-      //backgroundColor: CommonData.backgroundColor,
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 32.h,),
-            Container(
-              height: 42.h,
-              width: 411.w,
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(255, 110, 117, 0.9),
+    return SafeArea(
+      child: Scaffold(
+        //backgroundColor: CommonData.backgroundColor,
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: 32.h,),
+              Container(
+                height: 42.h,
+                width: 411.w,
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(255, 110, 117, 0.9),
+                ),
+                child: Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    IconButton(icon: Icon(Icons.arrow_downward_outlined, color: Colors.white54,), onPressed: (){
+                      SchedulerBinding.instance.addPostFrameCallback((_) {
+                        _scrollController.animateTo(
+                          _scrollController.position.maxScrollExtent,
+                          duration: const Duration(milliseconds: 2200),
+                          curve: Curves.easeOut,
+                        );
+                      });
+                    }),
+                    Align( alignment: AlignmentDirectional.topCenter, child: Text("Editar carta", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
+                    IconButton(icon: Icon(Icons.arrow_upward, color: Colors.white54,), onPressed: (){
+                      SchedulerBinding.instance.addPostFrameCallback((_) {
+                        _scrollController.animateTo(
+                          _scrollController.position.minScrollExtent,
+                          duration: const Duration(milliseconds: 2000),
+                          curve: Curves.easeOut,
+                        );
+                      });
+                    }),
+                  ],
+                ),
               ),
-              child: Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  IconButton(icon: Icon(Icons.arrow_downward_outlined, color: Colors.white54,), onPressed: (){
-                    SchedulerBinding.instance.addPostFrameCallback((_) {
-                      _scrollController.animateTo(
-                        _scrollController.position.maxScrollExtent,
-                        duration: const Duration(milliseconds: 2200),
-                        curve: Curves.easeOut,
-                      );
-                    });
-                  }),
-                  Align( alignment: AlignmentDirectional.topCenter, child: Text("Editar carta", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
-                  IconButton(icon: Icon(Icons.arrow_upward, color: Colors.white54,), onPressed: (){
-                    SchedulerBinding.instance.addPostFrameCallback((_) {
-                      _scrollController.animateTo(
-                        _scrollController.position.minScrollExtent,
-                        duration: const Duration(milliseconds: 2000),
-                        curve: Curves.easeOut,
-                      );
-                    });
-                  }),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
-                child: Center(
-                  child: ListView(
-                      //reverse: true,
-                      //shrinkWrap: true,
-                      controller: _scrollController,
-                      children: _initMenu()
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
+                  child: Center(
+                    child: ListView(
+                        //reverse: true,
+                        //shrinkWrap: true,
+                        controller: _scrollController,
+                        children: _initMenu()
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: Container(
-          height: 80.h,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                height: 50.h,
-                width: 160.w,
-                child: RaisedButton(elevation: 0,
-                  color: Color.fromRGBO(255, 110, 117, 0.9),
-                  child: Text("Editar orden", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
-                  onPressed: () async{
-                  dynamic result = await Navigator.pushNamed(context, "/editorder",arguments:[sections,menu]);
-                  if(result != null){
-                    result = List.from(result);
-                    sections = result.first;
-                    menu = result.last;
-                  }
-                  setState(() {});
-                }, ),
-              ),
-              SizedBox(width: 30.w,),
-              Container(
-                height: 50.h,
-                width: 160.w,
-                child: RaisedButton(elevation: 0,
-                  color: Color.fromRGBO(255, 110, 117, 0.9),
-                  child: Text("Guardar", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
-                  onPressed: ()async{
-                  List temp = sections.toSet().toList();
-                  if(temp.length < sections.length){
-                    Alerts.dialog('You can not have sections with the same name', context);
-                    return;
-                  }
-                  for(String section in sections){
-                    if(int.tryParse(section) != null){
-                      Alerts.dialog('You can not have sections with just numbers', context);
+        bottomNavigationBar: BottomAppBar(
+          child: Container(
+            height: 80.h,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  height: 50.h,
+                  width: 160.w,
+                  child: RaisedButton(elevation: 0,
+                    color: Color.fromRGBO(255, 110, 117, 0.9),
+                    child: Text("Editar orden", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
+                    onPressed: () async{
+                    dynamic result = await Navigator.pushNamed(context, "/editorder",arguments:[sections,menu]);
+                    if(result != null){
+                      result = List.from(result);
+                      sections = result.first;
+                      menu = result.last;
+                    }
+                    setState(() {});
+                  }, ),
+                ),
+                SizedBox(width: 30.w,),
+                Container(
+                  height: 50.h,
+                  width: 160.w,
+                  child: RaisedButton(elevation: 0,
+                    color: Color.fromRGBO(255, 110, 117, 0.9),
+                    child: Text("Guardar", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
+                    onPressed: ()async{
+                    List temp = sections.toSet().toList();
+                    if(temp.length < sections.length){
+                      Alerts.dialog('You can not have sections with the same name', context);
                       return;
                     }
-                  }
-                  indicator = true;
-                  setState(() {
-                  });
-                  for(MenuEntry entry in menu){
-                    entry.price = entry.price.toDouble();
-                    //print("${entry.section} / ${entry.name} / ${entry.price}/ ${entry.allergens}");
-                  }
-                  await DBServiceEntry.dbServiceEntry.uploadMenu(sections, menu, restaurant);
-                  Alerts.toast("Menu saved");
-                  setState(() {
-                  });
-                  Navigator.pop(context);
-                },),
-              ),
-            ],
+                    for(String section in sections){
+                      if(int.tryParse(section) != null){
+                        Alerts.dialog('You can not have sections with just numbers', context);
+                        return;
+                      }
+                    }
+                    indicator = true;
+                    setState(() {
+                    });
+                    for(MenuEntry entry in menu){
+                      entry.price = entry.price.toDouble();
+                      //print("${entry.section} / ${entry.name} / ${entry.price}/ ${entry.allergens}");
+                    }
+                    await DBServiceEntry.dbServiceEntry.uploadMenu(sections, menu, restaurant);
+                    Alerts.toast("Menu saved");
+                    setState(() {
+                    });
+                    Navigator.pop(context);
+                  },),
+                ),
+              ],
+            ),
           ),
         ),
       ),

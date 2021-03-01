@@ -70,6 +70,7 @@ dependencies:
   path_provider: ^1.6.27
   flutter_barcode_scanner: ^1.0.2
   firebase_messaging: ^6.0.16
+  flutter_statusbarcolor: ^0.2.3
 
 dev_dependencies:
   flutter_test:

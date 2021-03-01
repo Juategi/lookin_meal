@@ -89,7 +89,8 @@ class AuthService{
 			}
 		}
 		else{
-			await DBServiceUser.dbServiceUser.updateUserData(credential.user.uid,credential.user.email, profile["name"],picture,"FB");
+			//await DBServiceUser.dbServiceUser.updateUserData(credential.user.uid, credential.user.email, profile["name"],picture,"FB");
+			await DBServiceUser.dbServiceUser.updateUserData(credential.user.uid, finalUser.name, finalUser.about, finalUser.picture, "FB", finalUser.country, finalUser.username);
 			return _userFromFirebaseUser(credential.user);
 		}
 
@@ -132,9 +133,8 @@ class AuthService{
 			}
 		}
 		else{
-			await DBServiceUser.dbServiceUser.updateUserData(
-					user.uid, user.email, authResult.additionalUserInfo.profile['name'],
-					authResult.additionalUserInfo.profile['picture'], "GM");
+			//await DBServiceUser.dbServiceUser.updateUserData(user.uid, user.email, authResult.additionalUserInfo.profile['name'], authResult.additionalUserInfo.profile['picture'], "GM");
+			await DBServiceUser.dbServiceUser.updateUserData(user.uid, finalUser.name, finalUser.about, finalUser.picture, "GM", finalUser.country, finalUser.username);
 			return _userFromFirebaseUser(user);
 		}
 	}

@@ -31,6 +31,7 @@ import 'screens/authenticate/wrapper.dart';
 import 'services/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 
 void main() { Provider.debugCheckInvalidValueType = null; runApp(MyApp()); }
 
@@ -41,10 +42,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppLocalizations tr = AppLocalizations.of(context);
+    FlutterStatusbarcolor.setStatusBarColor(Color.fromRGBO(255, 110, 117, 0.5));
     return StreamProvider<String>.value(
       value: AuthService().user,
       child: MaterialApp(
-        darkTheme: ThemeData(brightness: Brightness.dark),
+        //darkTheme: ThemeData(brightness: Brightness.dark),
+        theme: ThemeData(
+          scaffoldBackgroundColor: const Color.fromRGBO(245, 245, 245, 1),
+        ),
         routes:{
           "/wrapper":(context) => Wrapper(),
           "/home":(context) => Home(),

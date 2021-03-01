@@ -67,64 +67,66 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
       init = false;
     }
     dateString = dateSelected.toString().substring(0,10);
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15.w),
-        child: Column(
-          children: [
-            SizedBox(height: 32.h,),
-            Center(child: Text("Check reservations", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24),),))),
-            SizedBox(height: 32.h,),
-            CalendarDatePicker(initialDate: dateSelected, firstDate: DateTime.now(), lastDate: DateTime.now().add(Duration(days: 30)), onDateChanged: (date) async{
-              dateSelected = date;
-              await _getReservations();
-              setState(() {
-              });
-            }, currentDate: dateSelected,
-              selectableDayPredicate: (day){
-                int weekday = day.weekday == 7? 0 : day.weekday;
-                if(restaurant.schedule[weekday.toString()].every((element) => element.replaceAll("[", "").replaceAll("]", "").replaceAll("[", "").replaceAll("]", "") == "-1")){
-                  return false;
-                }
-                return true;
-              },),
-            SizedBox(height: 5.h,),
-            loading ? Loading() : IconButton(icon: Icon(Icons.refresh,  size: ScreenUtil().setSp(45), color: Color.fromRGBO(255, 110, 117, 0.7),), onPressed: (){
-              _getReservations();
-            }),
-            SizedBox(height: 5.h,),
-            loading ? Container() : Expanded(child: ListView(
-              children: restaurant.reservations[dateString].map((reservation) => Padding(
-                padding: EdgeInsets.symmetric(vertical: 5.h),
-                child: Container(
-                  width: 395.w,
-                  height: 50.h,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(30)),
-                    boxShadow: [BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 3,
-                      offset: Offset(0, 3),
-                    ),],
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.w),
-                    child: Row(
-                      children: [
-                        Container(width: 170.w, child: Text(reservation.username, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
-                        SizedBox(width: 10.w,),
-                        Text("People: ${reservation.people}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
-                        SizedBox(width: 20.w,),
-                        Text("Time: ${reservation.reservationtime}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
-                      ],
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.w),
+          child: Column(
+            children: [
+              SizedBox(height: 32.h,),
+              Center(child: Text("Check reservations", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24),),))),
+              SizedBox(height: 32.h,),
+              CalendarDatePicker(initialDate: dateSelected, firstDate: DateTime.now(), lastDate: DateTime.now().add(Duration(days: 30)), onDateChanged: (date) async{
+                dateSelected = date;
+                await _getReservations();
+                setState(() {
+                });
+              }, currentDate: dateSelected,
+                selectableDayPredicate: (day){
+                  int weekday = day.weekday == 7? 0 : day.weekday;
+                  if(restaurant.schedule[weekday.toString()].every((element) => element.replaceAll("[", "").replaceAll("]", "").replaceAll("[", "").replaceAll("]", "") == "-1")){
+                    return false;
+                  }
+                  return true;
+                },),
+              SizedBox(height: 5.h,),
+              loading ? Loading() : IconButton(icon: Icon(Icons.refresh,  size: ScreenUtil().setSp(45), color: Color.fromRGBO(255, 110, 117, 0.7),), onPressed: (){
+                _getReservations();
+              }),
+              SizedBox(height: 5.h,),
+              loading ? Container() : Expanded(child: ListView(
+                children: restaurant.reservations[dateString].map((reservation) => Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5.h),
+                  child: Container(
+                    width: 395.w,
+                    height: 50.h,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                      boxShadow: [BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 3,
+                        offset: Offset(0, 3),
+                      ),],
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      child: Row(
+                        children: [
+                          Container(width: 170.w, child: Text(reservation.username, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                          SizedBox(width: 10.w,),
+                          Text("People: ${reservation.people}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+                          SizedBox(width: 20.w,),
+                          Text("Time: ${reservation.reservationtime}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              )).toList(),
-            ))
-          ],
+                )).toList(),
+              ))
+            ],
+          ),
         ),
       ),
     );
