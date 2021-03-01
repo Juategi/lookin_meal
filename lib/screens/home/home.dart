@@ -37,12 +37,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	List<Restaurant> nearRestaurants;
 	Map<MenuEntry,Restaurant> popular;
 	List<double> distances = List<double>();
-	int _selectedIndex = 0;
+	static int selectedIndex = 0;
 	bool ready = false;
 
-	void _onItemTapped(int index) {
+	void onItemTapped(int index) {
 		setState(()  {
-			_selectedIndex = index;
+			selectedIndex = index;
 		});
 	}
 
@@ -91,7 +91,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 					Navigator.pushNamed(context, "/order",arguments: barcodeScanRes).then((value) => setState(() {}));
 				else
 					setState(() {
-						_selectedIndex = 0;
+						selectedIndex = 0;
 					});
 		}
 		else{
@@ -99,13 +99,47 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		}
 	}
 
+	BottomNavigationBar getBar(){
+		AppLocalizations tr = AppLocalizations.of(context);
+		return BottomNavigationBar(
+			backgroundColor: Colors.white,
+			type: BottomNavigationBarType.fixed,
+			items: <BottomNavigationBarItem>[
+				BottomNavigationBarItem(
+					icon: Icon(FontAwesomeIcons.compass, size: ScreenUtil().setSp(22), ),
+					title: Text(tr.translate("home")),
+				),
+				BottomNavigationBarItem(
+					icon: Icon(FontAwesomeIcons.mapMarkedAlt, size: ScreenUtil().setSp(22),),
+					title: Text(tr.translate("map")),
+				),
+				BottomNavigationBarItem(
+					icon: GestureDetector(onTap: scanQR, child: Icon(DBServiceUser.userF.inOrder == null? Icons.camera : FontAwesomeIcons.shoppingCart, size: ScreenUtil().setSp(22),)),
+					title: GestureDetector(onTap: scanQR, child: Text("Order")),
+				),
+				BottomNavigationBarItem(
+					icon: Icon(Icons.star, size: ScreenUtil().setSp(25),),
+					title: Text("Top"),
+				),
+				BottomNavigationBarItem(
+					icon: Icon(Icons.person, size: ScreenUtil().setSp(25),),
+					title: Text(tr.translate("profile")),
+				),
+			],
+			currentIndex: selectedIndex,
+			selectedItemColor: Color.fromRGBO(255, 110, 117, 0.61),
+			unselectedItemColor: Color.fromRGBO(130, 130, 130, 1),
+			onTap: onItemTapped,
+		);
+	}
+
 	@override
 	Future<bool> didPopRoute() async {
-		if(_selectedIndex == 0)
+		if(selectedIndex == 0)
 			return false;
 		else {
 			setState(() {
-				_selectedIndex = 0;
+				selectedIndex = 0;
 			});
 			return Future<bool>.value(true);
 		}
@@ -133,9 +167,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 						body: Stack(
 							children: <Widget>[
 								Offstage(
-									offstage: _selectedIndex != 0,
+									offstage: selectedIndex != 0,
 									child: TickerMode(
-										enabled: _selectedIndex == 0,
+										enabled: selectedIndex == 0,
 										child: MultiProvider(
 											providers: [
 												Provider<Map<MenuEntry, Restaurant>>(create: (c) => popular,),
@@ -146,9 +180,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 									),
 								),
 								Offstage(
-									offstage: _selectedIndex != 1,
+									offstage: selectedIndex != 1,
 									child: TickerMode(
-										enabled: _selectedIndex == 1,
+										enabled: selectedIndex == 1,
 											child: MapSample()
 									),
 								),
@@ -160,52 +194,23 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 									),
 								),*/
 								Offstage(
-									offstage: _selectedIndex != 3,
+									offstage: selectedIndex != 3,
 									child: TickerMode(
-											enabled: _selectedIndex == 3,
+											enabled: selectedIndex == 3,
 											child: Top()
 									),
 								),
 								Offstage(
-									offstage: _selectedIndex != 4,
+									offstage: selectedIndex != 4,
 									child: TickerMode(
-										enabled: _selectedIndex == 4,
+										enabled: selectedIndex == 4,
 											child: Profile()
 									),
 								),
 
 							],
 						),
-						bottomNavigationBar: BottomNavigationBar(
-							backgroundColor: Colors.white,
-							type: BottomNavigationBarType.fixed,
-							items: <BottomNavigationBarItem>[
-								BottomNavigationBarItem(
-									icon: Icon(FontAwesomeIcons.compass, size: ScreenUtil().setSp(22), ),
-									title: Text(tr.translate("home")),
-								),
-								BottomNavigationBarItem(
-									icon: Icon(FontAwesomeIcons.mapMarkedAlt, size: ScreenUtil().setSp(22),),
-									title: Text(tr.translate("map")),
-								),
-								BottomNavigationBarItem(
-									icon: GestureDetector(onTap: scanQR, child: Icon(DBServiceUser.userF.inOrder == null? Icons.camera : FontAwesomeIcons.shoppingCart, size: ScreenUtil().setSp(22),)),
-									title: GestureDetector(onTap: scanQR, child: Text("Order")),
-								),
-								BottomNavigationBarItem(
-									icon: Icon(Icons.star, size: ScreenUtil().setSp(25),),
-									title: Text("Top"),
-								),
-								BottomNavigationBarItem(
-									icon: Icon(Icons.person, size: ScreenUtil().setSp(25),),
-									title: Text(tr.translate("profile")),
-								),
-							],
-							currentIndex: _selectedIndex,
-							selectedItemColor: Color.fromRGBO(255, 110, 117, 0.61),
-							unselectedItemColor: Color.fromRGBO(130, 130, 130, 1),
-							onTap: _onItemTapped,
-						)
+						bottomNavigationBar: getBar()
 					);
 		}
 	  else

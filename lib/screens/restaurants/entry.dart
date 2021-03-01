@@ -142,10 +142,13 @@ class _EntryRatingState extends State<EntryRating> {
                                 child: SvgPicture.asset("assets/menu.svg", color: Color.fromRGBO(255, 110, 117, 0.9), fit: BoxFit.contain,)
                             ),
                           ),
-                          SizedBox(width: 230.w,),
+                          SizedBox(width: 50.w,),
                           order ? Container() : DropdownButton<FavoriteList>(
                             icon: Icon(DBServiceUser.userF.lists.firstWhere((list) => list.type == 'E' && list.items.contains(entry.id), orElse: () => null) != null ? Icons.favorite_outlined : Icons.favorite_outline, size: ScreenUtil().setSp(45),color: Color.fromRGBO(255, 65, 112, 1)),
                             items: _loadItems(),
+                            underline: Padding(
+                              padding: EdgeInsets.all(5),
+                            ),
                             onChanged: (list)async{
                               if(list.id == null){
                                 await Navigator.pushNamed(context, "/createlist", arguments: 'E');

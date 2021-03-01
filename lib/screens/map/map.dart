@@ -203,7 +203,8 @@ class MapSampleState extends State<MapSample> {
 	Widget build(BuildContext context){
 		user = Provider.of<User>(context);
 		return _cameraPosition == null || (_markersNoCluster.length == 0 && _restaurants.length != 0) ? Loading() : Container(
-		  child: Stack(
+		  child: SafeArea(
+		    child: Stack(
 				children: <Widget>[
 					GoogleMap(
 						key: _key,
@@ -248,7 +249,7 @@ class MapSampleState extends State<MapSample> {
 					Positioned(
 						top: 110.h,
 						right: 20.w,
-						child: RaisedButton(child: Text("Load Restaurants", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),)), onPressed: ()async{
+						child: RaisedButton(color:Colors.white, child: Text("Load Restaurants", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),)), onPressed: ()async{
 							Size _widgetSize = _key.currentContext.size;
 							var _correctZoom = math.pow(2, _cameraPosition.zoom) * 2;
 							var _width = _widgetSize.width.toInt() / _correctZoom;
@@ -265,7 +266,7 @@ class MapSampleState extends State<MapSample> {
 					Positioned(
 						top: 60.h,
 						right: 20.w,
-						child: RaisedButton(child: Text("Clear", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),)), onPressed: (){
+						child: RaisedButton(color:Colors.white, child: Text("Clear", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),)), onPressed: (){
 								_markersNoCluster.clear();
 								_restaurants.clear();
 								setState(() {});
@@ -337,7 +338,8 @@ class MapSampleState extends State<MapSample> {
 							  ),
 							), duration: Duration(seconds: 1)),
 				],
-			)
+			),
+		  )
 		);
 	}
 }

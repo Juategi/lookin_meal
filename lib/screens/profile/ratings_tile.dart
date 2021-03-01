@@ -33,7 +33,7 @@ class _RatingTileState extends State<RatingTile> {
     return entry != null? GestureDetector(
       onTap: () async{
         await showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
-          return Provider<Restaurant>.value(value: restaurant, child: Provider<MenuEntry>.value(value: entry, child: EntryRating()));
+          return Provider.value(value: false, child: Provider<Restaurant>.value(value: restaurant, child: Provider<MenuEntry>.value(value: entry, child: EntryRating())));
         }).then((value){setState(() {});});
       },
       child: Container(
@@ -71,7 +71,7 @@ class _RatingTileState extends State<RatingTile> {
                       Text("on ${Functions.formatDate(rating.date)}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(13),),)),
                     ],
                   ),
-                  SizedBox(height: 10.h,),
+                  SizedBox(height: 7.h,),
                   Row( mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Container(

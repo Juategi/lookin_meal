@@ -90,9 +90,9 @@ class _UserReservationsState extends State<UserReservations> {
                             Text("People: " + reservation.people.toString(), maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                             Text(Functions.formatDate(reservation.reservationdate.substring(0,10)) + " - " + reservation.reservationtime, maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                             Container(
-                              height: 37.h,
+                              height: 34.h,
                               width: 160.w,
-                              child: IconButton(icon: Icon(Icons.delete,  size: ScreenUtil().setSp(35), color: Color.fromRGBO(255, 110, 117, 0.7),), onPressed: ()async{
+                              child: IconButton(icon: Icon(Icons.delete,  size: ScreenUtil().setSp(33), color: Color.fromRGBO(255, 110, 117, 0.7),), onPressed: ()async{
                                 if(await Alerts.confirmation("Remove reservation, are you sure?", context)){
                                   DBServiceUser.userF.reservations.remove(reservation);
                                   DBServiceReservation.dbServiceReservation.deleteReservation(reservation.table_id, reservation.reservationdate.substring(0,10), reservation.reservationtime);

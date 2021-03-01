@@ -147,7 +147,7 @@ class _FavoriteListsState extends State<FavoriteLists> {
                 children: [
                   SizedBox(height: 2.h,),
                   Icon(Icons.share_outlined, size: ScreenUtil().setSp(45), color: Color.fromRGBO(255, 110, 117, 0.6),),
-                  SizedBox(height: 19.h,),
+                  SizedBox(height: 15.h,),
                   GestureDetector(
                       onTap: () async{
                         bool delete = await Alerts.confirmation("Are you sure you want to delete this list?", context);
