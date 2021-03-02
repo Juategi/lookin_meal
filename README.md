@@ -9,6 +9,7 @@ j@j.j da error al registrar
 while en login por si hay dc,
 Terminar busqueda platos compleja, menos exacta,
 arreglar scanQR
+pop al volver a dar a la barra
 errores de login no sale
 actualizar pagina inicial despues de cambiar ubi (replantear el tema ubi)
 hacer trim() en la busqueda da error

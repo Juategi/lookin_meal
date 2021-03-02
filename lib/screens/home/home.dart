@@ -8,6 +8,7 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/home/home_screen.dart';
 import 'package:lookinmeal/screens/profile/profile.dart';
+import 'package:lookinmeal/screens/restaurants/orders/order_screen.dart';
 import 'package:lookinmeal/screens/top/top.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:flutter/services.dart';
@@ -92,14 +93,28 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
 			if(barcodeScanRes != "-1")
 				if(RegExp(r'[a-zA-Z0-9]+/+[a-zA-Z0-9]').hasMatch(barcodeScanRes))
-					Navigator.pushNamed(context, "/order",arguments: barcodeScanRes).then((value) => setState(() {}));
+					pushNewScreenWithRouteSettings(
+						context,
+						settings: RouteSettings(name: "/order", arguments: barcodeScanRes),
+						screen: OrderScreen(),
+						withNavBar: true,
+						pageTransitionAnimation: PageTransitionAnimation.slideUp,
+					).then((value) => setState(() {}));
+					//Navigator.pushNamed(context, "/order",arguments: barcodeScanRes).then((value) => setState(() {}));
 				else
 					setState(() {
-						CommonData.selectedIndex = 0;
+						_controller.jumpToTab(0);
 					});
 		}
 		else{
-			Navigator.pushNamed(context, "/order",arguments: DBServiceUser.userF.inOrder).then((value) => setState(() {}));
+			pushNewScreenWithRouteSettings(
+				context,
+				settings: RouteSettings(name: "/order", arguments: DBServiceUser.userF.inOrder),
+				screen: OrderScreen(),
+				withNavBar: true,
+				pageTransitionAnimation: PageTransitionAnimation.slideUp,
+			).then((value) => setState(() {}));
+			//Navigator.pushNamed(context, "/order",arguments: DBServiceUser.userF.inOrder).then((value) => setState(() {}));
 		}
 	}
 
@@ -177,6 +192,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 							child: HomeScreen(),
 						),
 						MapSample(),
+						Provider.value(value: _controller, child: OrderScreen()),
 						Top(),
 						Profile()
 					],
@@ -190,6 +206,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 						PersistentBottomNavBarItem(
 							icon: Icon(FontAwesomeIcons.mapMarkedAlt, size: ScreenUtil().setSp(22),),
 							title: ("Map"),
+							activeColor: selectedItemColor,
+							inactiveColor: unselectedItemColor,
+						),
+						PersistentBottomNavBarItem(
+							icon: Icon(DBServiceUser.userF.inOrder == null? Icons.camera : FontAwesomeIcons.shoppingCart, size: ScreenUtil().setSp(22)),
+							title: ("Order"),
 							activeColor: selectedItemColor,
 							inactiveColor: unselectedItemColor,
 						),
@@ -227,7 +249,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 						curve: Curves.ease,
 						duration: Duration(milliseconds: 200),
 					),
-					navBarStyle: NavBarStyle.style6,// Choose the nav bar style with this property.
+					navBarStyle: NavBarStyle.style6, // Choose the nav bar style with this property.
+					onItemSelected: (num){
+						print(num);
+					},
 			);
 			/*return Scaffold(
 						body: Stack(

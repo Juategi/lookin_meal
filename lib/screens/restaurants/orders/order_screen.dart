@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
@@ -26,10 +29,11 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   Restaurant restaurant;
-  String restaurant_id, table_id;
+  String restaurant_id, table_id, code;
   bool init = true;
   double bill = 0.0;
   final RealTimeOrders controller = RealTimeOrders();
+  PersistentTabController _controller;
 
   Future getRestaurant() async{
     List aux = await DBServiceRestaurant.dbServiceRestaurant.getRestaurantsById([restaurant_id], GeolocationService.myPos.latitude, GeolocationService.myPos.longitude);
@@ -276,10 +280,43 @@ class _OrderScreenState extends State<OrderScreen> {
     return widgets;
   }
 
+  Future<void> scanQR() async {
+    if(DBServiceUser.userF.inOrder == null){
+      try {
+        code = await FlutterBarcodeScanner.scanBarcode(
+            "#FF6E75", "Cancel", true, ScanMode.QR);
+        print(code);
+      } on PlatformException {
+        code = 'Failed to get platform version.';
+      }
+      // If the widget was removed from the tree while the asynchronous platform
+      // message was in flight, we want to discard the reply rather than calling
+      // setState to update our non-existent appearance.
+      if (!mounted) return;
+
+      if(code != "-1")
+        if(!RegExp(r'[a-zA-Z0-9]+/+[a-zA-Z0-9]').hasMatch(code))
+          setState(() {
+            _controller.jumpToTab(0);
+          });
+        else setState(() {});
+    }
+    else setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
-    String code = ModalRoute.of(context).settings.arguments;
+    _controller = Provider.of<PersistentTabController>(context);
+    if(code == null)
+      return SafeArea(child: Scaffold(
+        body: Center(
+          child: GestureDetector(
+            onTap: scanQR,
+            child: Icon(Icons.camera , size: ScreenUtil().setSp(60)),
+          ),
+        ),
+      ));
     if(init){
       restaurant_id = code.split("/").first;
       table_id = code.split("/").last;
@@ -321,157 +358,159 @@ class _OrderScreenState extends State<OrderScreen> {
                 entry.id == order.entry_id);
                 bill += entry.price * order.amount;
               });
-              return Scaffold(
-                body: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.w),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 50.h,),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              DBServiceUser.userF.inOrder = null;
-                              RealTimeOrders.sent = false;
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              width: 100.w,
-                              height: 20.h,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(30)),
-                                boxShadow: [BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 3,
-                                  offset: Offset(0, 3),
-                                ),
-                                ],),
-                              child: Center(child: Text("Exit", maxLines: 1,
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.niramit(
-                                    textStyle: TextStyle(color: Colors.black,
-                                      letterSpacing: .3,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: ScreenUtil().setSp(12),),))),
+              return SafeArea(
+                child: Scaffold(
+                  body: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                    child: Column(
+                      children: [
+                        SizedBox(height: 50.h,),
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                DBServiceUser.userF.inOrder = null;
+                                RealTimeOrders.sent = false;
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                width: 100.w,
+                                height: 20.h,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(30)),
+                                  boxShadow: [BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    spreadRadius: 2,
+                                    blurRadius: 3,
+                                    offset: Offset(0, 3),
+                                  ),
+                                  ],),
+                                child: Center(child: Text("Exit", maxLines: 1,
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.niramit(
+                                      textStyle: TextStyle(color: Colors.black,
+                                        letterSpacing: .3,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: ScreenUtil().setSp(12),),))),
+                              ),
                             ),
+                            SizedBox(width: 40.w,),
+                            Text("Total cost: ", maxLines: 1,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.niramit(textStyle: TextStyle(
+                                  color: Colors.black,
+                                  letterSpacing: .3,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ScreenUtil().setSp(20),),)),
+                            SizedBox(width: 10.w,),
+                            Container(
+                              width: 90.w,
+                              height: 30.h,
+                              decoration: BoxDecoration(
+                                  color: Color.fromRGBO(255, 110, 117, 0.9),
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(12))
+                              ),
+                              child: Align(alignment: Alignment.center,
+                                  child: Text("${bill} ${restaurant.currency}",
+                                      maxLines: 1,
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.niramit(
+                                        textStyle: TextStyle(color: Colors.white,
+                                          letterSpacing: .3,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: ScreenUtil().setSp(18),),))),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          height: 550.h,
+                          child: ListView(
+                              children: _loadOrder()
                           ),
-                          SizedBox(width: 40.w,),
-                          Text("Total cost: ", maxLines: 1,
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.niramit(textStyle: TextStyle(
-                                color: Colors.black,
-                                letterSpacing: .3,
-                                fontWeight: FontWeight.bold,
-                                fontSize: ScreenUtil().setSp(20),),)),
-                          SizedBox(width: 10.w,),
-                          Container(
-                            width: 90.w,
-                            height: 30.h,
+                        ),
+                        //SizedBox(height: 10.h,),
+                        GestureDetector(
+                          onTap: () async {
+                            if(!(RealTimeOrders.items.where((element) => !element.send).length == 0))
+                              if (await Alerts.confirmation("If you send the order you won't be able to change it back, are you sure?", context)) {
+                                setState(() {
+                                  RealTimeOrders.items.where((element) =>
+                                  !element.send).forEach((order) {
+                                    /*bool found = false;
+                            RealTimeOrders.items.where((element) => element.send).forEach((o) {
+                              if(o.entry_id == order.entry_id){
+                                found = true;
+                                o.amount += order.amount;
+                                o.note = o.note + " / " + order.note;
+                                controller.updateOrderData(restaurant_id, table_id, o);
+                                controller.deleteOrderData(restaurant_id, table_id, order);
+                              }
+                            });*/
+                                    if (true) {
+                                      order.send = true;
+                                      controller.updateOrderData(
+                                          restaurant_id, table_id, order);
+                                    }
+                                  });
+                                });
+                                for(Owner owner in await DBServiceUser.dbServiceUser.getOwners(restaurant.restaurant_id)){
+                                  PushNotificationService.sendNotification("Order sent", "On restaurant: ${restaurant.name}", restaurant.restaurant_id, "order", owner.token);
+                                }
+                              }
+                          },
+                          child: Container(
+                            height: 50.h,
+                            width: 200.w,
                             decoration: BoxDecoration(
                                 color: Color.fromRGBO(255, 110, 117, 0.9),
                                 borderRadius: BorderRadius.all(
                                     Radius.circular(12))
                             ),
-                            child: Align(alignment: Alignment.center,
-                                child: Text("${bill} ${restaurant.currency}",
-                                    maxLines: 1,
-                                    textAlign: TextAlign.center,
-                                    style: GoogleFonts.niramit(
-                                      textStyle: TextStyle(color: Colors.white,
-                                        letterSpacing: .3,
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: ScreenUtil().setSp(18),),))),
+                            child: Center(child: Text("Send order", maxLines: 1,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.niramit(
+                                  textStyle: TextStyle(color: Colors.white,
+                                    letterSpacing: .3,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: ScreenUtil().setSp(22),),))),
                           ),
-                        ],
-                      ),
-                      Container(
-                        height: 550.h,
-                        child: ListView(
-                            children: _loadOrder()
                         ),
-                      ),
-                      //SizedBox(height: 10.h,),
-                      GestureDetector(
-                        onTap: () async {
-                          if(!(RealTimeOrders.items.where((element) => !element.send).length == 0))
-                            if (await Alerts.confirmation("If you send the order you won't be able to change it back, are you sure?", context)) {
-                              setState(() {
-                                RealTimeOrders.items.where((element) =>
-                                !element.send).forEach((order) {
-                                  /*bool found = false;
-                          RealTimeOrders.items.where((element) => element.send).forEach((o) {
-                            if(o.entry_id == order.entry_id){
-                              found = true;
-                              o.amount += order.amount;
-                              o.note = o.note + " / " + order.note;
-                              controller.updateOrderData(restaurant_id, table_id, o);
-                              controller.deleteOrderData(restaurant_id, table_id, order);
-                            }
-                          });*/
-                                  if (true) {
-                                    order.send = true;
-                                    controller.updateOrderData(
-                                        restaurant_id, table_id, order);
-                                  }
-                                });
-                              });
-                              for(Owner owner in await DBServiceUser.dbServiceUser.getOwners(restaurant.restaurant_id)){
-                                PushNotificationService.sendNotification("Order sent", "On restaurant: ${restaurant.name}", restaurant.restaurant_id, "order", owner.token);
-                              }
-                            }
-                        },
-                        child: Container(
-                          height: 50.h,
-                          width: 200.w,
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(255, 110, 117, 0.9),
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(12))
+                        SizedBox(height: 20.h,),
+                        GestureDetector(
+                          onTap: () {
+                            pushNewScreenWithRouteSettings(
+                              context,
+                              settings: RouteSettings(name: "/addorder", arguments: restaurant),
+                              screen: AddMoreOrder(),
+                              withNavBar: true,
+                              pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                            );
+                            //Navigator.pushNamed(context, "/addorder", arguments: restaurant);
+                          },
+                          child: Container(
+                            height: 50.h,
+                            width: 200.w,
+                            decoration: BoxDecoration(
+                                color: Colors.white54,
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(12)),
+                                border: Border.all(
+                                  color: Color.fromRGBO(255, 110, 117, 0.9),)
+                            ),
+                            child: Center(child: Text("Add more", maxLines: 1,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.niramit(
+                                  textStyle: TextStyle(color: Colors.black,
+                                    letterSpacing: .3,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: ScreenUtil().setSp(22),),))),
                           ),
-                          child: Center(child: Text("Send order", maxLines: 1,
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.niramit(
-                                textStyle: TextStyle(color: Colors.white,
-                                  letterSpacing: .3,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: ScreenUtil().setSp(22),),))),
                         ),
-                      ),
-                      SizedBox(height: 20.h,),
-                      GestureDetector(
-                        onTap: () {
-                          pushNewScreenWithRouteSettings(
-                            context,
-                            settings: RouteSettings(name: "/addorder", arguments: restaurant),
-                            screen: AddMoreOrder(),
-                            withNavBar: true,
-                            pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                          );
-                          //Navigator.pushNamed(context, "/addorder", arguments: restaurant);
-                        },
-                        child: Container(
-                          height: 50.h,
-                          width: 200.w,
-                          decoration: BoxDecoration(
-                              color: Colors.white54,
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(12)),
-                              border: Border.all(
-                                color: Color.fromRGBO(255, 110, 117, 0.9),)
-                          ),
-                          child: Center(child: Text("Add more", maxLines: 1,
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.niramit(
-                                textStyle: TextStyle(color: Colors.black,
-                                  letterSpacing: .3,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: ScreenUtil().setSp(22),),))),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );
