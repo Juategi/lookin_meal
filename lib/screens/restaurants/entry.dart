@@ -224,7 +224,7 @@ class _EntryRatingState extends State<EntryRating> {
                                           image: Image.asset("assets/allergens/cacahuetes.png").image))
                               ),
                               onTap: (){
-                                showModalBottomSheet(context: context,  builder: (BuildContext bc){
+                                showModalBottomSheet(context: context, isScrollControlled: true,  builder: (BuildContext bc){
                                   return Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 40.h),
                                     child: Column(
@@ -233,7 +233,7 @@ class _EntryRatingState extends State<EntryRating> {
                                         SizedBox(height: 10.h,),
                                         Center(
                                           child: Container(
-                                            height: 320.h,
+                                            height: 450.h,
                                             //width: 300.w,
                                             child: Wrap(
                                               direction: Axis.vertical,

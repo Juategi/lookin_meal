@@ -71,7 +71,7 @@ class _MenuState extends State<Menu> {
     order = Provider.of<bool>(context);
     if(init){
       for(String section in restaurant.sections){
-        expanded[section] = true;
+        expanded[section] = false;
       }
       init = false;
     }

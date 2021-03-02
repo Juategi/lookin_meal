@@ -27,7 +27,7 @@ class _SignInState extends State<SignIn> {
     super.initState();
 		error = " ";
 		username = "";
-		country = "";
+		country = "ES";
 		name = "";
 		loading = false;
 
