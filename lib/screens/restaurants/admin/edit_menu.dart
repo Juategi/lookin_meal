@@ -9,11 +9,13 @@ import 'package:lookinmeal/database/entryDB.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/screens/restaurants/admin/edit_order.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/strings.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 
 class EditMenu extends StatefulWidget {
@@ -778,7 +780,14 @@ class _EditMenuState extends State<EditMenu> {
                     color: Color.fromRGBO(255, 110, 117, 0.9),
                     child: Text("Editar orden", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
                     onPressed: () async{
-                    dynamic result = await Navigator.pushNamed(context, "/editorder",arguments:[sections,menu]);
+                      dynamic result = await pushNewScreenWithRouteSettings(
+                        context,
+                        settings: RouteSettings(name: "/editorder", arguments: [sections,menu]),
+                        screen: EditOrder(),
+                        withNavBar: true,
+                        pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                      );
+                    //dynamic result = await Navigator.pushNamed(context, "/editorder",arguments:[sections,menu]);
                     if(result != null){
                       result = List.from(result);
                       sections = result.first;

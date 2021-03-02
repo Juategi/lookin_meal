@@ -11,6 +11,7 @@ import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 
 class ManageOrders extends StatefulWidget {
@@ -57,7 +58,14 @@ class _ManageOrdersState extends State<ManageOrders> {
                                   });
                                   return GestureDetector(
                                     onTap: (){
-                                      Navigator.pushNamed(context, "/detailorder", arguments: [restaurant, code.code_id]);
+                                      pushNewScreenWithRouteSettings(
+                                        context,
+                                        settings: RouteSettings(name: "/detailorder", arguments: [restaurant, code.code_id]),
+                                        screen: OrderDetail(),
+                                        withNavBar: true,
+                                        pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                                      );
+                                      //Navigator.pushNamed(context, "/detailorder", arguments: [restaurant, code.code_id]);
                                     },
                                     child: Padding(
                                       padding: EdgeInsets.symmetric(vertical: 5.h),

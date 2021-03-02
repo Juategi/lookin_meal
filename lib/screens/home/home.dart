@@ -19,6 +19,7 @@ import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:lookinmeal/screens/map/map.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 
 
@@ -37,12 +38,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	List<Restaurant> nearRestaurants;
 	Map<MenuEntry,Restaurant> popular;
 	List<double> distances = List<double>();
-	static int selectedIndex = 0;
 	bool ready = false;
+	Color selectedItemColor = Color.fromRGBO(255, 110, 117, 0.61);
+	Color unselectedItemColor = Color.fromRGBO(130, 130, 130, 1);
+	PersistentTabController _controller = PersistentTabController(initialIndex: 0);
 
 	void onItemTapped(int index) {
 		setState(()  {
-			selectedIndex = index;
+			CommonData.selectedIndex = index;
 		});
 	}
 
@@ -91,7 +94,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 					Navigator.pushNamed(context, "/order",arguments: barcodeScanRes).then((value) => setState(() {}));
 				else
 					setState(() {
-						selectedIndex = 0;
+						CommonData.selectedIndex = 0;
 					});
 		}
 		else{
@@ -126,7 +129,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 					title: Text(tr.translate("profile")),
 				),
 			],
-			currentIndex: selectedIndex,
+			currentIndex: CommonData.selectedIndex,
 			selectedItemColor: Color.fromRGBO(255, 110, 117, 0.61),
 			unselectedItemColor: Color.fromRGBO(130, 130, 130, 1),
 			onTap: onItemTapped,
@@ -135,11 +138,11 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
 	@override
 	Future<bool> didPopRoute() async {
-		if(selectedIndex == 0)
+		if(CommonData.selectedIndex == 0)
 			return false;
 		else {
 			setState(() {
-				selectedIndex = 0;
+				CommonData.selectedIndex = 0;
 			});
 			return Future<bool>.value(true);
 		}
@@ -159,17 +162,78 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	  AppLocalizations tr = AppLocalizations.of(context);
 		PushNotificationService.initialise(context);
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
-		print(user);
-		print(ready);
-		print(myPos);
 	  if(ready && user != null) {
-			return Scaffold(
+			return PersistentTabView(
+					context,
+					controller: _controller,
+					screens: [
+						MultiProvider(
+							providers: [
+								Provider<Map<MenuEntry, Restaurant>>(create: (c) => popular,),
+								Provider<List<Restaurant>>(create: (c) => nearRestaurants,)
+							],
+							child: HomeScreen(),
+						),
+						MapSample(),
+						Top(),
+						Profile()
+					],
+					items: [
+						PersistentBottomNavBarItem(
+							icon: Icon(FontAwesomeIcons.compass, size: ScreenUtil().setSp(22), ),
+							title: ("Home"),
+							activeColor: selectedItemColor,
+							inactiveColor: unselectedItemColor,
+						),
+						PersistentBottomNavBarItem(
+							icon: Icon(FontAwesomeIcons.mapMarkedAlt, size: ScreenUtil().setSp(22),),
+							title: ("Map"),
+							activeColor: selectedItemColor,
+							inactiveColor: unselectedItemColor,
+						),
+						PersistentBottomNavBarItem(
+							icon: Icon(Icons.star, size: ScreenUtil().setSp(25),),
+							title: ("Top"),
+							activeColor: selectedItemColor,
+							inactiveColor: unselectedItemColor,
+						),
+						PersistentBottomNavBarItem(
+							icon: Icon(Icons.person, size: ScreenUtil().setSp(25),),
+							title: ("Profile"),
+							activeColor: selectedItemColor,
+							inactiveColor: unselectedItemColor,
+						),
+					],
+					confineInSafeArea: true,
+					backgroundColor: Colors.white,
+					handleAndroidBackButtonPress: true,
+					resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen when keyboard appears.
+					stateManagement: true,
+					hideNavigationBarWhenKeyboardShows: true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument.
+					decoration: NavBarDecoration(
+						borderRadius: BorderRadius.circular(10.0),
+						colorBehindNavBar: Colors.white,
+					),
+					popAllScreensOnTapOfSelectedTab: true,
+					popActionScreens: PopActionScreensType.all,
+					itemAnimationProperties: ItemAnimationProperties( // Navigation Bar's items animation properties.
+						duration: Duration(milliseconds: 200),
+						curve: Curves.ease,
+					),
+					screenTransitionAnimation: ScreenTransitionAnimation( // Screen transition animation on change of selected tab.
+						animateTabTransition: true,
+						curve: Curves.ease,
+						duration: Duration(milliseconds: 200),
+					),
+					navBarStyle: NavBarStyle.style6,// Choose the nav bar style with this property.
+			);
+			/*return Scaffold(
 						body: Stack(
 							children: <Widget>[
 								Offstage(
-									offstage: selectedIndex != 0,
+									offstage: CommonData.selectedIndex != 0,
 									child: TickerMode(
-										enabled: selectedIndex == 0,
+										enabled: CommonData.selectedIndex == 0,
 										child: MultiProvider(
 											providers: [
 												Provider<Map<MenuEntry, Restaurant>>(create: (c) => popular,),
@@ -180,9 +244,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 									),
 								),
 								Offstage(
-									offstage: selectedIndex != 1,
+									offstage: CommonData.selectedIndex != 1,
 									child: TickerMode(
-										enabled: selectedIndex == 1,
+										enabled: CommonData.selectedIndex == 1,
 											child: MapSample()
 									),
 								),
@@ -194,16 +258,16 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 									),
 								),*/
 								Offstage(
-									offstage: selectedIndex != 3,
+									offstage: CommonData.selectedIndex != 3,
 									child: TickerMode(
-											enabled: selectedIndex == 3,
+											enabled: CommonData.selectedIndex == 3,
 											child: Top()
 									),
 								),
 								Offstage(
-									offstage: selectedIndex != 4,
+									offstage: CommonData.selectedIndex != 4,
 									child: TickerMode(
-										enabled: selectedIndex == 4,
+										enabled: CommonData.selectedIndex == 4,
 											child: Profile()
 									),
 								),
@@ -211,9 +275,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 							],
 						),
 						bottomNavigationBar: getBar()
-					);
-		}
-	  else
-	  	return Loading();
+					);*/
+
+		} else return Loading();
   }
 }

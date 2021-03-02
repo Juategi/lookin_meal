@@ -8,6 +8,7 @@ import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
+import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'package:lookinmeal/screens/search/searchTiles.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/geolocation.dart';
@@ -15,6 +16,7 @@ import 'package:lookinmeal/services/search.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:lookinmeal/shared/widgets.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
@@ -110,7 +112,14 @@ class _SearchState extends State<Search> {
                 GestureDetector(
                       onTap:(){
                         print(restaurant.types);
-                        Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
+                        pushNewScreenWithRouteSettings(
+                          context,
+                          settings: RouteSettings(name: "/restaurant", arguments: restaurant),
+                          screen: ProfileRestaurant(),
+                          withNavBar: true,
+                          pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                        ).then((value) => setState(() {}));
+                        //Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
                       },
                     child: Text(restaurant.name, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))
                 ),

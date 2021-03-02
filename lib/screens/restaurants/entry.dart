@@ -11,11 +11,15 @@ import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/order.dart';
 import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/screens/profile/favorites.dart';
+import 'package:lookinmeal/screens/restaurants/comments.dart';
 import 'package:lookinmeal/screens/restaurants/orders/order_screen.dart';
+import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/realtime_orders.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:lookinmeal/shared/decos.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
@@ -134,7 +138,14 @@ class _EntryRatingState extends State<EntryRating> {
                           order ? Container() : GestureDetector(
                             onTap:(){
                               DBServiceRestaurant.dbServiceRestaurant.updateRecently(restaurant);
-                              Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
+                              pushNewScreenWithRouteSettings(
+                                context,
+                                settings: RouteSettings(name: "/restaurant", arguments: restaurant),
+                                screen: ProfileRestaurant(),
+                                withNavBar: true,
+                                pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                              ).then((value) => setState(() {}));
+                              //Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
                             },
                             child: Container(
                                 height: 45.h,
@@ -151,7 +162,14 @@ class _EntryRatingState extends State<EntryRating> {
                             ),
                             onChanged: (list)async{
                               if(list.id == null){
-                                await Navigator.pushNamed(context, "/createlist", arguments: 'E');
+                                await pushNewScreenWithRouteSettings(
+                                  context,
+                                  settings: RouteSettings(name: "/createlist", arguments: 'E'),
+                                  screen: CreateList(),
+                                  withNavBar: true,
+                                  pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                                );
+                                //await Navigator.pushNamed(context, "/createlist", arguments: 'E');
                               }
                               else{
                                 if(!list.items.contains(entry.id)){
@@ -368,7 +386,14 @@ class _EntryRatingState extends State<EntryRating> {
               SizedBox(height: 5.h,),
               GestureDetector(
                 onTap: (){
-                  Navigator.pushNamed(context, "/comments", arguments: entry);
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings(name: "/comments", arguments: entry),
+                    screen: Comments(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                  );
+                  //Navigator.pushNamed(context, "/comments", arguments: entry);
                 },
                 child: Container(
                   child: Row( mainAxisAlignment: MainAxisAlignment.center,

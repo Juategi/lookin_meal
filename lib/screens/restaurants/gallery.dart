@@ -1,5 +1,6 @@
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:flutter/material.dart';
@@ -40,13 +41,23 @@ class _GalleryState extends State<Gallery> {
                   ),
                 ),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+                  pushNewScreen(
+                    context,
+                    screen: Container(
+                        child: PhotoView(
+                          imageProvider: NetworkImage(image),
+                        )
+                    ),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                  /*Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
                     return Container(
                         child: PhotoView(
                           imageProvider: NetworkImage(image),
                         )
                     );
-                  }));
+                  }));*/
                 }
               ),).toList(),
         ),

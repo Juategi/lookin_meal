@@ -37,7 +37,10 @@ class _EditOrderState extends State<EditOrder> {
                 numReviews: entry.numReviews,
                 section: entry.section,
                 image: entry.image,
-                pos: entry.pos
+                pos: entry.pos,
+                allergens: entry.allergens,
+                description: entry.description,
+                hide: entry.hide
             ));
           }
         }

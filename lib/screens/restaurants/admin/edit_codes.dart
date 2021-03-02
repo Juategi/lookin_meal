@@ -14,6 +14,7 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/decos.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -171,7 +172,14 @@ class _EditCodesState extends State<EditCodes> {
             ),
             GestureDetector(
               onTap: () async{
-                Navigator.pushNamed(context, "/newcode",arguments: restaurant).then((value) => setState(() {}));
+                pushNewScreenWithRouteSettings(
+                  context,
+                  settings: RouteSettings(name: "/ewcode", arguments: restaurant),
+                  screen: NewQRCode(),
+                  withNavBar: true,
+                  pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                ).then((value) => setState(() {}));
+                //Navigator.pushNamed(context, "/newcode",arguments: restaurant).then((value) => setState(() {}));
               },
               child: Container(
                 height: 100.h,

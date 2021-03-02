@@ -16,6 +16,7 @@ import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:lookinmeal/shared/widgets.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -442,8 +443,14 @@ class _OrderScreenState extends State<OrderScreen> {
                       SizedBox(height: 20.h,),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(
-                              context, "/addorder", arguments: restaurant);
+                          pushNewScreenWithRouteSettings(
+                            context,
+                            settings: RouteSettings(name: "/addorder", arguments: restaurant),
+                            screen: AddMoreOrder(),
+                            withNavBar: true,
+                            pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                          );
+                          //Navigator.pushNamed(context, "/addorder", arguments: restaurant);
                         },
                         child: Container(
                           height: 50.h,

@@ -5,10 +5,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/entry.dart';
+import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/widgets.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class SearchRestaurantTile extends StatefulWidget {
@@ -44,7 +46,14 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return GestureDetector(
       onTap: (){
-        Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
+        pushNewScreenWithRouteSettings(
+          context,
+          settings: RouteSettings(name: "/restaurant", arguments: restaurant),
+          screen: ProfileRestaurant(),
+          withNavBar: true,
+          pageTransitionAnimation: PageTransitionAnimation.slideUp,
+        ).then((value) => setState(() {}));
+        //Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
       },
       child: Container(
         width: 390.w,

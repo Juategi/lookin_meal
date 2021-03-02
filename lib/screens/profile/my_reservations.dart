@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/entryDB.dart';
 import 'package:lookinmeal/database/reservationDB.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/screens/home/home.dart';
 import 'package:lookinmeal/screens/profile/ratings_tile.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -46,6 +49,7 @@ class _UserReservationsState extends State<UserReservations> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     return SafeArea(
       child: Scaffold(
         body: Column(

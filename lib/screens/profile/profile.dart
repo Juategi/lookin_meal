@@ -10,11 +10,16 @@ import 'package:lookinmeal/models/order.dart';
 import 'package:lookinmeal/models/reservation.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/screens/profile/edit_profile.dart';
+import 'package:lookinmeal/screens/profile/favorites.dart';
+import 'package:lookinmeal/screens/profile/my_reservations.dart';
+import 'package:lookinmeal/screens/profile/rating_history.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lookinmeal/services/realtime_orders.dart';
 import 'package:lookinmeal/shared/strings.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -96,7 +101,14 @@ class _ProfileState extends State<Profile> {
             child: Column(children: [
               GestureDetector(
                 onTap:(){
-                  Navigator.pushNamed(context, "/editprofile");
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings(name: "/editprofile"),
+                    screen: EditProfile(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                  //Navigator.pushNamed(context, "/editprofile");
                 },
                 child: Container(
                   width: 365.w,
@@ -115,7 +127,14 @@ class _ProfileState extends State<Profile> {
               Divider(thickness: 2,),
               GestureDetector(
                 onTap:(){
-                  Navigator.pushNamed(context, "/ratinghistory");
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings(name: "/ratinghistory"),
+                    screen: RatingHistory(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                  //Navigator.pushNamed(context, "/ratinghistory");
                 },
                 child: Container(
                   width: 365.w,
@@ -134,7 +153,14 @@ class _ProfileState extends State<Profile> {
               Divider(thickness: 2,),
               GestureDetector(
                 onTap:(){
-                  Navigator.pushNamed(context, "/favs");
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings(name: "/favs"),
+                    screen: Favorites(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                  //Navigator.pushNamed(context, "/favs");
                 },
                 child: Container(
                   width: 365.w,
@@ -153,7 +179,14 @@ class _ProfileState extends State<Profile> {
               Divider(thickness: 2,),
               GestureDetector(
                 onTap:(){
-                  Navigator.pushNamed(context, "/userreservations");
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings(name: "/userreservations"),
+                    screen: UserReservations(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                  //Navigator.pushNamed(context, "/userreservations");
                 },
                 child: Container(
                   width: 365.w,

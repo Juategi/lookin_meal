@@ -8,6 +8,7 @@ import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/entry.dart';
+import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/restaurant_tile.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/geolocation.dart';
@@ -19,6 +20,7 @@ import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:lookinmeal/shared/strings.dart';
 import 'package:lookinmeal/shared/widgets.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class Favorites extends StatefulWidget {
@@ -45,7 +47,14 @@ class _FavoritesState extends State<Favorites> {
             SizedBox(height: 170.h,),
             GestureDetector(
               onTap: (){
-                Navigator.pushNamed(context, "/favslists", arguments: 'R');
+                pushNewScreenWithRouteSettings(
+                  context,
+                  settings: RouteSettings(name: "/favslists", arguments: 'R'),
+                  screen: FavoriteLists(),
+                  withNavBar: true,
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                );
+                //Navigator.pushNamed(context, "/favslists", arguments: 'R');
               },
               child: Container(
                   height: 113,
@@ -69,7 +78,14 @@ class _FavoritesState extends State<Favorites> {
             SizedBox(height: 100.h,),
             GestureDetector(
               onTap: (){
-                Navigator.pushNamed(context, "/favslists", arguments: 'E');
+                pushNewScreenWithRouteSettings(
+                  context,
+                  settings: RouteSettings(name: "/favslists", arguments: 'E'),
+                  screen: FavoriteLists(),
+                  withNavBar: true,
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                );
+                //Navigator.pushNamed(context, "/favslists", arguments: 'E');
               },
               child: Container(
                   height: 113,
@@ -111,7 +127,14 @@ class _FavoriteListsState extends State<FavoriteLists> {
       padding: EdgeInsets.symmetric(vertical: 15.h),
       child: GestureDetector(
         onTap: (){
-          Navigator.pushNamed(context, "/displaylist", arguments: type + list.id);
+          pushNewScreenWithRouteSettings(
+            context,
+            settings: RouteSettings(name: "/displaylist", arguments: type + list.id),
+            screen: ListDisplay(),
+            withNavBar: true,
+            pageTransitionAnimation: PageTransitionAnimation.cupertino,
+          );
+          //Navigator.pushNamed(context, "/displaylist", arguments: type + list.id);
         },
         child: Container(
           height: 113.h,
@@ -172,9 +195,14 @@ class _FavoriteListsState extends State<FavoriteLists> {
         padding: EdgeInsets.symmetric(vertical: 15.h),
         child: GestureDetector(
           onTap: ()async{
-           await Navigator.pushNamed(context, "/createlist", arguments: type);
-           setState(() {
-           });
+            pushNewScreenWithRouteSettings(
+              context,
+              settings: RouteSettings(name: "/createlist", arguments: type),
+              screen: CreateList(),
+              withNavBar: true,
+              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+            ).then((value) => setState(() {}));
+           //await Navigator.pushNamed(context, "/createlist", arguments: type);setState(() {});
           },
           child: Container(
             height: 100.h,
@@ -414,7 +442,14 @@ class _ListDisplayState extends State<ListDisplay> {
                         child: GestureDetector(
                           onTap: (){
                             DBServiceRestaurant.dbServiceRestaurant.updateRecently(restaurant);
-                            Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
+                            pushNewScreenWithRouteSettings(
+                              context,
+                              settings: RouteSettings(name: "/restaurant", arguments: restaurant),
+                              screen: ProfileRestaurant(),
+                              withNavBar: true,
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            ).then((value) => setState(() {}));
+                            //Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
                           },
                           child: Container(
                             width: 300.w,

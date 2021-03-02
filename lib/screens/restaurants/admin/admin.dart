@@ -4,7 +4,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/screens/restaurants/admin/edit_codes.dart';
+import 'package:lookinmeal/screens/restaurants/admin/edit_daily.dart';
+import 'package:lookinmeal/screens/restaurants/admin/edit_menu.dart';
+import 'package:lookinmeal/screens/restaurants/admin/edit_restaurant.dart';
+import 'package:lookinmeal/screens/restaurants/admin/edit_tables.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import 'edit_images.dart';
 
@@ -41,7 +47,14 @@ class _AdminPageState extends State<AdminPage> {
                   ],
                 ),
                 onTap: ()async{
-                  Navigator.pushNamed(context, "/editrestaurant",arguments: restaurant).then((value) => setState(() {}));
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings(name: "/editrestaurant", arguments: restaurant),
+                    screen: EditRestaurant(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                  ).then((value) => setState(() {}));
+                  //Navigator.pushNamed(context, "/editrestaurant",arguments: restaurant).then((value) => setState(() {}));
                 },
               ),
               SizedBox(height: 50.h,),
@@ -58,7 +71,14 @@ class _AdminPageState extends State<AdminPage> {
                   ],
                 ),
                 onTap: ()async{
-                  Navigator.pushNamed(context, "/editmenu",arguments: restaurant).then((value) => setState(() {}));
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings(name: "/editmenu", arguments: restaurant),
+                    screen: EditMenu(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                  ).then((value) => setState(() {}));
+                  //Navigator.pushNamed(context, "/editmenu",arguments: restaurant).then((value) => setState(() {}));
                 },
               ),
               SizedBox(height: 50.h,),
@@ -75,7 +95,14 @@ class _AdminPageState extends State<AdminPage> {
                   ],
                 ),
                 onTap: ()async{
-                  Navigator.pushNamed(context, "/editdaily",arguments: restaurant).then((value) => setState(() {}));
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings(name: "/editdaily", arguments: restaurant),
+                    screen: EditDaily(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                  ).then((value) => setState(() {}));
+                  //Navigator.pushNamed(context, "/editdaily",arguments: restaurant).then((value) => setState(() {}));
                 },
               ),
               SizedBox(height: 50.h,),
@@ -103,7 +130,14 @@ class _AdminPageState extends State<AdminPage> {
                   ],
                 ),
                 onTap:()async{
-                  Navigator.pushNamed(context, "/edittables",arguments: restaurant).then((value) => setState(() {}));
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings(name: "/edittables", arguments: restaurant),
+                    screen: EditTables(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                  ).then((value) => setState(() {}));
+                  //Navigator.pushNamed(context, "/edittables",arguments: restaurant).then((value) => setState(() {}));
                 },
               ),
               SizedBox(height: 50.h,),
@@ -116,7 +150,14 @@ class _AdminPageState extends State<AdminPage> {
                   ],
                 ),
                 onTap:()async{
-                  Navigator.pushNamed(context, "/editcodes",arguments: restaurant).then((value) => setState(() {}));
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings(name: "/editcodes", arguments: restaurant),
+                    screen: EditCodes(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                  ).then((value) => setState(() {}));
+                  //Navigator.pushNamed(context, "/editcodes",arguments: restaurant).then((value) => setState(() {}));
                 },
               ),
             ],

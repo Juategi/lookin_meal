@@ -10,14 +10,22 @@ import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/translate.dart';
+import 'package:lookinmeal/screens/profile/favorites.dart';
+import 'package:lookinmeal/screens/restaurants/admin/admin.dart';
+import 'package:lookinmeal/screens/restaurants/admin/manage_orders.dart';
 import 'package:lookinmeal/screens/restaurants/daily.dart';
+import 'package:lookinmeal/screens/restaurants/gallery.dart';
+import 'package:lookinmeal/screens/restaurants/info.dart';
 import 'package:lookinmeal/screens/restaurants/menu.dart';
+import 'package:lookinmeal/screens/restaurants/reservations.dart';
+import 'package:lookinmeal/screens/restaurants/reserve_table.dart';
 import 'package:lookinmeal/screens/restaurants/top_dishes_tile.dart';
 import 'package:lookinmeal/services/translator.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/widgets.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class ProfileRestaurant extends StatefulWidget {
@@ -242,7 +250,14 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 											items: _loadItems(),
 											onChanged: (list)async{
 												if(list.id == null){
-													await Navigator.pushNamed(context, "/createlist", arguments: 'R');
+													await pushNewScreenWithRouteSettings(
+														context,
+														settings: RouteSettings(name: "/createlist", arguments: 'R'),
+														screen: CreateList(),
+														withNavBar: true,
+														pageTransitionAnimation: PageTransitionAnimation.slideUp,
+													);
+													//await Navigator.pushNamed(context, "/createlist", arguments: 'R');
 												}
 												else{
 													if(!list.items.contains(restaurant.restaurant_id)){
@@ -268,7 +283,15 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 								],
 							),
 						),
-						onTap: () => Navigator.pushNamed(context, "/gallery", arguments: restaurant),
+						onTap: () =>
+								pushNewScreenWithRouteSettings(
+									context,
+									settings: RouteSettings(name: "/gallery", arguments: restaurant),
+									screen: Gallery(),
+									withNavBar: true,
+									pageTransitionAnimation: PageTransitionAnimation.slideUp,
+								),
+								//Navigator.pushNamed(context, "/gallery", arguments: restaurant),
         		),
 					Container(
 						height: 105.h,
@@ -292,7 +315,14 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 						  				),
 						  				onTap: ()async{
 						  					backToOriginal();
-						  					Navigator.pushNamed(context, "/reservations", arguments: restaurant);
+												pushNewScreenWithRouteSettings(
+													context,
+													settings: RouteSettings(name: "/reservations", arguments: restaurant),
+													screen: ReservationsChecker(),
+													withNavBar: true,
+													pageTransitionAnimation: PageTransitionAnimation.slideUp,
+												);
+						  					//Navigator.pushNamed(context, "/reservations", arguments: restaurant);
 						  				},
 						  			),
 						  		),
@@ -311,7 +341,14 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 												],
 						  				),
 						  				onTap: ()async{
-						  					Navigator.pushNamed(context, "/manageorder", arguments: restaurant);
+												pushNewScreenWithRouteSettings(
+													context,
+													settings: RouteSettings(name: "/manageorder", arguments: restaurant),
+													screen: ManageOrders(),
+													withNavBar: true,
+													pageTransitionAnimation: PageTransitionAnimation.slideUp,
+												);
+						  					//Navigator.pushNamed(context, "/manageorder", arguments: restaurant);
 						  				},
 						  			),
 						  		),
@@ -329,7 +366,14 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 											),
 											onTap: ()async{
 												backToOriginal();
-												Navigator.pushNamed(context, "/admin", arguments: restaurant);
+												pushNewScreenWithRouteSettings(
+													context,
+													settings: RouteSettings(name: "/admin", arguments: restaurant),
+													screen: AdminPage(),
+													withNavBar: true,
+													pageTransitionAnimation: PageTransitionAnimation.slideUp,
+												);
+												//Navigator.pushNamed(context, "/admin", arguments: restaurant);
 											},
 										),
 									),
@@ -382,7 +426,14 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 										),
 										GestureDetector(
 											onTap: (){
-													Navigator.pushNamed(context, "/tablereservations", arguments: restaurant);
+												pushNewScreenWithRouteSettings(
+													context,
+													settings: RouteSettings(name: "/tablereservations", arguments: restaurant),
+													screen: TableReservation(),
+													withNavBar: true,
+													pageTransitionAnimation: PageTransitionAnimation.slideUp,
+												);
+													//Navigator.pushNamed(context, "/tablereservations", arguments: restaurant);
 											},
 										  child: Row(
 										  	children: <Widget>[
@@ -416,7 +467,14 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 										  		],
 										  	),
 										  ),
-											onTap: () => Navigator.pushNamed(context, "/info", arguments: restaurant),
+											onTap: () =>	pushNewScreenWithRouteSettings(
+													context,
+													settings: RouteSettings(name: "/info", arguments: restaurant),
+													screen: RestaurantInfo(),
+													withNavBar: true,
+													pageTransitionAnimation: PageTransitionAnimation.slideUp,
+												)
+													//Navigator.pushNamed(context, "/info", arguments: restaurant),
 										),
 									],
 								)

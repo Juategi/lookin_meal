@@ -71,6 +71,7 @@ dependencies:
   flutter_barcode_scanner: ^1.0.2
   firebase_messaging: ^6.0.16
   flutter_statusbarcolor: ^0.2.3
+  persistent_bottom_nav_bar: ^3.1.0
 
 dev_dependencies:
   flutter_test:

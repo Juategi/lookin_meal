@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CommonData{
+  static int selectedIndex = 0;
   static final screenHeight = 781;
   static final screenWidth = 392;
   static final maxElementsList = 100;

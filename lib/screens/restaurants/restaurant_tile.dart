@@ -7,10 +7,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/widgets.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
@@ -31,7 +33,14 @@ class _RestaurantTileState extends State<RestaurantTile> {
       child: GestureDetector(
         onTap: (){
           DBServiceRestaurant.dbServiceRestaurant.updateRecently(restaurant);
-          Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
+          pushNewScreenWithRouteSettings(
+            context,
+            settings: RouteSettings(name: "/restaurant", arguments: restaurant),
+            screen: ProfileRestaurant(),
+            withNavBar: true,
+            pageTransitionAnimation: PageTransitionAnimation.slideUp,
+          ).then((value) => setState(() {}));
+          //Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
         },
         child: Container(
           width: 240.w,

@@ -9,7 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
-import 'package:lookinmeal/database/userDB.dart';
+import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/geolocation.dart';
@@ -139,6 +140,8 @@ class MapSampleState extends State<MapSample> {
 			target: LatLng(pos.latitude,pos.longitude),
 			zoom: 16,
 		);
+		setState(() {
+		});
 	}
 
 	Future _loadMarkers() async {
@@ -202,6 +205,7 @@ class MapSampleState extends State<MapSample> {
 	@override
 	Widget build(BuildContext context){
 		user = Provider.of<User>(context);
+		_timer();
 		return _cameraPosition == null || (_markersNoCluster.length == 0 && _restaurants.length != 0) ? Loading() : Container(
 		  child: SafeArea(
 		    child: Stack(
@@ -285,7 +289,14 @@ class MapSampleState extends State<MapSample> {
 							child: GestureDetector(
 								onTap: (){
 									DBServiceRestaurant.dbServiceRestaurant.updateRecently(selected);
-									Navigator.pushNamed(context, "/restaurant",arguments: selected).then((value) => setState(() {}));
+									pushNewScreenWithRouteSettings(
+										context,
+										settings: RouteSettings(name: "/restaurant", arguments: selected),
+										screen: ProfileRestaurant(),
+										withNavBar: true,
+										pageTransitionAnimation: PageTransitionAnimation.slideUp,
+									).then((value) => setState(() {}));
+									//Navigator.pushNamed(context, "/restaurant",arguments: selected).then((value) => setState(() {}));
 								},
 							  child: Center(
 							  		child: Container(
