@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/screens/authenticate/email_pass.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/decos.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -112,6 +114,7 @@ class _SignInState extends State<SignIn> {
 												Text('This name helps users find you', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),)),
 											],
 										),
+										Text(error, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.red, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
 										SizedBox(height: 20.h,),
 										Row( mainAxisAlignment: MainAxisAlignment.start,
 											children: <Widget>[
@@ -166,6 +169,9 @@ class _SignInState extends State<SignIn> {
 												child: !loading? Center(child: Text('Next', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))) : CircularLoading(),
 											),
 											onTap: () async{
+												setState(() {
+													error = "";
+												});
 												if(_formKey.currentState.validate()) {
 													setState(() {
 														loading = true;
@@ -174,11 +180,22 @@ class _SignInState extends State<SignIn> {
 														setState(() {
 															loading = false;
 														});
-														Navigator.pushNamed(context, "/emailpass", arguments: User(
+														pushNewScreenWithRouteSettings(
+															context,
+															settings: RouteSettings(name: "/emailpass", arguments: User(
+																name: name,
+																username: username,
+																country: country,
+															)),
+															screen: EmailPassword(),
+															withNavBar: false,
+															pageTransitionAnimation: PageTransitionAnimation.cupertino,
+														);
+														/*Navigator.pushNamed(context, "/emailpass", arguments: User(
 															name: name,
 															username: username,
 															country: country,
-														));
+														));*/
 													}
 													else{
 														setState(() {
@@ -190,10 +207,6 @@ class _SignInState extends State<SignIn> {
 											},
 										),
 										SizedBox(height: 12),
-										Text(
-											error,
-											style: TextStyle(color: Colors.red, fontSize: 14),
-										),
 									]
 							),
 		          ),

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lookinmeal/screens/authenticate/log_in.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:lookinmeal/services/auth.dart';
@@ -8,6 +9,7 @@ import 'package:location_permissions/location_permissions.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class Authenticate extends StatefulWidget {
 
@@ -72,8 +74,8 @@ class _AuthenticateState extends State<Authenticate> {
 								  			right: 222.w,
 								  		  top: 0.h,
 								  		  child: Container(
-								  		  	width: 58.w,
-								  		  	height: 58.h,
+								  		  	width: 60.w,
+								  		  	height: 60.h,
 								  		  	decoration: new BoxDecoration(
 								  		  		border: Border.all(color:Colors.white),
 								  		  		color: Colors.white,
@@ -120,8 +122,8 @@ class _AuthenticateState extends State<Authenticate> {
 												right: 222.w,
 												top: 0.h,
 												child: Container(
-													width: 58.w,
-													height: 58.h,
+													width: 60.w,
+													height: 60.h,
 													decoration: new BoxDecoration(
 														border: Border.all(color:Colors.white),
 														color: Colors.white,
@@ -168,8 +170,8 @@ class _AuthenticateState extends State<Authenticate> {
 													right: 222.w,
 													top: 0.h,
 													child: Container(
-														width: 58.w,
-														height: 58.h,
+														width: 60.w,
+														height: 60.h,
 														decoration: new BoxDecoration(
 															border: Border.all(color:Colors.white),
 															color: Colors.white,
@@ -189,8 +191,15 @@ class _AuthenticateState extends State<Authenticate> {
 										onTap: ()async{
 											PermissionStatus permission = await LocationPermissions().requestPermissions();
 											if(permission == PermissionStatus.granted) {
-												await GeolocationService().getLocation();
-												await Navigator.pushNamed(context, "/login");
+												GeolocationService().getLocation();
+												pushNewScreenWithRouteSettings(
+													context,
+													settings: RouteSettings(name: "/login"),
+													screen: LogIn(),
+													withNavBar: false,
+													pageTransitionAnimation: PageTransitionAnimation.cupertino,
+												);
+												//await Navigator.pushNamed(context, "/login");
 											}
 									},
 								),

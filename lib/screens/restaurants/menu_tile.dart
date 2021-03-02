@@ -49,7 +49,7 @@ class _MenuTileState extends State<MenuTile> with TickerProviderStateMixin {
                       padding: EdgeInsets.symmetric(horizontal: 10.w),
                       child: Container(width: 235.w, child: Text(entry.name, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
                     ),
-                    SizedBox(height: 15.h,),
+                    SizedBox(height: 12.h,),
                     Row(
                       children: <Widget>[
                         SizedBox(width: 10.w,),

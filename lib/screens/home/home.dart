@@ -20,6 +20,7 @@ import 'package:provider/provider.dart';
 import 'package:lookinmeal/screens/map/map.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:minimize_app/minimize_app.dart';
 
 
 
@@ -138,8 +139,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
 	@override
 	Future<bool> didPopRoute() async {
-		if(CommonData.selectedIndex == 0)
-			return false;
+		if(CommonData.selectedIndex == 0) {
+			MinimizeApp.minimizeApp();
+		}
 		else {
 			setState(() {
 				CommonData.selectedIndex = 0;

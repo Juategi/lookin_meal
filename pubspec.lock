@@ -539,6 +539,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.3.0-nullsafety.3"
+  minimize_app:
+    dependency: "direct main"
+    description:
+      name: minimize_app
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.1"
   modal_bottom_sheet:
     dependency: transitive
     description:

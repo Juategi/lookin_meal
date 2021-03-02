@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/screens/authenticate/sign_in.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/decos.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class LogIn extends StatefulWidget {
   @override
@@ -89,7 +91,9 @@ class _LogInState extends State<LogIn> {
 										validator: (val) => val.length < 6 ? tr.translate("enterpassw") : null,
 										decoration: textInputDeco,
 									),
-									SizedBox(height: 70.h,),
+									SizedBox(height: 10.h,),
+									Center(child: Text(error, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.red, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
+									SizedBox(height: 50.h,),
 									GestureDetector(
 									  child: Container(
 									  	height: 56.h,
@@ -103,6 +107,7 @@ class _LogInState extends State<LogIn> {
 										onTap: () async{
 											if(_formKey.currentState.validate()){
 												dynamic result = await _auth.signInEP(email, password);
+												print(result);
 												if(result == null)
 													setState(() {
 														error = tr.translate("validmail");
@@ -117,7 +122,14 @@ class _LogInState extends State<LogIn> {
 									  children: <Widget>[
 									    Text("Don't have an account? ", style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(17),),)),
 											GestureDetector(
-												onTap: () => Navigator.pushNamed(context, "/signin"),
+												onTap: () => pushNewScreenWithRouteSettings(
+													context,
+													settings: RouteSettings(name: "/signin"),
+													screen: SignIn(),
+													withNavBar: false,
+													pageTransitionAnimation: PageTransitionAnimation.cupertino,
+												),
+														//Navigator.pushNamed(context, "/signin"),
 													child: Text("Sign up now.", style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(17),),))),
 										],
 									),

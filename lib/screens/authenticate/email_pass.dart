@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/screens/authenticate/wrapper.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/decos.dart';
 import 'package:lookinmeal/shared/loading.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class EmailPassword extends StatefulWidget {
   @override
@@ -18,7 +20,9 @@ class _EmailPasswordState extends State<EmailPassword> {
 
   User user;
   final _formKey = GlobalKey<FormState>();
-  String password, confirmPassword, error = "";
+  String password = " ";
+  String confirmPassword = " ";
+  String error = " ";
   bool loading = false;
 
   @override
@@ -76,6 +80,7 @@ class _EmailPasswordState extends State<EmailPassword> {
                         validator: (val) => !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val) ? tr.translate("entername") : null,
                         decoration: textInputDeco
                     ),
+                    Text(error, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.red, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                     SizedBox(height: 20.h,),
                     Row( mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
@@ -124,6 +129,9 @@ class _EmailPasswordState extends State<EmailPassword> {
                         child: !loading? Center(child: Text('Confirm', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))) : CircularLoading(),
                       ),
                       onTap: () async{
+                        setState(() {
+                          error = "";
+                        });
                         if(_formKey.currentState.validate()) {
                           setState(() {
                             loading = true;
@@ -137,7 +145,16 @@ class _EmailPasswordState extends State<EmailPassword> {
                               });
                             }
                             else{
-                              Navigator.pushNamedAndRemoveUntil(context, "/wrapper",  (Route<dynamic> route) => false);
+                              Future.delayed(Duration(seconds: 3)).then((_) {
+                                pushNewScreenWithRouteSettings(
+                                  context,
+                                  settings: RouteSettings(name: "/wrapper"),
+                                  screen: Wrapper(),
+                                  withNavBar: false,
+                                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                );
+                              });
+                              //Navigator.pushNamedAndRemoveUntil(context, "/wrapper",  (Route<dynamic> route) => false);
                             }
                           }
                           else{
@@ -149,12 +166,7 @@ class _EmailPasswordState extends State<EmailPassword> {
                         }
                       },
                     ),
-                    SizedBox(height: 12),
-                    Text(
-                      error,
-                      style: TextStyle(color: Colors.red, fontSize: 14),
-                    ),
-                    SizedBox(height: 30.h,),
+                    SizedBox(height: 40.h,),
                     Text('By signing up you agree to our Terms and conditions of use.', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(13),),)),
                   ],
                 ),
