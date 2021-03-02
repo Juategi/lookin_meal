@@ -193,7 +193,7 @@ class _EntryRatingState extends State<EntryRating> {
                           ),
                         ],
                       ) : Container(),
-                      SizedBox(height: 235.h,),
+                      SizedBox(height: 215.h,),
                       Row(
                         children: [
                           entry.price == 0.0 ? Container():Row( mainAxisAlignment: entry.image == null || entry.image == ""?  MainAxisAlignment.center : MainAxisAlignment.start,
@@ -295,7 +295,7 @@ class _EntryRatingState extends State<EntryRating> {
               !order ? Container() : Text("Add a note", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.9), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(15),),)),
               Container(
                 //color: Color.fromRGBO(255, 110, 117, 0.1),
-                height: 150.h,
+                height: 120.h,
                 width: 342.w,
                 child: TextField(
                   keyboardType: TextInputType.text,
@@ -404,7 +404,8 @@ class _EntryRatingState extends State<EntryRating> {
                     ],
                   ),
                 ),
-              )
+              ),
+              SizedBox(height: 10.h,),
             ],
           ),
         ),
