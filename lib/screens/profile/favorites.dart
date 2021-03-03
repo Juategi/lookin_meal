@@ -229,26 +229,28 @@ class _FavoriteListsState extends State<FavoriteLists> {
   Widget build(BuildContext context) {
     type = ModalRoute.of(context).settings.arguments;
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
-    return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            height: 42.h,
-            width: 411.w,
-            decoration: BoxDecoration(
-              color: Color.fromRGBO(255, 110, 117, 0.9),
-            ),
-            child:Text("Favorite ${type == 'R'? 'restaurants' : 'dishes'}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w),
-              child: ListView(
-                children: _loadLists()
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            Container(
+              height: 42.h,
+              width: 411.w,
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 110, 117, 0.9),
               ),
+              child:Text("Favorite ${type == 'R'? 'restaurants' : 'dishes'}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
             ),
-          )
-        ],
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                child: ListView(
+                  children: _loadLists()
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -267,82 +269,84 @@ class _CreateListState extends State<CreateList> {
   Widget build(BuildContext context) {
     type = ModalRoute.of(context).settings.arguments;
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
-    return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            height: 42.h,
-            width: 411.w,
-            decoration: BoxDecoration(
-              color: Color.fromRGBO(255, 110, 117, 0.9),
-            ),
-            child:Text("Favorite ${type == 'R'? 'restaurants' : 'dishes'}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
-          ),
-          SizedBox(height: 30.h,),
-          Text("Add image", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30),),)),
-          SizedBox(height: 20.h,),
-          GestureDetector(
-            onTap: ()async{
-                /*IconData icon = await FlutterIconPicker.showIconPicker(
-                  context,
-                  adaptiveDialog: true,
-                  showTooltips: true,
-                  showSearchBar: true,
-                  iconPickerShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                  iconPackMode: IconPack.fontAwesomeIcons,
-                );
-                //icon = 
-                if (icon != null) {
-                  _icon = Icon(icon, size: ScreenUtil().setSp(120),);
-                  setState(() {});
-                }
-                iconImage = icon.codePoint.toString() + icon.fontFamily;
-                 */
-              },
-              child: _icon
-          ),
-          SizedBox(height: 50.h,),
-          Text("Name of the list", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30),),)),
-          SizedBox(height: 20.h,),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.w),
-            child: TextField(
-              maxLines: 1,
-              maxLength: 40,
-              decoration: textInputDeco,
-              onChanged: (v){
-                name = v;
-              },
-            ),
-          ),
-          SizedBox(height: 20.h,),
-          GestureDetector(
-            onTap: ()async{
-              if(name == null || name == ""){
-                Alerts.toast("Write a name");
-              }
-              else{
-                FavoriteList list = await DBServiceUser.dbServiceUser.createList(DBServiceUser.userF.uid, name, StaticStrings.defaultEntry, type);
-                DBServiceUser.userF.lists.add(list);
-                Navigator.pop(context);
-              }
-            },
-            child: Container(
-              height: 65.h,
-              width: 150.w,
-              decoration: new BoxDecoration(
-                  color: Color.fromRGBO(255, 110, 117, 0.9),
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            Container(
+              height: 42.h,
+              width: 411.w,
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 110, 117, 0.9),
               ),
-              child: Center(child: Text("Save", maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white,
-                    letterSpacing: .3,
-                    fontWeight: FontWeight.normal,
-                    fontSize: ScreenUtil().setSp(22),),))),
+              child:Text("Favorite ${type == 'R'? 'restaurants' : 'dishes'}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
             ),
-          ),
-        ],
+            SizedBox(height: 30.h,),
+            Text("Add image", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30),),)),
+            SizedBox(height: 20.h,),
+            GestureDetector(
+              onTap: ()async{
+                  /*IconData icon = await FlutterIconPicker.showIconPicker(
+                    context,
+                    adaptiveDialog: true,
+                    showTooltips: true,
+                    showSearchBar: true,
+                    iconPickerShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    iconPackMode: IconPack.fontAwesomeIcons,
+                  );
+                  //icon = 
+                  if (icon != null) {
+                    _icon = Icon(icon, size: ScreenUtil().setSp(120),);
+                    setState(() {});
+                  }
+                  iconImage = icon.codePoint.toString() + icon.fontFamily;
+                   */
+                },
+                child: _icon
+            ),
+            SizedBox(height: 50.h,),
+            Text("Name of the list", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30),),)),
+            SizedBox(height: 20.h,),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              child: TextField(
+                maxLines: 1,
+                maxLength: 40,
+                decoration: textInputDeco,
+                onChanged: (v){
+                  name = v;
+                },
+              ),
+            ),
+            SizedBox(height: 20.h,),
+            GestureDetector(
+              onTap: ()async{
+                if(name == null || name == ""){
+                  Alerts.toast("Write a name");
+                }
+                else{
+                  FavoriteList list = await DBServiceUser.dbServiceUser.createList(DBServiceUser.userF.uid, name, StaticStrings.defaultEntry, type);
+                  DBServiceUser.userF.lists.add(list);
+                  Navigator.pop(context);
+                }
+              },
+              child: Container(
+                height: 65.h,
+                width: 150.w,
+                decoration: new BoxDecoration(
+                    color: Color.fromRGBO(255, 110, 117, 0.9),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+                child: Center(child: Text("Save", maxLines: 1,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white,
+                      letterSpacing: .3,
+                      fontWeight: FontWeight.normal,
+                      fontSize: ScreenUtil().setSp(22),),))),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -420,40 +424,150 @@ class _ListDisplayState extends State<ListDisplay> {
       init = false;
     }
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
-    return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            height: 42.h,
-            width: 411.w,
-            decoration: BoxDecoration(
-              color: Color.fromRGBO(255, 110, 117, 0.9),
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            Container(
+              height: 42.h,
+              width: 411.w,
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 110, 117, 0.9),
+              ),
+              child:Text("${list.name}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
             ),
-            child:Text("${list.name}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
-          ),
-          (type == 'R' && restaurants == null) || (type == 'E' && entries == null) ? Center(child: Loading()) : Expanded(
-            child: type == 'R' ? Container(
-              width: 300.w,
-              child: ListView(
-                  shrinkWrap: true,
-                  children: restaurants.map((restaurant) =>
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-                        child: GestureDetector(
-                          onTap: (){
-                            DBServiceRestaurant.dbServiceRestaurant.updateRecently(restaurant);
-                            pushNewScreenWithRouteSettings(
-                              context,
-                              settings: RouteSettings(name: "/restaurant", arguments: restaurant),
-                              screen: ProfileRestaurant(),
-                              withNavBar: true,
-                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                            ).then((value) => setState(() {}));
-                            //Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
+            (type == 'R' && restaurants == null) || (type == 'E' && entries == null) ? Center(child: Loading()) : Expanded(
+              child: type == 'R' ? Container(
+                width: 300.w,
+                child: ListView(
+                    shrinkWrap: true,
+                    children: restaurants.map((restaurant) =>
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                          child: GestureDetector(
+                            onTap: (){
+                              DBServiceRestaurant.dbServiceRestaurant.updateRecently(restaurant);
+                              pushNewScreenWithRouteSettings(
+                                context,
+                                settings: RouteSettings(name: "/restaurant", arguments: restaurant),
+                                screen: ProfileRestaurant(),
+                                withNavBar: true,
+                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                              ).then((value) => setState(() {}));
+                              //Navigator.pushNamed(context, "/restaurant",arguments: restaurant).then((value) => setState(() {}));
+                            },
+                            child: Container(
+                              width: 300.w,
+                              height: 160.h,
+                              decoration: new BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(Radius.circular(15)),
+                                boxShadow: [BoxShadow(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 3,
+                                  offset: Offset(1, 1), // changes position of shadow
+                                ),],
+                              ),
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    height: 103.h,
+                                    width: 300.w,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: Image.network(
+                                            restaurant.images.first).image,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    child: Row( mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        IconButton(
+                                          icon:  Icon(Icons.delete, color: Colors.black,),
+                                          iconSize: ScreenUtil().setSp(32),
+                                          onPressed: ()async{
+                                            bool delete = await Alerts.confirmation("Are you sure you want to delete this restaurant?", context);
+                                            if(delete){
+                                              list.items.remove(restaurant.restaurant_id);
+                                              restaurants.remove(restaurant);
+                                              Alerts.toast("${restaurant.name} removed from ${list.name}");
+                                              await DBServiceUser.dbServiceUser.updateList(list);
+                                              setState(() {
+                                              });
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 1.h,),
+                                  Row( crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      SizedBox(width: 5.w,),
+                                      Container(width: 165.w, child: Text(restaurant.name,  maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(13),),))),
+                                      //SizedBox(width: 1.w,),
+                                      Column(
+                                        children: <Widget>[
+                                          SizedBox(height: 4.h,),
+                                          StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: Functions.getRating(restaurant), size: ScreenUtil().setSp(10),),
+                                        ],
+                                      ),
+                                      SizedBox(width: 3.w,),
+                                      Column(
+                                        children: <Widget>[
+                                          SizedBox(height: 2.h,),
+                                          Text("${Functions.getVotes(restaurant)} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),)),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  Row(
+                                    children: <Widget>[
+                                      SizedBox(width: 5.w,),
+                                      restaurant.types.length == 0 ? Container() : Container(
+                                          height: 15.h,
+                                          width: 15.w,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: Image.asset("assets/food/${CommonData.typesImage[restaurant.types[0]]}.png").image))
+                                      ),
+                                      SizedBox(width: 5.w,),
+                                      Container(width: 155.w, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : "${restaurant.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
+                                      SizedBox(width: 35.w,),
+                                      Container(
+                                        child: SvgPicture.asset("assets/markerMini.svg"),
+                                      ),
+                                      //Icon(Icons.location_on, color: Colors.black, size: ScreenUtil().setSp(16),),
+                                      Text("${restaurant.distance.toString()} km", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),))
+                                    ],
+                                  ),
+                                  SizedBox(height: 2.h,)
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                ).toList()
+                ),
+              ) : Container(
+                width: 200.w,
+                child: ListView(
+                  children: entries.keys.map((entryId) {
+                    MenuEntry entry = entries[entryId].menu.singleWhere((element) => element.id == entryId);
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                      child: GestureDetector(
+                          onTap: () async{
+                            await showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
+                              return Provider<Restaurant>.value(value: entries[entryId], child: Provider<MenuEntry>.value(value: entry, child: EntryRating()));
+                            }).then((value){setState(() {});});
                           },
                           child: Container(
-                            width: 300.w,
-                            height: 160.h,
+                            height: 170.h,
+                            width: 200.w,
                             decoration: new BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -467,195 +581,87 @@ class _ListDisplayState extends State<ListDisplay> {
                             child: Column(
                               children: <Widget>[
                                 Container(
-                                  height: 103.h,
-                                  width: 300.w,
+                                  width: 200.w,
+                                  height: 100.h,
                                   decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: Image.network(
-                                          restaurant.images.first).image,
-                                      fit: BoxFit.cover,
-                                    ),
+                                      image: DecorationImage(image: Image.network(entry.image == null || entry.image == "" ? StaticStrings.defaultEntry : entry.image, fit: BoxFit.cover).image)
                                   ),
-                                  child: Row( mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      IconButton(
-                                        icon:  Icon(Icons.delete, color: Colors.black,),
-                                        iconSize: ScreenUtil().setSp(32),
-                                        onPressed: ()async{
-                                          bool delete = await Alerts.confirmation("Are you sure you want to delete this restaurant?", context);
-                                          if(delete){
-                                            list.items.remove(restaurant.restaurant_id);
-                                            restaurants.remove(restaurant);
-                                            Alerts.toast("${restaurant.name} removed from ${list.name}");
-                                            await DBServiceUser.dbServiceUser.updateList(list);
-                                            setState(() {
-                                            });
-                                          }
-                                        },
+                                  child: entry.price == 0.0 ? Container() : Column( mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(vertical: 0.h, horizontal: 5.w),
+                                        child: Column( mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Row( mainAxisAlignment: MainAxisAlignment.end,
+                                              children: <Widget>[
+                                                IconButton(
+                                                  icon:  Icon(Icons.delete, color: Colors.black,),
+                                                  iconSize: ScreenUtil().setSp(32),
+                                                  onPressed: ()async{
+                                                    bool delete = await Alerts.confirmation("Are you sure you want to delete this dish?", context);
+                                                    if(delete){
+                                                      list.items.remove(entry.id);
+                                                      entries.remove(entryId);
+                                                      Alerts.toast("${entry.name} removed from ${list.name}");
+                                                      await DBServiceUser.dbServiceUser.updateList(list);
+                                                      setState(() {
+                                                      });
+                                                    }
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                            //SizedBox(height: 50.h,)
+                                            Row( mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                Container(
+                                                  width: 58.w,
+                                                  height: 20.h,
+                                                  decoration: BoxDecoration(
+                                                      color: Color.fromRGBO(255, 110, 117, 0.9),
+                                                      borderRadius: BorderRadius.all(Radius.circular(12))
+                                                  ),
+                                                  child: Align( alignment: Alignment.center, child: Text("${entry.price} ${entries[entryId].currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: 1.h,),
-                                Row( crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    SizedBox(width: 5.w,),
-                                    Container(width: 165.w, child: Text(restaurant.name,  maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(13),),))),
-                                    //SizedBox(width: 1.w,),
-                                    Column(
-                                      children: <Widget>[
-                                        SizedBox(height: 4.h,),
-                                        StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: Functions.getRating(restaurant), size: ScreenUtil().setSp(10),),
-                                      ],
-                                    ),
-                                    SizedBox(width: 3.w,),
-                                    Column(
-                                      children: <Widget>[
-                                        SizedBox(height: 2.h,),
-                                        Text("${Functions.getVotes(restaurant)} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),)),
-                                      ],
-                                    ),
-                                  ],
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
+                                  child: Container(width: 190.w, height: 28.h, child: Text("${entry.name}", maxLines: 2, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3,  fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),))),
                                 ),
-                                Spacer(),
-                                Row(
-                                  children: <Widget>[
-                                    SizedBox(width: 5.w,),
-                                    restaurant.types.length == 0 ? Container() : Container(
-                                        height: 15.h,
-                                        width: 15.w,
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: Image.asset("assets/food/${CommonData.typesImage[restaurant.types[0]]}.png").image))
-                                    ),
-                                    SizedBox(width: 5.w,),
-                                    Container(width: 155.w, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : "${restaurant.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
-                                    SizedBox(width: 35.w,),
-                                    Container(
-                                      child: SvgPicture.asset("assets/markerMini.svg"),
-                                    ),
-                                    //Icon(Icons.location_on, color: Colors.black, size: ScreenUtil().setSp(16),),
-                                    Text("${restaurant.distance.toString()} km", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),))
-                                  ],
-                                ),
-                                SizedBox(height: 2.h,)
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
-              ).toList()
-              ),
-            ) : Container(
-              width: 200.w,
-              child: ListView(
-                children: entries.keys.map((entryId) {
-                  MenuEntry entry = entries[entryId].menu.singleWhere((element) => element.id == entryId);
-                  return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-                    child: GestureDetector(
-                        onTap: () async{
-                          await showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
-                            return Provider<Restaurant>.value(value: entries[entryId], child: Provider<MenuEntry>.value(value: entry, child: EntryRating()));
-                          }).then((value){setState(() {});});
-                        },
-                        child: Container(
-                          height: 170.h,
-                          width: 200.w,
-                          decoration: new BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            boxShadow: [BoxShadow(
-                              color: Colors.grey.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 3,
-                              offset: Offset(1, 1), // changes position of shadow
-                            ),],
-                          ),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                width: 200.w,
-                                height: 100.h,
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(image: Image.network(entry.image == null || entry.image == "" ? StaticStrings.defaultEntry : entry.image, fit: BoxFit.cover).image)
-                                ),
-                                child: entry.price == 0.0 ? Container() : Column( mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 0.h, horizontal: 5.w),
-                                      child: Column( mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Row( mainAxisAlignment: MainAxisAlignment.end,
-                                            children: <Widget>[
-                                              IconButton(
-                                                icon:  Icon(Icons.delete, color: Colors.black,),
-                                                iconSize: ScreenUtil().setSp(32),
-                                                onPressed: ()async{
-                                                  bool delete = await Alerts.confirmation("Are you sure you want to delete this dish?", context);
-                                                  if(delete){
-                                                    list.items.remove(entry.id);
-                                                    entries.remove(entryId);
-                                                    Alerts.toast("${entry.name} removed from ${list.name}");
-                                                    await DBServiceUser.dbServiceUser.updateList(list);
-                                                    setState(() {
-                                                    });
-                                                  }
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                          //SizedBox(height: 50.h,)
-                                          Row( mainAxisAlignment: MainAxisAlignment.end,
-                                            children: [
-                                              Container(
-                                                width: 58.w,
-                                                height: 20.h,
-                                                decoration: BoxDecoration(
-                                                    color: Color.fromRGBO(255, 110, 117, 0.9),
-                                                    borderRadius: BorderRadius.all(Radius.circular(12))
-                                                ),
-                                                child: Align( alignment: Alignment.center, child: Text("${entry.price} ${entries[entryId].currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
-                                              ),
-                                            ],
-                                          ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
+                                  child: Row( crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Column( mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          //SmoothStarRating(rating: entry.rating, spacing: -3, isReadOnly: true, allowHalfRating: true, color: Color.fromRGBO(250, 201, 53, 1), borderColor: Color.fromRGBO(250, 201, 53, 1), size: ScreenUtil().setSp(10),),
+                                          StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: entry.rating, size: ScreenUtil().setSp(7),),
+                                          Text("${entry.numReviews} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(9),),)),
                                         ],
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
-                                child: Container(width: 190.w, height: 28.h, child: Text("${entry.name}", maxLines: 2, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.6), letterSpacing: .3,  fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),))),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
-                                child: Row( crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Column( mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        //SmoothStarRating(rating: entry.rating, spacing: -3, isReadOnly: true, allowHalfRating: true, color: Color.fromRGBO(250, 201, 53, 1), borderColor: Color.fromRGBO(250, 201, 53, 1), size: ScreenUtil().setSp(10),),
-                                        StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: entry.rating, size: ScreenUtil().setSp(7),),
-                                        Text("${entry.numReviews} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(9),),)),
-                                      ],
-                                    ),
-                                    SizedBox(width: 5.w,),
-                                    Container(width: 120.w, height: 28.h, child: Text(entries[entryId].name, maxLines: 2, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(11),),))),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                    ),
-                  );
-                }).toList(),
-              ),
+                                      SizedBox(width: 5.w,),
+                                      Container(width: 120.w, height: 28.h, child: Text(entries[entryId].name, maxLines: 2, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(11),),))),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                      ),
+                    );
+                  }).toList(),
+                ),
+              )
             )
-          )
-        ],
+          ],
+        ),
       ),
     );
   }

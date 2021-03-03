@@ -29,7 +29,7 @@ class _AdminPageState extends State<AdminPage> {
     return SafeArea(
       child: Scaffold(
         body: Padding(
-          padding: EdgeInsets.symmetric(vertical: 70.h, horizontal: 25.w),
+          padding: EdgeInsets.symmetric(vertical: 60.h, horizontal: 25.w),
           child: Column(
             children: [
               Row( mainAxisAlignment: MainAxisAlignment.center,

@@ -156,7 +156,7 @@ class _SearchState extends State<Search> {
           elevation: 0,
           toolbarHeight: 107.h,
           flexibleSpace: Padding(
-            padding: EdgeInsets.only(top: 40.h, right: 10.w, left: 10.w),
+            padding: EdgeInsets.only(top: 15.h, right: 10.w, left: 10.w),
             child: Column(
               children: [
                 Row(
@@ -313,7 +313,7 @@ class _SearchState extends State<Search> {
         ),
         backgroundColor: CommonData.backgroundColor,
         body: searching? CircularLoading()  : Padding(
-          padding: EdgeInsets.symmetric(horizontal: 0.w),
+          padding: EdgeInsets.symmetric(horizontal: 10.w),
           child: isSearching? _buildList() :  SingleChildScrollView(
             child: Column(
               children: <Widget>[
@@ -505,7 +505,7 @@ class _SearchState extends State<Search> {
                    SizedBox(height: 20.h,),
                    Container(
                      width: 388.w,
-                     height: 231.h,
+                     height: 243.h,
                      decoration: BoxDecoration(
                          color: Colors.white,
                          borderRadius: BorderRadius.all(Radius.circular(12))
@@ -521,7 +521,7 @@ class _SearchState extends State<Search> {
                            ),
                            SizedBox(height: 15.h,),
                            Container(
-                             height: 180.h,
+                             height: 190.h,
                              child: Wrap(
                                //crossAxisCount: 8,
                                spacing: 2,

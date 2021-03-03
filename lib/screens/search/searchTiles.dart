@@ -57,7 +57,7 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
       },
       child: Container(
         width: 390.w,
-        height: 315.h,
+        height: 319.h,
         child: Column(
           children: [
             Container(
@@ -105,7 +105,7 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
                 ),
                 SizedBox(width: 5.w,),
                 restaurant.types.length == 0? Container(width: 214.w) : Container(width: 214.w, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : "${restaurant.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
-                SizedBox(width: 66.w,),
+                SizedBox(width: 55.w,),
                 Container(
                   child: SvgPicture.asset("assets/markerMini.svg", height: 25.h, width: 25.w,),
                 ),
@@ -124,7 +124,7 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
                     child: GestureDetector(
                       onTap: () async{
                         await showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
-                          return Provider<Restaurant>.value(value: restaurant, child: Provider<MenuEntry>.value(value: entry, child: EntryRating()));
+                          return Provider.value(value:false, child: Provider<Restaurant>.value(value: restaurant, child: Provider<MenuEntry>.value(value: entry, child: EntryRating())));
                         }).then((value){setState(() {});});
                       },
                       child: Card(

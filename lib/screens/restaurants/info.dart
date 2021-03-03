@@ -24,7 +24,6 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
         backgroundColor: Colors.white,
         body: Column(
           children: <Widget>[
-            SizedBox(height: 32.h,),
             Container(
               height: 42.h,
               width: 411.w,
@@ -33,17 +32,17 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
               ),
               child:Text("Restaurant information", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
             ),
-            SizedBox(height: 10.h,),
+            SizedBox(height: 7.h,),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Column(
                 children: <Widget>[
                   Container(width: 382.w, child: Text(restaurant.address, maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
-                  SizedBox(height: 10.h,),
+                  SizedBox(height: 8.h,),
                   GestureDetector(
                     child: Container(
                       width: 382.w,
-                      height: 95.h,
+                      height: 92.h,
                       decoration: BoxDecoration(
                         image: DecorationImage(fit: BoxFit.cover, image: NetworkImage('https://maps.googleapis.com/maps/api/staticmap?center=${restaurant.address}&zoom=15&size=900x600&maptype=roadmap&markers=color:red%7Clabel:.%7C${restaurant.latitude},${restaurant.longitude}&key=AIzaSyAIIK4P68Ge26Yc0HkQ6uChj_NEqF2VeCU'))
                       ),
@@ -57,7 +56,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                         throw 'Could not open the map.';
                     },
                   ),
-                  SizedBox(height: 20.h,),
+                  SizedBox(height: 18.h,),
                   Row(
                     children: [
                       restaurant.types.length == 0 ? Container() : Container(
@@ -71,7 +70,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                       Container(width: 340.w, height: 25.h,  child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : restaurant.types.length > 0 ? "${restaurant.types[0]}" : "", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
                     ],
                   ),
-                  SizedBox(height: 20.h,),
+                  SizedBox(height: 18.h,),
                   restaurant.phone != null && restaurant.phone.length > 2 ? GestureDetector(
                     child: Row(
                       children: <Widget>[
@@ -151,8 +150,8 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                     children: <Widget>[
                       restaurant.delivery[0] == "" ? Container() : GestureDetector(
                         child: Container(
-                          width: 60.w,
-                          height: 60.h,
+                          width: 57.w,
+                          height: 57.h,
                           decoration: BoxDecoration(
                               image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/glovo.png").image),
                             borderRadius: BorderRadius.all(Radius.circular(16))
@@ -169,8 +168,8 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                       restaurant.delivery[0] == "" ? Container() : SizedBox(width: 20.w,),
                       restaurant.delivery[1] == "" ? Container() : GestureDetector(
                         child: Container(
-                          width: 60.w,
-                          height: 60.h,
+                          width: 57.w,
+                          height: 57.h,
                           decoration: BoxDecoration(
                               image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/ubereats.png").image),
                               borderRadius: BorderRadius.all(Radius.circular(16))
@@ -190,8 +189,8 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                       restaurant.delivery[1] == "" ? Container() : SizedBox(width: 20.w,),
                       restaurant.delivery[2] == "" ? Container() : GestureDetector(
                         child: Container(
-                          width: 60.w,
-                          height: 60.h,
+                          width: 57.w,
+                          height: 57.h,
                           decoration: BoxDecoration(
                               image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/justeat.png").image),
                               borderRadius: BorderRadius.all(Radius.circular(16))
@@ -208,8 +207,8 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                       restaurant.delivery[2] == "" ? Container() : SizedBox(width: 20.w,),
                       restaurant.delivery[3] == "" ? Container() : GestureDetector(
                         child: Container(
-                          width: 60.w,
-                          height: 60.h,
+                          width: 57.w,
+                          height: 57.h,
                           decoration: BoxDecoration(
                               image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/deliveroo.png").image),
                               borderRadius: BorderRadius.all(Radius.circular(16))
