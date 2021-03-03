@@ -32,11 +32,16 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final AuthService _auth = AuthService();
   User user;
+  bool first = true;
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     user = Provider.of<User>(context);
     AppLocalizations tr = AppLocalizations.of(context);
+    if(first){
+      CommonData.tabContext = context;
+      first = false;
+    }
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

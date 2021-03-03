@@ -35,6 +35,7 @@ class MapSampleState extends State<MapSample> {
 	int size;
 	double latTo, latFrom, longTo, longFrom;
 	bool loading = false;
+	bool first = true;
 	Restaurant selected;
 	String _mapStyle = '[{"featureType": "poi", elementType: "labels","stylers": [{"visibility": "off"}]}]';
 	Completer<GoogleMapController> _controller = Completer();
@@ -206,6 +207,10 @@ class MapSampleState extends State<MapSample> {
 	Widget build(BuildContext context){
 		user = Provider.of<User>(context);
 		_timer();
+		if(first){
+			CommonData.tabContext = context;
+			first = false;
+		}
 		return _cameraPosition == null || (_markersNoCluster.length == 0 && _restaurants.length != 0) ? Loading() : Container(
 		  child: SafeArea(
 		    child: Stack(

@@ -144,8 +144,8 @@ class _TableReservationState extends State<TableReservation> {
         body: Column(
           children: [
             Container(
-            height: 230,
-            width: 400,
+            height: 150.h,
+            width: 400.w,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: NetworkImage(restaurant.images.elementAt(0)),

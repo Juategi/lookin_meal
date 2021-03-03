@@ -46,7 +46,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	Color selectedItemColor = Color.fromRGBO(255, 110, 117, 0.61);
 	Color unselectedItemColor = Color.fromRGBO(130, 130, 130, 1);
 	PersistentTabController _controller = PersistentTabController(initialIndex: 0);
-	BuildContext tabContext;
 
 	void onItemTapped(int index) {
 		setState(()  {
@@ -240,12 +239,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 					stateManagement: true,
 					hideNavigationBarWhenKeyboardShows: true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument.
 					decoration: NavBarDecoration(
-						borderRadius: BorderRadius.circular(10.0),
 						colorBehindNavBar: Colors.white,
 					),
 					popAllScreensOnTapOfSelectedTab: true,
 					selectedTabScreenContext: (context){
-						tabContext = context;
+						//PRIMERA VEZ NULL
+							CommonData.tabContext = context;
 					},
 					popActionScreens: PopActionScreensType.all,
 					itemAnimationProperties: ItemAnimationProperties( // Navigation Bar's items animation properties.
@@ -259,10 +258,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 					),
 					navBarStyle: NavBarStyle.style6, // Choose the nav bar style with this property.
 					onItemSelected: (num){
-						print(ModalRoute.of(tabContext).settings.name);
 						if(CommonData.pop[num] && lastIndex == num){
 							CommonData.pop[num] = false;
-							Navigator.of(tabContext).popUntil((route) {
+							Navigator.of(CommonData.tabContext).popUntil((route) {
 								return route.settings.name == "/9f580fc5-c252-45d0-af25-9429992db112";
 							});
 						}

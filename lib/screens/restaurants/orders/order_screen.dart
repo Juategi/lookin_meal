@@ -31,6 +31,7 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
   Restaurant restaurant;
   String restaurant_id, table_id, code;
   bool init = true;
+  bool first = true;
   double bill = 0.0;
   final RealTimeOrders controller = RealTimeOrders();
   PersistentTabController _controller;
@@ -287,14 +288,14 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
             "#FF6E75", "Cancel", true, ScanMode.QR);
         print(code);
       } on PlatformException {
-        code = 'Failed to get platform version.';
+        code = null;
       }
       // If the widget was removed from the tree while the asynchronous platform
       // message was in flight, we want to discard the reply rather than calling
       // setState to update our non-existent appearance.
       if (!mounted) return;
 
-      if(code != "-1")
+      if(code != null)
         if(!RegExp(r'[a-zA-Z0-9]+/+[a-zA-Z0-9]').hasMatch(code))
           setState(() {
             _controller.jumpToTab(0);
@@ -312,6 +313,10 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     _controller = Provider.of<PersistentTabController>(context);
+    if(first){
+      CommonData.tabContext = context;
+      first = false;
+    }
     if(code == null)
       return SafeArea(child: Scaffold(
         body: Center(
