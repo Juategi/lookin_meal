@@ -30,6 +30,7 @@ class _DishTileState extends State<DishTile> {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return GestureDetector(
         onTap: () async{
+          CommonData.pop[0] = true;
           await showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
             return Provider.value(value: false, child: Provider<Restaurant>.value(value: restaurant, child: Provider<MenuEntry>.value(value: entry, child: EntryRating())));
           }).then((value){setState(() {});});

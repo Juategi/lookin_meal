@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -40,10 +41,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	List<Restaurant> nearRestaurants;
 	Map<MenuEntry,Restaurant> popular;
 	List<double> distances = List<double>();
+	int lastIndex = 0;
 	bool ready = false;
 	Color selectedItemColor = Color.fromRGBO(255, 110, 117, 0.61);
 	Color unselectedItemColor = Color.fromRGBO(130, 130, 130, 1);
 	PersistentTabController _controller = PersistentTabController(initialIndex: 0);
+	BuildContext tabContext;
 
 	void onItemTapped(int index) {
 		setState(()  {
@@ -241,6 +244,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 						colorBehindNavBar: Colors.white,
 					),
 					popAllScreensOnTapOfSelectedTab: true,
+					selectedTabScreenContext: (context){
+						tabContext = context;
+					},
 					popActionScreens: PopActionScreensType.all,
 					itemAnimationProperties: ItemAnimationProperties( // Navigation Bar's items animation properties.
 						duration: Duration(milliseconds: 200),
@@ -253,7 +259,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 					),
 					navBarStyle: NavBarStyle.style6, // Choose the nav bar style with this property.
 					onItemSelected: (num){
-						print(num);
+						print(ModalRoute.of(tabContext).settings.name);
+						if(CommonData.pop[num] && lastIndex == num){
+							CommonData.pop[num] = false;
+							Navigator.of(tabContext).popUntil((route) {
+								return route.settings.name == "/9f580fc5-c252-45d0-af25-9429992db112";
+							});
+						}
+						lastIndex = _controller.index;
 					},
 			);
 			/*return Scaffold(

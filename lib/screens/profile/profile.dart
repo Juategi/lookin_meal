@@ -101,6 +101,7 @@ class _ProfileState extends State<Profile> {
             child: Column(children: [
               GestureDetector(
                 onTap:(){
+                  CommonData.pop[4] = true;
                   pushNewScreenWithRouteSettings(
                     context,
                     settings: RouteSettings(name: "/editprofile"),
@@ -127,6 +128,7 @@ class _ProfileState extends State<Profile> {
               Divider(thickness: 2,),
               GestureDetector(
                 onTap:(){
+                  CommonData.pop[4] = true;
                   pushNewScreenWithRouteSettings(
                     context,
                     settings: RouteSettings(name: "/ratinghistory"),
@@ -153,6 +155,7 @@ class _ProfileState extends State<Profile> {
               Divider(thickness: 2,),
               GestureDetector(
                 onTap:(){
+                  CommonData.pop[4] = true;
                   pushNewScreenWithRouteSettings(
                     context,
                     settings: RouteSettings(name: "/favs"),
@@ -179,6 +182,7 @@ class _ProfileState extends State<Profile> {
               Divider(thickness: 2,),
               GestureDetector(
                 onTap:(){
+                  CommonData.pop[4] = true;
                   pushNewScreenWithRouteSettings(
                     context,
                     settings: RouteSettings(name: "/userreservations"),
@@ -205,7 +209,7 @@ class _ProfileState extends State<Profile> {
               Divider(thickness: 2,),
               GestureDetector(
                 onTap:(){
-
+                  CommonData.pop[4] = true;
                 },
                 child: Container(
                   width: 365.w,
@@ -224,11 +228,7 @@ class _ProfileState extends State<Profile> {
               Divider(thickness: 2,),
               GestureDetector(
                 onTap:()async{
-                  RealTimeOrders r = RealTimeOrders();
-                  //print(await r.createOrderData("833", "aa", "18", 4, false));
-                  //print(await r.updateOrderData("833", "aa", "18", "7sBBcSpcN3nUfiBfLxNI", 4, false));
-                 //List<Order> o = await r.getOrder("833", "1").first;
-
+                  CommonData.pop[4] = true;
                 },
                 child: Container(
                   width: 365.w,

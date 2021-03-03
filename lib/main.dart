@@ -1,6 +1,5 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:lookinmeal/models/list.dart';
+import 'package:lookinmeal/screens/home/home_screen.dart';
 import 'package:lookinmeal/screens/authenticate/authenticate.dart';
 import 'package:lookinmeal/screens/authenticate/email_pass.dart';
 import 'package:lookinmeal/screens/authenticate/log_in.dart';
@@ -24,7 +23,6 @@ import 'package:lookinmeal/screens/restaurants/orders/order_screen.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/reservations.dart';
 import 'package:lookinmeal/screens/restaurants/reserve_table.dart';
-import 'package:lookinmeal/services/push_notifications.dart';
 import 'screens/restaurants/admin/manage_orders.dart';
 import 'services/app_localizations.dart';
 import 'screens/authenticate/wrapper.dart';
@@ -53,6 +51,7 @@ class MyApp extends StatelessWidget {
         routes:{
           "/wrapper":(context) => Wrapper(),
           "/home":(context) => Home(),
+          "/homescreen":(context) => HomeScreen(),
           "/authenticate": (context) => Authenticate(),
           "/login": (context) => LogIn(),
           "/signin": (context) => SignIn(),

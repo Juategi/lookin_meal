@@ -289,7 +289,7 @@ class MapSampleState extends State<MapSample> {
 							child: GestureDetector(
 								onTap: ()async{
 									DBServiceRestaurant.dbServiceRestaurant.updateRecently(selected);
-									//Future.delayed(Duration(milliseconds: 100)).then((_) {});
+									CommonData.pop[1] = true;
 									await pushNewScreenWithRouteSettings(
 										context,
 										settings: RouteSettings(name: "/restaurant", arguments: selected),

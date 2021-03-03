@@ -33,6 +33,7 @@ class _RestaurantTileState extends State<RestaurantTile> {
       child: GestureDetector(
         onTap: (){
           DBServiceRestaurant.dbServiceRestaurant.updateRecently(restaurant);
+          CommonData.pop[0] = true;
           pushNewScreenWithRouteSettings(
             context,
             settings: RouteSettings(name: "/restaurant", arguments: restaurant),
