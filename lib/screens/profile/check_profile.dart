@@ -1,3 +1,4 @@
+import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -79,13 +80,95 @@ class _CheckProfileState extends State<CheckProfile> {
                   right: 10.w,
                   child: Container(
                     width: 190.w,
-                    //color: Colors.blue,
                     child:Text(user.username, maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(23),),)),
+                  ),
+                ),
+                Positioned(
+                  top: 140.h,
+                  right: 10.w,
+                  child: Row( mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 160.w,
+                        child:Text(user.name, maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
+                      ),
+                      Flag(
+                        user.country,
+                        height: 30.h,
+                        width: 30.w,
+                      )
+                    ],
+                  ),
+                ),
+                Positioned(
+                  top: 175.h,
+                  right: 20.w,
+                  child: Container(
+                    width: 180.w,
+                    child:Row( mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        //Text("770 T", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
+                        //Spacer(),
+                        Text("2894 ", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
+                        Icon(Icons.star, size: ScreenUtil().setSp(28), color: Colors.yellow,)
+                      ],
+                    ),
                   ),
                 )
               ],
             ),
-          )
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30.w),
+            child: Row(
+                children: [
+                  Text("2894 ", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(19),),)),
+                  Text("followers", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
+                  Spacer(),
+                  Text("123 ", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(19),),)),
+                  Text("following", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
+                ]
+            ),
+          ),
+          SizedBox(height: 20.h,),
+          GestureDetector(
+            child: Center(
+              child: Container(
+                width: 165.w,
+                height: 45.h,
+                decoration: BoxDecoration(
+                  color: Colors.lightBlueAccent,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  boxShadow: [BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 3,
+                    offset: Offset(1, 1), // changes position of shadow
+                  ),],
+                ),
+                child: Row( mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.add_rounded, size: ScreenUtil().setSp(32), color: Colors.white,),
+                    Column(
+                      children: [
+                        SizedBox(height: 4.h,),
+                        Text("   Follow", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(23),),)),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 20.h,),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.w),
+            child: Container(
+              width: 381.w,
+              height: user.about == null ? 1 : 130.h,
+              child:Text(user.about ?? "", maxLines: 5, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
+            ),
+          ),
         ],
       )
     );

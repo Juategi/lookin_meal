@@ -211,7 +211,9 @@ class DBServiceEntry{
           uid: element["user_id"],
           email: element["email"],
           picture: element["image"],
-          username: element["username"]
+          username: element["username"],
+          about: element["about"],
+          country: element["country"],
       );
       ratings[rating] = user;
     }
