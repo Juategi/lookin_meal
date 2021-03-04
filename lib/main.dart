@@ -5,6 +5,7 @@ import 'package:lookinmeal/screens/authenticate/email_pass.dart';
 import 'package:lookinmeal/screens/authenticate/log_in.dart';
 import 'package:lookinmeal/screens/authenticate/sign_in.dart';
 import 'package:lookinmeal/screens/home/home.dart';
+import 'package:lookinmeal/screens/profile/check_profile.dart';
 import 'package:lookinmeal/screens/profile/edit_profile.dart';
 import 'package:lookinmeal/screens/profile/favorites.dart';
 import 'package:lookinmeal/screens/profile/my_reservations.dart';
@@ -80,7 +81,8 @@ class MyApp extends StatelessWidget {
           "/order" : (context) => OrderScreen(),
           "/addorder" : (context) => AddMoreOrder(),
           "/manageorder" : (context) => ManageOrders(),
-          "/detailorder" : (context) => OrderDetail()
+          "/detailorder" : (context) => OrderDetail(),
+          "/checkprofile" : (context) => CheckProfile()
         },
         home: Wrapper(),
         //initialRoute:"/",
