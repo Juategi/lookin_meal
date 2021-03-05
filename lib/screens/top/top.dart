@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
@@ -53,7 +54,7 @@ class _TopState extends State<Top> {
             Text('Top dishes', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
             SizedBox(height: 10.h,),
             RaisedButton(onPressed: () async{
-                print(await GeolocationService().getCountry(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude));
+                DBServiceUser.dbServiceUser.getFollowers(DBServiceUser.userF.uid);
             },)
           ],
         ),

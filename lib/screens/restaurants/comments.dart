@@ -85,13 +85,14 @@ class _CommentsState extends State<Comments> {
                           horizontal: 10.w, vertical: 15.h),
                       child: GestureDetector(
                         onTap: (){
-                          pushNewScreenWithRouteSettings(
-                            context,
-                            settings: RouteSettings(name: "/checkprofile", arguments: ratings[rating]),
-                            screen: CheckProfile(),
-                            withNavBar: true,
-                            pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                          );
+                          if(ratings[rating].uid != DBServiceUser.userF.uid)
+                            pushNewScreenWithRouteSettings(
+                              context,
+                              settings: RouteSettings(name: "/checkprofile", arguments: ratings[rating]),
+                              screen: CheckProfile(),
+                              withNavBar: true,
+                              pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                            );
                         },
                         child: Container(height: 108.h, width: 300.w,
                           child: Row(

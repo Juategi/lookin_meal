@@ -7,6 +7,7 @@ import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/entry.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/restaurant_tile.dart';
@@ -49,7 +50,7 @@ class _FavoritesState extends State<Favorites> {
               onTap: (){
                 pushNewScreenWithRouteSettings(
                   context,
-                  settings: RouteSettings(name: "/favslists", arguments: 'R'),
+                  settings: RouteSettings(name: "/favslists", arguments: ['R', DBServiceUser.userF]),
                   screen: FavoriteLists(),
                   withNavBar: true,
                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
@@ -57,8 +58,8 @@ class _FavoritesState extends State<Favorites> {
                 //Navigator.pushNamed(context, "/favslists", arguments: 'R');
               },
               child: Container(
-                  height: 113,
-                  width: 336,
+                  height: 113.h,
+                  width: 336.w,
                   decoration: new BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                       boxShadow: [BoxShadow(
@@ -80,7 +81,7 @@ class _FavoritesState extends State<Favorites> {
               onTap: (){
                 pushNewScreenWithRouteSettings(
                   context,
-                  settings: RouteSettings(name: "/favslists", arguments: 'E'),
+                  settings: RouteSettings(name: "/favslists", arguments: ['E', DBServiceUser.userF]),
                   screen: FavoriteLists(),
                   withNavBar: true,
                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
@@ -88,8 +89,8 @@ class _FavoritesState extends State<Favorites> {
                 //Navigator.pushNamed(context, "/favslists", arguments: 'E');
               },
               child: Container(
-                  height: 113,
-                  width: 336,
+                  height: 113.h,
+                  width: 336.w,
                   decoration: new BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                       boxShadow: [BoxShadow(
@@ -120,6 +121,7 @@ class FavoriteLists extends StatefulWidget {
 
 class _FavoriteListsState extends State<FavoriteLists> {
   String type;
+  User user;
 
   List<Widget> _loadLists(){
     List<Widget> items = [];
@@ -129,7 +131,7 @@ class _FavoriteListsState extends State<FavoriteLists> {
         onTap: (){
           pushNewScreenWithRouteSettings(
             context,
-            settings: RouteSettings(name: "/displaylist", arguments: type + list.id),
+            settings: RouteSettings(name: "/displaylist", arguments: [type + list.id, user]),
             screen: ListDisplay(),
             withNavBar: true,
             pageTransitionAnimation: PageTransitionAnimation.cupertino,
@@ -171,7 +173,7 @@ class _FavoriteListsState extends State<FavoriteLists> {
                   SizedBox(height: 2.h,),
                   Icon(Icons.share_outlined, size: ScreenUtil().setSp(45), color: Color.fromRGBO(255, 110, 117, 0.6),),
                   SizedBox(height: 15.h,),
-                  GestureDetector(
+                  DBServiceUser.userF != user ? Container() : GestureDetector(
                       onTap: () async{
                         bool delete = await Alerts.confirmation("Are you sure you want to delete this list?", context);
                         if(delete){
@@ -190,7 +192,7 @@ class _FavoriteListsState extends State<FavoriteLists> {
         ),
       ),
     )));
-    if(DBServiceUser.userF.lists.where((list) => list.type == type).length < 15)
+    if(DBServiceUser.userF == user || user.lists.where((list) => list.type == type).length < 15)
       items.add(Padding(
         padding: EdgeInsets.symmetric(vertical: 15.h),
         child: GestureDetector(
@@ -227,7 +229,9 @@ class _FavoriteListsState extends State<FavoriteLists> {
 
   @override
   Widget build(BuildContext context) {
-    type = ModalRoute.of(context).settings.arguments;
+    List aux = ModalRoute.of(context).settings.arguments;
+    type = aux.first;
+    user = aux.last;
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return SafeArea(
       child: Scaffold(
@@ -364,6 +368,7 @@ class _ListDisplayState extends State<ListDisplay> {
   Map<String, Restaurant> entries;
   FavoriteList list;
   bool init = true;
+  User user;
 
   void _timer() {
     if(type == 'R'){
@@ -414,10 +419,12 @@ class _ListDisplayState extends State<ListDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    String aux = ModalRoute.of(context).settings.arguments;
+    List args = ModalRoute.of(context).settings.arguments;
+    String aux = args.first;
+    user = args.last;
     type = aux.substring(0,1);
     id = aux.substring(1);
-    list = DBServiceUser.userF.lists.singleWhere((element) => element.id == id);
+    list = user.lists.singleWhere((element) => element.id == id);
     if(init){
       _timer();
       _updateLists();
@@ -484,7 +491,7 @@ class _ListDisplayState extends State<ListDisplay> {
                                     child: Row( mainAxisAlignment: MainAxisAlignment.end,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        IconButton(
+                                        DBServiceUser.userF != user? Container() : IconButton(
                                           icon:  Icon(Icons.delete, color: Colors.black,),
                                           iconSize: ScreenUtil().setSp(32),
                                           onPressed: ()async{
@@ -594,7 +601,7 @@ class _ListDisplayState extends State<ListDisplay> {
                                           children: [
                                             Row( mainAxisAlignment: MainAxisAlignment.end,
                                               children: <Widget>[
-                                                IconButton(
+                                                DBServiceUser.userF != user? Container() : IconButton(
                                                   icon:  Icon(Icons.delete, color: Colors.black,),
                                                   iconSize: ScreenUtil().setSp(32),
                                                   onPressed: ()async{

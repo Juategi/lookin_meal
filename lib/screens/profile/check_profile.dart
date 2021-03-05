@@ -1,9 +1,15 @@
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/database/entryDB.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/screens/profile/rating_history.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
+import 'favorites.dart';
 
 class CheckProfile extends StatefulWidget {
   @override
@@ -12,10 +18,24 @@ class CheckProfile extends StatefulWidget {
 
 class _CheckProfileState extends State<CheckProfile> {
   User user;
+  bool init = true;
+
+  Future loadInfo() async{
+    user.lists = await DBServiceUser.dbServiceUser.getLists();
+    user.ratings = await DBServiceEntry.dbServiceEntry.getAllRating(user.uid);
+    user.history = await DBServiceEntry.dbServiceEntry.getRatingsHistory(user.uid, user.ratings.map((r) => r.entry_id).toList(), 0, 15);
+    user.numFollowers = await DBServiceUser.dbServiceUser.getNumFollowers(user.uid);
+    user.numFollowing = await DBServiceUser.dbServiceUser.getNumFollowing(user.uid);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     user = ModalRoute.of(context).settings.arguments;
+    if(init){
+      loadInfo();
+      init = false;
+    }
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return Scaffold(
       body: Column(
@@ -109,7 +129,8 @@ class _CheckProfileState extends State<CheckProfile> {
                       children: [
                         //Text("770 T", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
                         //Spacer(),
-                        Text("2894 ", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
+                        Text(user.ratings.length.toString(), maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
+                        SizedBox(width: 5.w,),
                         Icon(Icons.star, size: ScreenUtil().setSp(28), color: Colors.yellow,)
                       ],
                     ),
@@ -122,22 +143,35 @@ class _CheckProfileState extends State<CheckProfile> {
             padding: EdgeInsets.symmetric(horizontal: 30.w),
             child: Row(
                 children: [
-                  Text("2894 ", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(19),),)),
-                  Text("followers", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
+                  Text(user.numFollowers.toString(), maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(19),),)),
+                  Text(" followers", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
                   Spacer(),
-                  Text("123 ", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(19),),)),
-                  Text("following", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
+                  Text(user.numFollowing.toString(), maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(19),),)),
+                  Text(" following", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
                 ]
             ),
           ),
           SizedBox(height: 20.h,),
           GestureDetector(
+            onTap: ()async{
+              if(DBServiceUser.userF.following.contains(user.uid)) {
+                await DBServiceUser.dbServiceUser.deleteFollower(DBServiceUser.userF.uid, user.uid);
+                DBServiceUser.userF.following.remove(user.uid);
+              }
+              else {
+                await DBServiceUser.dbServiceUser.addFollower(user.uid);
+                DBServiceUser.userF.following.add(user.uid);
+              }
+              user.numFollowers = await DBServiceUser.dbServiceUser.getNumFollowers(user.uid);
+              setState(() {
+              });
+            },
             child: Center(
               child: Container(
-                width: 165.w,
+                width: 185.w,
                 height: 45.h,
                 decoration: BoxDecoration(
-                  color: Colors.lightBlueAccent,
+                  color: DBServiceUser.userF.following.contains(user.uid) ? Colors.redAccent: Colors.lightBlueAccent,
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                   boxShadow: [BoxShadow(
                     color: Colors.grey.withOpacity(0.2),
@@ -148,11 +182,11 @@ class _CheckProfileState extends State<CheckProfile> {
                 ),
                 child: Row( mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.add_rounded, size: ScreenUtil().setSp(32), color: Colors.white,),
+                    DBServiceUser.userF.following.contains(user.uid) ? Container() : Icon(Icons.add_rounded, size: ScreenUtil().setSp(32), color: Colors.white,),
                     Column(
                       children: [
                         SizedBox(height: 4.h,),
-                        Text("   Follow", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(23),),)),
+                        Text(DBServiceUser.userF.following.contains(user.uid) ? "Stop following" : "   Follow", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(23),),)),
                       ],
                     ),
                   ],
@@ -167,6 +201,101 @@ class _CheckProfileState extends State<CheckProfile> {
               width: 381.w,
               height: user.about == null ? 1 : 130.h,
               child:Text(user.about ?? "", maxLines: 5, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
+            ),
+          ),
+          Center(
+            child: Text("Favorite Lists", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),))
+          ),
+          SizedBox(height: 15.h,),
+          Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              GestureDetector(
+                onTap: user.lists == null? null: (){
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings(name: "/favslists", arguments: ['R', user]),
+                    screen: FavoriteLists(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                  //Navigator.pushNamed(context, "/favslists", arguments: 'R');
+                },
+                child: Container(
+                  height: 50.h,
+                  width: 150.w,
+                  decoration: new BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      boxShadow: [BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 3,
+                        blurRadius: 4,
+                        offset: Offset(1, 1), // changes position of shadow
+                      ),],
+                      image: new DecorationImage(
+                          fit: BoxFit.cover,
+                          image: new AssetImage("assets/rest_button.png")
+                      )
+                  ),
+                  child:Center(child: Text("Restaurants", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(19),),))),
+                ),
+              ),
+              GestureDetector(
+                onTap: user.lists == null? null: (){
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings(name: "/favslists", arguments: ['E', user]),
+                    screen: FavoriteLists(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                  //Navigator.pushNamed(context, "/favslists", arguments: 'E');
+                },
+                child: Container(
+                  height: 50.h,
+                  width: 150.w,
+                  decoration: new BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      boxShadow: [BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 3,
+                        blurRadius: 4,
+                        offset: Offset(1, 1), // changes position of shadow
+                      ),],
+                      image: new DecorationImage(
+                          fit: BoxFit.cover,
+                          image: new AssetImage("assets/platos_button.png")
+                      )
+                  ),
+                  child:Center(child: Text("Dishes", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(19),),))),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 30.h,),
+          GestureDetector(
+            onTap:(){
+              CommonData.pop[4] = true;
+              pushNewScreenWithRouteSettings(
+                context,
+                settings: RouteSettings(name: "/ratinghistory", arguments: user),
+                screen: RatingHistory(),
+                withNavBar: true,
+                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+              );
+              //Navigator.pushNamed(context, "/ratinghistory");
+            },
+            child: Container(
+              width: 365.w,
+              height: 60.h,
+              child: Row(mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(width: 20.w,),
+                  SvgPicture.asset("assets/ratings.svg", width: 37.w, height: 37.h,),
+                  SizedBox(width: 30.w,),
+                  Container(width: 250.w, child: Text("Rating history", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                  Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
+                ],
+              ),
             ),
           ),
         ],

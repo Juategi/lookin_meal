@@ -136,7 +136,7 @@ class _ProfileState extends State<Profile> {
                   CommonData.pop[4] = true;
                   pushNewScreenWithRouteSettings(
                     context,
-                    settings: RouteSettings(name: "/ratinghistory"),
+                    settings: RouteSettings(name: "/ratinghistory", arguments: user),
                     screen: RatingHistory(),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,

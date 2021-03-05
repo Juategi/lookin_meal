@@ -38,11 +38,15 @@ class DBServiceUser {
           about: result.first["about"],
           ratings: await DBServiceEntry.dbServiceEntry.getAllRating(id),
           recently: await DBServiceRestaurant.dbServiceRestaurant.getRecently(id),
+          followers: await dbServiceUser.getFollowers(id),
+          following: await dbServiceUser.getFollowing(id)
         );
         print("User obtained: ${result.first}");
         DBServiceUser.userF = user;
         user.lists = await dbServiceUser.getLists();
         user.history = await DBServiceEntry.dbServiceEntry.getRatingsHistory(user.uid, user.ratings.map((r) => r.entry_id).toList(), 0, 15);
+        user.numFollowing = user.following.length;
+        user.numFollowers = user.followers.length;
         return user;
       }
     }
@@ -227,5 +231,46 @@ class DBServiceUser {
     print(response.body);
   }
 
+  Future addFollower(String followerid)async{
+    var response = await http.post("${StaticStrings.api}/follower", body: {"userid": userF.uid, "followerid":followerid});
+    print(response.body);
+  }
+
+  Future deleteFollower(String userid, String followerid)async{
+    var response = await http.delete("${StaticStrings.api}/follower", headers: {"userid":userid, "followerid":followerid});
+    print(response.body);
+  }
+
+  Future<int> getNumFollowers(String userid) async{
+    var response = await http.get("${StaticStrings.api}/numfollowers", headers: {"userid":userid});
+    List result = json.decode(response.body);
+    return int.parse(result.first['num']);
+  }
+
+  Future<int> getNumFollowing(String userid) async{
+    var response = await http.get("${StaticStrings.api}/numfollowing", headers: {"userid":userid});
+    List result = json.decode(response.body);
+    return int.parse(result.first['num']);
+  }
+
+  Future<List<String>> getFollowers(String userid) async{
+    var response = await http.get("${StaticStrings.api}/followers", headers: {"userid":userid});
+    List<String> follows = [];
+    List result = json.decode(response.body);
+    for(var element in result){
+      follows.add(element['user_id']);
+    }
+    return follows;
+  }
+
+  Future<List<String>> getFollowing(String userid) async{
+    var response = await http.get("${StaticStrings.api}/following", headers: {"userid":userid});
+    List<String> follows = [];
+    List result = json.decode(response.body);
+    for(var element in result){
+      follows.add(element['followerid']);
+    }
+    return follows;
+  }
 
 }

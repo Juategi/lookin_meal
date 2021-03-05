@@ -15,11 +15,13 @@ class User with ChangeNotifier{
 	List<FavoriteList> lists;
 	List<Reservation> reservations;
 	String inOrder;
+	int numFollowers, numFollowing;
+	List<String> followers, following;
 
 	set recent(List<Restaurant> l){
 		recently = l;
 		notifyListeners();
 	}
 
-	User({this.uid, this.reservations, this.inOrder, this.email, this.name,this.picture,this.favorites,this.service, this.ratings, this.username, this.country, this.favoriteEntry, this.recently, this.history, this.lists, this.about});
+	User({this.uid, this.reservations, this.followers, this.following, this.numFollowers, this.numFollowing, this.inOrder, this.email, this.name,this.picture,this.favorites,this.service, this.ratings, this.username, this.country, this.favoriteEntry, this.recently, this.history, this.lists, this.about});
 }
