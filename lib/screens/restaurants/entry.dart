@@ -121,8 +121,8 @@ class _EntryRatingState extends State<EntryRating> {
             children: <Widget>[
               SizedBox(height: 40.h,),
               Container(
-                  height: order ? 260.h  :  342.h,
-                  width: order ? 260.w : 342.w,
+                  height: entry.image == null || entry.image == "" ? 130.h : order ? 260.h  :  342.h,
+                  width: entry.image == null || entry.image == "" ? 130.w : order ? 260.w : 342.w,
                   decoration: entry.image == null || entry.image == "" ? null : BoxDecoration(
                       border: Border.all(color: Colors.black54, width: 1),
                     image: entry.image == null || entry.image == ""? null : DecorationImage(
@@ -193,7 +193,7 @@ class _EntryRatingState extends State<EntryRating> {
                           ),
                         ],
                       ) : Container(),
-                      SizedBox(height: 215.h,),
+                      SizedBox(height: entry.image == null || entry.image == "" ? 30.h : 215.h,),
                       Row(
                         children: [
                           entry.price == 0.0 ? Container():Row( mainAxisAlignment: entry.image == null || entry.image == ""?  MainAxisAlignment.center : MainAxisAlignment.start,

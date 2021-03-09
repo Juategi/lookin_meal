@@ -12,6 +12,7 @@ arreglar cuadros texto
 actualizar pagina inicial despues de cambiar ubi (replantear el tema ubi)
 hacer trim() en la busqueda da error
 listener en nombre y tipos de restaurante para los tiles (quizas inecesario solo lo ve el owner)
+dar de alta otro owner
 EN PROPIETARIO, AÑADIR NOTIFICACIONES AHI, LISTA DE RESTAURANTES QUE TIENES, PEDIR NUEVO RESTAURANTE,
 share y aviso de conexion
 

@@ -1,24 +1,15 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
-import 'package:lookinmeal/database/reservationDB.dart';
-import 'package:lookinmeal/models/list.dart';
-import 'package:lookinmeal/models/menu_entry.dart';
-import 'package:lookinmeal/models/order.dart';
-import 'package:lookinmeal/models/reservation.dart';
-import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/profile/edit_profile.dart';
 import 'package:lookinmeal/screens/profile/favorites.dart';
 import 'package:lookinmeal/screens/profile/my_reservations.dart';
+import 'package:lookinmeal/screens/profile/propietary/propietary.dart';
 import 'package:lookinmeal/screens/profile/rating_history.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lookinmeal/services/realtime_orders.dart';
-import 'package:lookinmeal/shared/strings.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -215,6 +206,13 @@ class _ProfileState extends State<Profile> {
               GestureDetector(
                 onTap:(){
                   CommonData.pop[4] = true;
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    //settings: RouteSettings(name: "/owner"),
+                    screen: OwnerMenu(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
                 },
                 child: Container(
                   width: 365.w,

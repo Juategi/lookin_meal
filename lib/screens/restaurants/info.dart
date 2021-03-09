@@ -22,7 +22,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Column(
+        body: ListView(
           children: <Widget>[
             Container(
               height: 42.h,

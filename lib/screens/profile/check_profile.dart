@@ -129,7 +129,7 @@ class _CheckProfileState extends State<CheckProfile> {
                       children: [
                         //Text("770 T", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
                         //Spacer(),
-                        Text(user.ratings.length.toString(), maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
+                        Text(user.ratings == null ? "0" :user.ratings.length.toString(), maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
                         SizedBox(width: 5.w,),
                         Icon(Icons.star, size: ScreenUtil().setSp(28), color: Colors.yellow,)
                       ],
@@ -155,12 +155,16 @@ class _CheckProfileState extends State<CheckProfile> {
           GestureDetector(
             onTap: ()async{
               if(DBServiceUser.userF.following.contains(user.uid)) {
-                await DBServiceUser.dbServiceUser.deleteFollower(DBServiceUser.userF.uid, user.uid);
                 DBServiceUser.userF.following.remove(user.uid);
+                setState(() {
+                });
+                await DBServiceUser.dbServiceUser.deleteFollower(DBServiceUser.userF.uid, user.uid);
               }
               else {
-                await DBServiceUser.dbServiceUser.addFollower(user.uid);
                 DBServiceUser.userF.following.add(user.uid);
+                setState(() {
+                });
+                await DBServiceUser.dbServiceUser.addFollower(user.uid);
               }
               user.numFollowers = await DBServiceUser.dbServiceUser.getNumFollowers(user.uid);
               setState(() {

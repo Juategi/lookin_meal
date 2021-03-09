@@ -8,7 +8,7 @@ import 'package:lookinmeal/models/restaurant.dart';
 class User with ChangeNotifier{
 	String name,email,picture, country, username, about;
 	final String uid, service;
-	List<Restaurant> favorites, recently;
+	List<Restaurant> favorites, recently, owned;
 	List<Rating> ratings;
 	List<MenuEntry> favoriteEntry;
 	Map<String,Restaurant> history;
@@ -23,5 +23,5 @@ class User with ChangeNotifier{
 		notifyListeners();
 	}
 
-	User({this.uid, this.reservations, this.followers, this.following, this.numFollowers, this.numFollowing, this.inOrder, this.email, this.name,this.picture,this.favorites,this.service, this.ratings, this.username, this.country, this.favoriteEntry, this.recently, this.history, this.lists, this.about});
+	User({this.uid, this.reservations, this.owned, this.followers, this.following, this.numFollowers, this.numFollowing, this.inOrder, this.email, this.name,this.picture,this.favorites,this.service, this.ratings, this.username, this.country, this.favoriteEntry, this.recently, this.history, this.lists, this.about});
 }

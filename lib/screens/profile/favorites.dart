@@ -569,7 +569,7 @@ class _ListDisplayState extends State<ListDisplay> {
                       child: GestureDetector(
                           onTap: () async{
                             await showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
-                              return Provider<Restaurant>.value(value: entries[entryId], child: Provider<MenuEntry>.value(value: entry, child: EntryRating()));
+                              return Provider.value(value: false, child: Provider<Restaurant>.value(value: entries[entryId], child: Provider<MenuEntry>.value(value: entry, child: EntryRating())));
                             }).then((value){setState(() {});});
                           },
                           child: Container(

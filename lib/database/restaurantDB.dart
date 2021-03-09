@@ -43,6 +43,11 @@ class DBServiceRestaurant{
     return parseResponse(response);
   }
 
+  Future<List<Restaurant>> getOwned(String id) async {
+    var response = await http.get("${StaticStrings.api}/owned", headers: {"user_id" : id, "latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
+    return parseResponse(response);
+  }
+
   Future<List<Restaurant>> getRestaurantsById(List<String> ids, latitude, longitude) async {
     var response = await http.get(
         "${StaticStrings.api}/restbyid",
