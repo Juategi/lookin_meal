@@ -239,7 +239,7 @@ class RegisterRestaurantMenu extends StatelessWidget {
                   SizedBox(width: 20.w,),
                   Icon(Icons.create, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),),
                   SizedBox(width: 30.w,),
-                  Container(width: 250.w, child: Text("Register new", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                  Container(width: 250.w, child: Text("Create new", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                   Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                 ],
               ),

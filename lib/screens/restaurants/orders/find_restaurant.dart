@@ -9,6 +9,7 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/search.dart';
+import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/decos.dart';
@@ -269,7 +270,13 @@ class _ConfirmationMenuState extends State<ConfirmationMenu> {
           restaurant.phone == null || restaurant.phone == "" ? Container() : SizedBox(height: 50.h,),
           GestureDetector(
             onTap:(){
-
+              pushNewScreenWithRouteSettings(
+                context,
+                settings: RouteSettings(arguments: restaurant),
+                screen: IdRequest(),
+                withNavBar: true,
+                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+              );
             },
             child: Container(
               width: 365.w,
@@ -298,6 +305,7 @@ class ConfirmationCode extends StatefulWidget {
 class _ConfirmationCodeState extends State<ConfirmationCode> {
   Restaurant restaurant;
   bool init = true;
+  bool sent = false;
   int localcode;
   int code;
   String relation = "Dueño";
@@ -314,7 +322,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
       child: Scaffold(
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-          child: Column( crossAxisAlignment: CrossAxisAlignment.center,
+          child: !sent ? Column( crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text("Please introduce the code we sent to you", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
               SizedBox(height: 80.h,),
@@ -365,12 +373,20 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
               SizedBox(height: 50.h,),
               GestureDetector(
                 onTap: () async{
+                  FocusScope.of(context).unfocus();
                   bool result = await DBServiceRequest.dbServiceRequest.confirmCodes(code, localcode);
                   if(!result){
                     Alerts.toast("WRONG CODE!");
                   }
                   else{
-
+                    bool result = await DBServiceRequest.dbServiceRequest.createRequest(restaurant.restaurant_id, DBServiceUser.userF.uid, relation, 'email', "", "");
+                    if(result){
+                      setState(() {
+                        sent = true;
+                      });
+                    }
+                    else
+                      Alerts.dialog("Error, already requested", context);
                   }
                 },
                 child: Container(
@@ -383,6 +399,151 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
                     child: Center(child: Text("Send", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),)))
                 ),
               ),
+            ],
+          ) : Column(
+            children: [
+              SizedBox(height: 50.h,),
+              Text("Thank you, our team will review your application and will contact you soon.", maxLines: 5, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class IdRequest extends StatefulWidget {
+  @override
+  _IdRequestState createState() => _IdRequestState();
+}
+
+class _IdRequestState extends State<IdRequest> {
+  Restaurant restaurant;
+  bool init = true;
+  bool sent = false;
+  String idfront, idback;
+  String relation = "Dueño";
+  final StorageService _storageService = StorageService();
+  @override
+  Widget build(BuildContext context) {
+    restaurant = ModalRoute.of(context).settings.arguments;
+    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+          child: !sent ? Column( crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("Please take a photo of your ID on both sides so we can confirm your identity.", maxLines: 3, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+              SizedBox(height: 50.h,),
+              GestureDetector(
+                onTap: () async{
+                  idfront = await _storageService.uploadImage(context, "ids");
+                  if(idfront  != null){
+                    setState((){
+                    });
+                  }
+                },
+                child: Container(
+                  width: 240.w,
+                  height: 130.h,
+                  decoration: idfront == null? null: BoxDecoration(
+                    image: DecorationImage(
+                      image: Image.network(idfront).image,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Icon(Icons.camera_alt, size: ScreenUtil().setSp(55), color: Color.fromRGBO(255, 110, 117, 0.7),),
+                        Text("Front", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.7), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
+                      ],
+                    )
+                  ),
+                ),
+              ),
+              SizedBox(height: 50.h,),
+              GestureDetector(
+                onTap: () async{
+                  idback = await _storageService.uploadImage(context, "ids");
+                  if(idback != null){
+                    setState((){
+                    });
+                  }
+                },
+                child: Container(
+                  width: 240.w,
+                  height: 130.h,
+                  decoration: idback == null? null: BoxDecoration(
+                    image: DecorationImage(
+                      image: Image.network(idback).image,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: Center(
+                      child: Column(
+                        children: [
+                          Icon(Icons.camera_alt, size: ScreenUtil().setSp(55), color: Color.fromRGBO(255, 110, 117, 0.7),),
+                          Text("Back", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.7), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
+                        ],
+                      )
+                  ),
+                ),
+              ),
+              SizedBox(height: 20.h,),
+              Container(width: 200.w, child: Text("Relation with the place", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+              SizedBox(height: 10.h,),
+              DropdownButton<String>(
+                items: CommonData.typesRelation.map((type) => DropdownMenuItem<String>(
+                    value: type,
+                    child: Row( mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(width: 140.w, child: Text(type, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
+                      ],
+                    )
+                )).toList(),
+                underline: Padding(
+                  padding: EdgeInsets.all(5),
+                ),
+                value: relation,
+                onChanged: (type) async{
+                  setState(() {
+                    relation = type;
+                  });
+                },
+              ),
+              SizedBox(height: 50.h,),
+              GestureDetector(
+                onTap: () async{
+                  if(idfront == null || idback == null){
+                    Alerts.dialog("Please upload your id", context);
+                    return;
+                  }
+                  bool result = await DBServiceRequest.dbServiceRequest.createRequest(restaurant.restaurant_id, DBServiceUser.userF.uid, relation, 'id', idfront, idback);
+                  if(result){
+                    setState(() {
+                      sent = true;
+                    });
+                  }
+                  else
+                    Alerts.dialog("Error, already requested", context);
+                },
+                child: Container(
+                    width: 170.w,
+                    height: 45.h,
+                    decoration: BoxDecoration(
+                      color: Color.fromRGBO(255, 110, 117, 0.8),
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                    ),
+                    child: Center(child: Text("Send", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),)))
+                ),
+              ),
+            ],
+          ) : Column(
+            children: [
+              SizedBox(height: 50.h,),
+              Text("Thank you, our team will review your application and will contact you soon.", maxLines: 5, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
             ],
           ),
         ),

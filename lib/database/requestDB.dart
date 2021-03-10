@@ -48,4 +48,24 @@ class DBServiceRequest{
     if(response.body == 'error')
       return false;
   }
+
+  Future<bool> createRequest(String restaurant_id, String user_id, String relation, String confirmation, String idfront, String idback) async{
+    Map body = {
+      "restaurant_id" : restaurant_id,
+      "user_id" : user_id,
+      "relation" : relation,
+      "confirmation" : confirmation,
+      "idfront" : idfront,
+      "idback" : idback
+    };
+    try {
+      var response = await http.post(
+          "${StaticStrings.api}/request", body: body);
+      print(response.body);
+      if(response.body == 'Request created')
+        return true;
+    }catch(e){
+      return false;
+    }
+  }
 }
