@@ -12,6 +12,7 @@ class CommonData{
   static final Color backgroundColor = Color.fromRGBO(196, 196, 196, 0.3);
   //Color backgroundColor = Color(0xC4C4C4);
   static final List<String> typesList = ["African", "American", "Argentinean", "Asian", "Bar", "Barbeque", "Bistro", "Brazilian", "Cafe", "Canadian", "Chinese", "Dessert", "English", "French", "Fusion", "German", "Greek", "Grill", "Gourmet", "Hamburgers", "Hawaiian", "Healthy", "Indian", "Indonesian", "Italian", "Japanese", "Korean", "Lebanese", "Mexican", "Morocco", "Organic", "Pizza", "Pub", "Seafood", "South American", "Spanish", "Street Food", "Sushi", "Tapas", "Thai", "Turkish", "Vegan Options", "Vegetarian Friendly", "Wine Bar"];
+  static final List<String> typesRelation = ["Dueño", "Responsable", "Trabajador", "Otro"];
   static final List<dynamic> types = [
     {"value": "Cafe"},
     {"value": "African"},

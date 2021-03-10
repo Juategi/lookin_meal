@@ -3,18 +3,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/database/requestDB.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/search.dart';
+import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:lookinmeal/shared/decos.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:lookinmeal/shared/widgets.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:provider/provider.dart';
+import 'dart:math';
 
 class FindRestaurant extends StatefulWidget {
   @override
@@ -222,7 +225,13 @@ class _ConfirmationMenuState extends State<ConfirmationMenu> {
           SizedBox(height: 80.h,),
           restaurant.email == null || restaurant.email == "" ? Container() : GestureDetector(
             onTap:(){
-
+              pushNewScreenWithRouteSettings(
+                context,
+                settings: RouteSettings(arguments: restaurant),
+                screen: ConfirmationCode(),
+                withNavBar: true,
+                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+              );
             },
             child: Container(
               width: 365.w,
@@ -276,6 +285,107 @@ class _ConfirmationMenuState extends State<ConfirmationMenu> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ConfirmationCode extends StatefulWidget {
+  @override
+  _ConfirmationCodeState createState() => _ConfirmationCodeState();
+}
+
+class _ConfirmationCodeState extends State<ConfirmationCode> {
+  Restaurant restaurant;
+  bool init = true;
+  int localcode;
+  int code;
+  String relation = "Dueño";
+  @override
+  Widget build(BuildContext context) {
+    restaurant = ModalRoute.of(context).settings.arguments;
+    if(init){
+      localcode = Random().nextInt(99999);
+      DBServiceRequest.dbServiceRequest.sendConfirmationCode(localcode, "juantg1994@gmail.com"); //cambiar a email del restaurante
+      init = false;
+    }
+    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+          child: Column( crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("Please introduce the code we sent to you", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+              SizedBox(height: 80.h,),
+              Center(
+                child: TextField(
+                  onChanged: (val){
+                    code = int.parse(val);
+                  },
+                  maxLines: 1,
+                  maxLength: 6,
+                  autofocus: false,
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(
+                    color: Colors.black54,
+                  ),
+                  decoration: textInputDeco.copyWith(hintText: "Code here"),
+                ),
+              ),
+              SizedBox(height: 10.h,),
+              GestureDetector(
+                onTap: (){
+                  DBServiceRequest.dbServiceRequest.reSendConfirmationCode(localcode, "juantg1994@gmail.com");
+                  Alerts.toast("Code sent to your email!");
+                },
+                  child: Text("Resend", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.redAccent, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(18),),))),
+              SizedBox(height: 40.h,),
+              Container(width: 200.w, child: Text("Relation with the place", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+              SizedBox(height: 10.h,),
+              DropdownButton<String>(
+                items: CommonData.typesRelation.map((type) => DropdownMenuItem<String>(
+                    value: type,
+                    child: Row( mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(width: 140.w, child: Text(type, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
+                      ],
+                    )
+                )).toList(),
+                underline: Padding(
+                  padding: EdgeInsets.all(5),
+                ),
+                value: relation,
+                onChanged: (type) async{
+                  setState(() {
+                    relation = type;
+                  });
+                },
+              ),
+              SizedBox(height: 50.h,),
+              GestureDetector(
+                onTap: () async{
+                  bool result = await DBServiceRequest.dbServiceRequest.confirmCodes(code, localcode);
+                  if(!result){
+                    Alerts.toast("WRONG CODE!");
+                  }
+                  else{
+
+                  }
+                },
+                child: Container(
+                    width: 170.w,
+                    height: 45.h,
+                    decoration: BoxDecoration(
+                      color: Color.fromRGBO(255, 110, 117, 0.8),
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                    ),
+                    child: Center(child: Text("Send", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),)))
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
