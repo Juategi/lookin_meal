@@ -4,7 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
-import 'package:lookinmeal/screens/restaurants/orders/find_restaurant.dart';
+import 'package:lookinmeal/screens/profile/propietary/create_restaurant.dart';
+import 'file:///C:/D/lookin_meal/lib/screens/profile/propietary/find_restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
@@ -229,7 +230,13 @@ class RegisterRestaurantMenu extends StatelessWidget {
           SizedBox(height: 50.h,),
           GestureDetector(
             onTap:(){
-
+              pushNewScreenWithRouteSettings(
+                context,
+                //settings: RouteSettings(name: "/owner"),
+                screen: CreateRestaurant(),
+                withNavBar: true,
+                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+              );
             },
             child: Container(
               width: 365.w,

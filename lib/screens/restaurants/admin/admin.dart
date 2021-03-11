@@ -29,7 +29,7 @@ class _AdminPageState extends State<AdminPage> {
     return SafeArea(
       child: Scaffold(
         body: Padding(
-          padding: EdgeInsets.symmetric(vertical: 60.h, horizontal: 25.w),
+          padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 25.w),
           child: Column(
             children: [
               Row( mainAxisAlignment: MainAxisAlignment.center,
@@ -158,6 +158,19 @@ class _AdminPageState extends State<AdminPage> {
                     pageTransitionAnimation: PageTransitionAnimation.slideUp,
                   ).then((value) => setState(() {}));
                   //Navigator.pushNamed(context, "/editcodes",arguments: restaurant).then((value) => setState(() {}));
+                },
+              ),
+              SizedBox(height: 50.h,),
+              GestureDetector(
+                child: Row(
+                  children: [
+                    Icon(Icons.people, size: ScreenUtil().setSp(32),),
+                    SizedBox(width: 30.w,),
+                    Text("Manage admins", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                  ],
+                ),
+                onTap:()async{
+
                 },
               ),
             ],
