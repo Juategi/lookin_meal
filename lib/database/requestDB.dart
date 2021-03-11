@@ -68,4 +68,26 @@ class DBServiceRequest{
       return false;
     }
   }
+
+  Future<bool> createRequestRestaurant(String user_id, String relation, String name, String phone, String website, String address, String email, String city, String country, double latitude, double longitude, String image, List<String> types, String currency) async{
+    Map body = {
+      "user_id" : user_id,
+      "relation" : relation,
+      "name": name,
+      "phone": phone ?? "",
+      "website": website ?? "",
+      "address": address,
+      "email": email ?? "",
+      "city": city.trim().toUpperCase(),
+      "country": country,
+      "latitude": latitude.toString(),
+      "longitude": longitude.toString(),
+      "image" : image,
+      "types": types.toString().replaceAll("[", "{").replaceAll("]", "}") ??
+          List<String>().toString(),
+      "currency": currency,
+    };
+    var response = await http.post("${StaticStrings.api}/requestrestaurant", body: body);
+    print(response.body);
+  }
 }
