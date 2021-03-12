@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/shared/functions.dart';
@@ -46,6 +47,25 @@ class DBServiceRestaurant{
   Future<List<Restaurant>> getOwned(String id) async {
     var response = await http.get("${StaticStrings.api}/owned", headers: {"user_id" : id, "latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
     return parseResponse(response);
+  }
+
+  Future<Map<User, String>> getOwners(String restaurant_id) async {
+    var response = await http.get("${StaticStrings.api}/owners", headers: {"restaurant_id" : restaurant_id});
+    Map<User, String> users = {};
+    List<dynamic> aux = json.decode(response.body);
+    for(var result in aux){
+      User user = User(
+          uid: result["user_id"],
+          name: result["name"],
+          email: result["email"],
+          picture: result["image"],
+          country: result["country"],
+          username: result["username"],
+          about: result["about"],
+      );
+      users[user] = result["type"];
+    }
+    return users;
   }
 
   Future<List<Restaurant>> getRestaurantsById(List<String> ids, latitude, longitude) async {

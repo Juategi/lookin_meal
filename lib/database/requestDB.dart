@@ -82,9 +82,8 @@ class DBServiceRequest{
       "country": country,
       "latitude": latitude.toString(),
       "longitude": longitude.toString(),
-      "image" : image,
-      "types": types.toString().replaceAll("[", "{").replaceAll("]", "}") ??
-          List<String>().toString(),
+      "image" : image ?? "",
+      "types": types == null? "{}" : types.toString().replaceAll("[", "{").replaceAll("]", "}"),
       "currency": currency,
     };
     var response = await http.post("${StaticStrings.api}/requestrestaurant", body: body);

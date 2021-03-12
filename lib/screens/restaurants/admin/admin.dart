@@ -9,6 +9,7 @@ import 'package:lookinmeal/screens/restaurants/admin/edit_daily.dart';
 import 'package:lookinmeal/screens/restaurants/admin/edit_menu.dart';
 import 'package:lookinmeal/screens/restaurants/admin/edit_restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/admin/edit_tables.dart';
+import 'package:lookinmeal/screens/restaurants/admin/manage_admins.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
@@ -170,7 +171,13 @@ class _AdminPageState extends State<AdminPage> {
                   ],
                 ),
                 onTap:()async{
-
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings( arguments: restaurant),
+                    screen: ManageAdmins(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                  ).then((value) => setState(() {}));
                 },
               ),
             ],

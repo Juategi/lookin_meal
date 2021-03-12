@@ -239,9 +239,9 @@ class _ProfileState extends State<Profile> {
                   child: Row(mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(width: 20.w,),
-                      SvgPicture.asset("assets/points.svg", width: 37.w, height: 37.h,),
+                      SvgPicture.asset("assets/help.svg", width: 37.w, height: 37.h,),
                       SizedBox(width: 30.w,),
-                      Container(width: 250.w, child: Text("Points Program", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                      Container(width: 250.w, child: Text("Help and support", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                       Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                     ],
                   ),
