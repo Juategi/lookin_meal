@@ -202,6 +202,7 @@ class DBServiceUser {
       "user_id": owner.user_id,
       "restaurant_id": owner.restaurant_id,
       "token": owner.token,
+      "type": owner.type
     };
     var response = await http.post(
         "${StaticStrings.api}/owner", body: body);

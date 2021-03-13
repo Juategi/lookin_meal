@@ -88,7 +88,50 @@ class _ManageAdminsState extends State<ManageAdmins> {
                   )
               ).toList(),
             ),
-          )
+          ),
+          bottomNavigationBar: BottomAppBar(
+            child: Container(
+              height: 80.h,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    height: 50.h,
+                    width: 160.w,
+                    child: RaisedButton(elevation: 0,
+                      color: Color.fromRGBO(255, 110, 117, 0.9),
+                      child: Text("Save", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
+                      onPressed: () async{
+
+                      }, ),
+                  ),
+                  SizedBox(width: 30.w,),
+                  Container(
+                    height: 50.h,
+                    width: 160.w,
+                    child: RaisedButton(elevation: 0,
+                      color: Color.fromRGBO(255, 110, 117, 0.9),
+                      child: Text("Add new", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
+                      onPressed: (){
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                child: Column(
+                                  children: [
+                                    
+                                  ],
+                                ),
+                              );
+                            }
+                        );
+                      },),
+                  ),
+                ],
+              ),
+            ),
+          ),
         )
     );
   }
