@@ -49,7 +49,7 @@ class DBServiceRestaurant{
     return parseResponse(response);
   }
 
-  Future<Map<User, String>> getOwners(String restaurant_id) async {
+  /*Future<Map<User, String>> getOwners(String restaurant_id) async {
     var response = await http.get("${StaticStrings.api}/owners", headers: {"restaurant_id" : restaurant_id});
     Map<User, String> users = {};
     List<dynamic> aux = json.decode(response.body);
@@ -66,7 +66,7 @@ class DBServiceRestaurant{
       users[user] = result["type"];
     }
     return users;
-  }
+  }*/
 
   Future<List<Restaurant>> getRestaurantsById(List<String> ids, latitude, longitude) async {
     var response = await http.get(

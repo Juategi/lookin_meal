@@ -218,7 +218,9 @@ class DBServiceUser {
       Owner owner = Owner(
           restaurant_id: element['restaurant_id'].toString(),
           user_id: element['user_id'].toString(),
-          token: element['token'].toString()
+          token: element['token'].toString(),
+          type: element['type'].toString(),
+          username: element["username"].toString(),
       );
       owners.add(owner);
     }
