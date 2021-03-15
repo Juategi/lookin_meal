@@ -171,7 +171,8 @@ class _ManageAdminsState extends State<ManageAdmins> {
                                                       restaurant_id: restaurant.restaurant_id,
                                                       username: user.username,
                                                       user_id: user.uid,
-                                                      type: 'B'
+                                                      type: 'B',
+                                                      token: ""
                                                   );
                                                   DBServiceUser.dbServiceUser.createOwner(owner);
                                                   owners.add(owner);
