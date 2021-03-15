@@ -120,7 +120,7 @@ class _ManageAdminsState extends State<ManageAdmins> {
                               return Dialog(
                                 child: Column(
                                   children: [
-                                    
+
                                   ],
                                 ),
                               );
