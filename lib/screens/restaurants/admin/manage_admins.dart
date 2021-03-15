@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,6 +8,7 @@ import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/owner.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
@@ -48,7 +51,7 @@ class _ManageAdminsState extends State<ManageAdmins> {
                 SizedBox(height: 10.h,),
                 Text("Mark the check for the user to have permission to manage other admin", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
                 SizedBox(height: 20.h,),
-              ] + owners.map((user) =>
+              ] + (owners == null? [Loading()] : owners.map((user) =>
                   user.user_id == DBServiceUser.userF.uid ? Container() : Padding(
                     padding: EdgeInsets.symmetric(vertical: 10.h),
                     child: Container(
@@ -70,6 +73,7 @@ class _ManageAdminsState extends State<ManageAdmins> {
                                   }
                                   setState(() {
                                   });
+                                  DBServiceUser.dbServiceUser.updateOwner(user);
                                 },
                           ),
                           SizedBox(width: 20.w,),
@@ -77,6 +81,7 @@ class _ManageAdminsState extends State<ManageAdmins> {
                             icon:  Icon(Icons.delete, color: owners.firstWhere((o) => o.user_id == DBServiceUser.userF.uid).type == 'B'? Colors.grey : Colors.black,),
                             iconSize: ScreenUtil().setSp(26),
                             onPressed: owners.firstWhere((o) => o.user_id == DBServiceUser.userF.uid).type == 'B'? null : ()async{
+                              DBServiceUser.dbServiceUser.deleteOwner(user);
                               setState(() {
                                 owners.remove(user);
                               });
@@ -86,7 +91,7 @@ class _ManageAdminsState extends State<ManageAdmins> {
                       ),
                     ),
                   )
-              ).toList(),
+              ).toList()),
             ),
           ),
           bottomNavigationBar: BottomAppBar(
@@ -101,31 +106,92 @@ class _ManageAdminsState extends State<ManageAdmins> {
                     width: 160.w,
                     child: RaisedButton(elevation: 0,
                       color: Color.fromRGBO(255, 110, 117, 0.9),
-                      child: Text("Save", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
-                      onPressed: () async{
-
-                      }, ),
-                  ),
-                  SizedBox(width: 30.w,),
-                  Container(
-                    height: 50.h,
-                    width: 160.w,
-                    child: RaisedButton(elevation: 0,
-                      color: Color.fromRGBO(255, 110, 117, 0.9),
                       child: Text("Add new", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
-                      onPressed: (){
-                        showDialog(
+                      onPressed: ()async{
+                        await showModalBottomSheet(
                             context: context,
                             builder: (BuildContext context) {
-                              return Dialog(
-                                child: Column(
-                                  children: [
-
-                                  ],
+                              String username;
+                              InputDecoration input = InputDecoration(
+                                  filled: true,
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.black, width: 1),
+                                      borderRadius: BorderRadius.circular(20)
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.black, width: 1),
+                                      borderRadius: BorderRadius.circular(20)
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.black, width: 1),
+                                      borderRadius: BorderRadius.circular(20)
+                                  ),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.black, width: 1),
+                                      borderRadius: BorderRadius.circular(20)
+                                  )
+                              );
+                              return Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Center(
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 300.h,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: Colors.white
+                                    ),
+                                    padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
+                                    child: Column(
+                                      children: [
+                                        Text("Add new admin", style: TextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(18)),),
+                                        SizedBox(height: 30.h,),
+                                        TextField(
+                                          onChanged: (val){
+                                            username = val;
+                                          },
+                                          decoration: input.copyWith(hintText: "Username..."),
+                                        ),
+                                        SizedBox(height: 10.h,),
+                                        Container(
+                                          height: 50.h,
+                                          width: 160.w,
+                                          child: RaisedButton(elevation: 0,
+                                            color: Color.fromRGBO(255, 110, 117, 0.9),
+                                            child: Text("Add", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
+                                            onPressed: () async{
+                                              User user = await DBServiceUser.dbServiceUser.getUserDataUsername(username);
+                                              print(user);
+                                              if(user == null){
+                                                Alerts.toast("User not found!");
+                                              }
+                                              else{
+                                                if(owners.firstWhere((o) => o.username == user.username, orElse: () => Owner()).username == null){
+                                                  Owner owner = Owner(
+                                                      restaurant_id: restaurant.restaurant_id,
+                                                      username: user.username,
+                                                      user_id: user.uid,
+                                                      type: 'B'
+                                                  );
+                                                  DBServiceUser.dbServiceUser.createOwner(owner);
+                                                  owners.add(owner);
+                                                  Navigator.pop(context);
+                                                }
+                                                else{
+                                                  Alerts.toast("User is already an admin!");
+                                                }
+                                              }
+                                            }, ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               );
                             }
                         );
+                        setState(() {
+                        });
                       },),
                   ),
                 ],

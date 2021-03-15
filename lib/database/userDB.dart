@@ -75,6 +75,26 @@ class DBServiceUser {
       return null;
   }
 
+  Future<User> getUserDataUsername(String username) async{
+    var response = await http.get(
+        "${StaticStrings.api}/username", headers: {"username": username});
+    if(response.body != "[]") {
+      List<dynamic> result = json.decode(response.body);
+      User user = User(
+        uid: result.first["user_id"],
+        name: result.first["name"],
+        email: result.first["email"],
+        service: result.first["service"],
+        picture: result.first["image"],
+        country: result.first["country"],
+        username: result.first["username"],
+      );
+      return user;
+    }
+    else
+      return null;
+  }
+
   Future createUser(String id, String email, String name, String picture,
       String service, String country, String username) async {
     Map body = {
@@ -228,9 +248,19 @@ class DBServiceUser {
     return owners;
   }
 
-  Future deleteCode(String user_id, String restauratnt_id) async{
+  Future deleteOwner(Owner owner) async{
     var response = await http.delete(
-        "${StaticStrings.api}/owner", headers: {"user_id" : user_id, "restaurant_id" : restauratnt_id});
+        "${StaticStrings.api}/owner", headers: {"user_id" : owner.user_id, "restaurant_id" : owner.restaurant_id});
+    print(response.body);
+  }
+
+  Future updateOwner(Owner owner) async{
+    var response = await http.put("${StaticStrings.api}/owner", body: {
+      "user_id" : owner.user_id,
+      "type": owner.type,
+      "token": owner.token ?? "",
+      "restaurant_id": owner.restaurant_id,
+    });
     print(response.body);
   }
 
