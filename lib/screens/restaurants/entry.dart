@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -337,7 +338,7 @@ class _EntryRatingState extends State<EntryRating> {
                           fontWeight: FontWeight.normal,
                           fontSize: ScreenUtil().setSp(22),),))),
                   ),
-                ) :SmoothStarRating(
+                ) : SmoothStarRating(
                   allowHalfRating: true,
                   rating: rate,
                   color: Color.fromRGBO(250, 201, 53, 1),

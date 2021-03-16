@@ -306,4 +306,9 @@ class DBServiceUser {
     return follows;
   }
 
+  Future createTicket(String ticket, String type)async{
+    var response = await http.post("${StaticStrings.api}/ticket", body: {"userid":userF.uid, "ticket":ticket, "type":type});
+    print(response.body);
+  }
+
 }

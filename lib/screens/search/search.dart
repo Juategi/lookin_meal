@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -326,7 +327,7 @@ class _SearchState extends State<Search> {
                           if(actual.query != ""){
                             queries.add(actual);
                             setState(() {
-                              actual = DishQuery(allergens: []);
+                              actual = DishQuery(allergens: [], rating: 0);
                             });
                           }
                           else{
@@ -436,7 +437,7 @@ class _SearchState extends State<Search> {
                            SizedBox(height: 15.h,),
                            Row(mainAxisAlignment: MainAxisAlignment.start,
                              children: <Widget>[
-                               SmoothStarRating(
+                               /*SmoothStarRating(
                                  allowHalfRating: true,
                                  rating: actual.rating,
                                  color: Color.fromRGBO(250, 201, 53, 1),
@@ -449,7 +450,26 @@ class _SearchState extends State<Search> {
                                      actual.rating = rate;
                                    });
                                  },
-                               )
+                               )*/
+                               RatingBar.builder(
+                               initialRating: actual.rating,
+                               minRating: 1,
+                               direction: Axis.horizontal,
+                               allowHalfRating: true,
+                               itemCount: 5,
+                               itemSize: ScreenUtil().setSp(45),
+                               itemPadding: EdgeInsets.symmetric(horizontal: 2.0.w),
+                               itemBuilder: (context, _) => Icon(
+                                 Icons.star,
+                                 color: Color.fromRGBO(250, 201, 53, 1),
+                                 size: ScreenUtil().setSp(45),
+                               ),
+                               onRatingUpdate: (rate){
+                                 setState(() {
+                                   actual.rating = rate;
+                                 });
+                               },
+                             )
                              ],
                            )
                          ],

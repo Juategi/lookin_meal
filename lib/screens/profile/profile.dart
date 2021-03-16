@@ -7,6 +7,7 @@ import 'package:lookinmeal/screens/profile/favorites.dart';
 import 'package:lookinmeal/screens/profile/my_reservations.dart';
 import 'package:lookinmeal/screens/profile/propietary/propietary.dart';
 import 'package:lookinmeal/screens/profile/rating_history.dart';
+import 'package:lookinmeal/screens/profile/support.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -232,6 +233,13 @@ class _ProfileState extends State<Profile> {
               GestureDetector(
                 onTap:()async{
                   CommonData.pop[4] = true;
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    //settings: RouteSettings(name: "/editprofile"),
+                    screen: SupportMenu(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
                 },
                 child: Container(
                   width: 365.w,
@@ -239,7 +247,7 @@ class _ProfileState extends State<Profile> {
                   child: Row(mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(width: 20.w,),
-                      //SvgPicture.asset("assets/help.svg", width: 37.w, height: 37.h,),
+                      Container(width: 37.w, height: 37.h, decoration: BoxDecoration(image: DecorationImage(image: Image.asset("assets/support.png").image)),),
                       SizedBox(width: 30.w,),
                       Container(width: 250.w, child: Text("Help and support", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                       Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
