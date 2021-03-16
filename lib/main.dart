@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:lookinmeal/screens/home/home_screen.dart';
 import 'package:lookinmeal/screens/authenticate/authenticate.dart';
@@ -24,6 +25,7 @@ import 'package:lookinmeal/screens/restaurants/orders/order_screen.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/reservations.dart';
 import 'package:lookinmeal/screens/restaurants/reserve_table.dart';
+import 'package:lookinmeal/services/analytics.dart';
 import 'screens/restaurants/admin/manage_orders.dart';
 import 'services/app_localizations.dart';
 import 'screens/authenticate/wrapper.dart';
@@ -31,6 +33,7 @@ import 'services/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 void main() { Provider.debugCheckInvalidValueType = null; runApp(MyApp()); }
 
@@ -45,7 +48,9 @@ class MyApp extends StatelessWidget {
     return StreamProvider<String>.value(
       value: AuthService().user,
       child: MaterialApp(
-        //darkTheme: ThemeData(brightness: Brightness.dark),
+        navigatorObservers: [
+          AnalyticsService().getAnalyticsObserver()
+        ],
         theme: ThemeData(
           scaffoldBackgroundColor: const Color.fromRGBO(245, 245, 245, 1),
         ),

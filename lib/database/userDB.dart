@@ -5,6 +5,7 @@ import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/owner.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/services/analytics.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/shared/strings.dart';
 import 'package:lookinmeal/services/geolocation.dart';
@@ -47,6 +48,13 @@ class DBServiceUser {
         user.history = await DBServiceEntry.dbServiceEntry.getRatingsHistory(user.uid, user.ratings.map((r) => r.entry_id).toList(), 0, 15);
         user.numFollowing = user.following.length;
         user.numFollowers = user.followers.length;
+        user.owned = await DBServiceRestaurant.dbServiceRestaurant.getOwned(user.uid);
+        String owner;
+        if(user.owned.length == 0)
+          owner = "false";
+        else
+          owner = "true";
+        AnalyticsService().setUserProperties(user.uid, user.username, owner);
         return user;
       }
     }
