@@ -81,6 +81,16 @@ class DBServiceRestaurant{
     return parseResponseEntry(response);
   }
 
+  Future<Map<MenuEntry,Restaurant>> getTopEntries() async {
+    var response = await http.get("${StaticStrings.api}/topentry", headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
+    return parseResponseEntry(response);
+  }
+
+  Future<List<Restaurant>> getTopRestaurants() async {
+    var response = await http.get("${StaticStrings.api}/toprestaurant", headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
+    return parseResponse(response);
+  }
+
   Future<List<Restaurant>> getAllRestaurants() async {
     var response = await http.get(
         "${StaticStrings.api}/allrestaurants");

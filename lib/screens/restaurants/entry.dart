@@ -115,7 +115,7 @@ class _EntryRatingState extends State<EntryRating> {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        resizeToAvoidBottomPadding: true,
+        //resizeToAvoidBottomPadding: true,
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.w),
           child: ListView(
