@@ -317,7 +317,7 @@ class DBServiceUser {
     print(response.body);
   }
 
-  Future addNotification(Notification notification) async{
+  Future addNotification(PersonalNotification notification) async{
     Map body = {
       "user_id": notification.user_id,
       "restaurant_id": notification.restaurant_id,
@@ -329,14 +329,14 @@ class DBServiceUser {
     print(response.body);
   }
 
-  Future<List<Notification>> getNotifications(String user_id) async {
-    List<Notification> notifications = [];
+  Future<List<PersonalNotification>> getNotifications(String user_id) async {
+    List<PersonalNotification> notifications = [];
     var response = await http.get(
         "${StaticStrings.api}/notifications",
         headers: {"user_id" : user_id});
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
-      Notification notification = Notification(
+      PersonalNotification notification = PersonalNotification(
         id: element['id'].toString(),
         restaurant_id: element['restaurant_id'].toString(),
         user_id: element['user_id'].toString(),

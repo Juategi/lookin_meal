@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/reservationDB.dart';
+import 'package:lookinmeal/models/notification.dart';
 import 'package:lookinmeal/models/reservation.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/shared/alert.dart';
@@ -148,7 +149,13 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
                               if(await Alerts.confirmation("Remove reservation, are you sure?", context)){
                                 DBServiceReservation.dbServiceReservation.deleteReservation(reservation.table_id, DateTime.parse(reservation.reservationdate).add(Duration(days: 1)).toString().substring(0,10), reservation.reservationtime);
                                 restaurant.reservations[dateString].remove(reservation);
-                                //NOTIFICACION A USUARIO
+                                DBServiceUser.dbServiceUser.addNotification(PersonalNotification(
+                                  restaurant_name: restaurant.name,
+                                  restaurant_id: restaurant.restaurant_id,
+                                  user_id: reservation.user_id,
+                                  type: "Reserv",
+                                  body: "Reservation cancelled from restaurant " + restaurant.name
+                                ));
                                 setState(() {
                                 });
                               }

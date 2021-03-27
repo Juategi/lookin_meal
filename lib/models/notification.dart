@@ -7,7 +7,7 @@ class PushNotificationMessage {
   });
 }
 
-class Notification{
+class PersonalNotification{
   String user_id, restaurant_id, body, type, id, restaurant_name;
-  Notification({this.body, this.type, this.restaurant_id, this.user_id, this.id, this.restaurant_name});
+  PersonalNotification({this.body, this.type, this.restaurant_id, this.user_id, this.id, this.restaurant_name});
 }

@@ -86,7 +86,7 @@ class _UserReservationsState extends State<UserReservations> {
                         Container(
                           height: 100.h,
                           width: 160.w,
-                          child: Text(reservation.resturant_name, maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)),
+                          child: Text(reservation.restaurant_name, maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)),
                         ),
                         SizedBox(width: 10.w,),
                         Column( crossAxisAlignment: CrossAxisAlignment.start,

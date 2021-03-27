@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
+import 'package:lookinmeal/models/notification.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/models/order.dart';
 import 'package:lookinmeal/models/owner.dart';
@@ -469,6 +470,13 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
                                 });
                               });
                               for(Owner owner in await DBServiceUser.dbServiceUser.getOwners(restaurant.restaurant_id)){
+                                DBServiceUser.dbServiceUser.addNotification(PersonalNotification(
+                                    restaurant_name: restaurant.name,
+                                    restaurant_id: restaurant.restaurant_id,
+                                    user_id: owner.user_id,
+                                    type: "Order",
+                                    body: "Order sent On restaurant: ${restaurant.name}"
+                                ));
                                 PushNotificationService.sendNotification("Order sent", "On restaurant: ${restaurant.name}", restaurant.restaurant_id, "order", owner.token);
                               }
                             }
