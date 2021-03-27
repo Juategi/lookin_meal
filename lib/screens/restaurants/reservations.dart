@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/reservationDB.dart';
 import 'package:lookinmeal/models/reservation.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/loading.dart';
@@ -29,6 +30,8 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
       restaurant.reservations = {};
     dateString = dateSelected.toString().substring(0,10);
     restaurant.reservations[dateString] = await DBServiceReservation.dbServiceReservation.getReservationsDay(restaurant.restaurant_id, dateString);
+    restaurant.excludeddays = await DBServiceReservation.dbServiceReservation.getExcluded(restaurant.restaurant_id);
+    print(restaurant.excludeddays);
     setState(() {
       loading = false;
     });
@@ -44,7 +47,6 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     restaurant = ModalRoute.of(context).settings.arguments;
-    print(dateString);
     if(init){
       int weekday = dateSelected.weekday == 7? 0 : dateSelected.weekday;
       if(restaurant.schedule[weekday.toString()].every((element) => element.replaceAll("[", "").replaceAll("]", "") == "-1")){
@@ -90,6 +92,26 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
                   return true;
                 },),
               SizedBox(height: 5.h,),
+              Row( mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Checkbox(value: restaurant.excludeddays.contains(dateString.substring(0,10)), onChanged: (val){
+                    String date = dateString.substring(0,10);
+                    print(date);
+                    if(val){
+                      restaurant.excludeddays.add(date);
+                      DBServiceReservation.dbServiceReservation.addExcluded(date, restaurant.restaurant_id);
+                    }
+                    else{
+                      restaurant.excludeddays.remove(date);
+                      DBServiceReservation.dbServiceReservation.deleteExcluded(date, restaurant.restaurant_id);
+                    }
+                    setState(() {
+                    });
+                  }),
+                  Text("Disable more reservations this day", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(15),),)),
+                ],
+              ),
+              SizedBox(height: 5.h,),
               loading ? Loading() : IconButton(icon: Icon(Icons.refresh,  size: ScreenUtil().setSp(45), color: Color.fromRGBO(255, 110, 117, 0.7),), onPressed: (){
                 _getReservations();
               }),
@@ -114,11 +136,24 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
                       padding: EdgeInsets.symmetric(horizontal: 10.w),
                       child: Row(
                         children: [
-                          Container(width: 170.w, child: Text(reservation.username, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                          Container(width: 140.w, child: Text(reservation.username, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
                           SizedBox(width: 10.w,),
                           Text("People: ${reservation.people}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
-                          SizedBox(width: 20.w,),
+                          SizedBox(width: 10.w,),
                           Text("Time: ${reservation.reservationtime}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+                          Container(
+                            height: 40.h,
+                            width: 40.w,
+                            child: IconButton(icon: Icon(Icons.delete,  size: ScreenUtil().setSp(25), color: Color.fromRGBO(255, 110, 117, 0.7),), onPressed: ()async{
+                              if(await Alerts.confirmation("Remove reservation, are you sure?", context)){
+                                DBServiceReservation.dbServiceReservation.deleteReservation(reservation.table_id, DateTime.parse(reservation.reservationdate).add(Duration(days: 1)).toString().substring(0,10), reservation.reservationtime);
+                                restaurant.reservations[dateString].remove(reservation);
+                                //NOTIFICACION A USUARIO
+                                setState(() {
+                                });
+                              }
+                            }),
+                          ),
                         ],
                       ),
                     ),

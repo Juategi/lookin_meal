@@ -32,6 +32,12 @@ class _TableReservationState extends State<TableReservation> {
   bool loading = false;
   bool noSchedule = true;
 
+  Future getExcluded() async{
+    restaurant.excludeddays = await DBServiceReservation.dbServiceReservation.getExcluded(restaurant.restaurant_id);
+    setState(() {
+    });
+  }
+
   Future _calculateAvailable() async{
     List<Reservation> reservations;
     int weekday = dateSelected.weekday == 7? 0 : dateSelected.weekday;
@@ -113,6 +119,10 @@ class _TableReservationState extends State<TableReservation> {
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     restaurant = ModalRoute.of(context).settings.arguments;
+    getExcluded();
+    while(restaurant.excludeddays == null){
+      print("Loading excluded...");
+    }
     if(init){
       for(int i = 0; i <= 6; i++){
         if(!restaurant.schedule[i.toString()].every((element) => element.replaceAll("[", "").replaceAll("]", "")  == "-1")){
@@ -120,22 +130,32 @@ class _TableReservationState extends State<TableReservation> {
         }
       }
       dateSelected = DateTime.now();
-      int weekday = dateSelected.weekday == 7? 0 : dateSelected.weekday;
-      if(restaurant.schedule[weekday.toString()].every((element) => element.replaceAll("[", "").replaceAll("]", "") == "-1")){
-        bool loop = true;
-        int day = weekday;
-        int check = 0;
-        day = (weekday+1) == 7? 0 : (weekday+1);
-        while(loop){
-          day = (day+1) == 7? 0 : (day+1);
-          if(!restaurant.schedule[day.toString()].every((element) => element.replaceAll("[", "").replaceAll("]", "") == "-1")){
-            dateSelected = dateSelected.add(Duration(days: weekday < day ? day-weekday : 7 - (weekday - day)));
-            loop = false;
+      bool flag = true;
+      while(flag) {
+        int weekday = dateSelected.weekday == 7 ? 0 : dateSelected.weekday;
+        if (restaurant.schedule[weekday.toString()].every((element) =>
+        element.replaceAll("[", "").replaceAll("]", "") == "-1")) {
+          bool loop = true;
+          int day = weekday;
+          int check = 0;
+          day = (weekday + 1) == 7 ? 0 : (weekday + 1);
+          while (loop) {
+            day = (day + 1) == 7 ? 0 : (day + 1);
+            if (!restaurant.schedule[day.toString()].every((element) =>
+            element.replaceAll("[", "").replaceAll("]", "") == "-1")) {
+              dateSelected = dateSelected.add(Duration(
+                  days: weekday < day ? day - weekday : 7 - (weekday - day)));
+              loop = false;
+            }
+            check += day;
+            if (check >= 21)
+              loop = false;
           }
-          check += day;
-          if(check >= 21)
-            loop = false;
         }
+        if(!restaurant.excludeddays.contains(dateSelected.toString().substring(0,10)))
+          flag = false;
+        else
+          dateSelected = dateSelected.add(Duration(days: 1));
       }
       init = false;
     }
@@ -233,6 +253,9 @@ class _TableReservationState extends State<TableReservation> {
             selectableDayPredicate: (day){
               int weekday = day.weekday == 7? 0 : day.weekday;
               if(restaurant.schedule[weekday.toString()].every((element) => element.replaceAll("[", "").replaceAll("]", "").replaceAll("[", "").replaceAll("]", "") == "-1")){
+                return false;
+              }
+              if(restaurant.excludeddays.contains(day.toString().substring(0,10))) {
                 return false;
               }
               return true;

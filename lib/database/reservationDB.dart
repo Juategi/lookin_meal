@@ -162,12 +162,41 @@ class DBServiceReservation{
     return codes;
   }
 
-  Future deleteCode(String code_id, String restauratnt_id) async{
+  Future deleteCode(String code_id, String restaurant_id) async{
     var response = await http.delete(
-        "${StaticStrings.api}/codes", headers: {"restaurant_id" : restauratnt_id, "code_id" : code_id});
+        "${StaticStrings.api}/codes", headers: {"restaurant_id" : restaurant_id, "code_id" : code_id});
+    print(response.body);
+  }
+
+  //EXCLUDED DAYS
+
+  Future addExcluded(String excludeddate, String restaurant_id) async{
+    Map body = {
+      "restaurant_id": restaurant_id,
+      "excludeddate" : excludeddate,
+    };
+    var response = await http.post(
+        "${StaticStrings.api}/excluded", body: body);
     print(response.body);
   }
 
 
+  Future<List<String>> getExcluded(String restaurant_id) async {
+    List<String> days = [];
+    var response = await http.get(
+        "${StaticStrings.api}/excluded",
+        headers: {"restaurant_id": restaurant_id,});
+    List<dynamic> result = json.decode(response.body);
+    for(var element in result){
+      days.add(DateTime.parse(element['excludeddate']).add(Duration(days: 1)).toString().substring(0,10),);
+    }
+    return days;
+  }
+
+  Future deleteExcluded(String excludeddate, String restaurant_id) async{
+    var response = await http.delete(
+        "${StaticStrings.api}/excluded", headers: {"restaurant_id": restaurant_id, "excludeddate" : excludeddate,});
+    print(response.body);
+  }
 
 }

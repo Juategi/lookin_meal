@@ -42,7 +42,6 @@ class _UserReservationsState extends State<UserReservations> {
   @override
   void initState() {
     super.initState();
-    _getReservations();
     _timer();
   }
   
@@ -50,6 +49,7 @@ class _UserReservationsState extends State<UserReservations> {
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     AppLocalizations tr = AppLocalizations.of(context);
+    _getReservations();
     return SafeArea(
       child: Scaffold(
         body: Column(

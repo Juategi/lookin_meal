@@ -44,21 +44,26 @@ class _ProfileState extends State<Profile> {
             width: 255.w,
             child: Row( mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(height: 67.h, width: 67.w,
-                    decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 3,
-                          offset: Offset(1, 1), // changes position of shadow
-                        ),],
-                        image: new DecorationImage(
-                            fit: BoxFit.cover,
-                            image: new NetworkImage(
-                                user.picture)
-                        )
-                    )
+                GestureDetector(
+                  onTap:(){
+
+                  },
+                  child: Container(height: 67.h, width: 67.w,
+                      decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 3,
+                            offset: Offset(1, 1), // changes position of shadow
+                          ),],
+                          image: new DecorationImage(
+                              fit: BoxFit.cover,
+                              image: new NetworkImage(
+                                  user.picture)
+                          )
+                      )
+                  ),
                 ),
                 SizedBox(width: 50.w,),
                 Column(
