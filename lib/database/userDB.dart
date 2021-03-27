@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:lookinmeal/database/entryDB.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/list.dart';
+import 'package:lookinmeal/models/notification.dart';
 import 'package:lookinmeal/models/owner.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/analytics.dart';
@@ -222,9 +223,6 @@ class DBServiceUser {
     print(response.body);
   }
 
-  //CODES
-
-
   Future createOwner(Owner owner) async{
     Map body = {
       "user_id": owner.user_id,
@@ -316,6 +314,44 @@ class DBServiceUser {
 
   Future createTicket(String ticket, String type)async{
     var response = await http.post("${StaticStrings.api}/ticket", body: {"userid":userF.uid, "ticket":ticket, "type":type});
+    print(response.body);
+  }
+
+  Future addNotification(Notification notification) async{
+    Map body = {
+      "user_id": notification.user_id,
+      "restaurant_id": notification.restaurant_id,
+      "body": notification.body,
+      "type": notification.type
+    };
+    var response = await http.post(
+        "${StaticStrings.api}/notifications", body: body);
+    print(response.body);
+  }
+
+  Future<List<Notification>> getNotifications(String user_id) async {
+    List<Notification> notifications = [];
+    var response = await http.get(
+        "${StaticStrings.api}/notifications",
+        headers: {"user_id" : user_id});
+    List<dynamic> result = json.decode(response.body);
+    for(var element in result){
+      Notification notification = Notification(
+        id: element['id'].toString(),
+        restaurant_id: element['restaurant_id'].toString(),
+        user_id: element['user_id'].toString(),
+        body: element['body'].toString(),
+        type: element['type'].toString(),
+        restaurant_name: element['name'].toString(),
+      );
+      notifications.add(notification);
+    }
+    return notifications;
+  }
+
+  Future deleteNotification(String id) async{
+    var response = await http.delete(
+        "${StaticStrings.api}/notifications", headers: {"id" : id});
     print(response.body);
   }
 
