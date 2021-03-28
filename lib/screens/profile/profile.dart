@@ -16,6 +16,8 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
+
 
 class Profile extends StatefulWidget {
   @override
@@ -26,11 +28,17 @@ class _ProfileState extends State<Profile> {
   final AuthService _auth = AuthService();
   User user;
   bool first = true;
+  Future _getNotifications() async{
+    DBServiceUser.userF.notifications = await DBServiceUser.dbServiceUser.getNotifications(DBServiceUser.userF.uid);
+    setState(() {
+    });
+  }
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     user = Provider.of<User>(context);
     AppLocalizations tr = AppLocalizations.of(context);
+    _getNotifications();
     if(first){
       CommonData.tabContext = context;
       first = false;
@@ -229,7 +237,28 @@ class _ProfileState extends State<Profile> {
                     child: Row(mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(width: 20.w,),
-                        Container(width: 37.w, height: 37.h, child: Icon(Icons.notifications_active_rounded, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),)),
+                        Stack(
+                          children: [
+                            Container(width: 37.w, height: 37.h, child: Icon(Icons.notifications_active_rounded, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),)),
+                            DBServiceUser.userF.notifications == null || DBServiceUser.userF.notifications.length == 0 ? Container() : Container(
+                              height: 20.h,
+                              width: 20.w,
+                              decoration: BoxDecoration(
+                                color: Colors.redAccent,
+                                borderRadius: BorderRadius.all(Radius.circular(15)),
+                                boxShadow: [BoxShadow(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 3,
+                                  offset: Offset(1, 1), // changes position of shadow
+                                ),],
+                              ),
+                              child: Center(
+                                child: Text(DBServiceUser.userF.notifications.length.toString(), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),),)
+                              )
+                            )
+                          ],
+                        ),
                         SizedBox(width: 30.w,),
                         Container(width: 250.w, child: Text("Notifications", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                         Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),

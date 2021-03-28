@@ -9,6 +9,7 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:flutter/material.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/strings.dart';
 
 class PushNotificationService {
@@ -25,6 +26,7 @@ class PushNotificationService {
     // https://console.firebase.google.com/project/YOUR_PROJECT_ID/notification/compose
     String token = await _fcm.getToken();
     print("FirebaseMessaging token: $token");
+    DBServiceUser.dbServiceUser.updateToken(token, DBServiceUser.userF.uid);
     _fcm.configure(
         onMessage: (Map<String, dynamic> message) async {
           print("onMessage: $message");

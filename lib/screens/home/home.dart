@@ -258,6 +258,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 					),
 					navBarStyle: NavBarStyle.style6, // Choose the nav bar style with this property.
 					onItemSelected: (num){
+						print(CommonData.pop[num]);
 						if(CommonData.pop[num] && lastIndex == num){
 							CommonData.pop[num] = false;
 							Navigator.of(CommonData.tabContext).popUntil((route) {

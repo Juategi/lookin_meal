@@ -38,6 +38,7 @@ class DBServiceUser {
           country: result.first["country"],
           username: result.first["username"],
           about: result.first["about"],
+          token: result.first["token"],
           ratings: await DBServiceEntry.dbServiceEntry.getAllRating(id),
           recently: await DBServiceRestaurant.dbServiceRestaurant.getRecently(id),
           followers: await dbServiceUser.getFollowers(id),
@@ -227,7 +228,6 @@ class DBServiceUser {
     Map body = {
       "user_id": owner.user_id,
       "restaurant_id": owner.restaurant_id,
-      "token": owner.token,
       "type": owner.type
     };
     var response = await http.post(
@@ -264,7 +264,6 @@ class DBServiceUser {
     var response = await http.put("${StaticStrings.api}/owner", body: {
       "user_id" : owner.user_id,
       "type": owner.type,
-      "token": owner.token ?? "",
       "restaurant_id": owner.restaurant_id,
     });
     print(response.body);
@@ -352,6 +351,14 @@ class DBServiceUser {
   Future deleteNotification(String id) async{
     var response = await http.delete(
         "${StaticStrings.api}/notifications", headers: {"id" : id});
+    print(response.body);
+  }
+
+  Future updateToken(String token, String user_id) async{
+    var response = await http.put("${StaticStrings.api}/token", body: {
+      "user_id" : user_id,
+      "token": token,
+    });
     print(response.body);
   }
 

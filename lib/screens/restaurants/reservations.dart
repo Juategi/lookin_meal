@@ -4,7 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/reservationDB.dart';
 import 'package:lookinmeal/models/notification.dart';
-import 'package:lookinmeal/models/reservation.dart';
+import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/services/push_notifications.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -156,6 +157,8 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
                                   type: "Reserv",
                                   body: "Reservation cancelled from restaurant " + restaurant.name
                                 ));
+                                User user = await DBServiceUser.dbServiceUser.getUserData(reservation.user_id);
+                                PushNotificationService.sendNotification("Reservation cancelled", "On restaurant: ${restaurant.name}", restaurant.restaurant_id, "ReservCancel", user.token);
                                 setState(() {
                                 });
                               }

@@ -34,6 +34,7 @@ class _RestaurantTileState extends State<RestaurantTile> {
         onTap: (){
           DBServiceRestaurant.dbServiceRestaurant.updateRecently(restaurant);
           CommonData.pop[0] = true;
+          CommonData.pop[3] = true;
           pushNewScreenWithRouteSettings(
             context,
             settings: RouteSettings(name: "/restaurant", arguments: restaurant),
