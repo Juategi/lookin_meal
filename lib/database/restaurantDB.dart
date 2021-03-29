@@ -91,6 +91,11 @@ class DBServiceRestaurant{
     return parseResponse(response);
   }
 
+  Future<List<Restaurant>> getRecommended(String id) async {
+    var response = await http.get("${StaticStrings.api}/recommended", headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString(), "user_id" : id});
+    return parseResponse(response);
+  }
+
   Future<List<Restaurant>> getAllRestaurants() async {
     var response = await http.get(
         "${StaticStrings.api}/allrestaurants");

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/shared/functions.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -145,93 +146,15 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                         throw 'Could not open the web.';
                     },
                   ):Container(),
-                  SizedBox(height: 10.h,),
-                  Row(
-                    children: <Widget>[
-                      restaurant.delivery[0] == "" ? Container() : GestureDetector(
-                        child: Container(
-                          width: 57.w,
-                          height: 57.h,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/glovo.png").image),
-                            borderRadius: BorderRadius.all(Radius.circular(16))
-                          ),
-                        ),
-                        onTap: () async{
-                          if (await canLaunch(restaurant.delivery[0])) {
-                            await launch(restaurant.delivery[0]);
-                          }
-                          else
-                            throw 'Could not open the web.';
-                        },
-                      ),
-                      restaurant.delivery[0] == "" ? Container() : SizedBox(width: 20.w,),
-                      restaurant.delivery[1] == "" ? Container() : GestureDetector(
-                        child: Container(
-                          width: 57.w,
-                          height: 57.h,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/ubereats.png").image),
-                              borderRadius: BorderRadius.all(Radius.circular(16))
-                          ),
-                        ),
-                        onTap: () async{
-                          //await launch(restaurant.delivery[1].replaceAll('"', ''));
-                          if (await canLaunch(restaurant.delivery[1])) {
-                            await launch(restaurant.delivery[1]);
-                          }
-                          else {
-                            print(restaurant.delivery[1]);
-                            throw 'Could not open the web.';
-                          }
-                        },
-                      ),
-                      restaurant.delivery[1] == "" ? Container() : SizedBox(width: 20.w,),
-                      restaurant.delivery[2] == "" ? Container() : GestureDetector(
-                        child: Container(
-                          width: 57.w,
-                          height: 57.h,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/justeat.png").image),
-                              borderRadius: BorderRadius.all(Radius.circular(16))
-                          ),
-                        ),
-                        onTap: () async{
-                          if (await canLaunch(restaurant.delivery[2])) {
-                            await launch(restaurant.delivery[2]);
-                          }
-                          else
-                            throw 'Could not open the web.';
-                        },
-                      ),
-                      restaurant.delivery[2] == "" ? Container() : SizedBox(width: 20.w,),
-                      restaurant.delivery[3] == "" ? Container() : GestureDetector(
-                        child: Container(
-                          width: 57.w,
-                          height: 57.h,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/deliveroo.png").image),
-                              borderRadius: BorderRadius.all(Radius.circular(16))
-                          ),
-                        ),
-                        onTap: () async{
-                          if (await canLaunch(restaurant.delivery[3])) {
-                            await launch(restaurant.delivery[3]);
-                          }
-                          else
-                            throw 'Could not open the web.';
-                        },
-                      ),
-                    ],
-                  ),
                   SizedBox(height: 20.h,),
+                  restaurant.schedule.toString() == "{1: [-1, -1], 2: [-1, -1], 3: [-1, -1], 4: [-1, -1], 5: [-1, -1], 6: [-1, -1], 0: [-1, -1]}" ? Container():
                   Column(
                     children: <Widget>[
                       Row(
                         children: <Widget>[
                           Text("Monday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                           SizedBox(width: 50.w,),
-                          Text(parseSchedule(restaurant.schedule["1"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                          Text(Functions.parseSchedule(restaurant.schedule["1"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                           //Text(restaurant.schedule["1"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                         ],
                       ),
@@ -240,7 +163,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                         children: <Widget>[
                           Text("Tuesday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                           SizedBox(width: 50.w,),
-                          Text(parseSchedule(restaurant.schedule["2"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                          Text(Functions.parseSchedule(restaurant.schedule["2"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                         ],
                       ),
                       SizedBox(height: 20.h,),
@@ -248,7 +171,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                         children: <Widget>[
                           Text("Wednesday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                           SizedBox(width: 27.w,),
-                          Text(parseSchedule(restaurant.schedule["3"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                          Text(Functions.parseSchedule(restaurant.schedule["3"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                         ],
                       ),
                       SizedBox(height: 20.h,),
@@ -256,7 +179,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                         children: <Widget>[
                           Text("Thrusday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                           SizedBox(width: 43.w,),
-                          Text(parseSchedule(restaurant.schedule["4"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                          Text(Functions.parseSchedule(restaurant.schedule["4"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                         ],
                       ),
                       SizedBox(height: 20.h,),
@@ -264,7 +187,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                         children: <Widget>[
                           Text("Friday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                           SizedBox(width: 65.w,),
-                          Text(parseSchedule(restaurant.schedule["5"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                          Text(Functions.parseSchedule(restaurant.schedule["5"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                         ],
                       ),
                       SizedBox(height: 20.h,),
@@ -272,7 +195,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                         children: <Widget>[
                           Text("Saturday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                           SizedBox(width: 44.w,),
-                          Text(parseSchedule(restaurant.schedule["6"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                          Text(Functions.parseSchedule(restaurant.schedule["6"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                         ],
                       ),
                       SizedBox(height: 20.h,),
@@ -280,7 +203,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                         children: <Widget>[
                           Text("Sunday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                           SizedBox(width: 57.w,),
-                          Text(parseSchedule(restaurant.schedule["0"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                          Text(Functions.parseSchedule(restaurant.schedule["0"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                         ],
                       ),
                     ],
@@ -294,28 +217,5 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
     );
   }
 
-  String parseSchedule(List<String> hours){
-    String text = "";
-    for(int i = 0; i < hours.length; i+=2){
-      hours[i] = hours[i].replaceAll("[", "").replaceAll("]", "").trim();
-      hours[i+1] = hours[i+1].replaceAll("[", "").replaceAll("]", "").trim();
-      if(hours[i].toString() != "-1"){
-        if(hours[i].toString().length == 2){
-          text += hours[i].toString() + ":00" ;
-        }
-        else{
-          text += hours[i].toString().substring(0,2) + ":" + hours[i].toString().substring(2,4);
-        }
-        text += " - ";
-        if(hours[i+1].toString().length == 2){
-          text += hours[i+1].toString() + ":00" ;
-        }
-        else{
-          text += hours[i+1].toString().substring(0,2) + ":" + hours[i+1].toString().substring(2,4);
-        }
-        text += "     ";
-      }
-    }
-    return text;
-  }
+
 }

@@ -8,6 +8,7 @@ import 'package:lookinmeal/database/entryDB.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
+import 'package:lookinmeal/models/owner.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/translate.dart';
 import 'package:lookinmeal/screens/profile/favorites.dart';
@@ -27,6 +28,7 @@ import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/widgets.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileRestaurant extends StatefulWidget {
   @override
@@ -38,19 +40,12 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 	bool first = true;
 	bool loading = false;
 	String language;
-	void _loadMenu()async{
-		restaurant.menu = await DBServiceEntry.dbServiceEntry.getMenu(restaurant.restaurant_id);
-	}
+	List<Owner> owners;
 
-	void _timer() {
-		if(restaurant.menu == null) {
-			Future.delayed(Duration(seconds: 2)).then((_) {
-				setState(() {
-					print("Loading menu...");
-				});
-				_timer();
-			});
-		}
+	void _loadOwners()async{
+		owners = await DBServiceUser.dbServiceUser.getOwners(restaurant.restaurant_id);
+		setState(() {
+		});
 	}
 
 	List<Widget> _loadTop(){
@@ -192,8 +187,8 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   Widget build(BuildContext context) {
   	restaurant = ModalRoute.of(context).settings.arguments;
   	print(restaurant.restaurant_id);
-		_timer();
 		if(first){
+			_loadOwners();
 			if(restaurant.original == null){
 				restaurant.original = [];
 			}
@@ -204,6 +199,9 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 					Translate original = Translate(id: entry.id, name: entry.name, description: entry.description);
 					restaurant.original.add(original);
 				}
+			}
+			for(int i = 0; i < 7; i++){
+				Functions.parseSchedule(restaurant.schedule[i.toString()]);
 			}
 			first = false;
 		}
@@ -293,6 +291,8 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 								),
 								//Navigator.pushNamed(context, "/gallery", arguments: restaurant),
         		),
+						//ADMIN
+					//owners == null || owners.firstWhere((owner) => owner.user_id == DBServiceUser.userF.uid, orElse: () => null) == null ? Container() :
 					Container(
 						height: 105.h,
 						width: 411.w,
@@ -326,7 +326,6 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 						  				},
 						  			),
 						  		),
-
 						  		Align(
 						  			alignment: AlignmentDirectional.topCenter,
 						  			child: GestureDetector(
@@ -481,6 +480,86 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							],
 						),
 					),
+						SizedBox(height: 5.h,),
+						Padding(
+						  padding: EdgeInsets.symmetric(horizontal: 10.w),
+						  child: Row(mainAxisAlignment: MainAxisAlignment.start,
+						  	children: <Widget>[
+						  		restaurant.delivery[0] == "" || restaurant.delivery[0] == "-" ? Container() : GestureDetector(
+						  			child: Container(
+						  				width: 57.w,
+						  				height: 57.h,
+						  				decoration: BoxDecoration(
+						  						image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/glovo.png").image),
+						  						borderRadius: BorderRadius.all(Radius.circular(16))
+						  				),
+						  			),
+						  			onTap: () async{
+						  				if (await canLaunch(restaurant.delivery[0])) {
+						  					await launch(restaurant.delivery[0]);
+						  				}
+						  				else
+						  					throw 'Could not open the web.';
+						  			},
+						  		),
+						  		restaurant.delivery[1] == "" || restaurant.delivery[1] == "-"  ? Container() : GestureDetector(
+						  			child: Container(
+						  				width: 57.w,
+						  				height: 57.h,
+						  				decoration: BoxDecoration(
+						  						image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/ubereats.png").image),
+						  						borderRadius: BorderRadius.all(Radius.circular(16))
+						  				),
+						  			),
+						  			onTap: () async{
+						  				//await launch(restaurant.delivery[1].replaceAll('"', ''));
+						  				if (await canLaunch(restaurant.delivery[1])) {
+						  					await launch(restaurant.delivery[1]);
+						  				}
+						  				else {
+						  					print(restaurant.delivery[1]);
+						  					throw 'Could not open the web.';
+						  				}
+						  			},
+						  		),
+						  		restaurant.delivery[2] == "" || restaurant.delivery[2] == "-" ? Container() : GestureDetector(
+						  			child: Container(
+						  				width: 57.w,
+						  				height: 57.h,
+						  				decoration: BoxDecoration(
+						  						image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/justeat.png").image),
+						  						borderRadius: BorderRadius.all(Radius.circular(16))
+						  				),
+						  			),
+						  			onTap: () async{
+						  				if (await canLaunch(restaurant.delivery[2])) {
+						  					await launch(restaurant.delivery[2]);
+						  				}
+						  				else
+						  					throw 'Could not open the web.';
+						  			},
+						  		),
+						  		restaurant.delivery[3] == "" || restaurant.delivery[3] == "-" ? Container() : GestureDetector(
+						  			child: Container(
+						  				width: 57.w,
+						  				height: 57.h,
+						  				decoration: BoxDecoration(
+						  						image: DecorationImage(fit: BoxFit.cover, image: Image.asset("assets/deliveroo.png").image),
+						  						borderRadius: BorderRadius.all(Radius.circular(16))
+						  				),
+						  			),
+						  			onTap: () async{
+						  				if (await canLaunch(restaurant.delivery[3])) {
+						  					await launch(restaurant.delivery[3]);
+						  				}
+						  				else
+						  					throw 'Could not open the web.';
+						  			},
+						  		),
+						  	],
+						  ),
+						),
+						SizedBox(height: 20.h,),
 					restaurant.menu.length != 0 ? Container(
 						height: 42.h,
 						width: 411.w,

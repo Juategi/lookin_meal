@@ -38,7 +38,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	String id;
 	String locality, country;
 	Position myPos;
-	List<Restaurant> nearRestaurants;
+	List<Restaurant> nearRestaurants, recommended;
 	Map<MenuEntry,Restaurant> popular;
 	List<double> distances = List<double>();
 	int lastIndex = 0;
@@ -70,6 +70,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		locality = await _geolocationService.getLocality(myPos.latitude, myPos.longitude);
 		country = await _geolocationService.getCountry(myPos.latitude, myPos.longitude);
 		nearRestaurants= await DBServiceRestaurant.dbServiceRestaurant.getNearRestaurants(myPos.latitude, myPos.longitude, locality.toUpperCase());
+		recommended = await DBServiceRestaurant.dbServiceRestaurant.getRecommended(DBServiceUser.userF.uid);
 		/*for(Restaurant restaurant in restaurants){
 			distances.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));
 		}*/
@@ -181,9 +182,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
 	  user = Provider.of<User>(context);
 	  AppLocalizations tr = AppLocalizations.of(context);
-		PushNotificationService.initialise(context);
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
 	  if(ready && user != null) {
+			PushNotificationService.initialise(context);
 			return PersistentTabView(
 					context,
 					controller: _controller,
@@ -191,7 +192,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 						MultiProvider(
 							providers: [
 								Provider<Map<MenuEntry, Restaurant>>(create: (c) => popular,),
-								Provider<List<Restaurant>>(create: (c) => nearRestaurants,)
+								Provider<List<List<Restaurant>>>(create: (c) => [nearRestaurants , recommended],)
 							],
 							child: HomeScreen(),
 						),

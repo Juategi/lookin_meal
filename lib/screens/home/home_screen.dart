@@ -24,7 +24,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 	User user;
-	List<Restaurant> nearRestaurants;
+	List<Restaurant> nearRestaurants, recommended;
 	Map<MenuEntry,Restaurant> popular;
 	String location;
 	bool first = true;
@@ -38,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
 		});
 		return true;
 	}
+
 
 	@override
   void initState() {
@@ -53,10 +54,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
 	@override
   Widget build(BuildContext context) {
-		user = Provider.of<User>(context);
-		nearRestaurants = Provider.of<List<Restaurant>>(context);
-		popular = Provider.of<Map<MenuEntry,Restaurant>>(context);
 		if(first){
+			user = Provider.of<User>(context);
+			nearRestaurants = Provider.of<List<List<Restaurant>>>(context).first;
+			recommended = Provider.of<List<List<Restaurant>>>(context).last;
+			popular = Provider.of<Map<MenuEntry,Restaurant>>(context);
 			user.addListener(() { setState(() {
 			});});
 			for(MenuEntry entry in popular.keys){
@@ -143,16 +145,20 @@ class _HomeScreenState extends State<HomeScreen> {
 																	print(result.formattedAddress);
 																	GeolocationService.myPos = Position(latitude: result.geometry.location.lat, longitude: result.geometry.location.lng);
 																	String locality = await GeolocationService().getLocality(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude);
+																	await GeolocationService().getCountry(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude);
 																	nearRestaurants = await DBServiceRestaurant.dbServiceRestaurant.getNearRestaurants(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude, locality.toUpperCase());
-																	setState(() {
-																	});
+																	print(nearRestaurants.first.name);
 																	Navigator.of(context).pop();
 																},
 																initialPosition: LatLng(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude),
 																useCurrentLocation: false,
 															),
 														),
-													);
+													).then((value) {
+														//nearly = [];
+														setState(() {
+														});
+													});
 												}
 										),
 									],
@@ -186,14 +192,27 @@ class _HomeScreenState extends State<HomeScreen> {
 			  		),
 						SizedBox(height: 10.h,),
 						Container(
-							height: 175.h,
-						  child: ListView(
+							height: 355.h,
+						  child:/* ListView(
 						  	scrollDirection: Axis.horizontal,
 						  	children: nearRestaurants.map((r) => Padding(
 									padding: EdgeInsets.symmetric(vertical: 10.h),
-						  	  child: Provider<Restaurant>.value(value: r, child: RestaurantTile(),),
-						  	)).toList(),
-						  ),
+									child: Provider<Restaurant>.value(value: r, child: RestaurantTile(),),
+								)).toList()
+						  ),*/
+							GridView(
+								scrollDirection: Axis.horizontal,
+								gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+										maxCrossAxisExtent: 200,
+										childAspectRatio: 1.3 / 2,
+										crossAxisSpacing: 1,
+										mainAxisSpacing: 2
+								),
+								children: nearRestaurants.map((r) => Padding(
+									padding: EdgeInsets.symmetric(vertical: 10.h),
+									child: Provider<Restaurant>.value(value: r, child: RestaurantTile(),),
+								)).toList(),
+							),
 						),
 						SizedBox(height: 50.h,),
 						Text('Popular plates', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
@@ -230,6 +249,24 @@ class _HomeScreenState extends State<HomeScreen> {
 						),
 						SizedBox(height: 50.h,),
 						Text('You might like', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+						SizedBox(height: 20.h,),
+						Container(
+							height: 355.h,
+							child:
+							GridView(
+								scrollDirection: Axis.horizontal,
+								gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+										maxCrossAxisExtent: 200,
+										childAspectRatio: 1.3 / 2,
+										crossAxisSpacing: 1,
+										mainAxisSpacing: 2
+								),
+								children: recommended.map((r) => Padding(
+									padding: EdgeInsets.symmetric(vertical: 10.h),
+									child: Provider<Restaurant>.value(value: r, child: RestaurantTile(),),
+								)).toList(),
+							),
+						),
 					],
 			  ),
 			),

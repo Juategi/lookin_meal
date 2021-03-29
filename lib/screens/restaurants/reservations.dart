@@ -94,7 +94,7 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
                   return true;
                 },),
               SizedBox(height: 5.h,),
-              Row( mainAxisAlignment: MainAxisAlignment.center,
+              loading ? Loading() : Row( mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Checkbox(value: restaurant.excludeddays.contains(dateString.substring(0,10)), onChanged: (val){
                     String date = dateString.substring(0,10);
