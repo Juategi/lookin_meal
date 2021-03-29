@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
@@ -23,6 +24,7 @@ import 'package:lookinmeal/screens/map/map.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:minimize_app/minimize_app.dart';
+import 'package:splashscreen/splashscreen.dart';
 
 
 
@@ -319,6 +321,22 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 						bottomNavigationBar: getBar()
 					);*/
 
-		} else return Loading();
+		} else return SplashScreen(
+				seconds: 3,
+				//navigateAfterSeconds: Wrapper(),
+				title: Text.rich(
+					TextSpan(
+						children: [
+							TextSpan(text: 'Find', style: GoogleFonts.newsCycle(textStyle: TextStyle(color: Colors.white, letterSpacing: .5, fontWeight: FontWeight.normal, fontSize: 72,),),),
+							TextSpan(text: 'Eat', style: GoogleFonts.newsCycle(textStyle: TextStyle(color: Colors.white, letterSpacing: .5, fontWeight: FontWeight.bold, fontSize: 72,),))
+						],
+					),
+				),
+				image: Image.asset('assets/logo.png'),
+				backgroundColor: Color.fromRGBO(255, 110, 117, 0.9),
+				styleTextUnderTheLoader: TextStyle(),
+				photoSize: 110.0,
+				loaderColor: Colors.white
+		);
   }
 }

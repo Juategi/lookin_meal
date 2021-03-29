@@ -115,12 +115,12 @@ class _RestaurantTileState extends State<RestaurantTile> {
                   ),
                   SizedBox(width: 5.w,),
                   Container(width: 135.w, child: Text(restaurant.types.length == 0 ? "" : restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : "${restaurant.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(10),),))),
-                  SizedBox(width: 15.w,),
+                  SizedBox(width: 13.w,),
                   Container(
                     child: SvgPicture.asset("assets/markerMini.svg"),
                   ),
                   //Icon(Icons.location_on, color: Colors.black, size: ScreenUtil().setSp(16),),
-                  Text("${restaurant.distance.toString()} km", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(10),),))
+                  Container(width: 40.w, child: Text("${restaurant.distance.toString()} km", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(10),),)))
                 ],
               ),
               SizedBox(height: 2.h,)

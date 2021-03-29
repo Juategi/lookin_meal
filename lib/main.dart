@@ -1,5 +1,7 @@
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/screens/home/home_screen.dart';
 import 'package:lookinmeal/screens/authenticate/authenticate.dart';
 import 'package:lookinmeal/screens/authenticate/email_pass.dart';
@@ -26,6 +28,8 @@ import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/reservations.dart';
 import 'package:lookinmeal/screens/restaurants/reserve_table.dart';
 import 'package:lookinmeal/services/analytics.dart';
+import 'package:lookinmeal/shared/common_data.dart';
+import 'package:splashscreen/splashscreen.dart';
 import 'screens/restaurants/admin/manage_orders.dart';
 import 'services/app_localizations.dart';
 import 'screens/authenticate/wrapper.dart';
@@ -45,6 +49,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     AppLocalizations tr = AppLocalizations.of(context);
     FlutterStatusbarcolor.setStatusBarColor(Color.fromRGBO(255, 110, 117, 0.5));
+    //ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return StreamProvider<String>.value(
       value: AuthService().user,
       child: MaterialApp(
@@ -89,7 +94,23 @@ class MyApp extends StatelessWidget {
           "/detailorder" : (context) => OrderDetail(),
           "/checkprofile" : (context) => CheckProfile()
         },
-        home: Wrapper(),
+        home: SplashScreen(
+            seconds: 3,
+            navigateAfterSeconds: Wrapper(),
+            title: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(text: 'Find', style: GoogleFonts.newsCycle(textStyle: TextStyle(color: Colors.white, letterSpacing: .5, fontWeight: FontWeight.normal, fontSize: 72,),),),
+                  TextSpan(text: 'Eat', style: GoogleFonts.newsCycle(textStyle: TextStyle(color: Colors.white, letterSpacing: .5, fontWeight: FontWeight.bold, fontSize: 72,),))
+                ],
+              ),
+            ),
+            image: Image.asset('assets/logo.png'),
+            backgroundColor: Color.fromRGBO(255, 110, 117, 0.9),
+            styleTextUnderTheLoader: TextStyle(),
+            photoSize: 110.0,
+            loaderColor: Colors.white
+        ),
         //initialRoute:"/",
         supportedLocales: [
           Locale('es','ES'),
