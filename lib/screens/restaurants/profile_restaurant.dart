@@ -186,6 +186,8 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   @override
   Widget build(BuildContext context) {
   	restaurant = ModalRoute.of(context).settings.arguments;
+  	restaurant.menu = [];
+
   	print(restaurant.restaurant_id);
 		if(first){
 			_loadOwners();
@@ -571,7 +573,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 					Column(
 						children: [
 							SizedBox(height: 40.h,),
-							Container(width: 300.w, height: 190.h, child: Text("¡Parece que no hay menu, haz una foto a la carta y nosotros nos encargaremos de subirla!", maxLines: 5, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(28),),))),
+							Container(width: 300.w, height: 190.h, child: Text("¡Parece que no hay menu, haz una foto a la carta y nosotros nos encargaremos de subirla!", maxLines: 6, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(28),),))),
 							SizedBox(height: 30.h,),
 							GestureDetector(
 								onTap: ()async{
@@ -587,7 +589,8 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							  	child: Container(
 							  			height: 40.h,
 							  			width: 40.w,
-							  			child: SvgPicture.asset("assets/menu.svg", color: Color.fromRGBO(255, 110, 117, 0.9), fit: BoxFit.contain,)
+							  			//child: SvgPicture.asset("assets/menu.svg", color: Color.fromRGBO(255, 110, 117, 0.9), fit: BoxFit.contain,)
+											child: Icon(Icons.linked_camera_rounded, color: Color.fromRGBO(255, 110, 117, 0.9), size: ScreenUtil().setSp(60),),
 							  	),
 							  ),
 							)
@@ -712,7 +715,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							],
 						),
 					): Container(),
-					restaurant.dailymenu != null ? DailyMenu(restaurant: restaurant, currency: restaurant.currency) : Container(),
+					restaurant.dailymenu != null ? DailyMenu(restaurant: restaurant, currency: restaurant.currency) : Container(height: 20.h,),
         	],
         ),
       ),

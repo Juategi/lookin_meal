@@ -8,6 +8,7 @@ Terminar busqueda platos compleja, menos exacta,
 hacer trim() en la busqueda da error
 share y aviso de conexion
 sistema actualizacion
+pantalla menu vacio (enviar carta)
 idioma
 
 
