@@ -33,6 +33,7 @@ class _TopState extends State<Top> {
   Future _loadData() async{
     topRestaurant = await DBServiceRestaurant.dbServiceRestaurant.getTopRestaurants();
     topEntry = await DBServiceRestaurant.dbServiceRestaurant.getTopEntries();
+    print("top updated");
     setState(() {
     });
   }
@@ -40,12 +41,12 @@ class _TopState extends State<Top> {
   @override
   void initState() {
     super.initState();
-    _loadData();
   }
 
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    _loadData();
     return SafeArea(
       child: Scaffold(
         //backgroundColor: CommonData().getColor(),

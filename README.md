@@ -6,7 +6,6 @@ EN BUSQUEDA UNICA NO GUARDAR EL DISHQUERY,
 j@j.j da error al registrar
 while en login por si hay dc,
 Terminar busqueda platos compleja, menos exacta,
-arreglar cuadros texto
 hacer trim() en la busqueda da error
 share y aviso de conexion
 sistema actualizacion

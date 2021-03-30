@@ -237,7 +237,7 @@ class _ProfileState extends State<Profile> {
                     child: Row(mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(width: 20.w,),
-                        Stack(
+                        DBServiceUser.userF.notifications.length == 0? Container(width: 37.w, height: 37.h, child: Icon(Icons.notifications_active_rounded, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),)) : Stack(
                           children: [
                             Container(width: 37.w, height: 37.h, child: Icon(Icons.notifications_active_rounded, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),)),
                             DBServiceUser.userF.notifications == null || DBServiceUser.userF.notifications.length == 0 ? Container() : Container(

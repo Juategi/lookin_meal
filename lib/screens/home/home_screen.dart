@@ -148,6 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
 																	await GeolocationService().getCountry(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude);
 																	nearRestaurants = await DBServiceRestaurant.dbServiceRestaurant.getNearRestaurants(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude, locality.toUpperCase());
 																	recommended = await DBServiceRestaurant.dbServiceRestaurant.getRecommended(DBServiceUser.userF.uid);
+																	popular = await DBServiceRestaurant.dbServiceRestaurant.getPopular();
 																	print(nearRestaurants.first.name);
 																	Navigator.of(context).pop();
 																},
@@ -216,9 +217,9 @@ class _HomeScreenState extends State<HomeScreen> {
 							),
 						),
 						SizedBox(height: 50.h,),
-						Text('Popular plates', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+						popular.entries.length == 0? Container() : Text('Popular plates', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
 						SizedBox(height: 10.h,),
-						Container(
+						popular.entries.length == 0? Container() : Container(
 							height: 195.h,
 							child: ListView(
 								scrollDirection: Axis.horizontal,
@@ -235,10 +236,10 @@ class _HomeScreenState extends State<HomeScreen> {
 								) ).toList(),
 							),
 						),
-						SizedBox(height: 50.h,),
-						Text('Recently viewed', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+						popular.entries.length == 0? Container() : SizedBox(height: 50.h,),
+						user.recently.length == 0? Container() : Text('Recently viewed', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
 						SizedBox(height: 10.h,),
-						Container(
+						user.recently.length == 0? Container() : Container(
 							height: 175.h,
 							child: ListView(
 								scrollDirection: Axis.horizontal,
@@ -248,10 +249,10 @@ class _HomeScreenState extends State<HomeScreen> {
 								)).toList(),
 							),
 						),
-						SizedBox(height: 50.h,),
-						Text('You might like', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+						user.recently.length == 0? Container() : SizedBox(height: 50.h,),
+						recommended.length == 0? Container() : Text('You might like', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
 						SizedBox(height: 20.h,),
-						Container(
+						recommended.length == 0? Container() : Container(
 							height: 355.h,
 							child:
 							GridView(
