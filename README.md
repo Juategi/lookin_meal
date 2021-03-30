@@ -10,6 +10,7 @@ arreglar cuadros texto
 hacer trim() en la busqueda da error
 share y aviso de conexion
 sistema actualizacion
+idioma
 
 
 https://developers.google.com/maps/documentation/android-sdk/get-api-key#restrict_key

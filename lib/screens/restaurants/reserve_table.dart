@@ -121,9 +121,8 @@ class _TableReservationState extends State<TableReservation> {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     restaurant = ModalRoute.of(context).settings.arguments;
     getExcluded();
-    while(restaurant.excludeddays == null){
-      print("Loading excluded...");
-    }
+    if(restaurant.excludeddays == null)
+      return Loading();
     if(init){
       for(int i = 0; i <= 6; i++){
         if(!restaurant.schedule[i.toString()].every((element) => element.replaceAll("[", "").replaceAll("]", "")  == "-1")){
