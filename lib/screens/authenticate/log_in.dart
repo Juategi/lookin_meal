@@ -6,6 +6,7 @@ import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/decos.dart';
+import 'package:lookinmeal/shared/strings.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class LogIn extends StatefulWidget {
@@ -70,7 +71,7 @@ class _LogInState extends State<LogIn> {
 												style: TextStyle(
 													color: Colors.white,
 												),
-												validator: (val) => !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val) ? tr.translate("enteremail") : null,
+												validator: (val) => !RegExp(StaticStrings.emailReg).hasMatch(val) ? tr.translate("enteremail") : null,
 												decoration: textInputDeco
 										),
 									SizedBox(height: 25.h,),

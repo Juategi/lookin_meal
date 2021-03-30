@@ -9,6 +9,7 @@ import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/decos.dart';
 import 'package:lookinmeal/shared/loading.dart';
+import 'package:lookinmeal/shared/strings.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class EmailPassword extends StatefulWidget {
@@ -77,7 +78,7 @@ class _EmailPasswordState extends State<EmailPassword> {
                         style: TextStyle(
                           color: Colors.white,
                         ),
-                        validator: (val) => !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val) ? tr.translate("entername") : null,
+                        validator: (val) => !RegExp(StaticStrings.emailReg).hasMatch(val) ? tr.translate("entername") : null,
                         decoration: textInputDeco
                     ),
                     Text(error, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.red, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),

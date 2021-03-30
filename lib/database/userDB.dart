@@ -51,6 +51,7 @@ class DBServiceUser {
         user.numFollowing = user.following.length;
         user.numFollowers = user.followers.length;
         user.owned = await DBServiceRestaurant.dbServiceRestaurant.getOwned(user.uid);
+        user.notifications = await DBServiceUser.dbServiceUser.getNotifications(user.uid);
         String owner;
         if(user.owned.length == 0)
           owner = "false";
