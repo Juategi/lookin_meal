@@ -12,6 +12,7 @@ import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/strings.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class EditDaily extends StatefulWidget {
   @override
@@ -110,24 +111,13 @@ class _EditDailyState extends State<EditDaily> {
         ));
         items.add(SizedBox(height: 10,));
         items.add(Row(children: <Widget>[IconButton(icon: Icon(Icons.add_circle_outline, size: 30,), onPressed: (){
-          showModalBottomSheet(context: context, builder: (BuildContext bc){
-            return ListView(
-              children: restaurant.menu.map((entry) {
-                return Card(
-                  child: ListTile(
-                    title: Text(entry.name),
-                    leading: Image.network(entry.image ?? StaticStrings.defaultEntry),
-                    subtitle: Text("${entry.description}", maxLines: 1, ),
-                    onTap: (){
-                      dailyMenu.insert(i+1, entry.id);
-                      Navigator.pop(context);
-                    },
-                    trailing: Icon(Icons.add_circle_outline),
-                  ),
-                );
-              }).toList(),
-            );
-          }).then((value){setState(() {});});
+          pushNewScreenWithRouteSettings(
+            context,
+            settings: RouteSettings(arguments: [restaurant, dailyMenu, i]),
+            screen: SearchDishDaily(),
+            withNavBar: true,
+            pageTransitionAnimation: PageTransitionAnimation.cupertino,
+          );
           },), Text("Añadir plato", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))
         ],));
         items.add(SizedBox(height: 10,));
@@ -217,6 +207,89 @@ class _EditDailyState extends State<EditDaily> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class SearchDishDaily extends StatefulWidget {
+  @override
+  _SearchDishDailyState createState() => _SearchDishDailyState();
+}
+
+class _SearchDishDailyState extends State<SearchDishDaily> {
+  Restaurant restaurant;
+  int i;
+  List<String> dailyMenu;
+  List<MenuEntry> search;
+  bool init = true;
+  @override
+  Widget build(BuildContext context) {
+    List<Object> aux = ModalRoute.of(context).settings.arguments;
+    restaurant = aux.first;
+    dailyMenu = aux[1];
+    i = aux.last;
+    if(init){
+      search  = restaurant.menu;
+      init = false;
+    }
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
+        child: ListView(
+          children: [
+            Container(
+              height: 70.h,
+              child: TextField(
+                  onChanged: (value){
+                    setState(() {
+                      search = restaurant.menu.where((entry) => entry.name.toLowerCase().contains(value.toLowerCase())).toList();
+                    });
+                  },
+                  decoration: InputDecoration(
+                      filled: true,
+                      hintText: "Search..",
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black, width: 1),
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black, width: 1),
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                      errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black, width: 1),
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black, width: 1),
+                          borderRadius: BorderRadius.circular(20)
+                      )
+                  )
+              ),
+            ),
+            Container(
+              height: 620.h,
+              child: ListView(
+                children: search.map((entry) {
+                  return Card(
+                    child: ListTile(
+                      title: Text(entry.name),
+                      leading: Image.network(entry.image ?? StaticStrings.defaultEntry),
+                      subtitle: Text("${entry.description}", maxLines: 1, ),
+                      onTap: (){
+                        dailyMenu.insert(i+1, entry.id);
+                        Navigator.pop(context);
+                      },
+                      trailing: Icon(Icons.add_circle_outline),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ],),
+      ),
       ),
     );
   }
