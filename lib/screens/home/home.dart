@@ -1,3 +1,4 @@
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +12,7 @@ import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/home/home_screen.dart';
 import 'package:lookinmeal/screens/profile/profile.dart';
 import 'package:lookinmeal/screens/restaurants/orders/order_screen.dart';
+import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'package:lookinmeal/screens/top/top.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:flutter/services.dart';
@@ -157,6 +159,50 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		);
 	}
 
+	Future<void> initDynamicLinks(BuildContext context) async {
+		//https://findeat.page.link/?link=https://findeat.page.link/restaurant?id=833&apn=com.wt.lookinmeal
+		//https://findeat.page.link/?link=https://findeat.page.link/order?id=833/aa&apn=com.wt.lookinmeal
+		FirebaseDynamicLinks.instance.onLink(
+				onSuccess: (PendingDynamicLinkData dynamicLink) async {
+					final Uri deepLink = dynamicLink.link;
+					if (deepLink != null) {
+						print(deepLink.path);
+						if(deepLink.path == "/restaurant") {
+							Restaurant restaurant = (await DBServiceRestaurant
+									.dbServiceRestaurant.getRestaurantsById(
+									[deepLink.queryParameters['id']],
+									GeolocationService.myPos.latitude,
+									GeolocationService.myPos.longitude)).first;
+							pushNewScreenWithRouteSettings(
+								context,
+								settings: RouteSettings(
+										name: "/restaurant", arguments: restaurant),
+								screen: ProfileRestaurant(),
+								withNavBar: true,
+								pageTransitionAnimation: PageTransitionAnimation.slideUp,
+							);
+						}
+						else if(deepLink.path == "/order") {
+							CommonData.actualCode = deepLink.queryParameters['id'];
+							_controller.jumpToTab(2);
+						}
+					}
+				}, onError: (OnLinkErrorException e) async {
+			print('onLinkError');
+			print(e.message);
+		});
+
+		/*
+
+		final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.getInitialLink();
+		final Uri deepLink = data.link;
+
+		if (deepLink != null) {
+			// ignore: unawaited_futures
+			Navigator.pushNamed(context, deepLink.path);
+		}*/
+	}
+
 	@override
 	Future<bool> didPopRoute() async {
 		if(CommonData.selectedIndex == 0) {
@@ -184,6 +230,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
 	  user = Provider.of<User>(context);
 	  AppLocalizations tr = AppLocalizations.of(context);
+	  initDynamicLinks(context);
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
 	  if(ready && user != null) {
 			PushNotificationService.initialise(context);

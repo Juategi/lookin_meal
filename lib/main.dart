@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -43,7 +44,6 @@ void main() { Provider.debugCheckInvalidValueType = null; runApp(MyApp()); }
 
 
 class MyApp extends StatelessWidget {
-
 
   @override
   Widget build(BuildContext context) {

@@ -3,7 +3,6 @@
 TODO
 EN BUSQUEDA UNICA NO GUARDAR EL DISHQUERY,
 
-quitar primeros frames authenticate al iniciar (future delayed),
 j@j.j da error al registrar
 while en login por si hay dc,
 Terminar busqueda platos compleja, menos exacta,

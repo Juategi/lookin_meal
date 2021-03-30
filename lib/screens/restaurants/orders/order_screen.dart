@@ -314,6 +314,9 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     _controller = Provider.of<PersistentTabController>(context);
+    if(CommonData.actualCode != null){
+      code = CommonData.actualCode;
+    }
     if(first){
       CommonData.tabContext = context;
       first = false;
@@ -381,6 +384,7 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
                               DBServiceUser.userF.inOrder = null;
                               RealTimeOrders.sent = false;
                               code = null;
+                              CommonData.actualCode = null;
                               _controller.notifyListeners();
                               setState(() {
                               });

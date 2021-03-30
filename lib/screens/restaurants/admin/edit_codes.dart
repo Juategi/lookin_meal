@@ -105,7 +105,7 @@ class _EditCodesState extends State<EditCodes> {
                                                           child: pw.BarcodeWidget(
                                                             color: PdfColor.fromHex("#000000"),
                                                             barcode: pw.Barcode.qrCode(),
-                                                            data: restaurant.restaurant_id + "/" + code.code_id,
+                                                            data: "https://findeat.page.link/?link=https://findeat.page.link/order?id=${restaurant.restaurant_id + "/" + code.code_id}&apn=com.wt.lookinmeal",
                                                           ),
                                                         ),
                                                         top: 127,
