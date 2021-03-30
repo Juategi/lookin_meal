@@ -12,6 +12,7 @@ import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/main_screen_dish_tile.dart';
 import 'package:lookinmeal/screens/restaurants/restaurant_tile.dart';
+import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/pool.dart';
 import 'package:lookinmeal/services/search.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -28,14 +29,16 @@ class Top extends StatefulWidget {
 class _TopState extends State<Top> {
   List<Restaurant> topRestaurant;
   Map<MenuEntry,Restaurant> topEntry;
-
+  Position last;
 
   Future _loadData() async{
-    topRestaurant = await DBServiceRestaurant.dbServiceRestaurant.getTopRestaurants();
-    topEntry = await DBServiceRestaurant.dbServiceRestaurant.getTopEntries();
-    print("top updated");
-    setState(() {
-    });
+    if(last != GeolocationService.myPos) {
+      topRestaurant = await DBServiceRestaurant.dbServiceRestaurant.getTopRestaurants();
+      topEntry = await DBServiceRestaurant.dbServiceRestaurant.getTopEntries();
+      last = GeolocationService.myPos;
+      print("top updated");
+      setState(() {});
+    }
   }
 
   @override

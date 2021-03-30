@@ -14,6 +14,8 @@ idioma
 
 https://developers.google.com/maps/documentation/android-sdk/get-api-key#restrict_key
 
+Sistema de subida de cartas:
+Una carta por usuario por restaurante.
 
 
 
