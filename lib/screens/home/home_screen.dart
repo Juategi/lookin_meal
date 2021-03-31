@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
 					backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 					flexibleSpace: Column(
 						children: <Widget>[
-							SizedBox(height: 42.h,),
+							SizedBox(height: 19.h,),
 							Container(
 								padding: EdgeInsets.only(left: 8.w, right: 8.w),
 								margin: EdgeInsets.only(left: 30.w, right: 30.w),

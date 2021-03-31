@@ -1,10 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lookinmeal/database/entryDB.dart';
+import 'package:http_parser/http_parser.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
@@ -21,14 +24,18 @@ import 'package:lookinmeal/screens/restaurants/menu.dart';
 import 'package:lookinmeal/screens/restaurants/reservations.dart';
 import 'package:lookinmeal/screens/restaurants/reserve_table.dart';
 import 'package:lookinmeal/screens/restaurants/top_dishes_tile.dart';
+import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/services/translator.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
+import 'package:lookinmeal/shared/strings.dart';
 import 'package:lookinmeal/shared/widgets.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class ProfileRestaurant extends StatefulWidget {
   @override
@@ -41,6 +48,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 	bool loading = false;
 	String language;
 	List<Owner> owners;
+	List<File> photos = [];
 
 	void _loadOwners()async{
 		owners = await DBServiceUser.dbServiceUser.getOwners(restaurant.restaurant_id);
@@ -573,27 +581,124 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 					Column(
 						children: [
 							SizedBox(height: 40.h,),
-							Container(width: 300.w, height: 190.h, child: Text("¡Parece que no hay menu, haz una foto a la carta y nosotros nos encargaremos de subirla!", maxLines: 6, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(28),),))),
-							SizedBox(height: 30.h,),
-							GestureDetector(
-								onTap: ()async{
-									//await StorageService().uploadNanonets(context, restaurant.restaurant_id);
-								},
-							  child: Container(
-							  	height: 80.h,
-							  	width: 80.w,
-							  	/*decoration: BoxDecoration(
-							  		borderRadius: BorderRadius.all(Radius.circular(40)),
-							  		border: Border.all(width: 5, color: Color.fromRGBO(255, 110, 117, 0.9), style: BorderStyle.solid),
-							  	),*/
-							  	child: Container(
-							  			height: 40.h,
-							  			width: 40.w,
-							  			//child: SvgPicture.asset("assets/menu.svg", color: Color.fromRGBO(255, 110, 117, 0.9), fit: BoxFit.contain,)
-											child: Icon(Icons.linked_camera_rounded, color: Color.fromRGBO(255, 110, 117, 0.9), size: ScreenUtil().setSp(60),),
-							  	),
+							photos.length == 0 ? Container(width: 300.w, height: 190.h, child: Text("¡Parece que no hay menu, haz una foto a la carta y nosotros nos encargaremos de subirla!", maxLines: 6, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(28),),))) :
+							Container(
+								height: 90.h,
+							  child: ListView(
+							  	//mainAxisAlignment: MainAxisAlignment.center,
+							  	scrollDirection: Axis.horizontal,
+							  	children: photos.map((photo) =>
+							  		Padding(
+							  		  padding:  EdgeInsets.symmetric(horizontal: 10.w),
+							  		  child: Container(
+							  		  	width: 90.w,
+							  		  	height: 90.h,
+							  		  	decoration: BoxDecoration(
+							  		  			image: DecorationImage(fit: BoxFit.cover, image: Image.file(photo).image),
+							  		  			borderRadius: BorderRadius.all(Radius.circular(8))
+							  		  	),
+												child: GestureDetector(
+													onTap: ()async{
+														setState(() {
+														  photos.remove(photo);
+														});
+													},
+													child: Container(
+														height: 40.h,
+														width: 40.w,
+														child: Icon(Icons.delete, color: Colors.black87, size: ScreenUtil().setSp(30),),
+													),
+												),
+							  		  ),
+							  		)
+							  	).toList(),
 							  ),
-							)
+							),
+							SizedBox(height: 30.h,),
+							Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
+							  children: [
+									photos.length >= 10 ? Container() : GestureDetector(
+							    	onTap: ()async{
+							    		File file = await StorageService().uploadNanonets(context, restaurant.restaurant_id);
+							    		if(file != null)
+							    			photos.add(file);
+							    		setState(() {
+							    		});
+							    	},
+							      child: Container(
+							      	height: 80.h,
+							      	width: 80.w,
+							      	child: Container(
+							      			height: 40.h,
+							      			width: 40.w,
+							      			//child: SvgPicture.asset("assets/menu.svg", color: Color.fromRGBO(255, 110, 117, 0.9), fit: BoxFit.contain,)
+							    				child: Icon(Icons.linked_camera_rounded, color: Color.fromRGBO(255, 110, 117, 0.9), size: ScreenUtil().setSp(60),),
+							      	),
+							      ),
+							    ),
+									photos.length != 0 ? GestureDetector(
+										onTap: ()async{
+											final pdf = pw.Document();
+											for(File photo in photos){
+												final photoMem = pw.MemoryImage(
+													photo.readAsBytesSync(),
+												);
+												pdf.addPage(pw.Page(
+														pageFormat: PdfPageFormat.a4,
+														build: (pw.Context context) {
+															return pw.Center(
+																	child: pw.Container(
+																		decoration: pw.BoxDecoration(
+																				image:  pw.DecorationImage(
+																						fit: pw.BoxFit.cover,
+																						image: pw.Image(photoMem).image)),
+																	)
+															);
+														})
+												);
+											}
+											final output2 = Directory("/storage/emulated/0/Download/");
+											final file = File("${output2.path}/prueba.pdf");
+											await file.writeAsBytes(await pdf.save());
+											print(output2.path);
+											/*
+											var postUri = Uri.parse(StaticStrings.nanonets);
+											var request = http.MultipartRequest("POST", postUri);
+											request.headers.addAll({
+												//"Authorization":"Basic " + base64.encode(utf8.encode('1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-'))
+												"Authorization":'1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-'
+											});
+											print(request.headers);
+											request.files.add(http.MultipartFile.fromBytes('files', await pdf.save(), contentType: MediaType('image', 'jpg')));
+											request.send().then((response) async {
+												var r = await http.Response.fromStream(response);
+												print(r.body);
+											});
+											/*
+													Map data = {
+														"file" : (await file.readAsBytes()).toString()
+													};
+													Map<String, String> header = {
+														"accept":"multipart/form-data",
+														'Authorization' : 'Basic ' + ('1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-' + ':')
+													};
+													var response = await http.post("${StaticStrings.nanonets}", body: data ,headers: header ,encoding: Encoding.getByName("base64"));
+													print(response.body);
+												*/
+												*/
+										},
+										child: Container(
+											height: 80.h,
+											width: 80.w,
+											child: Container(
+												height: 40.h,
+												width: 40.w,
+												child: Icon(Icons.send, color: Color.fromRGBO(255, 110, 117, 0.9), size: ScreenUtil().setSp(60),),
+											),
+										),
+									) : Container()
+							  ],
+							),
 						],
 					),
 					restaurant.menu.length != 0 ? Padding(

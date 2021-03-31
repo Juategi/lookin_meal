@@ -150,7 +150,7 @@ class StorageService{
      print("removed $url");
    }
 
-    Future uploadNanonets(BuildContext context, String restaurant_id)async {
+    Future<File> uploadNanonets(BuildContext context, String restaurant_id)async {
       File file;
       String fileName = "";
       String url, filePath;
@@ -168,10 +168,11 @@ class StorageService{
                       //title: Container( alignment: Alignment.center,child: Text("Seleccionar una foto", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(22),),)),
                       children: <Widget>[
                         Container(
-                          height: 140.h,
+                          height: 170.h,
                           child: loading ? CircularLoading() : Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
+
                               GestureDetector(
                                 onTap: () async {
                                   PickedFile f = await ImagePicker().getImage(
@@ -183,18 +184,20 @@ class StorageService{
                                     filePath = f.path;
                                     file = File(filePath);
                                     file = await file.rename("/storage/emulated/0/Android/data/com.wt.lookinmeal/files/Pictures/$restaurant_id.jpg");
-                                    var postUri = Uri.parse(StaticStrings.nanonets);
+                                    /*var postUri = Uri.parse(StaticStrings.nanonets);
                                     var request = http.MultipartRequest("POST", postUri);
                                     request.headers.addAll({
                                       //"Authorization":"Basic " + base64.encode(utf8.encode('1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-'))
                                       "Authorization":'1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-'
                                     });
                                     print(request.headers);
-                                    //request.files.add(http.MultipartFile.fromBytes('files', await file.readAsBytes(), contentType: MediaType('image', 'jpg')));
+                                    request.files.add(http.MultipartFile.fromBytes('files', await file.readAsBytes(), contentType: MediaType('image', 'jpg')));
                                     request.send().then((response) async {
                                       var r = await http.Response.fromStream(response);
                                       print(r.body);
                                     });
+                                    */
+
                                     Navigator.pop(context);
                                   }
                                 },
@@ -226,8 +229,7 @@ class StorageService{
                                       loading = true;
                                     });
                                     filePath = file.path;
-                                    fileName = restaurant_id;
-                                    print(fileName);
+                                    /*fileName = restaurant_id;
                                     Map data = {
                                       "file":file
                                     };
@@ -236,7 +238,7 @@ class StorageService{
                                       'Authorization' : 'Basic ' + ('1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-' + ':')
                                     };
                                     var response = await http.post("${StaticStrings.nanonets}", body: data ,headers: header ,encoding: Encoding.getByName("base64"));
-                                    print(response.body);
+                                    print(response.body);*/
                                     Navigator.pop(context);
                                   }
                                 },
@@ -271,7 +273,7 @@ class StorageService{
         );
         if (file == null)
           return null;
-        return url;
+        return file;
       }
       catch (e) {
         showDialog(
@@ -291,7 +293,7 @@ class StorageService{
               );
             }
         );
-        return "";
+        return null;
       }
     }
 }
