@@ -31,6 +31,7 @@ import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/strings.dart';
 import 'package:lookinmeal/shared/widgets.dart';
+import 'package:permission/permission.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -595,7 +596,8 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							  		  	height: 90.h,
 							  		  	decoration: BoxDecoration(
 							  		  			image: DecorationImage(fit: BoxFit.cover, image: Image.file(photo).image),
-							  		  			borderRadius: BorderRadius.all(Radius.circular(8))
+							  		  			borderRadius: BorderRadius.all(Radius.circular(8)),
+														border: Border.all(color: Colors.black)
 							  		  	),
 												child: GestureDetector(
 													onTap: ()async{
@@ -620,8 +622,17 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 									photos.length >= 10 ? Container() : GestureDetector(
 							    	onTap: ()async{
 							    		File file = await StorageService().uploadNanonets(context, restaurant.restaurant_id);
-							    		if(file != null)
-							    			photos.add(file);
+							    		if(file != null){
+							    			try{
+													final photoMem = pw.MemoryImage(
+														file.readAsBytesSync(),
+													);
+													photos.add(file);
+												}catch(e){
+							    				print("es pdf");
+							    				//HACER MOVIDA
+												}
+											}
 							    		setState(() {
 							    		});
 							    	},
@@ -638,54 +649,65 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							    ),
 									photos.length != 0 ? GestureDetector(
 										onTap: ()async{
+											//await Permission.requestPermissions([PermissionName.Storage]);
 											final pdf = pw.Document();
 											for(File photo in photos){
-												final photoMem = pw.MemoryImage(
-													photo.readAsBytesSync(),
-												);
-												pdf.addPage(pw.Page(
-														pageFormat: PdfPageFormat.a4,
-														build: (pw.Context context) {
-															return pw.Center(
-																	child: pw.Container(
-																		decoration: pw.BoxDecoration(
-																				image:  pw.DecorationImage(
-																						fit: pw.BoxFit.cover,
-																						image: pw.Image(photoMem).image)),
-																	)
-															);
-														})
-												);
+													final photoMem = pw.MemoryImage(
+														photo.readAsBytesSync(),
+													);
+													pdf.addPage(pw.Page(
+															pageFormat: PdfPageFormat.a4,
+															build: (pw.Context context) {
+																return pw.Center(
+																		child: pw.Container(
+																			decoration: pw.BoxDecoration(
+																					image: pw.DecorationImage(
+																							fit: pw.BoxFit.cover,
+																							image: pw
+																									.Image(photoMem)
+																									.image)),
+																		)
+																);
+															})
+													);
 											}
-											final output2 = Directory("/storage/emulated/0/Download/");
-											final file = File("${output2.path}/prueba.pdf");
-											await file.writeAsBytes(await pdf.save());
-											print(output2.path);
+											print("sent");
+											StorageService().sendNanonets(restaurant.restaurant_id, DBServiceUser.userF.uid, await pdf.save());
+											//final output2 = Directory("/storage/emulated/0/Download/");
+											//final file = File("${output2.path}prueba.pdf");
+											//await file.writeAsBytes(await pdf.save());
+											//print(output2.path);
 											/*
-											var postUri = Uri.parse(StaticStrings.nanonets);
-											var request = http.MultipartRequest("POST", postUri);
-											request.headers.addAll({
-												//"Authorization":"Basic " + base64.encode(utf8.encode('1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-'))
-												"Authorization":'1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-'
-											});
-											print(request.headers);
-											request.files.add(http.MultipartFile.fromBytes('files', await pdf.save(), contentType: MediaType('image', 'jpg')));
-											request.send().then((response) async {
-												var r = await http.Response.fromStream(response);
-												print(r.body);
-											});
-											/*
-													Map data = {
-														"file" : (await file.readAsBytes()).toString()
-													};
-													Map<String, String> header = {
-														"accept":"multipart/form-data",
-														'Authorization' : 'Basic ' + ('1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-' + ':')
-													};
-													var response = await http.post("${StaticStrings.nanonets}", body: data ,headers: header ,encoding: Encoding.getByName("base64"));
-													print(response.body);
-												*/
-												*/
+											if(true) {
+												var postUri = Uri.parse(StaticStrings.nanonets);
+												var request = http.MultipartRequest("POST", postUri);
+												request.headers.addAll({
+													"Authorization": "Basic " + base64.encode(utf8.encode('1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-')),
+													//"Authorization":'1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-',
+													"accept" : "multipart/form-data",
+												});
+												//request.files.add(http.MultipartFile.fromBytes('files', await pdf.save(), contentType: MediaType('application', 'pdf')));
+												request.files.add(http.MultipartFile.fromBytes('files', [1,2,4], contentType: MediaType('image', 'pdf')));
+												request.send().then((response) async {
+													var r = await http.Response.fromStream(response);
+													print(r.body);
+												});
+											}
+											else {
+												Map data = {
+													"file": "(await pdf.save()).toString()"
+												};
+												Map<String, String> header = {
+													"accept": "multipart/form-data",
+													'Authorization': 'Basic ' +
+															('1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-' + ':')
+												};
+												var response = await http.post(
+														"${StaticStrings.nanonets}", body: data,
+														headers: header,
+														encoding: Encoding.getByName("base64"));
+												print(response.body);
+											}*/
 										},
 										child: Container(
 											height: 80.h,

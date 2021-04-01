@@ -72,7 +72,7 @@ class _EditCodesState extends State<EditCodes> {
                             Container(width: 140.w, child: Text("Table: " + code.code_id, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
                             GestureDetector(
                               onTap: () async{
-                                Permission.requestPermissions([PermissionName.Storage]);
+                                await Permission.requestPermissions([PermissionName.Storage]);
                                 final pdf = pw.Document();
                                 Directory directory = await getApplicationDocumentsDirectory();
                                 var dbPath = directory.path + "PDF.png";

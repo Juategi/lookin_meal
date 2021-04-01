@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lookinmeal/shared/loading.dart';
@@ -168,7 +169,7 @@ class StorageService{
                       //title: Container( alignment: Alignment.center,child: Text("Seleccionar una foto", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(22),),)),
                       children: <Widget>[
                         Container(
-                          height: 170.h,
+                          height: 240.h,
                           child: loading ? CircularLoading() : Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
@@ -261,6 +262,48 @@ class StorageService{
                                         fontSize: ScreenUtil().setSp(17),),)
                                   ],
                                 ),
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  file = await FilePicker.getFile(
+                                      type: FileType.custom, allowedExtensions: ['pdf'],);
+                                  if (file != null) {
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    filePath = file.path;
+                                    /*fileName = restaurant_id;
+                                    Map data = {
+                                      "file":file
+                                    };
+                                    Map header = {
+                                      "accept":"multipart/form-data",
+                                      'Authorization' : 'Basic ' + ('1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-' + ':')
+                                    };
+                                    var response = await http.post("${StaticStrings.nanonets}", body: data ,headers: header ,encoding: Encoding.getByName("base64"));
+                                    print(response.body);*/
+                                    Navigator.pop(context);
+                                  }
+                                },
+                                child: Row(
+                                  children: <Widget>[
+                                    SizedBox(width: 20.w,),
+                                    Container(
+                                      height: 30.h,
+                                      width: 30.w,
+                                      child: SvgPicture.asset(
+                                        "assets/iconos-camara_2.svg",
+                                        color: Colors.lightBlueAccent,
+                                      ),
+                                    ),
+                                    SizedBox(width: 20.w,),
+                                    Text("Seleccionar PDF",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.black,
+                                        fontSize: ScreenUtil().setSp(17),),)
+                                  ],
+                                ),
                               )
                             ],
                           ),
@@ -296,4 +339,12 @@ class StorageService{
         return null;
       }
     }
+
+   Future sendNanonets(String restaurant_id, String user_id, Uint8List file) async{
+     print(file.toString().substring(0,100));
+     var response = await http.post(
+         "${StaticStrings.api}/nanonets",
+         body: {"restaurant_id": restaurant_id, "user_id": user_id, "file": file.toString()});
+     print(response.body);
+   }
 }
