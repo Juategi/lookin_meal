@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:lookinmeal/database/restaurantDB.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
@@ -46,13 +47,26 @@ class ProfileRestaurant extends StatefulWidget {
 class _ProfileRestaurantState extends State<ProfileRestaurant> {
 	Restaurant restaurant;
 	bool first = true;
+	bool uploaded = false;
 	bool loading = false;
 	String language;
 	List<Owner> owners;
 	List<File> photos = [];
+	String requestStatus = "";
 
 	void _loadOwners()async{
 		owners = await DBServiceUser.dbServiceUser.getOwners(restaurant.restaurant_id);
+		setState(() {
+		});
+	}
+
+	void _loadStatus() async{
+		if(await 	DBServiceRestaurant.dbServiceRestaurant.checkRequestStatus(restaurant.restaurant_id)) {
+			requestStatus = "¡Parece que ya has subido una carta del menu!";
+			uploaded = true;
+		}
+		else
+			requestStatus = "¡Parece que no hay menu, haz una foto a la carta y nosotros nos encargaremos de subirla!";
 		setState(() {
 		});
 	}
@@ -195,11 +209,12 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   @override
   Widget build(BuildContext context) {
   	restaurant = ModalRoute.of(context).settings.arguments;
-  	restaurant.menu = [];
-
+  	//restaurant.menu = [];
   	print(restaurant.restaurant_id);
 		if(first){
 			_loadOwners();
+			if(restaurant.menu.length == 0)
+				_loadStatus();
 			if(restaurant.original == null){
 				restaurant.original = [];
 			}
@@ -582,7 +597,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 					Column(
 						children: [
 							SizedBox(height: 40.h,),
-							photos.length == 0 ? Container(width: 300.w, height: 190.h, child: Text("¡Parece que no hay menu, haz una foto a la carta y nosotros nos encargaremos de subirla!", maxLines: 6, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(28),),))) :
+							photos.length == 0 ? Container(width: 300.w, height: 190.h, child: Text(requestStatus, maxLines: 6, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(28),),))) :
 							Container(
 								height: 90.h,
 							  child: ListView(
@@ -617,7 +632,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							  ),
 							),
 							SizedBox(height: 30.h,),
-							Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
+							uploaded? Container() : Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
 							  children: [
 									photos.length >= 10 ? Container() : GestureDetector(
 							    	onTap: ()async{
@@ -629,8 +644,12 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 													);
 													photos.add(file);
 												}catch(e){
-							    				print("es pdf");
-							    				//HACER MOVIDA
+													StorageService().sendNanonets(restaurant.restaurant_id, DBServiceUser.userF.uid, file.readAsBytesSync());
+													setState(() {
+														photos.clear();
+														requestStatus = "¡Parece que ya has subido una carta del menu!";
+													  uploaded = true;
+													});
 												}
 											}
 							    		setState(() {
@@ -649,7 +668,6 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							    ),
 									photos.length != 0 ? GestureDetector(
 										onTap: ()async{
-											//await Permission.requestPermissions([PermissionName.Storage]);
 											final pdf = pw.Document();
 											for(File photo in photos){
 													final photoMem = pw.MemoryImage(
@@ -671,43 +689,12 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 															})
 													);
 											}
-											print("sent");
 											StorageService().sendNanonets(restaurant.restaurant_id, DBServiceUser.userF.uid, await pdf.save());
-											//final output2 = Directory("/storage/emulated/0/Download/");
-											//final file = File("${output2.path}prueba.pdf");
-											//await file.writeAsBytes(await pdf.save());
-											//print(output2.path);
-											/*
-											if(true) {
-												var postUri = Uri.parse(StaticStrings.nanonets);
-												var request = http.MultipartRequest("POST", postUri);
-												request.headers.addAll({
-													"Authorization": "Basic " + base64.encode(utf8.encode('1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-')),
-													//"Authorization":'1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-',
-													"accept" : "multipart/form-data",
-												});
-												//request.files.add(http.MultipartFile.fromBytes('files', await pdf.save(), contentType: MediaType('application', 'pdf')));
-												request.files.add(http.MultipartFile.fromBytes('files', [1,2,4], contentType: MediaType('image', 'pdf')));
-												request.send().then((response) async {
-													var r = await http.Response.fromStream(response);
-													print(r.body);
-												});
-											}
-											else {
-												Map data = {
-													"file": "(await pdf.save()).toString()"
-												};
-												Map<String, String> header = {
-													"accept": "multipart/form-data",
-													'Authorization': 'Basic ' +
-															('1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-' + ':')
-												};
-												var response = await http.post(
-														"${StaticStrings.nanonets}", body: data,
-														headers: header,
-														encoding: Encoding.getByName("base64"));
-												print(response.body);
-											}*/
+											setState(() {
+												photos.clear();
+												requestStatus = "¡Parece que ya has subido una carta del menu!";
+												uploaded = true;
+											});
 										},
 										child: Container(
 											height: 80.h,

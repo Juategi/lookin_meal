@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:lookinmeal/shared/strings.dart';
+import 'package:permission/permission.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
@@ -185,20 +186,6 @@ class StorageService{
                                     filePath = f.path;
                                     file = File(filePath);
                                     file = await file.rename("/storage/emulated/0/Android/data/com.wt.lookinmeal/files/Pictures/$restaurant_id.jpg");
-                                    /*var postUri = Uri.parse(StaticStrings.nanonets);
-                                    var request = http.MultipartRequest("POST", postUri);
-                                    request.headers.addAll({
-                                      //"Authorization":"Basic " + base64.encode(utf8.encode('1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-'))
-                                      "Authorization":'1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-'
-                                    });
-                                    print(request.headers);
-                                    request.files.add(http.MultipartFile.fromBytes('files', await file.readAsBytes(), contentType: MediaType('image', 'jpg')));
-                                    request.send().then((response) async {
-                                      var r = await http.Response.fromStream(response);
-                                      print(r.body);
-                                    });
-                                    */
-
                                     Navigator.pop(context);
                                   }
                                 },
@@ -230,16 +217,6 @@ class StorageService{
                                       loading = true;
                                     });
                                     filePath = file.path;
-                                    /*fileName = restaurant_id;
-                                    Map data = {
-                                      "file":file
-                                    };
-                                    Map header = {
-                                      "accept":"multipart/form-data",
-                                      'Authorization' : 'Basic ' + ('1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-' + ':')
-                                    };
-                                    var response = await http.post("${StaticStrings.nanonets}", body: data ,headers: header ,encoding: Encoding.getByName("base64"));
-                                    print(response.body);*/
                                     Navigator.pop(context);
                                   }
                                 },
@@ -272,16 +249,7 @@ class StorageService{
                                       loading = true;
                                     });
                                     filePath = file.path;
-                                    /*fileName = restaurant_id;
-                                    Map data = {
-                                      "file":file
-                                    };
-                                    Map header = {
-                                      "accept":"multipart/form-data",
-                                      'Authorization' : 'Basic ' + ('1Np9aBp8m9j8WCnN6reOjZTpaRD96eF-' + ':')
-                                    };
-                                    var response = await http.post("${StaticStrings.nanonets}", body: data ,headers: header ,encoding: Encoding.getByName("base64"));
-                                    print(response.body);*/
+                                    //Modo pdf
                                     Navigator.pop(context);
                                   }
                                 },
@@ -340,11 +308,19 @@ class StorageService{
       }
     }
 
-   Future sendNanonets(String restaurant_id, String user_id, Uint8List file) async{
-     print(file.toString().substring(0,100));
-     var response = await http.post(
-         "${StaticStrings.api}/nanonets",
-         body: {"restaurant_id": restaurant_id, "user_id": user_id, "file": file.toString()});
+   Future<bool> sendNanonets(String restaurant_id, String user_id, Uint8List file) async{
+     StorageReference storageReference = FirebaseStorage.instance.ref().child("$restaurant_id");
+     final StorageUploadTask uploadTask = storageReference.putData(file);
+     final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+     final String url = (await downloadUrl.ref.getDownloadURL());
+     print(url);
+     var response = await http.post("${StaticStrings.api}/nanonets", body: {"restaurant_id": restaurant_id, "user_id": user_id, "file": url});
      print(response.body);
+     removeFile(url);
+     if(response.body == "OK"){
+       return true;
+     }
+     else
+       return false;
    }
 }

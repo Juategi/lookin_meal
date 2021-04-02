@@ -56,6 +56,16 @@ class DBServiceRestaurant{
     return parseResponse(response);
   }
 
+  Future<bool> checkRequestStatus(String restaurant_id) async {
+    var response = await http.get("${StaticStrings.api}/nanonets", headers: {"restaurant_id" : restaurant_id, "user_id" : DBServiceUser.userF.uid});
+    List<dynamic> result = json.decode(response.body);
+    print(response.body);
+    if(result.length > 0)
+      return true;
+    else
+      return false;
+  }
+
   Future updateRecently(Restaurant restaurant) async{
     for(Restaurant r in DBServiceUser.userF.recently){
       if(r.restaurant_id == restaurant.restaurant_id){
