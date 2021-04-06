@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/database/paymentDB.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
@@ -46,7 +47,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	Map<MenuEntry,Restaurant> popular;
 	List<double> distances = List<double>();
 	int lastIndex = 0;
-	bool ready = false;
 	Color selectedItemColor = Color.fromRGBO(255, 110, 117, 0.61);
 	Color unselectedItemColor = Color.fromRGBO(130, 130, 130, 1);
 	PersistentTabController _controller = PersistentTabController(initialIndex: 0);
@@ -57,15 +57,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		});
 	}
 
-	void _timer() {
-		if(!ready || user == null) {
-			Future.delayed(Duration(seconds: 2)).then((_) {
-				setState(() {
-					print("Loading..");
-				});
-				_timer();
-			});
-		}
+	Future _getPrices() async{
+		CommonData.prices = await DBServicePayment.dbServicePayment.getPrices();
 	}
 
 
@@ -79,7 +72,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 			distances.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));
 		}*/
 		popular = await DBServiceRestaurant.dbServiceRestaurant.getPopular();
-		ready = true;
+		setState(() {
+		});
 	}
 
 	Future<void> scanQR() async {
@@ -223,7 +217,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		_controller.addListener(() {setState(() {
 		});});
 		_update();
-		_timer();
+		_getPrices();
 	}
 
 	@override
@@ -232,7 +226,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	  AppLocalizations tr = AppLocalizations.of(context);
 	  initDynamicLinks(context);
 		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
-	  if(ready && user != null) {
+	  if(popular != null && user != null) {
 			PushNotificationService.initialise(context);
 			return PersistentTabView(
 					context,

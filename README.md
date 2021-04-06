@@ -10,6 +10,7 @@ share y aviso de conexion
 sistema actualizacion
 pantalla menu vacio (enviar carta)
 idioma
+limitar los orders a si hay suscription
 
 
 https://developers.google.com/maps/documentation/android-sdk/get-api-key#restrict_key

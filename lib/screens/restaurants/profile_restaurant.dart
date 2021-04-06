@@ -8,7 +8,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:lookinmeal/database/paymentDB.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
+import 'admin/premium.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
@@ -56,6 +58,13 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 
 	void _loadOwners()async{
 		owners = await DBServiceUser.dbServiceUser.getOwners(restaurant.restaurant_id);
+		setState(() {
+		});
+	}
+
+	void _loadData() async{
+		await DBServicePayment.dbServicePayment.getPremium(restaurant);
+		await DBServicePayment.dbServicePayment.getSponsor(restaurant);
 		setState(() {
 		});
 	}
@@ -209,9 +218,9 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   @override
   Widget build(BuildContext context) {
   	restaurant = ModalRoute.of(context).settings.arguments;
-  	//restaurant.menu = [];
   	print(restaurant.restaurant_id);
 		if(first){
+			_loadData();
 			_loadOwners();
 			if(restaurant.menu.length == 0)
 				_loadStatus();
@@ -341,13 +350,36 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 						  				),
 						  				onTap: ()async{
 						  					backToOriginal();
-												pushNewScreenWithRouteSettings(
-													context,
-													settings: RouteSettings(name: "/reservations", arguments: restaurant),
-													screen: ReservationsChecker(),
-													withNavBar: true,
-													pageTransitionAnimation: PageTransitionAnimation.slideUp,
-												);
+						  					if(restaurant.premiumtime == null)
+													pushNewScreenWithRouteSettings(
+														context,
+														settings: RouteSettings( arguments: restaurant),
+														screen: Premium(),
+														withNavBar: true,
+														pageTransitionAnimation: PageTransitionAnimation.slideUp,
+													).then((value) => setState(() {}));
+						  					else if(restaurant.premium || (!restaurant.premium && restaurant.premiumtime != null && Functions.compareDates(restaurant.premiumtime, DateTime.now().toString().substring(0,10)) <= 0)) {
+													if(restaurant.schedule.toString() == "{1: [-1, -1], 2: [-1, -1], 3: [-1, -1], 4: [-1, -1], 5: [-1, -1], 6: [-1, -1], 0: [-1, -1]}")
+														Alerts.dialog("Please create a schedule in Settings -> Edit Restaurant information", context);
+													else
+														pushNewScreenWithRouteSettings(
+															context,
+															settings: RouteSettings(
+																	name: "/reservations", arguments: restaurant),
+															screen: ReservationsChecker(),
+															withNavBar: true,
+															pageTransitionAnimation: PageTransitionAnimation
+																	.slideUp,
+														);
+												}
+						  					else
+													pushNewScreenWithRouteSettings(
+														context,
+														settings: RouteSettings( arguments: restaurant),
+														screen: Premium(),
+														withNavBar: true,
+														pageTransitionAnimation: PageTransitionAnimation.slideUp,
+													).then((value) => setState(() {}));
 						  					//Navigator.pushNamed(context, "/reservations", arguments: restaurant);
 						  				},
 						  			),
@@ -366,13 +398,31 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 												],
 						  				),
 						  				onTap: ()async{
-												pushNewScreenWithRouteSettings(
-													context,
-													settings: RouteSettings(name: "/manageorder", arguments: restaurant),
-													screen: ManageOrders(),
-													withNavBar: true,
-													pageTransitionAnimation: PageTransitionAnimation.slideUp,
-												);
+												backToOriginal();
+												if(restaurant.premiumtime == null)
+													pushNewScreenWithRouteSettings(
+														context,
+														settings: RouteSettings( arguments: restaurant),
+														screen: Premium(),
+														withNavBar: true,
+														pageTransitionAnimation: PageTransitionAnimation.slideUp,
+													).then((value) => setState(() {}));
+						  					else if(restaurant.premium || (!restaurant.premium && restaurant.premiumtime != null && Functions.compareDates(restaurant.premiumtime, DateTime.now().toString().substring(0,10)) <= 0))
+													pushNewScreenWithRouteSettings(
+														context,
+														settings: RouteSettings(name: "/manageorder", arguments: restaurant),
+														screen: ManageOrders(),
+														withNavBar: true,
+														pageTransitionAnimation: PageTransitionAnimation.slideUp,
+													);
+						  					else
+													pushNewScreenWithRouteSettings(
+														context,
+														settings: RouteSettings( arguments: restaurant),
+														screen: Premium(),
+														withNavBar: true,
+														pageTransitionAnimation: PageTransitionAnimation.slideUp,
+													).then((value) => setState(() {}));
 						  					//Navigator.pushNamed(context, "/manageorder", arguments: restaurant);
 						  				},
 						  			),
@@ -449,7 +499,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 												Text("${restaurant.distance.toString()} km", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))
 											],
 										),
-										GestureDetector(
+										restaurant.premium || (!restaurant.premium && restaurant.premiumtime != null && Functions.compareDates(restaurant.premiumtime, DateTime.now().toString().substring(0,10)) <= 0) ? GestureDetector(
 											onTap: (){
 												pushNewScreenWithRouteSettings(
 													context,
@@ -468,7 +518,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 										  		Text("Reserve a table", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))
 										  	],
 										  ),
-										),
+										) : Container()
 									],
 								),
 								Column( crossAxisAlignment:  CrossAxisAlignment.end,

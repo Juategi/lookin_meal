@@ -9,7 +9,7 @@ import 'dart:convert';
 class DBServicePayment{
   static final DBServicePayment dbServicePayment = DBServicePayment();
 
-  Future<List<Price>> getPrices(String restaurant_id) async {
+  Future<List<Price>> getPrices() async {
     List<Price> prices = [];
     var response = await http.get(
         "${StaticStrings.api}/prices",
@@ -18,7 +18,7 @@ class DBServicePayment{
     for (var element in result) {
       prices.add(Price(
           type: element['type'],
-          price: element['price'],
+          price: double.parse(element['price'].toString()),
           quantity: element['quantity']
       ));
     }
@@ -30,7 +30,10 @@ class DBServicePayment{
         "${StaticStrings.api}/sponsor",
         headers: {"restaurant_id":restaurant.restaurant_id});
     List<dynamic> result = json.decode(response.body);
-    restaurant.clicks = result.first['clicks'];
+    if(result.length > 0)
+      restaurant.clicks = result.first['clicks'];
+    else
+      restaurant.clicks = 0;
   }
 
   Future updateSponsor(String restaurant_id) async{
@@ -50,12 +53,22 @@ class DBServicePayment{
         "${StaticStrings.api}/premium",
         headers: {"restaurant_id":restaurant.restaurant_id});
     List<dynamic> result = json.decode(response.body);
-    restaurant.sponshorshiptime = result.first['sponshorshiptime'];
+    print(result);
+    if(result.length > 0) {
+      restaurant.premiumtime = result.first['premiumtime'].toString().substring(0,10);
+      if(restaurant.premium = result.first['ispremium'] == null)
+        restaurant.premium = false;
+      else
+        restaurant.premium = result.first['ispremium'];
+    }
+    else{
+      restaurant.premium = false;
+    }
   }
 
-  Future updatePremium(String restaurant_id, String date) async{
+  Future updatePremium(String restaurant_id, String date, bool premium) async{
     var response = await http.put(
-        "${StaticStrings.api}/premium", body: {"restaurant_id":restaurant_id, "date" : date});
+        "${StaticStrings.api}/premium", body: {"restaurant_id":restaurant_id, "date" : date, "premium" : premium.toString()});
     print(response.body);
   }
 

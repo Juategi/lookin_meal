@@ -10,7 +10,10 @@ import 'package:lookinmeal/screens/restaurants/admin/edit_menu.dart';
 import 'package:lookinmeal/screens/restaurants/admin/edit_restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/admin/edit_tables.dart';
 import 'package:lookinmeal/screens/restaurants/admin/manage_admins.dart';
+import 'package:lookinmeal/screens/restaurants/admin/premium.dart';
+import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:lookinmeal/shared/functions.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import 'edit_images.dart';
@@ -31,7 +34,7 @@ class _AdminPageState extends State<AdminPage> {
       child: Scaffold(
         body: Padding(
           padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 25.w),
-          child: Column(
+          child: ListView(
             children: [
               Row( mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -58,13 +61,13 @@ class _AdminPageState extends State<AdminPage> {
                   //Navigator.pushNamed(context, "/editrestaurant",arguments: restaurant).then((value) => setState(() {}));
                 },
               ),
-              SizedBox(height: 50.h,),
+              SizedBox(height: 40.h,),
               GestureDetector(
                 child: Row(
                   children: [
                     Container(
-                        height: 40.h,
-                        width: 40.w,
+                        height: 35.h,
+                        width: 35.w,
                         child: SvgPicture.asset("assets/menu.svg")
                     ),
                     SizedBox(width: 30.w,),
@@ -82,13 +85,13 @@ class _AdminPageState extends State<AdminPage> {
                   //Navigator.pushNamed(context, "/editmenu",arguments: restaurant).then((value) => setState(() {}));
                 },
               ),
-              SizedBox(height: 50.h,),
+              SizedBox(height: 40.h,),
               GestureDetector(
                 child: Row(
                   children: [
                     Container(
-                        height: 40.h,
-                        width: 40.w,
+                        height: 35.h,
+                        width: 35.w,
                         child: SvgPicture.asset("assets/menu.svg", )
                     ),
                     SizedBox(width: 30.w,),
@@ -106,7 +109,7 @@ class _AdminPageState extends State<AdminPage> {
                   //Navigator.pushNamed(context, "/editdaily",arguments: restaurant).then((value) => setState(() {}));
                 },
               ),
-              SizedBox(height: 50.h,),
+              SizedBox(height: 40.h,),
               GestureDetector(
                 child: Row(
                   children: [
@@ -121,7 +124,7 @@ class _AdminPageState extends State<AdminPage> {
                   }).then((value){setState(() {});});
                 },
               ),
-              SizedBox(height: 50.h,),
+              SizedBox(height: 40.h,),
               GestureDetector(
                 child: Row(
                   children: [
@@ -131,17 +134,35 @@ class _AdminPageState extends State<AdminPage> {
                   ],
                 ),
                 onTap:()async{
-                  pushNewScreenWithRouteSettings(
-                    context,
-                    settings: RouteSettings(name: "/edittables", arguments: restaurant),
-                    screen: EditTables(),
-                    withNavBar: true,
-                    pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                  ).then((value) => setState(() {}));
+                  if(restaurant.premiumtime == null)
+                    pushNewScreenWithRouteSettings(
+                      context,
+                      settings: RouteSettings( arguments: restaurant),
+                      screen: Premium(),
+                      withNavBar: true,
+                      pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                    ).then((value) => setState(() {}));
+                  else if(restaurant.premium || (!restaurant.premium && restaurant.premiumtime != null && Functions.compareDates(restaurant.premiumtime, DateTime.now().toString().substring(0,10)) <= 0)) {
+                      pushNewScreenWithRouteSettings(
+                        context,
+                        settings: RouteSettings(name: "/edittables", arguments: restaurant),
+                        screen: EditTables(),
+                        withNavBar: true,
+                        pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                      ).then((value) => setState(() {}));
+                  }
+                  else
+                    pushNewScreenWithRouteSettings(
+                      context,
+                      settings: RouteSettings( arguments: restaurant),
+                      screen: Premium(),
+                      withNavBar: true,
+                      pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                    ).then((value) => setState(() {}));
                   //Navigator.pushNamed(context, "/edittables",arguments: restaurant).then((value) => setState(() {}));
                 },
               ),
-              SizedBox(height: 50.h,),
+              SizedBox(height: 40.h,),
               GestureDetector(
                 child: Row(
                   children: [
@@ -151,17 +172,35 @@ class _AdminPageState extends State<AdminPage> {
                   ],
                 ),
                 onTap:()async{
-                  pushNewScreenWithRouteSettings(
-                    context,
-                    settings: RouteSettings(name: "/editcodes", arguments: restaurant),
-                    screen: EditCodes(),
-                    withNavBar: true,
-                    pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                  ).then((value) => setState(() {}));
+                  if(restaurant.premiumtime == null)
+                    pushNewScreenWithRouteSettings(
+                      context,
+                      settings: RouteSettings( arguments: restaurant),
+                      screen: Premium(),
+                      withNavBar: true,
+                      pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                    ).then((value) => setState(() {}));
+                  else if(restaurant.premium || (!restaurant.premium && restaurant.premiumtime != null && Functions.compareDates(restaurant.premiumtime, DateTime.now().toString().substring(0,10)) <= 0)) {
+                      pushNewScreenWithRouteSettings(
+                        context,
+                        settings: RouteSettings(name: "/editcodes", arguments: restaurant),
+                        screen: EditCodes(),
+                        withNavBar: true,
+                        pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                      ).then((value) => setState(() {}));
+                  }
+                  else
+                    pushNewScreenWithRouteSettings(
+                      context,
+                      settings: RouteSettings( arguments: restaurant),
+                      screen: Premium(),
+                      withNavBar: true,
+                      pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                    ).then((value) => setState(() {}));
                   //Navigator.pushNamed(context, "/editcodes",arguments: restaurant).then((value) => setState(() {}));
                 },
               ),
-              SizedBox(height: 50.h,),
+              SizedBox(height: 40.h,),
               GestureDetector(
                 child: Row(
                   children: [
@@ -175,6 +214,25 @@ class _AdminPageState extends State<AdminPage> {
                     context,
                     settings: RouteSettings( arguments: restaurant),
                     screen: ManageAdmins(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                  ).then((value) => setState(() {}));
+                },
+              ),
+              SizedBox(height: 40.h,),
+              GestureDetector(
+                child: Row(
+                  children: [
+                    Icon(Icons.verified_outlined, size: ScreenUtil().setSp(32),),
+                    SizedBox(width: 30.w,),
+                    Text("Premium", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                  ],
+                ),
+                onTap:()async{
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings( arguments: restaurant),
+                    screen: Premium(),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.slideUp,
                   ).then((value) => setState(() {}));
