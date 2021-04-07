@@ -86,11 +86,11 @@ class DBServicePayment{
     List<dynamic> result = json.decode(response.body);
     for (var element in result) {
       payments.add(Payment(
-          id: element['id'],
-          price: element['price'],
-          restaurant_id: element['restaurant_id'],
+          id: element['id'].toString(),
+          price: double.parse(element['price'].toString()),
+          restaurant_id: element['restaurant_id'].toString(),
           user_id: element['user_id'],
-          paymentdate: element['paymentdate'],
+          paymentdate: DateTime.parse(element['paymentdate']).add(Duration(days: 1)).toString(),
           service: element['service'],
           description: element['description']
       ));

@@ -10,6 +10,7 @@ import 'package:lookinmeal/screens/restaurants/admin/edit_menu.dart';
 import 'package:lookinmeal/screens/restaurants/admin/edit_restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/admin/edit_tables.dart';
 import 'package:lookinmeal/screens/restaurants/admin/manage_admins.dart';
+import 'package:lookinmeal/screens/restaurants/admin/payments.dart';
 import 'package:lookinmeal/screens/restaurants/admin/premium.dart';
 import 'package:lookinmeal/screens/restaurants/admin/sponsor.dart';
 import 'package:lookinmeal/shared/alert.dart';
@@ -253,6 +254,25 @@ class _AdminPageState extends State<AdminPage> {
                     context,
                     settings: RouteSettings( arguments: restaurant),
                     screen: Sponsor(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                  ).then((value) => setState(() {}));
+                },
+              ),
+              SizedBox(height: 40.h,),
+              GestureDetector(
+                child: Row(
+                  children: [
+                    Icon(Icons.payment, size: ScreenUtil().setSp(32),),
+                    SizedBox(width: 30.w,),
+                    Text("Payments", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                  ],
+                ),
+                onTap:()async{
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings( arguments: restaurant),
+                    screen: PaymentList(),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.slideUp,
                   ).then((value) => setState(() {}));
