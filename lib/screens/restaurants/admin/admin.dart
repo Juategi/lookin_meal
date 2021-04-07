@@ -288,7 +288,7 @@ class _AdminPageState extends State<AdminPage> {
                   ],
                 ),
                 onTap:()async{
-
+                  Alerts.toast("Descargando manual...");
                 },
               ),
             ],

@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:lookinmeal/database/paymentDB.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
+import 'package:lookinmeal/shared/loading.dart';
 import 'admin/premium.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/models/list.dart';
@@ -246,7 +247,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
     return SafeArea(
       child: Scaffold(
 			//backgroundColor: CommonData.backgroundColor,
-        body: ListView(
+        body: restaurant.premium  == null? Loading() : ListView(
         	children: <Widget>[
         		GestureDetector(
         		  child: Container(
