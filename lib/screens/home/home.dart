@@ -59,6 +59,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
 	Future _getPrices() async{
 		CommonData.prices = await DBServicePayment.dbServicePayment.getPrices();
+		CommonData.prices.sort((p1, p2) => p1.quantity.compareTo(p2.quantity));
 	}
 
 

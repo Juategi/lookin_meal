@@ -36,9 +36,9 @@ class DBServicePayment{
       restaurant.clicks = 0;
   }
 
-  Future updateSponsor(String restaurant_id) async{
+  Future updateSponsor(String restaurant_id, int clicks) async{
     var response = await http.put(
-        "${StaticStrings.api}/sponsor", body: {"restaurant_id":restaurant_id});
+        "${StaticStrings.api}/sponsor", body: {"restaurant_id":restaurant_id, "clicks": clicks.toString()});
     print(response.body);
   }
 

@@ -100,6 +100,12 @@ class _PremiumState extends State<Premium> {
               decoration: BoxDecoration(
                 color: restaurant.premium == true? Color.fromRGBO(255, 110, 117, 0.7) : Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(30)),
+                boxShadow: [BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 3,
+                  offset: Offset(1, 1), // changes position of shadow
+                ),],
               ),
               child: restaurant.premium == false? Center(child: Text("Suscribirse", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.greenAccent, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),))):
               Center(child: Text("Cancelar", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),)))
