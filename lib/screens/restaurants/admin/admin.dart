@@ -59,8 +59,8 @@ class _AdminPageState extends State<AdminPage> {
                     screen: EditRestaurant(),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                  ).then((value) => setState(() {}));
-                  //Navigator.pushNamed(context, "/editrestaurant",arguments: restaurant).then((value) => setState(() {}));
+                  );
+                  //Navigator.pushNamed(context, "/editrestaurant",arguments: restaurant);
                 },
               ),
               SizedBox(height: 40.h,),
@@ -83,8 +83,8 @@ class _AdminPageState extends State<AdminPage> {
                     screen: EditMenu(),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                  ).then((value) => setState(() {}));
-                  //Navigator.pushNamed(context, "/editmenu",arguments: restaurant).then((value) => setState(() {}));
+                  );
+                  //Navigator.pushNamed(context, "/editmenu",arguments: restaurant);
                 },
               ),
               SizedBox(height: 40.h,),
@@ -107,8 +107,8 @@ class _AdminPageState extends State<AdminPage> {
                     screen: EditDaily(),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                  ).then((value) => setState(() {}));
-                  //Navigator.pushNamed(context, "/editdaily",arguments: restaurant).then((value) => setState(() {}));
+                  );
+                  //Navigator.pushNamed(context, "/editdaily",arguments: restaurant);
                 },
               ),
               SizedBox(height: 40.h,),
@@ -143,7 +143,7 @@ class _AdminPageState extends State<AdminPage> {
                       screen: Premium(),
                       withNavBar: true,
                       pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                    ).then((value) => setState(() {}));
+                    );
                   else if(restaurant.premium || (!restaurant.premium && restaurant.premiumtime != null && Functions.compareDates(restaurant.premiumtime, DateTime.now().toString().substring(0,10)) <= 0)) {
                       pushNewScreenWithRouteSettings(
                         context,
@@ -151,7 +151,7 @@ class _AdminPageState extends State<AdminPage> {
                         screen: EditTables(),
                         withNavBar: true,
                         pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                      ).then((value) => setState(() {}));
+                      );
                   }
                   else
                     pushNewScreenWithRouteSettings(
@@ -160,8 +160,8 @@ class _AdminPageState extends State<AdminPage> {
                       screen: Premium(),
                       withNavBar: true,
                       pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                    ).then((value) => setState(() {}));
-                  //Navigator.pushNamed(context, "/edittables",arguments: restaurant).then((value) => setState(() {}));
+                    );
+                  //Navigator.pushNamed(context, "/edittables",arguments: restaurant);
                 },
               ),
               SizedBox(height: 40.h,),
@@ -181,7 +181,7 @@ class _AdminPageState extends State<AdminPage> {
                       screen: Premium(),
                       withNavBar: true,
                       pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                    ).then((value) => setState(() {}));
+                    );
                   else if(restaurant.premium || (!restaurant.premium && restaurant.premiumtime != null && Functions.compareDates(restaurant.premiumtime, DateTime.now().toString().substring(0,10)) <= 0)) {
                       pushNewScreenWithRouteSettings(
                         context,
@@ -189,7 +189,7 @@ class _AdminPageState extends State<AdminPage> {
                         screen: EditCodes(),
                         withNavBar: true,
                         pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                      ).then((value) => setState(() {}));
+                      );
                   }
                   else
                     pushNewScreenWithRouteSettings(
@@ -198,8 +198,8 @@ class _AdminPageState extends State<AdminPage> {
                       screen: Premium(),
                       withNavBar: true,
                       pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                    ).then((value) => setState(() {}));
-                  //Navigator.pushNamed(context, "/editcodes",arguments: restaurant).then((value) => setState(() {}));
+                    );
+                  //Navigator.pushNamed(context, "/editcodes",arguments: restaurant);
                 },
               ),
               SizedBox(height: 40.h,),
@@ -218,7 +218,7 @@ class _AdminPageState extends State<AdminPage> {
                     screen: ManageAdmins(),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                  ).then((value) => setState(() {}));
+                  );
                 },
               ),
               SizedBox(height: 40.h,),
@@ -237,7 +237,7 @@ class _AdminPageState extends State<AdminPage> {
                     screen: Premium(),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                  ).then((value) => setState(() {}));
+                  );
                 },
               ),
               SizedBox(height: 40.h,),
@@ -256,7 +256,7 @@ class _AdminPageState extends State<AdminPage> {
                     screen: Sponsor(),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                  ).then((value) => setState(() {}));
+                  );
                 },
               ),
               SizedBox(height: 40.h,),
@@ -275,7 +275,20 @@ class _AdminPageState extends State<AdminPage> {
                     screen: PaymentList(),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                  ).then((value) => setState(() {}));
+                  );
+                },
+              ),
+              SizedBox(height: 40.h,),
+              GestureDetector(
+                child: Row(
+                  children: [
+                    Icon(Icons.live_help_rounded, size: ScreenUtil().setSp(32),),
+                    SizedBox(width: 30.w,),
+                    Text("Download Manual", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                  ],
+                ),
+                onTap:()async{
+
                 },
               ),
             ],
