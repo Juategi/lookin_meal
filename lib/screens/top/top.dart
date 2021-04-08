@@ -27,7 +27,7 @@ class Top extends StatefulWidget {
 }
 
 class _TopState extends State<Top> {
-  List<Restaurant> topRestaurant;
+  List<Restaurant> topRestaurant, sponsored;
   Map<MenuEntry,Restaurant> topEntry;
   Position last;
 
@@ -35,7 +35,17 @@ class _TopState extends State<Top> {
     if(last != GeolocationService.myPos) {
       topRestaurant = await DBServiceRestaurant.dbServiceRestaurant.getTopRestaurants();
       topEntry = await DBServiceRestaurant.dbServiceRestaurant.getTopEntries();
+      sponsored = await DBServiceRestaurant.dbServiceRestaurant.getSponsored();
       last = GeolocationService.myPos;
+      List<Restaurant> aux = [];
+      for(Restaurant r in topRestaurant){
+        if(sponsored.contains(r)){
+          aux.add(r);
+        }
+      }
+      for(Restaurant r in aux){
+        topRestaurant.remove(r);
+      }
       print("top updated");
       setState(() {});
     }
@@ -81,9 +91,12 @@ class _TopState extends State<Top> {
                       crossAxisSpacing: 1,
                       mainAxisSpacing: 2
                   ),
-                  children: topRestaurant.map((r) => Padding(
+                  children: sponsored.map((r) => Padding(
                     padding: EdgeInsets.symmetric(vertical: 10.h),
-                    child: Provider<Restaurant>.value(value: r, child: RestaurantTile(),),
+                    child: Provider<bool>.value(value: true, child: Provider<Restaurant>.value(value: r, child: RestaurantTile(),)),
+                  )).toList() + topRestaurant.map((r) => Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    child: Provider<bool>.value(value: false, child: Provider<Restaurant>.value(value: r, child: RestaurantTile(),)),
                   )).toList(),
                 ),
               ),

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/database/paymentDB.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
@@ -23,10 +24,12 @@ class RestaurantTile extends StatefulWidget {
 
 class _RestaurantTileState extends State<RestaurantTile> {
   Restaurant restaurant;
+  bool sponsored;
 
   @override
   Widget build(BuildContext context) {
     restaurant = Provider.of<Restaurant>(context);
+    sponsored = Provider.of<bool>(context);
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -35,6 +38,9 @@ class _RestaurantTileState extends State<RestaurantTile> {
           DBServiceRestaurant.dbServiceRestaurant.updateRecently(restaurant);
           CommonData.pop[0] = true;
           CommonData.pop[3] = true;
+          if(sponsored){
+            DBServicePayment.dbServicePayment.updateSponsor(restaurant.restaurant_id, -1);
+          }
           pushNewScreenWithRouteSettings(
             context,
             settings: RouteSettings(name: "/restaurant", arguments: restaurant),
@@ -59,26 +65,22 @@ class _RestaurantTileState extends State<RestaurantTile> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                child: Row( mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                  /*IconButton(
-                      icon:  Icon(user.favorites.contains(restaurant) ? Icons.favorite : Icons.favorite_border, color: user.favorites.contains(restaurant) ? Color.fromRGBO(255, 110, 117, 1) : Color.fromRGBO(255, 110, 117, 1),),
-                      iconSize: ScreenUtil().setSp(32),
-                      onPressed: ()async{
-                        if(user.favorites.contains(restaurant)) {
-                          user.favorites.remove(restaurant);
-                          DBService.dbService.deleteFromUserFavorites(user.uid, restaurant);
-                        }
-                        else {
-                          user.favorites.add(restaurant);
-                          DBService.dbService.addToUserFavorites(user.uid, restaurant);
-                        }
-                        setState(() {});
-                      },
-
-                    ),*/
-                  ],
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
+                  child: Row( mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      sponsored ? Container(
+                        width: 90.w,
+                        height: 20.h,
+                        decoration: BoxDecoration(
+                            color: Color.fromRGBO(255, 201, 23, 1),
+                            borderRadius: BorderRadius.all(Radius.circular(12))
+                        ),
+                        child: Text("Promocionado", textAlign: TextAlign.center,  maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(12),),))
+                      ) : Container()
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: 1.h,),

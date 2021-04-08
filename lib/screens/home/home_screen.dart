@@ -15,6 +15,7 @@ import 'package:lookinmeal/screens/restaurants/restaurant_tile.dart';
 import 'package:lookinmeal/screens/search/search.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/shared/common_data.dart';
+import 'package:lookinmeal/shared/loading.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 	User user;
-	List<Restaurant> nearRestaurants, recommended;
+	List<Restaurant> nearRestaurants, recommended, sponsored;
 	Map<MenuEntry,Restaurant> popular;
 	String location;
 	bool first = true;
@@ -57,7 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
 		if(first){
 			user = Provider.of<User>(context);
 			nearRestaurants = Provider.of<List<List<Restaurant>>>(context).first;
-			recommended = Provider.of<List<List<Restaurant>>>(context).last;
+			recommended = Provider.of<List<List<Restaurant>>>(context)[1];
+			sponsored = Provider.of<List<List<Restaurant>>>(context).last;
 			popular = Provider.of<Map<MenuEntry,Restaurant>>(context);
 			user.addListener(() { setState(() {
 			});});
@@ -65,11 +67,18 @@ class _HomeScreenState extends State<HomeScreen> {
 				entry.addListener(() { setState(() {
 				});});
 			}
+			List<Restaurant> aux = [];
 			for(Restaurant r in nearRestaurants){
 				for(MenuEntry entry in r.menu){
 					entry.addListener(() { setState(() {
 					});});
 				}
+				if(sponsored.contains(r)){
+					aux.add(r);
+				}
+			}
+			for(Restaurant r in aux){
+				nearRestaurants.remove(r);
 			}
 			for(Restaurant r in user.recently){
 				for(MenuEntry entry in r.menu){
@@ -211,9 +220,12 @@ class _HomeScreenState extends State<HomeScreen> {
 		  								crossAxisSpacing: 1,
 		  								mainAxisSpacing: 2
 		  						),
-		  						children: nearRestaurants.map((r) => Padding(
+		  						children: sponsored.map((r) => Padding(
+										padding: EdgeInsets.symmetric(vertical: 10.h),
+										child: Provider<bool>.value(value: true, child: Provider<Restaurant>.value(value: r, child: RestaurantTile(),)),
+									)).toList() + nearRestaurants.map((r) => Padding(
 		  							padding: EdgeInsets.symmetric(vertical: 10.h),
-		  							child: Provider<Restaurant>.value(value: r, child: RestaurantTile(),),
+		  							child: Provider<bool>.value(value: false, child: Provider<Restaurant>.value(value: r, child: RestaurantTile(),)),
 		  						)).toList(),
 		  					),
 		  				),
@@ -246,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
 		  						scrollDirection: Axis.horizontal,
 		  						children: user.recently.map((r) => Padding(
 		  							padding: EdgeInsets.symmetric(vertical: 10.h),
-		  						  child: Provider<Restaurant>.value(value: r, child: RestaurantTile(),),
+		  						  child: Provider<bool>.value(value: false, child: Provider<Restaurant>.value(value: r, child: RestaurantTile(),)),
 		  						)).toList(),
 		  					),
 		  				),
@@ -266,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
 		  						),
 		  						children: recommended.map((r) => Padding(
 		  							padding: EdgeInsets.symmetric(vertical: 10.h),
-		  							child: Provider<Restaurant>.value(value: r, child: RestaurantTile(),),
+		  							child: Provider<bool>.value(value: false, child: Provider<Restaurant>.value(value: r, child: RestaurantTile(),)),
 		  						)).toList(),
 		  					),
 		  				),

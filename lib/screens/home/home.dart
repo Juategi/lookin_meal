@@ -43,7 +43,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	String id;
 	String locality, country;
 	Position myPos;
-	List<Restaurant> nearRestaurants, recommended;
+	List<Restaurant> nearRestaurants, recommended, sponsored;
 	Map<MenuEntry,Restaurant> popular;
 	List<double> distances = List<double>();
 	int lastIndex = 0;
@@ -68,6 +68,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		locality = await _geolocationService.getLocality(myPos.latitude, myPos.longitude);
 		country = await _geolocationService.getCountry(myPos.latitude, myPos.longitude);
 		nearRestaurants= await DBServiceRestaurant.dbServiceRestaurant.getNearRestaurants(myPos.latitude, myPos.longitude, locality.toUpperCase());
+		sponsored = await DBServiceRestaurant.dbServiceRestaurant.getSponsored();
 		recommended = await DBServiceRestaurant.dbServiceRestaurant.getRecommended(DBServiceUser.userF.uid);
 		/*for(Restaurant restaurant in restaurants){
 			distances.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));
@@ -236,7 +237,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 						MultiProvider(
 							providers: [
 								Provider<Map<MenuEntry, Restaurant>>(create: (c) => popular,),
-								Provider<List<List<Restaurant>>>(create: (c) => [nearRestaurants , recommended],)
+								Provider<List<List<Restaurant>>>(create: (c) => [nearRestaurants , recommended, sponsored],)
 							],
 							child: HomeScreen(),
 						),

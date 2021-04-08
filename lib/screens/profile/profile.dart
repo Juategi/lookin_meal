@@ -58,8 +58,7 @@ class _ProfileState extends State<Profile> {
                 children: [
                   GestureDetector(
                     onTap:()async{
-                      List<Restaurant> aux = await DBServiceRestaurant.dbServiceRestaurant.getSponsored();
-                      print(aux.length);
+
                     },
                     child: Container(height: 67.h, width: 67.w,
                         decoration: new BoxDecoration(

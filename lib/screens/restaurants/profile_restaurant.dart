@@ -237,7 +237,11 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 				}
 			}
 			for(int i = 0; i < 7; i++){
-				Functions.parseSchedule(restaurant.schedule[i.toString()]);
+				try {
+					Functions.parseSchedule(restaurant.schedule[i.toString()]);
+				}catch(e){
+					print(e);
+				}
 			}
 			first = false;
 		}
