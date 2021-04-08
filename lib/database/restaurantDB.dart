@@ -56,8 +56,8 @@ class DBServiceRestaurant{
     return parseResponse(response);
   }
 
-  Future<List<Restaurant>> getSponsored() async {
-    var response = await http.get("${StaticStrings.api}/sponsored", headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
+  Future<List<Restaurant>> getSponsored(int quantity) async {
+    var response = await http.get("${StaticStrings.api}/sponsored", headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString(), "quantity":quantity.toString() });
     return parseResponse(response);
   }
 

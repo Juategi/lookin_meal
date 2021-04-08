@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/database/paymentDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/entry.dart';
@@ -22,6 +23,7 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
   Restaurant restaurant;
   List<MenuEntry> top;
   bool init = true;
+  bool sponsored;
 
   List<MenuEntry> _getTop(){
     int max = 0;
@@ -39,6 +41,7 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
   @override
   Widget build(BuildContext context) {
     restaurant = Provider.of<Restaurant>(context);
+    sponsored = Provider.of<bool>(context);
     if(init){
       top = _getTop();
       init = false;
@@ -46,6 +49,9 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return GestureDetector(
       onTap: (){
+        if(sponsored){
+          DBServicePayment.dbServicePayment.updateSponsor(restaurant.restaurant_id, -1);
+        }
         pushNewScreenWithRouteSettings(
           context,
           settings: RouteSettings(name: "/restaurant", arguments: restaurant),
@@ -68,6 +74,23 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
                   image: Image.network(
                       restaurant.images.first).image,
                   fit: BoxFit.cover,
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
+                child: Row( mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    sponsored ? Container(
+                        width: 90.w,
+                        height: 20.h,
+                        decoration: BoxDecoration(
+                            color: Color.fromRGBO(255, 201, 23, 1),
+                            borderRadius: BorderRadius.all(Radius.circular(12))
+                        ),
+                        child: Text("Promocionado", textAlign: TextAlign.center,  maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(12),),))
+                    ) : Container()
+                  ],
                 ),
               ),
             ),

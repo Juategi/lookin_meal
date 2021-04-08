@@ -68,7 +68,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		locality = await _geolocationService.getLocality(myPos.latitude, myPos.longitude);
 		country = await _geolocationService.getCountry(myPos.latitude, myPos.longitude);
 		nearRestaurants= await DBServiceRestaurant.dbServiceRestaurant.getNearRestaurants(myPos.latitude, myPos.longitude, locality.toUpperCase());
-		sponsored = await DBServiceRestaurant.dbServiceRestaurant.getSponsored();
+		sponsored = await DBServiceRestaurant.dbServiceRestaurant.getSponsored(3);
 		recommended = await DBServiceRestaurant.dbServiceRestaurant.getRecommended(DBServiceUser.userF.uid);
 		/*for(Restaurant restaurant in restaurants){
 			distances.add(await _geolocationService.distanceBetween(myPos.latitude,myPos.longitude, restaurant.latitude, restaurant.longitude));

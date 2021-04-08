@@ -35,7 +35,7 @@ class _TopState extends State<Top> {
     if(last != GeolocationService.myPos) {
       topRestaurant = await DBServiceRestaurant.dbServiceRestaurant.getTopRestaurants();
       topEntry = await DBServiceRestaurant.dbServiceRestaurant.getTopEntries();
-      sponsored = await DBServiceRestaurant.dbServiceRestaurant.getSponsored();
+      sponsored = await DBServiceRestaurant.dbServiceRestaurant.getSponsored(3);
       last = GeolocationService.myPos;
       List<Restaurant> aux = [];
       for(Restaurant r in topRestaurant){

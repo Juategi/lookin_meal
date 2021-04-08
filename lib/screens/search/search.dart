@@ -4,6 +4,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/dish_query.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
@@ -41,12 +42,13 @@ class _SearchState extends State<Search> {
   String query = "";
   double maxDistance = 5.0;
   int offset = 0;
-  List<Restaurant> result;
+  List<Restaurant> result, sponsored;
   Map<Restaurant, List<String>> resultEntry;
 
   Future _search() async{
     if(isRestaurant) {
       result = await SearchService().query(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude, maxDistance, offset, types, query, searchType);
+      sponsored = await DBServiceRestaurant.dbServiceRestaurant.getSponsored(1);
     }
     else{
       if(actual.query != ""){
@@ -63,12 +65,23 @@ class _SearchState extends State<Search> {
 
   Widget _buildList(){
     if(isRestaurant) {
-      List<Widget> buildList = result.map((restaurant) =>
+      List<Widget> buildList = sponsored.map((restaurant) =>
           Container(
-            child: Provider.value(value: restaurant, child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 15.h),
-              child: SearchRestaurantTile(),
-            )),
+            child: Provider.value(value: true,
+              child: Provider.value(value: restaurant, child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 25.h),
+                child: SearchRestaurantTile(),
+              )),
+            ),
+          )
+      ).toList() + result.map((restaurant) =>
+          Container(
+            child: Provider.value(value: false,
+              child: Provider.value(value: restaurant, child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 25.h),
+                child: SearchRestaurantTile(),
+              )),
+            ),
           )
       ).toList();
       if(offset < 20)
@@ -312,7 +325,7 @@ class _SearchState extends State<Search> {
             ),
           ),
         ),
-        backgroundColor: CommonData.backgroundColor,
+        //backgroundColor: CommonData.backgroundColor,
         body: searching? CircularLoading()  : Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.w),
           child: isSearching? _buildList() :  SingleChildScrollView(
