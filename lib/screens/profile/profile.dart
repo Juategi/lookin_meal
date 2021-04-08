@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lookinmeal/database/restaurantDB.dart';
+import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/profile/edit_profile.dart';
 import 'package:lookinmeal/screens/profile/favorites.dart';
@@ -55,8 +57,9 @@ class _ProfileState extends State<Profile> {
               child: Row( mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap:(){
-
+                    onTap:()async{
+                      List<Restaurant> aux = await DBServiceRestaurant.dbServiceRestaurant.getSponsored();
+                      print(aux.length);
                     },
                     child: Container(height: 67.h, width: 67.w,
                         decoration: new BoxDecoration(

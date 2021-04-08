@@ -161,7 +161,7 @@ class _SponsorState extends State<Sponsor> {
                                   letterSpacing: .3,
                                   fontWeight: FontWeight.bold,
                                   fontSize: ScreenUtil().setSp(20),),)),
-                            Text("${price.price.toString().substring(0, price.price.toString().length -2)} ${restaurant.currency}", maxLines: 1,
+                            Text("${price.price.toString().substring(0, price.price.toString().length -2)} €", maxLines: 1,
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.niramit(textStyle: TextStyle(
                                   color: Color.fromRGBO(255, 110, 117, 0.7),

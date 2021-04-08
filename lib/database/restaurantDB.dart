@@ -56,6 +56,11 @@ class DBServiceRestaurant{
     return parseResponse(response);
   }
 
+  Future<List<Restaurant>> getSponsored() async {
+    var response = await http.get("${StaticStrings.api}/sponsored", headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
+    return parseResponse(response);
+  }
+
   Future<bool> checkRequestStatus(String restaurant_id) async {
     var response = await http.get("${StaticStrings.api}/nanonets", headers: {"restaurant_id" : restaurant_id, "user_id" : DBServiceUser.userF.uid});
     List<dynamic> result = json.decode(response.body);
