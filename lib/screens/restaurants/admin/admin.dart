@@ -13,6 +13,7 @@ import 'package:lookinmeal/screens/restaurants/admin/manage_admins.dart';
 import 'package:lookinmeal/screens/restaurants/admin/payments.dart';
 import 'package:lookinmeal/screens/restaurants/admin/premium.dart';
 import 'package:lookinmeal/screens/restaurants/admin/sponsor.dart';
+import 'package:lookinmeal/screens/restaurants/admin/statistics.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
@@ -91,11 +92,7 @@ class _AdminPageState extends State<AdminPage> {
               GestureDetector(
                 child: Row(
                   children: [
-                    Container(
-                        height: 35.h,
-                        width: 35.w,
-                        child: SvgPicture.asset("assets/menu.svg", )
-                    ),
+                    Icon(Icons.restaurant, size: ScreenUtil().setSp(32),),
                     SizedBox(width: 30.w,),
                     Text("Edit daily menu", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                   ],
@@ -273,6 +270,25 @@ class _AdminPageState extends State<AdminPage> {
                     context,
                     settings: RouteSettings( arguments: restaurant),
                     screen: PaymentList(),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                  );
+                },
+              ),
+              SizedBox(height: 40.h,),
+              GestureDetector(
+                child: Row(
+                  children: [
+                    Icon(Icons.stacked_bar_chart, size: ScreenUtil().setSp(32),),
+                    SizedBox(width: 30.w,),
+                    Text("Statistics", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                  ],
+                ),
+                onTap:()async{
+                  pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings( arguments: restaurant),
+                    screen: Statistics(),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.slideUp,
                   );

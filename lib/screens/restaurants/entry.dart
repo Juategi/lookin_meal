@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:lookinmeal/database/entryDB.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
+import 'package:lookinmeal/database/statisticDB.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/models/list.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
@@ -381,6 +382,7 @@ class _EntryRatingState extends State<EntryRating> {
                       Alerts.toast("Rating saved");
                       Navigator.pop(context);
                     }
+                    DBServiceStatistic.dbServiceStatistic.addRate(restaurant.restaurant_id, entry.id, comment != "");
                   },
                 ),
               ),

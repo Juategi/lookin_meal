@@ -10,7 +10,8 @@ share y aviso de conexion
 sistema actualizacion
 pantalla menu vacio (enviar carta)
 idioma
-limitar los orders a si hay suscription
+limitar los orders a si hay suscription => te llevaran a la carta sin mas
+cambiar city del near por cantidad
 
 
 https://developers.google.com/maps/documentation/android-sdk/get-api-key#restrict_key
@@ -22,27 +23,3 @@ Numero de valoraciones con comentario (por dia)
 Tipo de usuario que visita tu perfil por gustos (Por restaurantes favoritos o valoraciones segun el tipo comida de estos sitios)
 Tipo de restaurantes mas valorados en tu zona
 
-
-
-Sistema de sponsors:
-Contratación de número de clicks
-Precio segun el numero contratado. Ej packs:
-	- 100 Clicks a 7 cents. = 7€
-	- 1000 Clicks a 5 cents. = 50€
-	- 10000 Clicks a 2 cents. = 200€
-Si está dentro de una ubicación dada al usuario (10Km radio?) saldrá en las búsquedas o en el feed principal (2-3).
-Ordenación para ir saliendo ideas:
-	- Los 2-3 mas cercanos ignorando la distancia máxima?
-	- Hacer una cola con todos y coger los 2-3 primeros que entren en la distancia máxima (10Km radio?) Me gusta esta.
-
-
-
-Cuenta premium del restaurante para pedidos, reservas y estadisticas:
-Por mensualidad. Ej:
-	- 1 mes 15€
-	- 3 meses 12€ = 36€
-	- 6 meses 10€ = 60€
-	- 1 año 8€ = 96€
-
-Por suscripcion automatica:
-	- 12€ mes

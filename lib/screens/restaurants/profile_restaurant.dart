@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:lookinmeal/database/paymentDB.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
+import 'package:lookinmeal/database/statisticDB.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'admin/premium.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
@@ -223,6 +224,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 		if(first){
 			_loadData();
 			_loadOwners();
+			DBServiceStatistic.dbServiceStatistic.addVisit(restaurant.restaurant_id);
 			if(restaurant.menu.length == 0)
 				_loadStatus();
 			if(restaurant.original == null){

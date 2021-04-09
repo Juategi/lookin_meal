@@ -126,6 +126,46 @@ class _MenuState extends State<Menu> {
             ).toList()
           ,
         )
+        /*child: ExpansionPanelList(
+            animationDuration: Duration(milliseconds: 300),
+            elevation: 1,
+            expansionCallback: (i, isOpen){
+              setState(() {
+                expanded[restaurant.sections[i]] = !expanded[restaurant.sections[i]];
+              });
+            },
+          children: restaurant.sections.map((section) =>
+            ExpansionPanel(canTapOnHeader: true,
+              isExpanded: expanded[section],
+              headerBuilder: (context, isOpen){
+                return  Row( mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text(Functions.limitString(section, 26), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+                  ],
+                );
+              },
+              body: Column(
+                  children: restaurant.menu.map((entry){
+                    if(section == entry.section && entry.hide)
+                      return Provider.value(
+                        value: order,
+                        key: UniqueKey(),
+                        child: Provider<Restaurant>.value(
+                          key: UniqueKey(),
+                          value: restaurant,
+                          child: Provider<MenuEntry>.value(
+                              key: UniqueKey(),
+                              value: entry, child: MenuTile(daily: false,)),
+                        ),
+                      );
+                    else
+                      return Container();
+                  }
+                  ).toList()
+              )
+            )
+          ).toList(),
+        )*/
       );
     }
     else return Container();

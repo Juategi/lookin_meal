@@ -1,0 +1,176 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lookinmeal/database/paymentDB.dart';
+import 'package:lookinmeal/database/restaurantDB.dart';
+import 'package:lookinmeal/database/statisticDB.dart';
+import 'package:lookinmeal/models/payment.dart';
+import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/shared/common_data.dart';
+import 'package:lookinmeal/shared/functions.dart';
+import 'package:lookinmeal/shared/loading.dart';
+import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
+class Statistics extends StatefulWidget {
+  @override
+  _StatisticsState createState() => _StatisticsState();
+}
+
+class _StatisticsState extends State<Statistics> {
+  Map<String, int> visits, rates;
+  Restaurant restaurant;
+  Map<String, int> typesNearly;
+  bool init = true;
+  List<bool> _isOpen;
+
+  Future _loadStats() async{
+    _isOpen = [false, false, false];
+    List<String> auxVisits = await DBServiceStatistic.dbServiceStatistic.getVisits(restaurant.restaurant_id);
+    List<String> auxRates = await DBServiceStatistic.dbServiceStatistic.getRates(restaurant.restaurant_id);
+    List<Restaurant> nearly = await DBServiceRestaurant.dbServiceRestaurant.getNearRestaurants(restaurant.latitude, restaurant.longitude, "val");
+    visits = {"01" : 0, "02" : 0, "03" : 0, "04" : 0, "05" : 0, "06" : 0, "07" : 0, "08" : 0, "09" : 0, "10" : 0, "11" : 0, "12" : 0};
+    rates = {"01" : 0, "02" : 0, "03" : 0, "04" : 0, "05" : 0, "06" : 0, "07" : 0, "08" : 0, "09" : 0, "10" : 0, "11" : 0, "12" : 0};
+    for(String visit in auxVisits){
+      visits[visit.substring(5,7)] += 1;
+    }
+    for(String rate in auxRates){
+      rates[rate.substring(5,7)] += 1;
+    }
+    typesNearly = {};
+    for(Restaurant restaurant in nearly){
+      for(String type in restaurant.types){
+        if(typesNearly.containsKey(type))
+          typesNearly[type] += 1;
+        else
+          typesNearly[type] = 1;
+      }
+    }
+    print(typesNearly);
+    setState(() {
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    restaurant = ModalRoute.of(context).settings.arguments;
+    if(init){
+      _loadStats();
+      init = false;
+    }
+    return typesNearly == null? Loading(): SafeArea(
+      child: Scaffold(
+        body: ListView(
+          children: [
+            Container(
+              height: 42.h,
+              width: 411.w,
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 110, 117, 0.9),
+              ),
+              child: Row( mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("Statistics", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+                  //Spacer(),
+                ],
+              ),
+            ),
+            SizedBox(height: 30.h,),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 2.w),
+              child: ExpansionPanelList(
+                animationDuration: Duration(seconds: 1),
+                expandedHeaderPadding: EdgeInsets.symmetric(vertical: 10.h),
+                elevation: 1,
+                expansionCallback: (i, isOpen){
+                  setState(() {
+                    _isOpen[i] = !_isOpen[i];
+                  });
+                },
+                children: [
+                  ExpansionPanel(
+                      canTapOnHeader: true,
+                      isExpanded: _isOpen[0],
+                      headerBuilder: (context, isOpen){
+                        return  Center(child: Text("Visits per month", textAlign: TextAlign.center,  maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.7), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)));
+                      },
+                      body: Container(
+                        child: SfCartesianChart(
+                            //legend: Legend(isVisible: true),
+
+                            primaryXAxis: CategoryAxis(),
+                            primaryYAxis: NumericAxis(),
+                            series: <ColumnSeries<String, String>>[
+                              ColumnSeries<String, String>(
+                                // Bind data source
+                                  dataSource:  visits.keys.toList(),
+                                  xValueMapper: (String key, _) => key,
+                                  yValueMapper: (String key, _) => visits[key],
+                                  dataLabelSettings: DataLabelSettings(isVisible: true),
+                                  xAxisName: "months",
+                                  yAxisName: "visits"
+                              )
+                            ]
+                        ),
+                      )
+                  ),
+                  ExpansionPanel(
+                      canTapOnHeader: true,
+                      isExpanded: _isOpen[1],
+                      headerBuilder: (context, isOpen){
+                        return  Center(child: Text("Rates per month", textAlign: TextAlign.center,  maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.7), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)));
+                      },
+                      body: Container(
+                        child: SfCartesianChart(
+                          //legend: Legend(isVisible: true),
+                            primaryXAxis: CategoryAxis(),
+                            primaryYAxis: NumericAxis(),
+                            series: <ColumnSeries<String, String>>[
+                              ColumnSeries<String, String>(
+                                // Bind data source
+                                  dataSource:  rates.keys.toList(),
+                                  xValueMapper: (String key, _) => key,
+                                  yValueMapper: (String key, _) => rates[key],
+                                  dataLabelSettings: DataLabelSettings(isVisible: true),
+                                  xAxisName: "months",
+                                  yAxisName: "rates"
+                              )
+                            ]
+                        ),
+                      )
+                  ),
+                  ExpansionPanel(
+                      canTapOnHeader: true,
+                      isExpanded: _isOpen[2],
+                      headerBuilder: (context, isOpen){
+                        return  Center(child: Text("Types near", textAlign: TextAlign.center,  maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.7), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)));
+                      },
+                      body: Container(
+                        child: SfCartesianChart(
+                          //legend: Legend(isVisible: true),
+                            primaryXAxis: CategoryAxis(),
+                            primaryYAxis: NumericAxis(),
+                            series: <ColumnSeries<String, String>>[
+                              ColumnSeries<String, String>(
+                                // Bind data source
+                                  dataSource:  typesNearly.keys.toList(),
+                                  xValueMapper: (String key, _) => key,
+                                  yValueMapper: (String key, _) => typesNearly[key],
+                                  dataLabelSettings: DataLabelSettings(isVisible: true),
+                                  xAxisName: "types",
+                                  yAxisName: "quantity"
+                              )
+                            ]
+                        ),
+                      )
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
