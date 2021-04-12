@@ -7,11 +7,15 @@ while en login por si hay dc,
 Terminar busqueda platos compleja, menos exacta,
 hacer trim() en la busqueda da error
 share y aviso de conexion
-sistema actualizacion
-pantalla menu vacio (enviar carta)
+sistema actualizacion y valorar app
+arreglar enviar email confirmacion y hacer sms
+arreglar mysql para nanonets
 idioma
 limitar los orders a si hay suscription => te llevaran a la carta sin mas
 cambiar city del near por cantidad
+arreglar las stats del mes con el año
+cambiar labels meses
+imprimir facturas
 
 
 https://developers.google.com/maps/documentation/android-sdk/get-api-key#restrict_key

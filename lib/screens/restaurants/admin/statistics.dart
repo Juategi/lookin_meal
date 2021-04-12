@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,19 +24,44 @@ class _StatisticsState extends State<Statistics> {
   Map<String, int> typesNearly;
   bool init = true;
   List<bool> _isOpen;
+  int yearVisits, yearRates;
+  List<int> years;
+  List<String> auxVisits, auxRates;
 
-  Future _loadStats() async{
-    _isOpen = [false, false, false];
-    List<String> auxVisits = await DBServiceStatistic.dbServiceStatistic.getVisits(restaurant.restaurant_id);
-    List<String> auxRates = await DBServiceStatistic.dbServiceStatistic.getRates(restaurant.restaurant_id);
-    List<Restaurant> nearly = await DBServiceRestaurant.dbServiceRestaurant.getNearRestaurants(restaurant.latitude, restaurant.longitude, "val");
+  void _reloadData(){
     visits = {"01" : 0, "02" : 0, "03" : 0, "04" : 0, "05" : 0, "06" : 0, "07" : 0, "08" : 0, "09" : 0, "10" : 0, "11" : 0, "12" : 0};
     rates = {"01" : 0, "02" : 0, "03" : 0, "04" : 0, "05" : 0, "06" : 0, "07" : 0, "08" : 0, "09" : 0, "10" : 0, "11" : 0, "12" : 0};
     for(String visit in auxVisits){
-      visits[visit.substring(5,7)] += 1;
+      if(visit.substring(0,4) == yearVisits.toString())
+        visits[visit.substring(5,7)] += 1;
     }
     for(String rate in auxRates){
-      rates[rate.substring(5,7)] += 1;
+      if(rate.substring(0,4) == yearRates.toString())
+        rates[rate.substring(5,7)] += 1;
+    }
+  }
+
+  Future _loadStats() async{
+    _isOpen = [false, false, false];
+    auxVisits = await DBServiceStatistic.dbServiceStatistic.getVisits(restaurant.restaurant_id);
+    auxRates = await DBServiceStatistic.dbServiceStatistic.getRates(restaurant.restaurant_id);
+    List<Restaurant> nearly = await DBServiceRestaurant.dbServiceRestaurant.getNearRestaurants(restaurant.latitude, restaurant.longitude, "val");
+    visits = {"01" : 0, "02" : 0, "03" : 0, "04" : 0, "05" : 0, "06" : 0, "07" : 0, "08" : 0, "09" : 0, "10" : 0, "11" : 0, "12" : 0};
+    rates = {"01" : 0, "02" : 0, "03" : 0, "04" : 0, "05" : 0, "06" : 0, "07" : 0, "08" : 0, "09" : 0, "10" : 0, "11" : 0, "12" : 0};
+    int maxYear = int.parse(auxVisits.first.substring(0,4));
+    int minYear = int.parse(auxVisits.last.substring(0,4));
+    years = List<int>.generate(maxYear+1-minYear, (i) => minYear + i);
+    //years = [2020, 2021, 2022];
+    years.sort((a,b) => b.compareTo(a));
+    yearVisits = years.first;
+    yearRates = years.first;
+    for(String visit in auxVisits){
+      if(visit.substring(0,4) == yearVisits.toString())
+        visits[visit.substring(5,7)] += 1;
+    }
+    for(String rate in auxRates){
+      if(rate.substring(0,4) == yearRates.toString())
+        rates[rate.substring(5,7)] += 1;
     }
     typesNearly = {};
     for(Restaurant restaurant in nearly){
@@ -46,7 +72,13 @@ class _StatisticsState extends State<Statistics> {
           typesNearly[type] = 1;
       }
     }
-    print(typesNearly);
+    Map<String,int> sorted = SplayTreeMap<String,int>.from(typesNearly, (a, b) => typesNearly[a] > typesNearly[b] ? -1 : 1 );
+    int total = sorted.keys.length >= 7? 7 : sorted.keys.length;
+    Map<String, int> aux = {};
+    for(int i = 0; i <= total; i++){
+      aux[sorted.keys.toList()[i]] = typesNearly[sorted.keys.toList()[i]];
+    }
+    typesNearly = aux;
     setState(() {
     });
   }
@@ -95,24 +127,52 @@ class _StatisticsState extends State<Statistics> {
                       headerBuilder: (context, isOpen){
                         return  Center(child: Text("Visits per month", textAlign: TextAlign.center,  maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.7), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)));
                       },
-                      body: Container(
-                        child: SfCartesianChart(
-                            //legend: Legend(isVisible: true),
-
-                            primaryXAxis: CategoryAxis(),
-                            primaryYAxis: NumericAxis(),
-                            series: <ColumnSeries<String, String>>[
-                              ColumnSeries<String, String>(
-                                // Bind data source
-                                  dataSource:  visits.keys.toList(),
-                                  xValueMapper: (String key, _) => key,
-                                  yValueMapper: (String key, _) => visits[key],
-                                  dataLabelSettings: DataLabelSettings(isVisible: true),
-                                  xAxisName: "months",
-                                  yAxisName: "visits"
-                              )
-                            ]
-                        ),
+                      body: Column(
+                        children: [
+                          DropdownButton(
+                            value: yearVisits,
+                            elevation: 1,
+                            items: years.map((year) => DropdownMenuItem(
+                              child: Row(
+                                children: <Widget>[
+                                  Text(year.toString(), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),)),
+                                  SizedBox(width: 10.w,)
+                                ],
+                              ),
+                              value: year,
+                            )).toList(),
+                            onChanged: (selected) async{
+                              setState(() {
+                                yearVisits = selected;
+                                _reloadData();
+                              });
+                            },
+                          ),
+                          Container(
+                            child: SfCartesianChart(
+                                //legend: Legend(isVisible: true),
+                                zoomPanBehavior: ZoomPanBehavior(
+                                  enablePanning: true,
+                                ),
+                                primaryXAxis: CategoryAxis(
+                                    visibleMinimum: 2,
+                                    visibleMaximum: 4
+                                ),
+                                primaryYAxis: NumericAxis(),
+                                series: <ColumnSeries<String, String>>[
+                                  ColumnSeries<String, String>(
+                                    // Bind data source
+                                      dataSource:  visits.keys.toList(),
+                                      xValueMapper: (String key, _) => key,
+                                      yValueMapper: (String key, _) => visits[key],
+                                      dataLabelSettings: DataLabelSettings(isVisible: true),
+                                      xAxisName: "months",
+                                      yAxisName: "visits"
+                                  )
+                                ]
+                            ),
+                          ),
+                        ],
                       )
                   ),
                   ExpansionPanel(
@@ -121,23 +181,52 @@ class _StatisticsState extends State<Statistics> {
                       headerBuilder: (context, isOpen){
                         return  Center(child: Text("Rates per month", textAlign: TextAlign.center,  maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.7), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)));
                       },
-                      body: Container(
-                        child: SfCartesianChart(
-                          //legend: Legend(isVisible: true),
-                            primaryXAxis: CategoryAxis(),
-                            primaryYAxis: NumericAxis(),
-                            series: <ColumnSeries<String, String>>[
-                              ColumnSeries<String, String>(
-                                // Bind data source
-                                  dataSource:  rates.keys.toList(),
-                                  xValueMapper: (String key, _) => key,
-                                  yValueMapper: (String key, _) => rates[key],
-                                  dataLabelSettings: DataLabelSettings(isVisible: true),
-                                  xAxisName: "months",
-                                  yAxisName: "rates"
-                              )
-                            ]
-                        ),
+                      body: Column(
+                        children: [
+                          DropdownButton(
+                            value: yearRates,
+                            elevation: 1,
+                            items: years.map((year) => DropdownMenuItem(
+                              child: Row(
+                                children: <Widget>[
+                                  Text(year.toString(), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),)),
+                                  SizedBox(width: 10.w,)
+                                ],
+                              ),
+                              value: year,
+                            )).toList(),
+                            onChanged: (selected) async{
+                              setState(() {
+                                yearRates = selected;
+                                _reloadData();
+                              });
+                            },
+                          ),
+                          Container(
+                            child: SfCartesianChart(
+                              //legend: Legend(isVisible: true),
+                                zoomPanBehavior: ZoomPanBehavior(
+                                  enablePanning: true,
+                                ),
+                                primaryXAxis: CategoryAxis(
+                                    visibleMinimum: 2,
+                                    visibleMaximum: 4
+                                ),
+                                primaryYAxis: NumericAxis(),
+                                series: <ColumnSeries<String, String>>[
+                                  ColumnSeries<String, String>(
+                                    // Bind data source
+                                      dataSource:  rates.keys.toList(),
+                                      xValueMapper: (String key, _) => key,
+                                      yValueMapper: (String key, _) => rates[key],
+                                      dataLabelSettings: DataLabelSettings(isVisible: true),
+                                      xAxisName: "months",
+                                      yAxisName: "rates"
+                                  )
+                                ]
+                            ),
+                          ),
+                        ],
                       )
                   ),
                   ExpansionPanel(
@@ -149,7 +238,13 @@ class _StatisticsState extends State<Statistics> {
                       body: Container(
                         child: SfCartesianChart(
                           //legend: Legend(isVisible: true),
-                            primaryXAxis: CategoryAxis(),
+                            zoomPanBehavior: ZoomPanBehavior(
+                                enablePanning: true,
+                            ),
+                            primaryXAxis: CategoryAxis(
+                                visibleMinimum: 2,
+                                visibleMaximum: 4
+                            ),
                             primaryYAxis: NumericAxis(),
                             series: <ColumnSeries<String, String>>[
                               ColumnSeries<String, String>(
