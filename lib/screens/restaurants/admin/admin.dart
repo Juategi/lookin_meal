@@ -171,31 +171,13 @@ class _AdminPageState extends State<AdminPage> {
                   ],
                 ),
                 onTap:()async{
-                  if(restaurant.premiumtime == null)
-                    pushNewScreenWithRouteSettings(
-                      context,
-                      settings: RouteSettings( arguments: restaurant),
-                      screen: Premium(),
-                      withNavBar: true,
-                      pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                    );
-                  else if(restaurant.premium || (!restaurant.premium && restaurant.premiumtime != null && Functions.compareDates(restaurant.premiumtime, DateTime.now().toString().substring(0,10)) <= 0)) {
-                      pushNewScreenWithRouteSettings(
+                  pushNewScreenWithRouteSettings(
                         context,
                         settings: RouteSettings(name: "/editcodes", arguments: restaurant),
                         screen: EditCodes(),
                         withNavBar: true,
                         pageTransitionAnimation: PageTransitionAnimation.slideUp,
                       );
-                  }
-                  else
-                    pushNewScreenWithRouteSettings(
-                      context,
-                      settings: RouteSettings( arguments: restaurant),
-                      screen: Premium(),
-                      withNavBar: true,
-                      pageTransitionAnimation: PageTransitionAnimation.slideUp,
-                    );
                   //Navigator.pushNamed(context, "/editcodes",arguments: restaurant);
                 },
               ),

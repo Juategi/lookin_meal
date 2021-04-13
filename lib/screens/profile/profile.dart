@@ -100,7 +100,7 @@ class _ProfileState extends State<Profile> {
             ),
             SizedBox(height: 25.h,),
             Container(
-              height: 560.h,
+              height: 552.h,
               width: 365.w,
               decoration: BoxDecoration(
                 color: Colors.white,

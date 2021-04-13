@@ -67,7 +67,7 @@ class _TopState extends State<Top> {
           padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
           child: topEntry == null? Loading() : Column(
             children: <Widget>[
-              SizedBox(height: 10.h,),
+              SizedBox(height: 5.h,),
               Row( mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text('Top Restaurants', textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),

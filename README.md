@@ -11,10 +11,7 @@ sistema actualizacion y valorar app
 arreglar enviar email confirmacion y hacer sms
 arreglar mysql para nanonets
 idioma
-limitar los orders a si hay suscription => te llevaran a la carta sin mas
-cambiar city del near por cantidad
-arreglar las stats del mes con el año
-cambiar labels meses
+cambiar labels meses (idioma)
 imprimir facturas
 
 

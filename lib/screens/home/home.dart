@@ -67,7 +67,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		myPos = await _geolocationService.getLocation();
 		locality = await _geolocationService.getLocality(myPos.latitude, myPos.longitude);
 		country = await _geolocationService.getCountry(myPos.latitude, myPos.longitude);
-		nearRestaurants= await DBServiceRestaurant.dbServiceRestaurant.getNearRestaurants(myPos.latitude, myPos.longitude, locality.toUpperCase());
+		nearRestaurants= await DBServiceRestaurant.dbServiceRestaurant.getNearRestaurants(myPos.latitude, myPos.longitude, 12);
 		sponsored = await DBServiceRestaurant.dbServiceRestaurant.getSponsored(3);
 		recommended = await DBServiceRestaurant.dbServiceRestaurant.getRecommended(DBServiceUser.userF.uid);
 		/*for(Restaurant restaurant in restaurants){
@@ -162,7 +162,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 				onSuccess: (PendingDynamicLinkData dynamicLink) async {
 					final Uri deepLink = dynamicLink.link;
 					if (deepLink != null) {
-						print(deepLink.path);
+						print(deepLink.queryParameters['id']);
 						if(deepLink.path == "/restaurant") {
 							Restaurant restaurant = (await DBServiceRestaurant
 									.dbServiceRestaurant.getRestaurantsById(
@@ -178,9 +178,27 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 								pageTransitionAnimation: PageTransitionAnimation.slideUp,
 							);
 						}
-						else if(deepLink.path == "/order") {
-							CommonData.actualCode = deepLink.queryParameters['id'];
-							_controller.jumpToTab(2);
+						else{
+							Restaurant restaurant = (await DBServiceRestaurant
+									.dbServiceRestaurant.getRestaurantsById(
+									[deepLink.queryParameters['id'].split("/").first],
+									GeolocationService.myPos.latitude,
+									GeolocationService.myPos.longitude)).first;
+							await DBServicePayment.dbServicePayment.getPremium(restaurant);
+							if(restaurant.premium) {
+								CommonData.actualCode = deepLink.queryParameters['id'];
+								_controller.jumpToTab(2);
+							}
+							else{
+								pushNewScreenWithRouteSettings(
+									context,
+									settings: RouteSettings(
+											name: "/restaurant", arguments: restaurant),
+									screen: ProfileRestaurant(),
+									withNavBar: true,
+									pageTransitionAnimation: PageTransitionAnimation.slideUp,
+								);
+							}
 						}
 					}
 				}, onError: (OnLinkErrorException e) async {

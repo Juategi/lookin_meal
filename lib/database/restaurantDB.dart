@@ -117,10 +117,10 @@ class DBServiceRestaurant{
     return parseResponse(response);
   }
 
-  Future<List<Restaurant>> getNearRestaurants(double latitude, double longitude, String city) async {
+  Future<List<Restaurant>> getNearRestaurants(double latitude, double longitude, int quantity) async {
     var response = await http.get(
         "${StaticStrings.api}/restaurants",
-        headers: {"latitude": latitude.toString(), "longitude": longitude.toString(), "city": city});
+        headers: {"latitude": latitude.toString(), "longitude": longitude.toString(), "quantity": quantity.toString()});
     return parseResponse(response);
   }
 

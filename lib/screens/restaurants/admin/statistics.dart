@@ -45,7 +45,7 @@ class _StatisticsState extends State<Statistics> {
     _isOpen = [false, false, false];
     auxVisits = await DBServiceStatistic.dbServiceStatistic.getVisits(restaurant.restaurant_id);
     auxRates = await DBServiceStatistic.dbServiceStatistic.getRates(restaurant.restaurant_id);
-    List<Restaurant> nearly = await DBServiceRestaurant.dbServiceRestaurant.getNearRestaurants(restaurant.latitude, restaurant.longitude, "val");
+    List<Restaurant> nearly = await DBServiceRestaurant.dbServiceRestaurant.getNearRestaurants(restaurant.latitude, restaurant.longitude, 30);
     visits = {"01" : 0, "02" : 0, "03" : 0, "04" : 0, "05" : 0, "06" : 0, "07" : 0, "08" : 0, "09" : 0, "10" : 0, "11" : 0, "12" : 0};
     rates = {"01" : 0, "02" : 0, "03" : 0, "04" : 0, "05" : 0, "06" : 0, "07" : 0, "08" : 0, "09" : 0, "10" : 0, "11" : 0, "12" : 0};
     int maxYear = int.parse(auxVisits.first.substring(0,4));
@@ -108,9 +108,9 @@ class _StatisticsState extends State<Statistics> {
                 ],
               ),
             ),
-            SizedBox(height: 30.h,),
+            //SizedBox(height: 30.h,),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 2.w),
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: ExpansionPanelList(
                 animationDuration: Duration(seconds: 1),
                 expandedHeaderPadding: EdgeInsets.symmetric(vertical: 10.h),

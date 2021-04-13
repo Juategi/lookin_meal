@@ -156,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
 		  															GeolocationService.myPos = Position(latitude: result.geometry.location.lat, longitude: result.geometry.location.lng);
 		  															String locality = await GeolocationService().getLocality(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude);
 		  															await GeolocationService().getCountry(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude);
-		  															nearRestaurants = await DBServiceRestaurant.dbServiceRestaurant.getNearRestaurants(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude, locality.toUpperCase());
+		  															nearRestaurants = await DBServiceRestaurant.dbServiceRestaurant.getNearRestaurants(GeolocationService.myPos.latitude, GeolocationService.myPos.longitude, 12);
 		  															recommended = await DBServiceRestaurant.dbServiceRestaurant.getRecommended(DBServiceUser.userF.uid);
 		  															popular = await DBServiceRestaurant.dbServiceRestaurant.getPopular();
 		  															print(nearRestaurants.first.name);
