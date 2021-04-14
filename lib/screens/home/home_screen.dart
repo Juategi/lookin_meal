@@ -146,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
 		  												context,
 		  												MaterialPageRoute(
 		  													builder: (context) => PlacePicker(
-		  														apiKey: "AIzaSyAIIK4P68Ge26Yc0HkQ6uChj_NEqF2VeCU",
+		  														apiKey: "",
 		  														autocompleteLanguage: "es",
 		  														desiredLocationAccuracy: LocationAccuracy.high,
 		  														hintText: "Buscar",
