@@ -192,7 +192,7 @@ class _SearchState extends State<Search> {
                                   enabled: queries.length < 3,
                                   controller: TextEditingController()..text = actual.query..selection = TextSelection.fromPosition(TextPosition(offset: actual.query.length)),
                                   onChanged: (val){
-                                    actual.query = val;
+                                    actual.query = val.trim();
                                     setState(() {
                                       error = "";
                                     });

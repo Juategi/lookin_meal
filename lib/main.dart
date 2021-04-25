@@ -3,6 +3,7 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:lookinmeal/screens/home/home_screen.dart';
 import 'package:lookinmeal/screens/authenticate/authenticate.dart';
 import 'package:lookinmeal/screens/authenticate/email_pass.dart';
@@ -40,7 +41,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
-void main() { Provider.debugCheckInvalidValueType = null; runApp(MyApp()); }
+void main() {
+  Provider.debugCheckInvalidValueType = null;
+  InAppPurchaseConnection.enablePendingPurchases();
+  runApp(MyApp());
+}
 
 
 class MyApp extends StatelessWidget {

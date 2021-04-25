@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:lookinmeal/database/paymentDB.dart';
 import 'package:lookinmeal/models/payment.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
@@ -15,6 +19,70 @@ class Sponsor extends StatefulWidget {
 
 class _SponsorState extends State<Sponsor> {
   Restaurant restaurant;
+  StreamSubscription<List<PurchaseDetails>> _subscription;
+
+  void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
+    purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
+      if (purchaseDetails.status == PurchaseStatus.pending) {
+       // _showPendingUI();
+      } else {
+        if (purchaseDetails.status == PurchaseStatus.error) {
+          //_handleError(purchaseDetails.error!);
+          Alerts.dialog(purchaseDetails.error.message, context);
+        } else if (purchaseDetails.status == PurchaseStatus.purchased) {
+          bool valid = await _verifyPurchase(purchaseDetails);
+          if (valid) {
+           // _deliverProduct(purchaseDetails);
+          } else {
+            //_handleInvalidPurchase(purchaseDetails);
+            return;
+          }
+        }
+        if (purchaseDetails.pendingCompletePurchase) {
+          await InAppPurchaseConnection.instance
+              .completePurchase(purchaseDetails);
+        }
+      }
+    });
+  }
+
+  Future<bool> _verifyPurchase(PurchaseDetails product) async{
+    final QueryPurchaseDetailsResponse response =
+    await InAppPurchaseConnection.instance.queryPastPurchases();
+    if (response.error != null) {
+      // Handle the error.
+    }
+    for (PurchaseDetails purchase in response.pastPurchases) {
+      // Verify the purchase following best practices for each underlying store.
+      _verifyPurchase(purchase);
+      // Deliver the purchase to the user in your app.
+      //_deliverPurchase(purchase);
+      if (purchase.pendingCompletePurchase) {
+        // Mark that you've delivered the purchase. This is mandatory.
+        InAppPurchaseConnection.instance.completePurchase(purchase);
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    final Stream purchaseUpdated =
+        InAppPurchaseConnection.instance.purchaseUpdatedStream;
+    _subscription = purchaseUpdated.listen((purchaseDetailsList) {
+      _listenToPurchaseUpdated(purchaseDetailsList);
+    }, onDone: () {
+      _subscription.cancel();
+    }, onError: (error) {
+      print("error in stream");
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,27 +183,42 @@ class _SponsorState extends State<Sponsor> {
                   padding: EdgeInsets.symmetric(vertical: 5.h),
                   child: GestureDetector(
                     onTap: () async{
-                      String today = DateTime.now().toString().substring(0,10);
-                      if(restaurant.clicks == 0) {
-                        try{
-                          await DBServicePayment.dbServicePayment.createSponsor(
-                              restaurant.restaurant_id);
-                        }catch(e){
-                          print(e);
+                      final bool available = await InAppPurchaseConnection.instance.isAvailable();
+                      print(available);
+                      if (available) {
+                        const Set<String> _kIds = <String>{'visits100'};
+                        final ProductDetailsResponse response =
+                        await InAppPurchaseConnection.instance.queryProductDetails(_kIds);
+                        if (response.notFoundIDs.isNotEmpty) {
+                          print("error no id");
                         }
+                        List<ProductDetails> products = response.productDetails;
+                        print(products);
+                        final ProductDetails productDetails = products.first;
+                        final PurchaseParam purchaseParam = PurchaseParam(productDetails: productDetails);
+                        InAppPurchaseConnection.instance.buyConsumable(purchaseParam: purchaseParam);
+                        String today = DateTime.now().toString().substring(0,10);
+                        if(restaurant.clicks == 0) {
+                          try{
+                            await DBServicePayment.dbServicePayment.createSponsor(
+                                restaurant.restaurant_id);
+                          }catch(e){
+                            print(e);
+                          }
+                        }
+                        await DBServicePayment.dbServicePayment.updateSponsor(restaurant.restaurant_id, price.quantity);
+                        DBServicePayment.dbServicePayment.createPayment(Payment(
+                          restaurant_id: restaurant.restaurant_id,
+                          service: "clicks",
+                          paymentdate: today,
+                          price: price.price,
+                          user_id: DBServiceUser.userF.uid,
+                          description: "Sponsor visits for " + restaurant.name,
+                        ));
+                        restaurant.clicks += price.quantity;
+                        setState(() {
+                        });
                       }
-                      await DBServicePayment.dbServicePayment.updateSponsor(restaurant.restaurant_id, price.quantity);
-                      DBServicePayment.dbServicePayment.createPayment(Payment(
-                        restaurant_id: restaurant.restaurant_id,
-                        service: "clicks",
-                        paymentdate: today,
-                        price: price.price,
-                        user_id: DBServiceUser.userF.uid,
-                        description: "Sponsor visits for " + restaurant.name,
-                      ));
-                      restaurant.clicks += price.quantity;
-                      setState(() {
-                      });
                     },
                     child: Container(
                       width: 345.w,

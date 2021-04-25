@@ -307,7 +307,6 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
       try {
         code = await FlutterBarcodeScanner.scanBarcode(
             "#FF6E75", "Cancel", true, ScanMode.QR);
-        print(code);
       } on PlatformException {
         code = null;
       }
@@ -315,8 +314,7 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
       // message was in flight, we want to discard the reply rather than calling
       // setState to update our non-existent appearance.
       if (!mounted) return;
-
-      if(code != null) {
+      if(code != null && code != "-1") {
         code = code.split("order?id=").last.split("&apn=").first;
         if (!RegExp(r'[a-zA-Z0-9]+/+[a-zA-Z0-9]').hasMatch(code))
           setState(() {
@@ -337,6 +335,11 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
 
   @override
   Widget build(BuildContext context) {
+    print(CommonData.actualCode);
+    print(code);
+    print(restaurant);
+    print(RealTimeOrders.sent);
+    print(DBServiceUser.userF.inOrder);
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     _controller = Provider.of<PersistentTabController>(context);
     if(CommonData.actualCode != null){
@@ -346,7 +349,7 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
       CommonData.tabContext = context;
       first = false;
     }
-    if(code == null)
+    if(code == null || code == "-1")
       return SafeArea(child: Scaffold(
         body: Center(
           child: GestureDetector(
@@ -355,7 +358,7 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
           ),
         ),
       ));
-    if(init){
+    if(restaurant == null || init == true){
       restaurant_id = code.split("/").first;
       table_id = code.split("/").last;
       RealTimeOrders.actualTable = table_id;

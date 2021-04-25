@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +29,7 @@ import 'package:lookinmeal/screens/map/map.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:minimize_app/minimize_app.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 import 'package:splashscreen/splashscreen.dart';
 
 
@@ -205,6 +208,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 			print('onLinkError');
 			print(e.message);
 		});
+
 
 		/*
 
