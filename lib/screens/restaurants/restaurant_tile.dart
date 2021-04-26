@@ -37,7 +37,6 @@ class _RestaurantTileState extends State<RestaurantTile> {
         onTap: (){
           DBServiceRestaurant.dbServiceRestaurant.updateRecently(restaurant);
           CommonData.pop[0] = true;
-          CommonData.pop[3] = true;
           if(sponsored){
             DBServicePayment.dbServicePayment.updateSponsor(restaurant.restaurant_id, -1);
           }

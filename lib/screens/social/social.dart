@@ -6,12 +6,17 @@ import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/screens/profile/check_profile.dart';
+import 'package:lookinmeal/screens/restaurants/entry.dart';
+import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:lookinmeal/shared/widgets.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:provider/provider.dart';
 
 class SocialScreen extends StatefulWidget {
   @override
@@ -60,30 +65,42 @@ class _SocialScreenState extends State<SocialScreen> {
                         height: 110.h,
                         child: Row(
                           children: [
-                            Column(
-                              children: [
-                                Container(height: 55.h, width: 55.w,
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        boxShadow: [BoxShadow(
-                                          color: Colors.grey.withOpacity(0.2),
-                                          spreadRadius: 2,
-                                          blurRadius: 3,
-                                          offset: Offset(1, 1), // changes position of shadow
-                                        ),],
-                                        image: new DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: new NetworkImage(
-                                                user.picture)
-                                        )
-                                    )
-                                ),
-                                SizedBox(height: 10.h,),
-                                Container(
-                                  width: 60.w,
-                                  child: Text(user.username, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(104, 97, 105, 0.9), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(15),),)),
-                                )
-                              ],
+                            GestureDetector(
+                              onTap: (){
+                                CommonData.pop[3] = true;
+                                pushNewScreenWithRouteSettings(
+                                  context,
+                                  settings: RouteSettings(name: "/checkprofile", arguments: user),
+                                  screen: CheckProfile(),
+                                  withNavBar: true,
+                                  pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                                );
+                              },
+                              child: Column(
+                                children: [
+                                  Container(height: 55.h, width: 55.w,
+                                      decoration: new BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          boxShadow: [BoxShadow(
+                                            color: Colors.grey.withOpacity(0.2),
+                                            spreadRadius: 2,
+                                            blurRadius: 3,
+                                            offset: Offset(1, 1), // changes position of shadow
+                                          ),],
+                                          image: new DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: new NetworkImage(
+                                                  user.picture)
+                                          )
+                                      )
+                                  ),
+                                  SizedBox(height: 10.h,),
+                                  Container(
+                                    width: 60.w,
+                                    child: Text(user.username, maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(104, 97, 105, 0.9), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(15),),)),
+                                  )
+                                ],
+                              ),
                             ),
                             SizedBox(width: 5.w,),
                             Column(crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,8 +112,29 @@ class _SocialScreenState extends State<SocialScreen> {
                                   ],
                                 ),
                                 Container(width: 75.w, child: Text(Functions.formatDate(rating.date), maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(104, 97, 105, 0.9), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),))),
-                                Container(width: 75.w, child: Text(entry.name, maxLines: 3, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(104, 97, 105, 0.9), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(11),),))),
-                                Container(width: 75.w, child: Text(restaurant.name, maxLines: 2, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.9), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(11),),))),
+                                GestureDetector(
+                                    onTap: () async {
+                                      CommonData.pop[3] = true;
+                                      await showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
+                                        return Provider.value(value: false, child: Provider<Restaurant>.value(value: restaurant, child: Provider<MenuEntry>.value(value: entry, child: EntryRating())));
+                                      }).then((value){setState(() {});});
+                                    },
+                                    child: Container(width: 75.w, child: Text(entry.name, maxLines: 3, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(104, 97, 105, 0.9), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(11),),)))),
+                                GestureDetector(
+                                    onTap: () {
+                                      CommonData.pop[3] = true;
+                                      pushNewScreenWithRouteSettings(
+                                        context,
+                                        settings: RouteSettings(
+                                            name: "/restaurant",
+                                            arguments: restaurant),
+                                        screen: ProfileRestaurant(),
+                                        withNavBar: true,
+                                        pageTransitionAnimation: PageTransitionAnimation
+                                            .slideUp,
+                                      );
+                                    },
+                                    child: Container(width: 75.w, child: Text(restaurant.name, maxLines: 2, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.9), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(11),),)))),
                               ],
                             ),
                             SizedBox(width: 6.w,),
@@ -113,17 +151,25 @@ class _SocialScreenState extends State<SocialScreen> {
                             Column(
                               children: [
                                 SizedBox(height: 4.h,),
-                                Container(
-                                  width: 85.w,
-                                  height: 85.h,
-                                    decoration: new BoxDecoration(
-                                        borderRadius: BorderRadius.all(Radius.circular(18)),
-                                        image: new DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: new NetworkImage(
-                                                entry.image)
-                                        )
-                                    )
+                                GestureDetector(
+                                  onTap: () async {
+                                    CommonData.pop[3] = true;
+                                    await showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){
+                                      return Provider.value(value: false, child: Provider<Restaurant>.value(value: restaurant, child: Provider<MenuEntry>.value(value: entry, child: EntryRating())));
+                                    }).then((value){setState(() {});});
+                                  },
+                                  child: Container(
+                                    width: 85.w,
+                                    height: 85.h,
+                                      decoration: new BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(18)),
+                                          image: new DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: new NetworkImage(
+                                                  entry.image)
+                                          )
+                                      )
+                                  ),
                                 ),
                               ],
                             ),
