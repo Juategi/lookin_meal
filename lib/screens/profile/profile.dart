@@ -42,9 +42,9 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     AppLocalizations tr = AppLocalizations.of(context);
-    _getData();
     if(first){
       CommonData.tabContext = context;
+      _getData();
       first = false;
     }
     return SafeArea(

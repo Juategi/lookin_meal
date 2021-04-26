@@ -335,11 +335,12 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
 
   @override
   Widget build(BuildContext context) {
-    print(CommonData.actualCode);
+    /*print(CommonData.actualCode);
     print(code);
     print(restaurant);
     print(RealTimeOrders.sent);
     print(DBServiceUser.userF.inOrder);
+     */
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     _controller = Provider.of<PersistentTabController>(context);
     if(CommonData.actualCode != null){

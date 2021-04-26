@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
+import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/services/geolocation.dart';
@@ -209,6 +210,42 @@ class DBServiceRestaurant{
     var response = await http.put(
         "${StaticStrings.api}/restaurantimages", body: {"id" : restaurant_id, "images": images.toString().replaceAll("[", "{").replaceAll("]", "}") ?? List<String>().toString()});
     print(response.body);
+  }
+
+  Future<List<List<Object>>> getFeed(String user_id) async{
+    List<List<Object>> ratings = [];
+    var response = await http.get(
+        "${StaticStrings.api}/feed", headers: {"user_id" : user_id});
+    List<dynamic> result = json.decode(response.body);
+    for(var element in result){
+      Rating rating = Rating(
+          entry_id: element["entry_id"].toString(),
+          rating: element["rating"].toDouble(),
+          date: element["ratedate"].toString().substring(0,10),
+          comment: element["comment"] == null? " " : element["comment"]
+      );
+      User user = User(
+        name: element["name"],
+        uid: element["user_id"],
+        email: element["email"],
+        picture: element["image"],
+        username: element["username"],
+        about: element["about"],
+        country: element["country"],
+      );
+      MenuEntry entry = MenuEntry(
+          id: element['entry_id'].toString(),
+          restaurant_id: element['restaurant_id'].toString(),
+          name: element['entryname'],
+          price: element['price'].toDouble(),
+          image: element['entryimage'],
+          description: element['description'],
+          allergens: element['allergens'] == null ? [] : List<String>.from(element['allergens'])
+      );
+      Restaurant restaurant = (await DBServiceRestaurant.dbServiceRestaurant.getRestaurantsById([entry.restaurant_id], GeolocationService.myPos.latitude, GeolocationService.myPos.longitude)).first;
+      ratings.add([user, entry, rating, restaurant]);
+    }
+    return ratings;
   }
 
   Future<List<Restaurant>> parseResponse(var response) async{
