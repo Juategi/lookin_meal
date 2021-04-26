@@ -274,7 +274,50 @@ class _HomeScreenState extends State<HomeScreen> {
 		    		padding: EdgeInsets.symmetric(horizontal: 20.w),
 		    	  child: ListView(
 		    	  	children: <Widget>[
-		    	  		SizedBox(height: 30.h,),
+		    	  		SizedBox(height: 10.h,),
+								Row(
+									children: <Widget>[
+											SizedBox(width: 2.w,),
+											GestureDetector(
+												onTap: (){
+													pushNewScreenWithRouteSettings(
+														context,
+														settings: RouteSettings(
+																name: "/top"),
+														screen: Top(),
+														withNavBar: true,
+														pageTransitionAnimation: PageTransitionAnimation.slideUp,
+													);
+												},
+											  child: Container(
+											  	height: 40.w,
+											  	width: 245.w,
+											  	decoration: BoxDecoration(
+											  			color: Colors.white,
+											  			border: Border.all(color: Colors.white),
+											  			boxShadow: [BoxShadow(
+											  				color: Colors.grey.withOpacity(0.2),
+											  				spreadRadius: 2,
+											  				blurRadius: 3,
+											  				offset: Offset(1, 1), // changes position of shadow
+											  			),],
+											  			borderRadius: new BorderRadius.all(
+											  				const Radius.circular(20),
+											  			)
+											  	),
+											  	child: Row(
+											  		children: [
+											  			SizedBox(width: 5.w,),
+											  			Icon(Icons.star_outlined, color: Color.fromRGBO(255, 201, 23, 1), size: ScreenUtil().setSp(28),),
+											  			SizedBox(width: 5.w,),
+											  			Text('Top restaurants and dishes', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(15),),)),
+											  		],
+											  	),
+											  ),
+											)
+										],
+								),
+								SizedBox(height: 10.h,),
 		    	  		Row(
 		    	  		  children: <Widget>[
 		    	  		    Text('Nearly ', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),

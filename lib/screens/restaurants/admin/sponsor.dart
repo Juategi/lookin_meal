@@ -185,8 +185,8 @@ class _SponsorState extends State<Sponsor> {
                     onTap: () async{
                       final bool available = await InAppPurchaseConnection.instance.isAvailable();
                       print(available);
-                      if (available) {
-                        const Set<String> _kIds = <String>{'visits100'};
+                      if (!available) {
+                        /*const Set<String> _kIds = <String>{'visits100'};
                         final ProductDetailsResponse response =
                         await InAppPurchaseConnection.instance.queryProductDetails(_kIds);
                         if (response.notFoundIDs.isNotEmpty) {
@@ -197,6 +197,7 @@ class _SponsorState extends State<Sponsor> {
                         final ProductDetails productDetails = products.first;
                         final PurchaseParam purchaseParam = PurchaseParam(productDetails: productDetails);
                         InAppPurchaseConnection.instance.buyConsumable(purchaseParam: purchaseParam);
+                        */
                         String today = DateTime.now().toString().substring(0,10);
                         if(restaurant.clicks == 0) {
                           try{
@@ -213,7 +214,7 @@ class _SponsorState extends State<Sponsor> {
                           paymentdate: today,
                           price: price.price,
                           user_id: DBServiceUser.userF.uid,
-                          description: "Sponsor visits for " + restaurant.name,
+                          description: "${price.quantity} Sponsor visits " ,
                         ));
                         restaurant.clicks += price.quantity;
                         setState(() {

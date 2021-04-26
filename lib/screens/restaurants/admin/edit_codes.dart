@@ -145,6 +145,7 @@ class _EditCodesState extends State<EditCodes> {
                                 final file = File("${output2.path}/${code.code_id}.pdf");
                                 await file.writeAsBytes(await pdf.save());
                                 print(output2.path);
+                                Alerts.toast("QR downloaded!");
                               },
                               child: Row(
                                 children: [

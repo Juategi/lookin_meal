@@ -78,7 +78,7 @@ class _PremiumState extends State<Premium> {
                   paymentdate: today,
                   price: CommonData.prices.firstWhere((element) => element.type == "premium").price,
                   user_id: DBServiceUser.userF.uid,
-                  description: "Premium suscription for " + restaurant.name,
+                  description: "Premium suscription",
                 ));
                 DBServicePayment.dbServicePayment.createPremium(restaurant.restaurant_id, today);
                 restaurant.premium = true;

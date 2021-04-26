@@ -288,8 +288,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 							inactiveColor: unselectedItemColor,
 						),
 						PersistentBottomNavBarItem(
-							icon: Icon(Icons.star, size: ScreenUtil().setSp(25),),
-							title: ("Top"),
+							icon: Icon(Icons.people_alt_sharp, size: ScreenUtil().setSp(25),),
+							title: ("Social"),
 							activeColor: selectedItemColor,
 							inactiveColor: unselectedItemColor,
 						),

@@ -15,6 +15,26 @@ class DBServiceRequest{
 
   static final DBServiceRequest dbServiceRequest = DBServiceRequest();
 
+  Future sendConfirmationSms(int localcode, String phone) async{
+    Map body = {
+      "phone" : phone,
+      "localcode" : localcode.toString(),
+    };
+    var response = await http.post(
+        "${StaticStrings.api}/smssend", body: body);
+    print(response.body);
+  }
+
+  Future reSendConfirmationSms(int localcode, String phone) async{
+    Map body = {
+      "phone" : phone,
+      "localcode" : localcode.toString(),
+    };
+    var response = await http.put(
+        "${StaticStrings.api}/smsresend", body: body);
+    print(response.body);
+  }
+
   Future sendConfirmationCode(int localcode, String email) async{
     Map body = {
       "email" : email,

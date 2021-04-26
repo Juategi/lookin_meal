@@ -228,7 +228,7 @@ class _ConfirmationMenuState extends State<ConfirmationMenu> {
             onTap:(){
               pushNewScreenWithRouteSettings(
                 context,
-                settings: RouteSettings(arguments: restaurant),
+                settings: RouteSettings(arguments:[restaurant, "email"]),
                 screen: ConfirmationCode(),
                 withNavBar: true,
                 pageTransitionAnimation: PageTransitionAnimation.cupertino,
@@ -251,7 +251,13 @@ class _ConfirmationMenuState extends State<ConfirmationMenu> {
           restaurant.email == null || restaurant.email == "" ? Container() : SizedBox(height: 50.h,),
           restaurant.phone == null || restaurant.phone == "" ? Container() : GestureDetector(
             onTap:(){
-
+              pushNewScreenWithRouteSettings(
+                context,
+                settings: RouteSettings(arguments: [restaurant, "sms"]),
+                screen: ConfirmationCode(),
+                withNavBar: true,
+                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+              );
             },
             child: Container(
               width: 365.w,
@@ -308,13 +314,19 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
   bool sent = false;
   int localcode;
   int code;
+  String mode;
   String relation = "Dueño";
   @override
   Widget build(BuildContext context) {
-    restaurant = ModalRoute.of(context).settings.arguments;
+    List aux = ModalRoute.of(context).settings.arguments;
+    restaurant = aux.first;
+    mode = aux.last;
     if(init){
       localcode = Random().nextInt(99999);
-      DBServiceRequest.dbServiceRequest.sendConfirmationCode(localcode, "juantg1994@gmail.com"); //cambiar a email del restaurante
+      if(mode == "email")
+        DBServiceRequest.dbServiceRequest.sendConfirmationCode(localcode, restaurant.email); //cambiar a email del restaurante
+      else if(mode == "sms")
+        DBServiceRequest.dbServiceRequest.sendConfirmationSms(localcode, restaurant.phone); //cambiar a email del restaurante
       init = false;
     }
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
@@ -344,8 +356,16 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
               SizedBox(height: 10.h,),
               GestureDetector(
                 onTap: (){
-                  DBServiceRequest.dbServiceRequest.reSendConfirmationCode(localcode, "juantg1994@gmail.com");
-                  Alerts.toast("Code sent to your email!");
+                  if(mode == "email") {
+                    DBServiceRequest.dbServiceRequest.reSendConfirmationCode(
+                        localcode, restaurant.email);
+                    Alerts.toast("Code sent to your email!");
+                  }
+                  else if(mode == "sms"){
+                    DBServiceRequest.dbServiceRequest.reSendConfirmationSms(
+                        localcode, restaurant.phone);
+                    Alerts.toast("Code sent to your phone!");
+                  }
                 },
                   child: Text("Resend", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.redAccent, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(18),),))),
               SizedBox(height: 40.h,),
@@ -379,7 +399,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
                     Alerts.toast("WRONG CODE!");
                   }
                   else{
-                    bool result = await DBServiceRequest.dbServiceRequest.createRequest(restaurant.restaurant_id, DBServiceUser.userF.uid, relation, 'email', "", "");
+                    bool result = await DBServiceRequest.dbServiceRequest.createRequest(restaurant.restaurant_id, DBServiceUser.userF.uid, relation, mode, "", "");
                     if(result){
                       setState(() {
                         sent = true;
