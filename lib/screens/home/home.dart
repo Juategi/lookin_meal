@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +15,7 @@ import 'package:lookinmeal/screens/home/home_screen.dart';
 import 'package:lookinmeal/screens/profile/profile.dart';
 import 'package:lookinmeal/screens/restaurants/orders/order_screen.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
+import 'package:lookinmeal/screens/social/social.dart';
 import 'package:lookinmeal/screens/top/top.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:flutter/services.dart';
@@ -265,7 +265,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 						),
 						MapSample(),
 						Provider.value(value: _controller, child: OrderScreen()),
-						Top(),
+						SocialScreen(),
 						Profile()
 					],
 					items: [

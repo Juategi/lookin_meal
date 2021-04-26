@@ -167,6 +167,7 @@ class _CheckProfileState extends State<CheckProfile> {
                 await DBServiceUser.dbServiceUser.addFollower(user.uid);
               }
               user.numFollowers = await DBServiceUser.dbServiceUser.getNumFollowers(user.uid);
+              user.numFollowing = await DBServiceUser.dbServiceUser.getNumFollowing(user.uid);
               setState(() {
               });
             },

@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:lookinmeal/screens/top/top.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
@@ -280,6 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
 											SizedBox(width: 2.w,),
 											GestureDetector(
 												onTap: (){
+													CommonData.pop[0] = true;
 													pushNewScreenWithRouteSettings(
 														context,
 														settings: RouteSettings(

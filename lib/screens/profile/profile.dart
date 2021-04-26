@@ -28,19 +28,21 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final AuthService _auth = AuthService();
-  User user;
   bool first = true;
-  Future _getNotifications() async{
+
+  Future _getData() async{
     DBServiceUser.userF.notifications = await DBServiceUser.dbServiceUser.getNotifications(DBServiceUser.userF.uid);
+    DBServiceUser.userF.numFollowers = await DBServiceUser.dbServiceUser.getNumFollowers(DBServiceUser.userF.uid);
+    DBServiceUser.userF.numFollowing = await DBServiceUser.dbServiceUser.getNumFollowing(DBServiceUser.userF.uid);
     setState(() {
     });
   }
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
-    user = Provider.of<User>(context);
     AppLocalizations tr = AppLocalizations.of(context);
-    _getNotifications();
+    _getData();
     if(first){
       CommonData.tabContext = context;
       first = false;
@@ -74,7 +76,7 @@ class _ProfileState extends State<Profile> {
                               image: new DecorationImage(
                                   fit: BoxFit.cover,
                                   image: new NetworkImage(
-                                      user.picture)
+                                      DBServiceUser.userF.picture)
                               )
                           )
                       ),
@@ -83,8 +85,17 @@ class _ProfileState extends State<Profile> {
                     Column(
                       children: [
                         SizedBox(height: 20.h,),
-                        Text("${user.username}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.9), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
-                        Text("${user.ratings.length} Ratings", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                        Text("${DBServiceUser.userF.username}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.9), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
+                        Text("${DBServiceUser.userF.ratings.length} Ratings", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                        Row(
+                            children: [
+                              Text(DBServiceUser.userF.numFollowers.toString(), maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(16),),)),
+                              Text(" followers", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                              SizedBox(width: 10.w,),
+                              Text(DBServiceUser.userF.numFollowing.toString(), maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(16),),)),
+                              Text(" following", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                            ]
+                        ),
                       ],
                     )
                   ],
@@ -147,7 +158,7 @@ class _ProfileState extends State<Profile> {
                       CommonData.pop[4] = true;
                       pushNewScreenWithRouteSettings(
                         context,
-                        settings: RouteSettings(name: "/ratinghistory", arguments: user),
+                        settings: RouteSettings(name: "/ratinghistory", arguments: DBServiceUser.userF),
                         screen: RatingHistory(),
                         withNavBar: true,
                         pageTransitionAnimation: PageTransitionAnimation.cupertino,
