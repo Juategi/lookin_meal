@@ -214,6 +214,7 @@ class DBServiceEntry{
           username: element["username"],
           about: element["about"],
           country: element["country"],
+          checked: element["checked"] == null ? false : element["checked"],
       );
       ratings[rating] = user;
     }

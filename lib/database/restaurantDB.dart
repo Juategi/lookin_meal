@@ -232,6 +232,7 @@ class DBServiceRestaurant{
         username: element["username"],
         about: element["about"],
         country: element["country"],
+        checked: element["checked"] == null ? false : element["checked"],
       );
       MenuEntry entry = MenuEntry(
           id: element['entry_id'].toString(),

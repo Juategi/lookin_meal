@@ -11,7 +11,7 @@ import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'package:lookinmeal/shared/widgets.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:provider/provider.dart';
+import 'package:badges/badges.dart';
 
 class Comments extends StatefulWidget {
   @override
@@ -99,23 +99,30 @@ class _CommentsState extends State<Comments> {
                             children: [
                               Column(
                                 children: [
-                                  Container(height: 67.h, width: 67.w,
-                                      decoration: new BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          boxShadow: [BoxShadow(
-                                            color: Colors.grey.withOpacity(0.2),
-                                            spreadRadius: 2,
-                                            blurRadius: 3,
-                                            offset: Offset(
-                                                1, 1), // changes position of shadow
-                                          ),
-                                          ],
-                                          image: new DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: new NetworkImage(
-                                                  ratings[rating].picture)
-                                          )
-                                      )
+                                  Badge(
+                                    badgeContent: Icon(Icons.check_circle, color: Colors.blue,size: ScreenUtil().setSp(23),),
+                                    badgeColor: Colors.white,
+                                    elevation: 0,
+                                    showBadge: ratings[rating].checked,
+                                    padding: EdgeInsets.all(4),
+                                    child: Container(height: 67.h, width: 67.w,
+                                        decoration: new BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            boxShadow: [BoxShadow(
+                                              color: Colors.grey.withOpacity(0.2),
+                                              spreadRadius: 2,
+                                              blurRadius: 3,
+                                              offset: Offset(
+                                                  1, 1), // changes position of shadow
+                                            ),
+                                            ],
+                                            image: new DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: new NetworkImage(
+                                                    ratings[rating].picture)
+                                            )
+                                        )
+                                    ),
                                   ),
                                   SizedBox(height: 3.h,),
                                   Container(height: 37.h,

@@ -376,6 +376,7 @@ class DBServiceUser {
         picture: element["image"],
         country: element["country"],
         username: element["username"],
+        checked: element["checked"] == null ? false : element["checked"],
       );
       users.add(user);
     }
@@ -404,6 +405,7 @@ class DBServiceUser {
         picture: element["image"],
         country: element["country"],
         username: element["username"],
+        checked: element["checked"] == null ? false : element["checked"],
       );
       users.add(user);
     }

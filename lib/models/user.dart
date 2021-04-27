@@ -10,6 +10,7 @@ class User with ChangeNotifier{
 	String name,email,picture, country, username, about, token;
 	final String uid, service;
 	List<Restaurant> favorites, recently, owned;
+	bool checked;
 	List<Rating> ratings;
 	List<MenuEntry> favoriteEntry;
 	Map<String,Restaurant> history;
@@ -25,5 +26,5 @@ class User with ChangeNotifier{
 		notifyListeners();
 	}
 
-	User({this.uid, this.reservations, this.notifications, this.token, this.owned, this.followers, this.following, this.numFollowers, this.numFollowing, this.inOrder, this.email, this.name,this.picture,this.favorites,this.service, this.ratings, this.username, this.country, this.favoriteEntry, this.recently, this.history, this.lists, this.about});
+	User({this.uid, this.checked, this.reservations, this.notifications, this.token, this.owned, this.followers, this.following, this.numFollowers, this.numFollowing, this.inOrder, this.email, this.name,this.picture,this.favorites,this.service, this.ratings, this.username, this.country, this.favoriteEntry, this.recently, this.history, this.lists, this.about});
 }

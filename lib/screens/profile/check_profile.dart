@@ -10,6 +10,7 @@ import 'package:lookinmeal/shared/common_data.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'favorites.dart';
+import 'package:badges/badges.dart';
 
 class CheckProfile extends StatefulWidget {
   @override
@@ -100,7 +101,19 @@ class _CheckProfileState extends State<CheckProfile> {
                   right: 10.w,
                   child: Container(
                     width: 190.w,
-                    child:Text(user.username, maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(23),),)),
+                    child:Row(
+                      children: [
+                        Text(user.username, maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(23),),)),
+                        SizedBox(width: 10.w,),
+                        user.checked ? Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(Icons.check_circle, color: Colors.blue,size: ScreenUtil().setSp(25),)
+                        ) : Container()
+                      ],
+                    ),
                   ),
                 ),
                 Positioned(

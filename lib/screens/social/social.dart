@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -89,9 +90,9 @@ class _SocialScreenState extends State<SocialScreen> {
                                   controller: TextEditingController()..text = query..selection = TextSelection.fromPosition(TextPosition(offset: query.length)),
                                   onChanged: (val){
                                       query = val.trim();
-                                      if(query == "")
-                                        setState(() {
-                                        });
+                                      if(query == "") {
+                                        setState(() {});
+                                      }
                                   },
                                   maxLines: 1,
                                   maxLength: 20,
@@ -111,6 +112,7 @@ class _SocialScreenState extends State<SocialScreen> {
                                 if(query != ""){
                                   await _searchUsers();
                                 }
+                                FocusScope.of(context).unfocus();
                                 setState(() {
                                 });
                               },)
@@ -131,6 +133,7 @@ class _SocialScreenState extends State<SocialScreen> {
                     children: (query == "" ? usersFeed : usersSearch).map((user) =>
                         GestureDetector(
                           onTap: () {
+                            FocusScope.of(context).unfocus();
                             CommonData.pop[3] = true;
                             pushNewScreenWithRouteSettings(
                               context,
@@ -144,23 +147,30 @@ class _SocialScreenState extends State<SocialScreen> {
                           },
                           child: Column(
                             children: [
-                              Container(height: 55.h, width: 55.w,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      boxShadow: [BoxShadow(
-                                        color: Colors.grey.withOpacity(0.2),
-                                        spreadRadius: 2,
-                                        blurRadius: 3,
-                                        offset: Offset(1,
-                                            1), // changes position of shadow
-                                      ),
-                                      ],
-                                      image: new DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: new NetworkImage(
-                                              user.picture)
-                                      )
-                                  )
+                              Badge(
+                                badgeContent: Icon(Icons.check_circle, color: Colors.blue,size: ScreenUtil().setSp(22),),
+                                badgeColor: Colors.white,
+                                elevation: 0,
+                                showBadge: user.checked,
+                                padding: EdgeInsets.all(4),
+                                child: Container(height: 55.h, width: 55.w,
+                                    decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        boxShadow: [BoxShadow(
+                                          color: Colors.grey.withOpacity(0.2),
+                                          spreadRadius: 2,
+                                          blurRadius: 3,
+                                          offset: Offset(1,
+                                              1), // changes position of shadow
+                                        ),
+                                        ],
+                                        image: new DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: new NetworkImage(
+                                                user.picture)
+                                        )
+                                    )
+                                ),
                               ),
                               SizedBox(height: 10.h,),
                               Container(
@@ -209,6 +219,7 @@ class _SocialScreenState extends State<SocialScreen> {
                             children: [
                               GestureDetector(
                                 onTap: () {
+                                  FocusScope.of(context).unfocus();
                                   CommonData.pop[3] = true;
                                   pushNewScreenWithRouteSettings(
                                     context,
@@ -222,23 +233,30 @@ class _SocialScreenState extends State<SocialScreen> {
                                 },
                                 child: Column(
                                   children: [
-                                    Container(height: 55.h, width: 55.w,
-                                        decoration: new BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            boxShadow: [BoxShadow(
-                                              color: Colors.grey.withOpacity(0.2),
-                                              spreadRadius: 2,
-                                              blurRadius: 3,
-                                              offset: Offset(1,
-                                                  1), // changes position of shadow
-                                            ),
-                                            ],
-                                            image: new DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: new NetworkImage(
-                                                    user.picture)
-                                            )
-                                        )
+                                    Badge(
+                                      badgeContent: Icon(Icons.check_circle, color: Colors.blue,size: ScreenUtil().setSp(22),),
+                                      badgeColor: Colors.white,
+                                      elevation: 0,
+                                      showBadge: user.checked,
+                                      padding: EdgeInsets.all(4),
+                                      child: Container(height: 55.h, width: 55.w,
+                                          decoration: new BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              boxShadow: [BoxShadow(
+                                                color: Colors.grey.withOpacity(0.2),
+                                                spreadRadius: 2,
+                                                blurRadius: 3,
+                                                offset: Offset(1,
+                                                    1), // changes position of shadow
+                                              ),
+                                              ],
+                                              image: new DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: new NetworkImage(
+                                                      user.picture)
+                                              )
+                                          )
+                                      ),
                                     ),
                                     SizedBox(height: 10.h,),
                                     Container(
@@ -314,6 +332,7 @@ class _SocialScreenState extends State<SocialScreen> {
                                                       11),),)))),
                                   GestureDetector(
                                       onTap: () {
+                                        FocusScope.of(context).unfocus();
                                         CommonData.pop[3] = true;
                                         pushNewScreenWithRouteSettings(
                                           context,

@@ -85,6 +85,7 @@ dependencies:
   rate_my_app: ^0.7.2
   upgrader: ^2.8.2
   animate_do: ^1.7.4
+  badges: ^1.2.0
 
 dev_dependencies:
   flutter_test:
