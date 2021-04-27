@@ -65,6 +65,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		CommonData.prices.sort((p1, p2) => p1.quantity.compareTo(p2.quantity));
 	}
 
+	Future _getData() async{
+		DBServiceUser.userF.notifications = await DBServiceUser.dbServiceUser.getNotifications(DBServiceUser.userF.uid);
+		DBServiceUser.userF.numFollowers = await DBServiceUser.dbServiceUser.getNumFollowers(DBServiceUser.userF.uid);
+		DBServiceUser.userF.numFollowing = await DBServiceUser.dbServiceUser.getNumFollowing(DBServiceUser.userF.uid);
+		print("updating...");
+	}
 
 	void _update()async{
 		myPos = await _geolocationService.getLocation();
@@ -333,6 +339,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 								return route.settings.name == "/9f580fc5-c252-45d0-af25-9429992db112";
 							});
 						}
+						if(num == 4)
+							_getData();
 						lastIndex = _controller.index;
 					},
 			);

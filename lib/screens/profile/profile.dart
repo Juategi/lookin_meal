@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
@@ -252,28 +253,15 @@ class _ProfileState extends State<Profile> {
                       height: 60.h,
                       child: Row(mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SizedBox(width: 20.w,),
-                          DBServiceUser.userF.notifications.length == 0? Container(width: 37.w, height: 37.h, child: Icon(Icons.notifications_active_rounded, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),)) : Stack(
-                            children: [
-                              Container(width: 37.w, height: 37.h, child: Icon(Icons.notifications_active_rounded, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),)),
-                              DBServiceUser.userF.notifications == null || DBServiceUser.userF.notifications.length == 0 ? Container() : Container(
-                                height: 20.h,
-                                width: 20.w,
-                                decoration: BoxDecoration(
-                                  color: Colors.redAccent,
-                                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                                  boxShadow: [BoxShadow(
-                                    color: Colors.grey.withOpacity(0.2),
-                                    spreadRadius: 2,
-                                    blurRadius: 3,
-                                    offset: Offset(1, 1), // changes position of shadow
-                                  ),],
-                                ),
-                                child: Center(
-                                  child: Text(DBServiceUser.userF.notifications.length.toString(), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),),)
-                                )
-                              )
-                            ],
+                          SizedBox(width: 20.w,), //DBServiceUser.userF.notifications == null || DBServiceUser.userF.notifications.length == 0
+                          Badge(
+                            toAnimate: true,
+                              animationType: BadgeAnimationType.fade,
+                              animationDuration: Duration(seconds: 2),
+                              padding: EdgeInsets.all(6),
+                              showBadge: !(DBServiceUser.userF.notifications == null || DBServiceUser.userF.notifications.length == 0),
+                              badgeContent: Text(DBServiceUser.userF.notifications.length.toString(), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),),),
+                              child: Icon(Icons.notifications_active_rounded, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),)
                           ),
                           SizedBox(width: 30.w,),
                           Container(width: 250.w, child: Text("Notifications", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
