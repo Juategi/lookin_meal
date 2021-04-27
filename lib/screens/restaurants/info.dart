@@ -4,7 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/services/enviroment.dart';
 import 'package:lookinmeal/shared/functions.dart';
+import 'package:lookinmeal/shared/loading.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -16,6 +18,20 @@ class RestaurantInfo extends StatefulWidget {
 
 class _RestaurantInfoState extends State<RestaurantInfo> {
   Restaurant restaurant;
+  String code;
+
+  Future getCode() async{
+    code = await Enviroment.getApi();
+    setState(() {
+    });
+  }
+
+  @override
+  void initState() {
+    getCode();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     restaurant = ModalRoute.of(context).settings.arguments;
@@ -23,7 +39,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: ListView(
+        body: code == null? Loading() : ListView(
           children: <Widget>[
             Container(
               height: 42.h,
@@ -45,7 +61,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                       width: 382.w,
                       height: 92.h,
                       decoration: BoxDecoration(
-                        image: DecorationImage(fit: BoxFit.cover, image: NetworkImage('https://maps.googleapis.com/maps/api/staticmap?center=${restaurant.address}&zoom=15&size=900x600&maptype=roadmap&markers=color:red%7Clabel:.%7C${restaurant.latitude},${restaurant.longitude}&key=AIzaSyAIIK4P68Ge26Yc0HkQ6uChj_NEqF2VeCU'))
+                        image: DecorationImage(fit: BoxFit.cover, image: NetworkImage('https://maps.googleapis.com/maps/api/staticmap?center=${restaurant.address}&zoom=15&size=900x600&maptype=roadmap&markers=color:red%7Clabel:.%7C${restaurant.latitude},${restaurant.longitude}&key=${code}'))
                       ),
                     ),
                     onTap: ()async{

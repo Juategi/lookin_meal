@@ -14,6 +14,7 @@ import 'package:lookinmeal/screens/profile/support.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lookinmeal/services/enviroment.dart';
 import 'package:lookinmeal/services/strype.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
@@ -62,6 +63,7 @@ class _ProfileState extends State<Profile> {
                   children: [
                     GestureDetector(
                       onTap:()async{
+
                       },
                       child: Container(height: 67.h, width: 67.w,
                           decoration: new BoxDecoration(

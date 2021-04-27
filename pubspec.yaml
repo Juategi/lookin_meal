@@ -86,8 +86,12 @@ dependencies:
   upgrader: ^2.8.2
   animate_do: ^1.7.4
   badges: ^1.2.0
+  hive: ^1.4.4
+  hive_flutter: ^0.3.1
 
 dev_dependencies:
+  hive_generator: ^0.8.2
+  build_runner: ^1.11.0
   flutter_test:
     sdk: flutter
   flutter_localizations:

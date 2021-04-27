@@ -77,14 +77,21 @@ class _CheckProfileState extends State<CheckProfile> {
                                   color: Colors.grey
                               ),
                               child: Center(
-                                child: Container(
-                                  height: 136.h,
-                                  width: 136.w,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      image: Image.network(user.picture).image,
-                                      fit: BoxFit.cover,
+                                child: Badge(
+                                  badgeContent: Icon(Icons.check_circle, color: Colors.blue,size: ScreenUtil().setSp(30),),
+                                  badgeColor: Colors.white,
+                                  elevation: 0,
+                                  showBadge: user.checked,
+                                  padding: EdgeInsets.all(4),
+                                  child: Container(
+                                    height: 136.h,
+                                    width: 136.w,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        image: Image.network(user.picture).image,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -101,19 +108,7 @@ class _CheckProfileState extends State<CheckProfile> {
                   right: 10.w,
                   child: Container(
                     width: 190.w,
-                    child:Row(
-                      children: [
-                        Text(user.username, maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(23),),)),
-                        SizedBox(width: 10.w,),
-                        user.checked ? Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(Icons.check_circle, color: Colors.blue,size: ScreenUtil().setSp(25),)
-                        ) : Container()
-                      ],
-                    ),
+                    child:Text(user.username, maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(23),),)),
                   ),
                 ),
                 Positioned(

@@ -148,7 +148,7 @@ class _SocialScreenState extends State<SocialScreen> {
                           child: Column(
                             children: [
                               Badge(
-                                badgeContent: Icon(Icons.check_circle, color: Colors.blue,size: ScreenUtil().setSp(22),),
+                                badgeContent: Icon(Icons.check_circle, color: Colors.blue,size: ScreenUtil().setSp(20),),
                                 badgeColor: Colors.white,
                                 elevation: 0,
                                 showBadge: user.checked,
@@ -234,7 +234,7 @@ class _SocialScreenState extends State<SocialScreen> {
                                 child: Column(
                                   children: [
                                     Badge(
-                                      badgeContent: Icon(Icons.check_circle, color: Colors.blue,size: ScreenUtil().setSp(22),),
+                                      badgeContent: Icon(Icons.check_circle, color: Colors.blue,size: ScreenUtil().setSp(20),),
                                       badgeColor: Colors.white,
                                       elevation: 0,
                                       showBadge: user.checked,

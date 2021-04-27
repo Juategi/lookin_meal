@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:animate_do/animate_do.dart';
 import 'package:lookinmeal/screens/top/top.dart';
+import 'package:lookinmeal/services/enviroment.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
@@ -33,9 +34,15 @@ class _HomeScreenState extends State<HomeScreen> {
 	User user;
 	List<Restaurant> nearRestaurants, recommended, sponsored;
 	Map<MenuEntry,Restaurant> popular;
-	String location;
+	String location,code;
 	bool first = true;
 	bool search = false;
+
+	Future getCode() async{
+		code = await Enviroment.getApi();
+		setState(() {
+		});
+	}
 
 	bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
 		if (info.ifRouteChanged(context)) return false;
@@ -123,6 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 	@override
   void initState() {
+		getCode();
 		BackButtonInterceptor.add(myInterceptor, context: context);
     super.initState();
   }
@@ -228,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
 		    												context,
 		    												MaterialPageRoute(
 		    													builder: (context) => PlacePicker(
-		    														apiKey: "",
+		    														apiKey: code,
 		    														autocompleteLanguage: "es",
 		    														desiredLocationAccuracy: LocationAccuracy.high,
 		    														hintText: "Buscar",
