@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:animate_do/animate_do.dart';
 import 'package:http/http.dart' as http;
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
@@ -484,12 +485,14 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 									children: <Widget>[
 										Row(
 										  children: [
-												restaurant.types.length == 0 ? Container() : Container(
-														height: 25.h,
-														width: 25.w,
-														decoration: BoxDecoration(
-																image: DecorationImage(
-																		image: Image.asset("assets/food/${CommonData.typesImage[restaurant.types[0]]}.png").image))
+												restaurant.types.length == 0 ? Container() : Spin(
+												  child: Container(
+												  		height: 25.h,
+												  		width: 25.w,
+												  		decoration: BoxDecoration(
+												  				image: DecorationImage(
+												  						image: Image.asset("assets/food/${CommonData.typesImage[restaurant.types[0]]}.png").image))
+												  ),
 												),
 										    SizedBox(width: 5.w,),
 										    Container(width: 180.w, height: 25.h, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : restaurant.types.length > 0 ? "${restaurant.types[0]}" : "", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(17),),))),
@@ -871,7 +874,9 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 							],
 						),
 					) : Container(),
-					restaurant.menu.length != 0 ? Provider.value(value: false, child: Provider.value(value: restaurant, child: Menu())) : Container(),
+					restaurant.menu.length != 0 ? Provider.value(value: false, child: Provider.value(value: restaurant, child:
+					Menu()
+					)) : Container(),
 					restaurant.dailymenu != null? Container(
 						height: 42.h,
 						width: 411.w,

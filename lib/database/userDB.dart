@@ -363,4 +363,51 @@ class DBServiceUser {
     print(response.body);
   }
 
+  Future<List<User>> getUsersFeed() async{
+    List<User> users = [];
+    var response = await http.get(
+        "${StaticStrings.api}/usersfeed", headers: {"user_id": userF.uid, "latitude" : GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
+    List<dynamic> result = json.decode(response.body);
+    for(var element in result){
+      User user = User(
+        uid: element["user_id"],
+        name: element["name"],
+        email: element["email"],
+        picture: element["image"],
+        country: element["country"],
+        username: element["username"],
+      );
+      users.add(user);
+    }
+    return users;
+  }
+
+  Future<List<User>> searchUsers(String query) async{
+    //transformar 'platero:* &utopi:* &fo:*'
+    String originalQuery = query;
+    List aux = query.split(" ");
+    for(int i = 0; i < aux.length; i++){
+      aux[i] = aux[i] + ":*";
+      if(i != 0)
+        aux[i] = "&" + aux[i];
+    }
+    query = aux.join(" ");
+    List<User> users = [];
+    var response = await http.get(
+        "${StaticStrings.api}/userssearch", headers: {"user_id": userF.uid, "query": query});
+    List<dynamic> result = json.decode(response.body);
+    for(var element in result){
+      User user = User(
+        uid: element["user_id"],
+        name: element["name"],
+        email: element["email"],
+        picture: element["image"],
+        country: element["country"],
+        username: element["username"],
+      );
+      users.add(user);
+    }
+    return users;
+  }
+
 }

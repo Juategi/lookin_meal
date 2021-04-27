@@ -195,7 +195,7 @@ class _EntryRatingState extends State<EntryRating> {
                           ),
                         ],
                       ) : Container(),
-                      SizedBox(height: entry.image == null || entry.image == "" ? 30.h : 215.h,),
+                      SizedBox(height: entry.image == null || entry.image == "" ? 30.h : 235.h,),
                       Row(
                         children: [
                           entry.price == 0.0 ? Container():Row( mainAxisAlignment: entry.image == null || entry.image == ""?  MainAxisAlignment.center : MainAxisAlignment.start,

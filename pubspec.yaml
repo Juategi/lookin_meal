@@ -84,6 +84,7 @@ dependencies:
   flutter_launcher_icons: ^0.8.0
   rate_my_app: ^0.7.2
   upgrader: ^2.8.2
+  animate_do: ^1.7.4
 
 dev_dependencies:
   flutter_test:

@@ -212,10 +212,10 @@ class DBServiceRestaurant{
     print(response.body);
   }
 
-  Future<List<List<Object>>> getFeed(String user_id) async{
+  Future<List<List<Object>>> getFeed(String user_id, int offset) async{
     List<List<Object>> ratings = [];
     var response = await http.get(
-        "${StaticStrings.api}/feed", headers: {"user_id" : user_id});
+        "${StaticStrings.api}/feed", headers: {"user_id" : user_id, "offset" : offset.toString()});
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
       Rating rating = Rating(

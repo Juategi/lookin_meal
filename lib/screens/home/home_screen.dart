@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:animate_do/animate_do.dart';
 import 'package:lookinmeal/screens/top/top.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:upgrader/upgrader.dart';
@@ -311,7 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
 											  	child: Row(
 											  		children: [
 											  			SizedBox(width: 5.w,),
-											  			Icon(Icons.star_outlined, color: Color.fromRGBO(255, 201, 23, 1), size: ScreenUtil().setSp(28),),
+															Swing(child: Icon(Icons.star_outlined, color: Color.fromRGBO(255, 201, 23, 1), size: ScreenUtil().setSp(28),)),
 											  			SizedBox(width: 5.w,),
 											  			Text('Top restaurants and dishes', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(15),),)),
 											  		],
