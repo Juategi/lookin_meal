@@ -277,31 +277,31 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 					items: [
 						PersistentBottomNavBarItem(
 							icon: Icon(FontAwesomeIcons.compass, size: ScreenUtil().setSp(22), ),
-							title: ("Home"),
+							title: (tr.translate("home")),
 							activeColor: selectedItemColor,
 							inactiveColor: unselectedItemColor,
 						),
 						PersistentBottomNavBarItem(
 							icon: Icon(FontAwesomeIcons.mapMarkedAlt, size: ScreenUtil().setSp(22),),
-							title: ("Map"),
+							title: (tr.translate("map")),
 							activeColor: selectedItemColor,
 							inactiveColor: unselectedItemColor,
 						),
 						PersistentBottomNavBarItem(
 							icon: Icon(DBServiceUser.userF.inOrder == null? Icons.camera : FontAwesomeIcons.shoppingCart, size: ScreenUtil().setSp(22)),
-							title: ("Order"),
+							title: (tr.translate("order")),
 							activeColor: selectedItemColor,
 							inactiveColor: unselectedItemColor,
 						),
 						PersistentBottomNavBarItem(
 							icon: Icon(Icons.people_alt_sharp, size: ScreenUtil().setSp(25),),
-							title: ("Social"),
+							title: (tr.translate("social")),
 							activeColor: selectedItemColor,
 							inactiveColor: unselectedItemColor,
 						),
 						PersistentBottomNavBarItem(
 							icon: Icon(Icons.person, size: ScreenUtil().setSp(25),),
-							title: ("Profile"),
+							title: (tr.translate("profile")),
 							activeColor: selectedItemColor,
 							inactiveColor: unselectedItemColor,
 						),

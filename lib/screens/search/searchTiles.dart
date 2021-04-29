@@ -7,6 +7,7 @@ import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/entry.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
@@ -40,6 +41,7 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations tr = AppLocalizations.of(context);
     restaurant = Provider.of<Restaurant>(context);
     sponsored = Provider.of<bool>(context);
     if(init){
@@ -88,7 +90,7 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
                             color: Color.fromRGBO(255, 201, 23, 1),
                             borderRadius: BorderRadius.all(Radius.circular(12))
                         ),
-                        child: Text("Promocionado", textAlign: TextAlign.center,  maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(12),),))
+                        child: Text(tr.translate("promoted"), textAlign: TextAlign.center,  maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(12),),))
                     ) : Container()
                   ],
                 ),
@@ -110,7 +112,7 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
                 Column(
                   children: <Widget>[
                     SizedBox(height: 2.h,),
-                    Text("${Functions.getVotes(restaurant)} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+                    Text("${Functions.getVotes(restaurant)} ${tr.translate("votes")}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
                   ],
                 ),
               ],
@@ -188,7 +190,7 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
                                           child: Align( alignment: Alignment.center, child: Text("${entry.price} €", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
                                         ),
                                         SizedBox(width: 20.w,),
-                                        Text("${entry.numReviews} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),)),
+                                        Text("${entry.numReviews} ${tr.translate("votes")}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),)),
                                       ],
                                     )
                                   ],
@@ -231,6 +233,7 @@ class _SearchEntryTileState extends State<SearchEntryTile> {
   MenuEntry entry;
   @override
   Widget build(BuildContext context) {
+    AppLocalizations tr = AppLocalizations.of(context);
     restaurant = Provider.of<Restaurant>(context);
     entry = Provider.of<MenuEntry>(context);
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
@@ -267,7 +270,7 @@ class _SearchEntryTileState extends State<SearchEntryTile> {
                     children: [
                       StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: entry.rating, size: ScreenUtil().setSp(11),),
                       SizedBox(width: 8.w,),
-                      Text("${entry.numReviews} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(13),),)),
+                      Text("${entry.numReviews} ${tr.translate("votes")}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(13),),)),
                       SizedBox(width: 15.w,),
                       Container(
                         child: SvgPicture.asset("assets/markerMini.svg", height: 20.h, width: 20.w,),

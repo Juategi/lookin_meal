@@ -10,6 +10,7 @@ import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/profile/check_profile.dart';
 import 'package:lookinmeal/screens/restaurants/entry.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -54,7 +55,7 @@ class _SocialScreenState extends State<SocialScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //query = "";
+    AppLocalizations tr = AppLocalizations.of(context);
     if(init){
       _loadFeed();
       _loadUsers();
@@ -101,7 +102,7 @@ class _SocialScreenState extends State<SocialScreen> {
                                     color: Colors.black54,
                                   ),
                                   decoration: InputDecoration(
-                                      hintText: "Search an user..",
+                                      hintText: tr.translate("searchuser"),
                                       hintStyle: TextStyle(color: Colors.black45),
                                       counterText: "",
                                       border: InputBorder.none
@@ -124,7 +125,7 @@ class _SocialScreenState extends State<SocialScreen> {
                   ],
                 ),
                 SizedBox(height: 5.h,),
-                Text('Find out new people to follow near you', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.9), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(20),),)),
+                Text(tr.translate("findoutpeople"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.9), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(20),),)),
                 SizedBox(height: 10.h,),
                 Container(
                   height: 100.h,
@@ -192,7 +193,7 @@ class _SocialScreenState extends State<SocialScreen> {
                     ).toList(),
                   ),
                 ),
-                Text('What are your friends eating? ', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.9), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(20),),)),
+                Text(tr.translate("friendseat"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.9), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(20),),)),
                 SizedBox(height: 10.h,),
                 Container(
                   height: 450.h,
@@ -383,6 +384,7 @@ class _SocialScreenState extends State<SocialScreen> {
                                   SizedBox(height: 4.h,),
                                   GestureDetector(
                                     onTap: () async {
+                                      FocusScope.of(context).unfocus();
                                       CommonData.pop[3] = true;
                                       await showModalBottomSheet(context: context,
                                           isScrollControlled: true,

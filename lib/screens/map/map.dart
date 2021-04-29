@@ -10,6 +10,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
@@ -205,6 +206,7 @@ class MapSampleState extends State<MapSample> {
 
 	@override
 	Widget build(BuildContext context){
+		AppLocalizations tr = AppLocalizations.of(context);
 		user = Provider.of<User>(context);
 		_timer();
 		if(first){
@@ -258,7 +260,7 @@ class MapSampleState extends State<MapSample> {
 					Positioned(
 						top: 110.h,
 						right: 20.w,
-						child: RaisedButton(color:Colors.white, child: Text("Load Restaurants", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),)), onPressed: ()async{
+						child: RaisedButton(color:Colors.white, child: Text(tr.translate("loadres"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),)), onPressed: ()async{
 							Size _widgetSize = _key.currentContext.size;
 							var _correctZoom = math.pow(2, _cameraPosition.zoom) * 2;
 							var _width = _widgetSize.width.toInt() / _correctZoom;
@@ -275,7 +277,7 @@ class MapSampleState extends State<MapSample> {
 					Positioned(
 						top: 60.h,
 						right: 20.w,
-						child: RaisedButton(color:Colors.white, child: Text("Clear", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),)), onPressed: (){
+						child: RaisedButton(color:Colors.white, child: Text(tr.translate("clear"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),)), onPressed: (){
 								_markersNoCluster.clear();
 								_restaurants.clear();
 								setState(() {});
@@ -343,7 +345,7 @@ class MapSampleState extends State<MapSample> {
 							  								  children: [
 							  								    StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: Functions.getRating(selected), size: ScreenUtil().setSp(12),),
 							  										SizedBox(width: 10.w,),
-							  										Text("${Functions.getVotes(selected)} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),)),
+							  										Text("${Functions.getVotes(selected)} ${tr.translate("votes")}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),)),
 							  									],
 							  								),
 							  							],

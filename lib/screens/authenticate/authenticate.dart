@@ -66,7 +66,7 @@ class _AuthenticateState extends State<Authenticate> {
 								  			child: Row( mainAxisAlignment: MainAxisAlignment.center,
 								  			  children: <Widget>[
 								  			  	SizedBox(width: 20.w,),
-								  			    Text('Sign up with Facebook', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .5, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+								  			    Text(tr.translate('facebook'), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .5, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
 								  			  ],
 								  			),
 								  		),
@@ -114,7 +114,7 @@ class _AuthenticateState extends State<Authenticate> {
 												child: Row( mainAxisAlignment: MainAxisAlignment.center,
 													children: <Widget>[
 														SizedBox(width: 20.w,),
-														Text('Sign up with Google', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .5, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+														Text(tr.translate('google'), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .5, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
 													],
 												),
 											),

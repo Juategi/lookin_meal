@@ -60,7 +60,7 @@ class _LogInState extends State<LogIn> {
 									SizedBox(height: 40.h,),
 									Row( mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
-											Text('Email', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+											Text( tr.translate("email"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
 										],
 									),
 									SizedBox(height: 10.h,),
@@ -77,7 +77,7 @@ class _LogInState extends State<LogIn> {
 									SizedBox(height: 25.h,),
 									Row( mainAxisAlignment: MainAxisAlignment.start,
 										children: <Widget>[
-											Text('Password', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+											Text( tr.translate("passw"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
 										],
 									),
 									SizedBox(height: 10.h,),
@@ -103,7 +103,7 @@ class _LogInState extends State<LogIn> {
 									  			borderRadius: BorderRadius.all(Radius.circular(16)),
 									  			color: Colors.white
 									  	),
-									  	child: Center(child: Text('LOG IN', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
+									  	child: Center(child: Text( tr.translate("login"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
 									  ),
 										onTap: () async{
 											if(_formKey.currentState.validate()){
@@ -121,7 +121,7 @@ class _LogInState extends State<LogIn> {
 									SizedBox(height: 100.h,),
 									Row(
 									  children: <Widget>[
-									    Text("Don't have an account? ", style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(17),),)),
+									    Text( tr.translate("donthaveaccount"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(17),),)),
 											GestureDetector(
 												onTap: () => pushNewScreenWithRouteSettings(
 													context,
@@ -131,12 +131,12 @@ class _LogInState extends State<LogIn> {
 													pageTransitionAnimation: PageTransitionAnimation.cupertino,
 												),
 														//Navigator.pushNamed(context, "/signin"),
-													child: Text("Sign up now.", style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(17),),))),
+													child: Text(tr.translate("signupnow"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(17),),))),
 										],
 									),
 									SizedBox(height: 30.h,),
 									GestureDetector(
-											child: Center(child: Text("Forgot password?", style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(17),),)))),
+											child: Center(child: Text(tr.translate("forgot"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(17),),)))),
 								],
 					    ),
 					  ),

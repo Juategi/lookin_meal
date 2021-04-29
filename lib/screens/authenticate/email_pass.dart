@@ -67,7 +67,7 @@ class _EmailPasswordState extends State<EmailPassword> {
                     SizedBox(height: 40.h,),
                     Row( mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Text('Email', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                        Text(tr.translate("loginemail"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                       ],
                     ),
                     SizedBox(height: 10.h,),
@@ -85,7 +85,7 @@ class _EmailPasswordState extends State<EmailPassword> {
                     SizedBox(height: 20.h,),
                     Row( mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Text('Password', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                        Text(tr.translate("passw"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                       ],
                     ),
                     SizedBox(height: 10.h,),
@@ -97,13 +97,13 @@ class _EmailPasswordState extends State<EmailPassword> {
                         style: TextStyle(
                           color: Colors.white,
                         ),
-                        validator: (val) => password.length < 8 ? "Password too short" : null,
+                        validator: (val) => password.length < 8 ? tr.translate("enterpass") : null,
                         decoration: textInputDeco
                     ),
                     SizedBox(height: 20.h,),
                     Row( mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Text('Confirm password', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                        Text(tr.translate("confirmpass"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                       ],
                     ),
                     SizedBox(height: 10.h,),
@@ -115,7 +115,7 @@ class _EmailPasswordState extends State<EmailPassword> {
                         style: TextStyle(
                           color: Colors.white,
                         ),
-                        validator: (val) => password != confirmPassword ? "Passwords don't match" : null,
+                        validator: (val) => password != confirmPassword ? tr.translate("matchpass") : null,
                         decoration: textInputDeco
                     ),
                     SizedBox(height: 50.h,),
@@ -127,7 +127,7 @@ class _EmailPasswordState extends State<EmailPassword> {
                             borderRadius: BorderRadius.all(Radius.circular(16)),
                             color: Colors.white
                         ),
-                        child: !loading? Center(child: Text('Confirm', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))) : CircularLoading(),
+                        child: !loading? Center(child: Text(tr.translate("confirm"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))) : CircularLoading(),
                       ),
                       onTap: () async{
                         setState(() {
@@ -161,14 +161,14 @@ class _EmailPasswordState extends State<EmailPassword> {
                           else{
                             setState(() {
                               loading = false;
-                              error = "Email taken";
+                              error = tr.translate("emailtaken");
                             });
                           }
                         }
                       },
                     ),
                     SizedBox(height: 40.h,),
-                    Text('By signing up you agree to our Terms and conditions of use.', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(13),),)),
+                    Text(tr.translate('terms'), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(13),),)),
                   ],
                 ),
               ),

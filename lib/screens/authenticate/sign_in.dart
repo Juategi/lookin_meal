@@ -73,7 +73,7 @@ class _SignInState extends State<SignIn> {
 										SizedBox(height: 40.h,),
 										Row( mainAxisAlignment: MainAxisAlignment.start,
 											children: <Widget>[
-												Text('Name', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+												Text(tr.translate("name"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
 											],
 										),
 										SizedBox(height: 10.h,),
@@ -89,13 +89,13 @@ class _SignInState extends State<SignIn> {
 										),
 										Row( mainAxisAlignment: MainAxisAlignment.start,
 											children: <Widget>[
-												Text('Appears in your profile', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),)),
+												Text(tr.translate("appears"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),)),
 											],
 										),
 										SizedBox(height: 20.h,),
 										Row( mainAxisAlignment: MainAxisAlignment.start,
 											children: <Widget>[
-												Text('Username', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+												Text(tr.translate("username"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
 											],
 										),
 										SizedBox(height: 10.h,),
@@ -106,19 +106,19 @@ class _SignInState extends State<SignIn> {
 											style: TextStyle(
 												color: Colors.white,
 											),
-											validator: (val) => username.length < 3 ? "Username too short" : null,
+											validator: (val) => username.length < 3 ? tr.translate("usernameshort") : null,
 											decoration: textInputDeco
 										),
 										Row( mainAxisAlignment: MainAxisAlignment.start,
 											children: <Widget>[
-												Text('This name helps users find you', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),)),
+												Text(tr.translate("namehelpsfind"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),)),
 											],
 										),
 										Text(error, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.red, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
 										SizedBox(height: 20.h,),
 										Row( mainAxisAlignment: MainAxisAlignment.start,
 											children: <Widget>[
-												Text('Country', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+												Text(tr.translate("country"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
 											],
 										),
 										SizedBox(height: 10.h,),
@@ -154,7 +154,7 @@ class _SignInState extends State<SignIn> {
 										),
 										Row( mainAxisAlignment: MainAxisAlignment.start,
 											children: <Widget>[
-												Text('Appears in your profile', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),)),
+												Text(tr.translate("appears"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),)),
 											],
 										),
 									 SizedBox(height: 50.h,),
@@ -166,7 +166,7 @@ class _SignInState extends State<SignIn> {
 														borderRadius: BorderRadius.all(Radius.circular(16)),
 														color: Colors.white
 												),
-												child: !loading? Center(child: Text('Next', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))) : CircularLoading(),
+												child: !loading? Center(child: Text(tr.translate("next"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))) : CircularLoading(),
 											),
 											onTap: () async{
 												setState(() {
@@ -200,7 +200,7 @@ class _SignInState extends State<SignIn> {
 													else{
 														setState(() {
 														  loading = false;
-														  error = "Username taken";
+														  error = tr.translate("usernametaken");
 														});
 													}
 												}

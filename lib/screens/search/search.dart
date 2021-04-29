@@ -12,6 +12,7 @@ import 'package:lookinmeal/models/user.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
 import 'package:lookinmeal/screens/search/searchTiles.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/search.dart';
@@ -29,6 +30,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   Map<MenuEntry, Restaurant> map;
+  AppLocalizations tr;
   bool isRestaurant = true;
   bool isSearching = false;
   bool searching = false;
@@ -100,7 +102,7 @@ class _SearchState extends State<Search> {
               height: 50.h,
               width: 50.w,
               color: Color.fromRGBO(255, 110, 117, 0.9),
-              child: Center(child: Text("Show more", maxLines: 1,
+              child: Center(child: Text(tr.translate("showmore"), maxLines: 1,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white,
                     letterSpacing: .3,
@@ -162,6 +164,7 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
+    tr = AppLocalizations.of(context);
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return SafeArea(
       child: Scaffold(
@@ -212,7 +215,7 @@ class _SearchState extends State<Search> {
                                     color: Colors.black54,
                                   ),
                                   decoration: InputDecoration(
-                                      hintText: queries.length < 3? "   Restaurant or dish..." : "   Press search",
+                                      hintText: queries.length < 3? tr.translate("resordish") : tr.translate("presssearch"),
                                       hintStyle: TextStyle(color: Colors.black45),
                                       counterText: "",
                                       border: InputBorder.none
@@ -241,7 +244,7 @@ class _SearchState extends State<Search> {
                                     color: Colors.black54,
                                   ),
                                   decoration: InputDecoration(
-                                      hintText: "   Press search",
+                                      hintText: tr.translate("presssearch"),
                                       hintStyle: TextStyle(color: Colors.black45),
                                       counterText: "",
                                       border: InputBorder.none
@@ -286,12 +289,12 @@ class _SearchState extends State<Search> {
                           child: DropdownButton<String>(
                             value: searchType,
                             style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),)),
-                            items: isRestaurant?  <String>['Sort by relevance', 'Sort by distance'].map((String value) {
+                            items: isRestaurant?  <String>[ tr.translate("sortrelevance"), tr.translate("sortdistance")].map((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                               );
-                            }).toList() : <String>['Sort by relevance', 'Sort by price lower first', 'Sort by distance'].map((String value) {
+                            }).toList() : <String>[tr.translate("sortrelevance"), tr.translate("sortprice"), tr.translate("sortdistance")].map((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
@@ -345,11 +348,11 @@ class _SearchState extends State<Search> {
                           }
                           else{
                             setState(() {
-                              error = "Add a name";
+                              error = tr.translate("addname");
                             });
                           }
                         },
-                        child: Text("+ Add", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.9), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),))
+                        child: Text(tr.translate("+add"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.9), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),))
                     ): Container()
                   ],
                 ) : Container(height: 20.h,),
@@ -360,7 +363,7 @@ class _SearchState extends State<Search> {
                       onTap: (){
                         setState(() {
                           isRestaurant = true;
-                          searchType = 'Sort by relevance';
+                          searchType = tr.translate("sortrelevance");
                         });
                       },
                       child: Container(
@@ -370,14 +373,14 @@ class _SearchState extends State<Search> {
                             color: isRestaurant? Color.fromRGBO(255, 110, 117, 0.9) : Color.fromRGBO(255, 110, 117, 0.3)  ,
                             borderRadius: BorderRadius.all(Radius.circular(8))
                         ),
-                        child: Center(child: Text("RESTAURANTS", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                        child: Center(child: Text(tr.translate("restaurants").toUpperCase(), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
                       ),
                     ),
                     GestureDetector(
                       onTap: (){
                         setState(() {
                           isRestaurant = false;
-                          searchType = 'Sort by relevance';
+                          searchType = tr.translate("sortrelevance");
                         });
                       },
                       child: Container(
@@ -387,7 +390,7 @@ class _SearchState extends State<Search> {
                             color: !isRestaurant? Color.fromRGBO(255, 110, 117, 0.9) : Color.fromRGBO(255, 110, 117, 0.3)  ,
                             borderRadius: BorderRadius.all(Radius.circular(8))
                         ),
-                        child: Center(child: Text("DISHES", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                        child: Center(child: Text(tr.translate("dishes").toUpperCase(), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
                       ),
                     ),
                   ],
@@ -427,7 +430,7 @@ class _SearchState extends State<Search> {
                    SizedBox(height: 10.h,),
                    Row(mainAxisAlignment: MainAxisAlignment.start,
                      children: <Widget>[
-                       Text("Filters", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                       Text(tr.translate("filters"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                      ],
                    ),
                    SizedBox(height: 20.h,),
@@ -444,7 +447,7 @@ class _SearchState extends State<Search> {
                          children: <Widget>[
                            Row(mainAxisAlignment: MainAxisAlignment.start,
                              children: <Widget>[
-                               Text("Stars", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                               Text(tr.translate("stars"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                              ],
                            ),
                            SizedBox(height: 15.h,),
@@ -503,7 +506,7 @@ class _SearchState extends State<Search> {
                          children: <Widget>[
                            Row(mainAxisAlignment: MainAxisAlignment.start,
                              children: <Widget>[
-                               Text("Price", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                               Text(tr.translate("price"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                                SizedBox(width: 240.w,),
                                Text("${actual.price.toStringAsFixed(1)}€", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                              ],
@@ -549,7 +552,7 @@ class _SearchState extends State<Search> {
                          children: <Widget>[
                            Row(mainAxisAlignment: MainAxisAlignment.start,
                              children: <Widget>[
-                               Text("Allergens", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                               Text(tr.translate("allergens"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                              ],
                            ),
                            SizedBox(height: 15.h,),
@@ -595,7 +598,7 @@ class _SearchState extends State<Search> {
                    SizedBox(height: 51.h,),
                    Row(mainAxisAlignment: MainAxisAlignment.start,
                      children: <Widget>[
-                       Text("Filters", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                       Text(tr.translate("filters"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                      ],
                    ),
                    SizedBox(height: 20.h,),
@@ -612,7 +615,7 @@ class _SearchState extends State<Search> {
                          children: <Widget>[
                            Row(mainAxisAlignment: MainAxisAlignment.start,
                              children: <Widget>[
-                               Text("Max. distance", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                               Text(tr.translate("maxdistance"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                                SizedBox(width: 100.w,),
                                Text("${maxDistance.toStringAsFixed(1)} km", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                              ],
@@ -657,7 +660,7 @@ class _SearchState extends State<Search> {
                          children: [
                            Row(mainAxisAlignment: MainAxisAlignment.start,
                              children: <Widget>[
-                               Text("Types", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                               Text(tr.translate("types"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                                SizedBox(width: 240.w,),
                                GestureDetector(
                                  onTap: (){
@@ -666,7 +669,7 @@ class _SearchState extends State<Search> {
                                    });
                                  },
                                  //child: Icon(Icons.cancel_outlined, size: ScreenUtil().setSp(24), color: Colors.black,),
-                                 child: Text("Clear", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.9), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                                 child: Text(tr.translate("clear"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.9), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                                )
                              ],
                            ),

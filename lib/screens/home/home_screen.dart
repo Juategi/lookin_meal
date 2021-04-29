@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:animate_do/animate_do.dart';
 import 'package:lookinmeal/screens/top/top.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/enviroment.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:upgrader/upgrader.dart';
@@ -31,6 +32,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+	AppLocalizations tr;
 	User user;
 	List<Restaurant> nearRestaurants, recommended, sponsored;
 	Map<MenuEntry,Restaurant> popular;
@@ -67,11 +69,11 @@ class _HomeScreenState extends State<HomeScreen> {
 			if (rateMyApp.shouldOpenDialog) {
 				rateMyApp.showRateDialog(
 					context,
-					title: 'Rate this app', // The dialog title.
-					message: 'If you like this app, please take a little bit of your time to review it !\nIt really helps us and it shouldn\'t take you more than one minute.', // The dialog message.
-					rateButton: 'RATE', // The dialog "rate" button text.
-					noButton: 'NO THANKS', // The dialog "no" button text.
-					laterButton: 'MAYBE LATER', // The dialog "later" button text.
+					title: tr.translate("rateapp"), // The dialog title.
+					message: tr.translate("ratedescription"), // The dialog message.
+					rateButton: tr.translate("rate"), // The dialog "rate" button text.
+					noButton: tr.translate("nothanks"), // The dialog "no" button text.
+					laterButton: tr.translate("maybelater"), // The dialog "later" button text.
 					listener: (button) { // The button click listener (useful if you want to cancel the click event).
 						switch(button) {
 							case RateMyAppDialogButton.rate:
@@ -143,6 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 	@override
   Widget build(BuildContext context) {
+		tr = AppLocalizations.of(context);
 		if(first){
 			user = Provider.of<User>(context);
 			nearRestaurants = Provider.of<List<List<Restaurant>>>(context).first;
@@ -218,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
 		    									),
 		    								),*/
 		    								GestureDetector(
-		    									child: Text('Search for restaurant or dish...', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.4), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+		    									child: Text(tr.translate("searchrestordish"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.4), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
 		    									onTap: (){
 		    										setState(() {
 		    										  search = true;
@@ -239,8 +242,8 @@ class _HomeScreenState extends State<HomeScreen> {
 		    														apiKey: code,
 		    														autocompleteLanguage: "es",
 		    														desiredLocationAccuracy: LocationAccuracy.high,
-		    														hintText: "Buscar",
-		    														searchingText: "Buscando..",
+		    														hintText: tr.translate("search"),
+		    														searchingText: tr.translate("searching"),
 		    														onPlacePicked: (result) async {
 		    															print(result.formattedAddress);
 		    															GeolocationService.myPos = Position(latitude: result.geometry.location.lat, longitude: result.geometry.location.lng);
@@ -322,7 +325,7 @@ class _HomeScreenState extends State<HomeScreen> {
 											  			SizedBox(width: 5.w,),
 															Swing(child: Icon(Icons.star_outlined, color: Color.fromRGBO(255, 201, 23, 1), size: ScreenUtil().setSp(28),)),
 											  			SizedBox(width: 5.w,),
-											  			Text('Top restaurants and dishes', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(15),),)),
+											  			Text(tr.translate("thetop"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(15),),)),
 											  		],
 											  	),
 											  ),
@@ -332,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
 								SizedBox(height: 10.h,),
 		    	  		Row(
 		    	  		  children: <Widget>[
-		    	  		    Text('Nearly ', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+		    	  		    Text(tr.translate("nearly"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
 		    						Text("${GeolocationService.locality}, ${GeolocationService.country}", style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
 		    					],
 		    	  		),
@@ -364,7 +367,7 @@ class _HomeScreenState extends State<HomeScreen> {
 		    					),
 		    				),
 		    				SizedBox(height: 50.h,),
-		    				popular.entries.length == 0? Container() : Text('Popular plates', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+		    				popular.entries.length == 0? Container() : Text(tr.translate("popular"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
 		    				SizedBox(height: 10.h,),
 		    				popular.entries.length == 0? Container() : Container(
 		    					height: 195.h,
@@ -384,7 +387,7 @@ class _HomeScreenState extends State<HomeScreen> {
 		    					),
 		    				),
 		    				popular.entries.length == 0? Container() : SizedBox(height: 50.h,),
-		    				user.recently.length == 0? Container() : Text('Recently viewed', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+		    				user.recently.length == 0? Container() : Text(tr.translate("recently"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
 		    				SizedBox(height: 10.h,),
 		    				user.recently.length == 0? Container() : Container(
 		    					height: 175.h,
@@ -397,7 +400,7 @@ class _HomeScreenState extends State<HomeScreen> {
 		    					),
 		    				),
 		    				user.recently.length == 0? Container() : SizedBox(height: 50.h,),
-		    				recommended.length == 0? Container() : Text('You might like', style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+		    				recommended.length == 0? Container() : Text(tr.translate("mightlike"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
 		    				SizedBox(height: 20.h,),
 		    				recommended.length == 0? Container() : Container(
 		    					height: 355.h,

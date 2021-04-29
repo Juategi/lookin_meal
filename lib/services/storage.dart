@@ -309,7 +309,7 @@ class StorageService{
     }
 
    Future<bool> sendNanonets(String restaurant_id, String user_id, Uint8List file) async{
-     StorageReference storageReference = FirebaseStorage.instance.ref().child("$restaurant_id");
+     StorageReference storageReference = FirebaseStorage.instance.ref().child("$restaurant_id-$user_id-");
      final StorageUploadTask uploadTask = storageReference.putData(file);
      final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
      final String url = (await downloadUrl.ref.getDownloadURL());
