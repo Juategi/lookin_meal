@@ -177,15 +177,15 @@ class _EntryRatingState extends State<EntryRating> {
                                 if(!list.items.contains(entry.id)){
                                   if(list.items.length < CommonData.maxElementsList) {
                                     list.items.add(entry.id);
-                                    Alerts.toast("${entry.name} added to ${list.name}");
+                                    Alerts.toast("${entry.name} ${tr.translate("addedto")} ${list.name}");
                                   }
                                   else{
-                                    Alerts.toast("${list.name} full");
+                                    Alerts.toast("${list.name} ${tr.translate("full")}");
                                   }
                                 }
                                 else{
                                   list.items.remove(entry.id);
-                                  Alerts.toast("${entry.name} removed from ${list.name}");
+                                  Alerts.toast("${entry.name} ${tr.translate("removedfrom")} ${list.name}");
                                 }
                                 await DBServiceUser.dbServiceUser.updateList(list);
                               }
@@ -231,7 +231,7 @@ class _EntryRatingState extends State<EntryRating> {
                                     padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 40.h),
                                     child: Column(
                                       children: <Widget>[
-                                        Text("Alérgenos", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: ScreenUtil().setSp(22),),),
+                                        Text(tr.translate("allergens"), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: ScreenUtil().setSp(22),),),
                                         SizedBox(height: 10.h,),
                                         Center(
                                           child: Container(
@@ -282,7 +282,7 @@ class _EntryRatingState extends State<EntryRating> {
               !order ? Container()  :
                   Row( mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Amount", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.9), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+                      Text(tr.translate("amount"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.9), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
                       SizedBox(width: 20.w,),
                       DropdownButton(items: List<int>.generate(30, (i) => i + 1).map((n) => DropdownMenuItem(value: n, child:
                       Text(n.toString(), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)),
@@ -294,7 +294,7 @@ class _EntryRatingState extends State<EntryRating> {
                     ],
                   ),
               SizedBox(height: !order ? 0 :  10.h,),
-              !order ? Container() : Text("Add a note", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.9), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(15),),)),
+              !order ? Container() : Text(tr.translate("addnote"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.9), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(15),),)),
               Container(
                 //color: Color.fromRGBO(255, 110, 117, 0.1),
                 height: 120.h,
@@ -332,7 +332,7 @@ class _EntryRatingState extends State<EntryRating> {
                         color: Color.fromRGBO(255, 110, 117, 0.9),
                         borderRadius: BorderRadius.all(Radius.circular(12))
                     ),
-                    child: Center(child: Text("Add", maxLines: 1,
+                    child: Center(child: Text(tr.translate("add"), maxLines: 1,
                         textAlign: TextAlign.center,
                         style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white,
                           letterSpacing: .3,
@@ -362,7 +362,7 @@ class _EntryRatingState extends State<EntryRating> {
                       entry.rate = double.parse(aux.toStringAsFixed(2));
                       print("______________");
                       print(entry.rating);
-                      Alerts.toast("Rating saved");
+                      Alerts.toast(tr.translate("ratingsaved"));
                       Navigator.pop(context);
                     }
                     else{
@@ -379,7 +379,7 @@ class _EntryRatingState extends State<EntryRating> {
                       //entry.numReviews += 1;
                       entry.rate = double.parse(aux.toStringAsFixed(2));
                       entry.reviews = entry.numReviews + 1;
-                      Alerts.toast("Rating saved");
+                      Alerts.toast(tr.translate("ratingsaved"));
                       Navigator.pop(context);
                     }
                     DBServiceStatistic.dbServiceStatistic.addRate(restaurant.restaurant_id, entry.id, comment != "");
@@ -401,7 +401,7 @@ class _EntryRatingState extends State<EntryRating> {
                 child: Container(
                   child: Row( mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("View comments ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black45, fontSize: ScreenUtil().setSp(22),),),
+                      Text(tr.translate("viewcomments"), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black45, fontSize: ScreenUtil().setSp(22),),),
                       SizedBox(width: 7.w,),
                       Icon(Icons.comment, size: ScreenUtil().setSp(32),color: Colors.black45),
                     ],

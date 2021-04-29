@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/reservationDB.dart';
 import 'package:lookinmeal/models/notification.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/push_notifications.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/shared/alert.dart';
@@ -48,6 +49,7 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     restaurant = ModalRoute.of(context).settings.arguments;
     if(init){
       int weekday = dateSelected.weekday == 7? 0 : dateSelected.weekday;
@@ -78,7 +80,7 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
           child: Column(
             children: [
               SizedBox(height: 32.h,),
-              Center(child: Text("Check reservations", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24),),))),
+              Center(child: Text(tr.translate("checkreserv"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24),),))),
               SizedBox(height: 32.h,),
               CalendarDatePicker(initialDate: dateSelected, firstDate: DateTime.now(), lastDate: DateTime.now().add(Duration(days: 30)), onDateChanged: (date) async{
                 dateSelected = date;
@@ -110,7 +112,7 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
                     setState(() {
                     });
                   }),
-                  Text("Disable more reservations this day", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(15),),)),
+                  Text(tr.translate("disablereserv"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(15),),)),
                 ],
               ),
               SizedBox(height: 5.h,),
@@ -140,14 +142,14 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
                         children: [
                           Container(width: 140.w, child: Text(reservation.username, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
                           SizedBox(width: 10.w,),
-                          Text("People: ${reservation.people}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+                          Text("${tr.translate("people")}: ${reservation.people}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
                           SizedBox(width: 10.w,),
-                          Text("Time: ${reservation.reservationtime}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+                          Text("${tr.translate("time")}: ${reservation.reservationtime}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
                           Container(
                             height: 40.h,
                             width: 40.w,
                             child: IconButton(icon: Icon(Icons.delete,  size: ScreenUtil().setSp(25), color: Color.fromRGBO(255, 110, 117, 0.7),), onPressed: ()async{
-                              if(await Alerts.confirmation("Remove reservation, are you sure?", context)){
+                              if(await Alerts.confirmation(tr.translate("removereserv"), context)){
                                 DBServiceReservation.dbServiceReservation.deleteReservation(reservation.table_id, DateTime.parse(reservation.reservationdate).add(Duration(days: 1)).toString().substring(0,10), reservation.reservationtime);
                                 restaurant.reservations[dateString].remove(reservation);
                                 DBServiceUser.dbServiceUser.addNotification(PersonalNotification(
@@ -155,10 +157,10 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
                                   restaurant_id: restaurant.restaurant_id,
                                   user_id: reservation.user_id,
                                   type: "Reserv",
-                                  body: "Reservation cancelled from restaurant " + restaurant.name
+                                  body: tr.translate("msg3") + restaurant.name
                                 ));
                                 User user = await DBServiceUser.dbServiceUser.getUserData(reservation.user_id);
-                                PushNotificationService.sendNotification("Reservation cancelled", "On restaurant: ${restaurant.name}", restaurant.restaurant_id, "ReservCancel", user.token);
+                                PushNotificationService.sendNotification(tr.translate("cancelled"), "${tr.translate("onrest")}: ${restaurant.name}", restaurant.restaurant_id, "ReservCancel", user.token);
                                 setState(() {
                                 });
                               }

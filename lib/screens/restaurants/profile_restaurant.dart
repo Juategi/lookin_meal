@@ -12,6 +12,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:lookinmeal/database/paymentDB.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/database/statisticDB.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/shared/loading.dart';
 import 'admin/premium.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
@@ -58,6 +59,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 	List<Owner> owners;
 	List<File> photos = [];
 	String requestStatus = "";
+	AppLocalizations tr;
 
 	void _loadOwners()async{
 		owners = await DBServiceUser.dbServiceUser.getOwners(restaurant.restaurant_id);
@@ -74,11 +76,11 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 
 	void _loadStatus() async{
 		if(await 	DBServiceRestaurant.dbServiceRestaurant.checkRequestStatus(restaurant.restaurant_id)) {
-			requestStatus = "¡Parece que ya has subido una carta del menu!";
+			requestStatus = tr.translate("msg1");
 			uploaded = true;
 		}
 		else
-			requestStatus = "¡Parece que no hay menu, haz una foto a la carta y nosotros nos encargaremos de subirla!";
+			requestStatus = tr.translate("msg2");
 		setState(() {
 		});
 	}
@@ -221,8 +223,8 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   @override
   Widget build(BuildContext context) {
   	restaurant = ModalRoute.of(context).settings.arguments;
-
-  	print(restaurant.restaurant_id);
+		tr = AppLocalizations.of(context);
+		print(restaurant.restaurant_id);
 		if(first){
 			_loadData();
 			_loadOwners();
@@ -305,15 +307,15 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 													if(!list.items.contains(restaurant.restaurant_id)){
 														if(list.items.length < CommonData.maxElementsList) {
 															list.items.add(restaurant.restaurant_id);
-															Alerts.toast("${restaurant.name} added to ${list.name}");
+															Alerts.toast("${restaurant.name} ${tr.translate("addedto")} ${list.name}");
 														}
 														else{
-															Alerts.toast("${list.name} full");
+															Alerts.toast("${list.name} ${tr.translate("full")}");
 														}
 													}
 													else{
 														list.items.remove(restaurant.restaurant_id);
-														Alerts.toast("${restaurant.name} removed from ${list.name}");
+														Alerts.toast("${restaurant.name} ${tr.translate("removedfrom")} ${list.name}");
 													}
 													await DBServiceUser.dbServiceUser.updateList(list);
 												}
@@ -354,7 +356,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 															height: 55.h,
 															width: 55.w,
 															child: Icon(FontAwesomeIcons.calendarAlt, size:  ScreenUtil().setSp(55),)),
-													Text("Reservations", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),)),
+													Text(tr.translate("reservations"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),)),
 												],
 						  				),
 						  				onTap: ()async{
@@ -369,7 +371,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 													).then((value) => setState(() {}));
 						  					else if(restaurant.premium || (!restaurant.premium && restaurant.premiumtime != null && Functions.compareDates(restaurant.premiumtime, DateTime.now().toString().substring(0,10)) <= 0)) {
 													if(restaurant.schedule.toString() == "{1: [-1, -1], 2: [-1, -1], 3: [-1, -1], 4: [-1, -1], 5: [-1, -1], 6: [-1, -1], 0: [-1, -1]}")
-														Alerts.dialog("Please create a schedule in Settings -> Edit Restaurant information", context);
+														Alerts.dialog(tr.translate("plsschedule"), context);
 													else
 														pushNewScreenWithRouteSettings(
 															context,
@@ -403,7 +405,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 						  				    	height: 55.h,
 						  				    	width: 55.w,
 						  				    ),
-													Text("Orders", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),)),
+													Text(tr.translate("orders"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),)),
 												],
 						  				),
 						  				onTap: ()async{
@@ -445,7 +447,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 															height: 55.h,
 															width: 55.w,
 															child: Icon(Icons.settings, size:  ScreenUtil().setSp(60),)),
-													Text("Settings", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),)),
+													Text(tr.translate("settings"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(14),),)),
 												],
 											),
 											onTap: ()async{
@@ -526,7 +528,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 										  		SizedBox(width: 5.w,),
 										  		Icon(FontAwesomeIcons.calendarAlt, color: Colors.black87, size: ScreenUtil().setSp(20),),
 										  		SizedBox(width: 5.w,),
-										  		Text("Reserve a table", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))
+										  		Text(tr.translate("reservetable"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))
 										  	],
 										  ),
 										) : Container()
@@ -535,7 +537,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 								Column( crossAxisAlignment:  CrossAxisAlignment.end,
 									children: <Widget>[
 										StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: Functions.getRating(restaurant), size: ScreenUtil().setSp(15),),
-										Text("${Functions.getVotes(restaurant)} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+										Text("${Functions.getVotes(restaurant)} ${tr.translate("votes")}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
 										SizedBox(height: 10.h,),
 										GestureDetector(
 										  child: Container(
@@ -548,7 +550,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 										  	child: Row(
 										  		children: <Widget>[
 										  			SizedBox(width: 15.w,),
-										  			Text('Restaurant info ', style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(16),),)),
+										  			Text(tr.translate("resinfo"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(16),),)),
 										  			Icon(Icons.info_outline, size: ScreenUtil().setSp(18),)
 										  		],
 										  	),
@@ -653,7 +655,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 						decoration: BoxDecoration(
 							color: Color.fromRGBO(255, 110, 117, 0.9),
 						),
-						child:Text("Top dishes", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+						child:Text(tr.translate("topdish"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
 					) : //Container(height: 780.h, child: RestaurantInfo()),
 					Column(
 						children: [
@@ -708,7 +710,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 													StorageService().sendNanonets(restaurant.restaurant_id, DBServiceUser.userF.uid, file.readAsBytesSync());
 													setState(() {
 														photos.clear();
-														requestStatus = "¡Parece que ya has subido una carta del menu!";
+														requestStatus = tr.translate("msg1");
 													  uploaded = true;
 													});
 												}
@@ -753,7 +755,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 											StorageService().sendNanonets(restaurant.restaurant_id, DBServiceUser.userF.uid, await pdf.save());
 											setState(() {
 												photos.clear();
-												requestStatus = "¡Parece que ya has subido una carta del menu!";
+												requestStatus = tr.translate("msg1");
 												uploaded = true;
 											});
 										},
@@ -869,7 +871,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 								),
 								SizedBox(width: 10.w,),
 								loading? Container(height: 20.h, width: 20.w, child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white), strokeWidth: 2,)) : Container(width: 20.w, height: 20.h,),
-								Expanded(child: Align( alignment: AlignmentDirectional.topCenter, child: Text("Menu", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)))),
+								Expanded(child: Align( alignment: AlignmentDirectional.topCenter, child: Text(tr.translate("menu"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)))),
 								SizedBox(width: 130.w,),
 
 							],
@@ -886,7 +888,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 						),
 						child: Row(
 							children: <Widget>[
-								Expanded(child: Align( alignment: AlignmentDirectional.topCenter, child: Text("Daily Menu", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)))),
+								Expanded(child: Align( alignment: AlignmentDirectional.topCenter, child: Text(tr.translate("dailymenu"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)))),
 								//Spacer(),
 
 							],

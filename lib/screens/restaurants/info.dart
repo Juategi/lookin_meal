@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/enviroment.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/loading.dart';
@@ -36,6 +37,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
   Widget build(BuildContext context) {
     restaurant = ModalRoute.of(context).settings.arguments;
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -47,7 +49,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
               decoration: BoxDecoration(
                 color: Color.fromRGBO(255, 110, 117, 0.9),
               ),
-              child:Text("Restaurant information", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+              child:Text(tr.translate("resinfo"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
             ),
             SizedBox(height: 7.h,),
             Padding(
@@ -168,7 +170,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                     children: <Widget>[
                       Row(
                         children: <Widget>[
-                          Text("Monday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                          Text(tr.translate("monday"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                           SizedBox(width: 50.w,),
                           Text(Functions.parseSchedule(restaurant.schedule["1"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                           //Text(restaurant.schedule["1"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
@@ -177,7 +179,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                       SizedBox(height: 20.h,),
                       Row(
                         children: <Widget>[
-                          Text("Tuesday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                          Text(tr.translate("tuesday"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                           SizedBox(width: 50.w,),
                           Text(Functions.parseSchedule(restaurant.schedule["2"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                         ],
@@ -185,7 +187,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                       SizedBox(height: 20.h,),
                       Row(
                         children: <Widget>[
-                          Text("Wednesday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                          Text(tr.translate("wednesday"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                           SizedBox(width: 27.w,),
                           Text(Functions.parseSchedule(restaurant.schedule["3"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                         ],
@@ -193,7 +195,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                       SizedBox(height: 20.h,),
                       Row(
                         children: <Widget>[
-                          Text("Thrusday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                          Text(tr.translate("thursday"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                           SizedBox(width: 43.w,),
                           Text(Functions.parseSchedule(restaurant.schedule["4"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                         ],
@@ -201,7 +203,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                       SizedBox(height: 20.h,),
                       Row(
                         children: <Widget>[
-                          Text("Friday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                          Text(tr.translate("friday"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                           SizedBox(width: 65.w,),
                           Text(Functions.parseSchedule(restaurant.schedule["5"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                         ],
@@ -209,7 +211,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                       SizedBox(height: 20.h,),
                       Row(
                         children: <Widget>[
-                          Text("Saturday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                          Text(tr.translate("saturday"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                           SizedBox(width: 44.w,),
                           Text(Functions.parseSchedule(restaurant.schedule["6"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                         ],
@@ -217,7 +219,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                       SizedBox(height: 20.h,),
                       Row(
                         children: <Widget>[
-                          Text("Sunday", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                          Text(tr.translate("sunday"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                           SizedBox(width: 57.w,),
                           Text(Functions.parseSchedule(restaurant.schedule["0"]), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                         ],

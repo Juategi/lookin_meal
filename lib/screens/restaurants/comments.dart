@@ -6,6 +6,7 @@ import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/profile/check_profile.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
@@ -23,34 +24,19 @@ class _CommentsState extends State<Comments> {
   Map<Rating, User> ratings;
   bool init = true;
 
-  List<Widget> _loadItems(){
-    List<Widget> items = [];
-    //items.add(null);
-    return items;
-  }
-
-  void _timer() {
-    if(ratings == null) {
-      Future.delayed(Duration(seconds: 2)).then((_) {
-        setState(() {
-          print("Loading..");
-        });
-        _timer();
-      });
-    }
-  }
-
   Future _update() async{
     ratings = await DBServiceEntry.dbServiceEntry.getEntryRatings(entry.id);
+    setState(() {
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     entry = ModalRoute.of(context).settings.arguments;
     if(init){
       _update();
-      _timer();
       init = false;
     }
     return SafeArea(
@@ -70,7 +56,7 @@ class _CommentsState extends State<Comments> {
                     children: [
                       StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: entry.rating, size: ScreenUtil().setSp(20),),
                       SizedBox(width: 10.w,),
-                      Text("${entry.numReviews} votes", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),)),
+                      Text("${entry.numReviews} ${tr.translate("votes")}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),)),
                     ],
                   )
                 ],

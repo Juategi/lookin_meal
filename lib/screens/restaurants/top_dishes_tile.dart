@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/entry.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/strings.dart';
@@ -25,6 +26,7 @@ class _TopDishesTileState extends State<TopDishesTile> with TickerProviderStateM
     entry = Provider.of<MenuEntry>(context);
     restaurant = Provider.of<Restaurant>(context);
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     return GestureDetector(
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -54,7 +56,7 @@ class _TopDishesTileState extends State<TopDishesTile> with TickerProviderStateM
                         children: <Widget>[
                           //SmoothStarRating(rating: entry.rating, spacing: -3, isReadOnly: true, allowHalfRating: true, color: Color.fromRGBO(250, 201, 53, 1), borderColor: Color.fromRGBO(250, 201, 53, 1), size: ScreenUtil().setSp(10),),
                           StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: entry.rating, size: ScreenUtil().setSp(7),),
-                          Text("${entry.numReviews} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(8),),)),
+                          Text("${entry.numReviews} ${tr.translate("votes")}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(8),),)),
                         ],
                       ),
                     ],

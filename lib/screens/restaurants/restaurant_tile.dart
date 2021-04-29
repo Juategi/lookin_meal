@@ -10,6 +10,7 @@ import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
@@ -32,6 +33,7 @@ class _RestaurantTileState extends State<RestaurantTile> {
     restaurant = Provider.of<Restaurant>(context);
     sponsored = Provider.of<bool>(context);
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: GestureDetector(
@@ -77,7 +79,7 @@ class _RestaurantTileState extends State<RestaurantTile> {
                             color: Color.fromRGBO(255, 201, 23, 1),
                             borderRadius: BorderRadius.all(Radius.circular(12))
                         ),
-                        child: Text("Promocionado", textAlign: TextAlign.center,  maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(12),),))
+                        child: Text(tr.translate("promoted"), textAlign: TextAlign.center,  maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(12),),))
                       ) : Container()
                     ],
                   ),
@@ -99,7 +101,7 @@ class _RestaurantTileState extends State<RestaurantTile> {
                   Column(
                     children: <Widget>[
                       SizedBox(height: 2.h,),
-                      Text("${Functions.getVotes(restaurant)} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(8),),)),
+                      Text("${Functions.getVotes(restaurant)} ${tr.translate("votes")}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(8),),)),
                     ],
                   ),
                 ],

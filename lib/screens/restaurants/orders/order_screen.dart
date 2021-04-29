@@ -8,6 +8,7 @@ import 'package:lookinmeal/database/paymentDB.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/notification.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import '../profile_restaurant.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/models/order.dart';
@@ -38,6 +39,7 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
   double bill = 0.0;
   final RealTimeOrders controller = RealTimeOrders();
   PersistentTabController _controller;
+  AppLocalizations tr;
 
   Future getRestaurant() async{
     print(restaurant_id);
@@ -76,7 +78,7 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
       );
       widgets.add(Row( mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text("Amount", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),)),
+          Text(tr.translate("amount"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),)),
         ],
       )
     );
@@ -116,7 +118,7 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
                               rating: entry.rating,
                               size: ScreenUtil().setSp(12),),
                             SizedBox(width: 5.w,),
-                            Text("${entry.numReviews} votes", maxLines: 1,
+                            Text("${entry.numReviews} ${tr.translate("votes")}", maxLines: 1,
                                 style: GoogleFonts.niramit(textStyle: TextStyle(
                                   color: Color.fromRGBO(0, 0, 0, 1),
                                   letterSpacing: .3,
@@ -184,12 +186,12 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
       decoration: BoxDecoration(
         color: Color.fromRGBO(255, 110, 117, 0.9),
       ),
-      child: Align( alignment: AlignmentDirectional.topCenter, child: Text("Not sent", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
+      child: Align( alignment: AlignmentDirectional.topCenter, child: Text(tr.translate("notsent"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
     )
     );
     widgets.add(Row( mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text("Amount", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),)),
+        Text(tr.translate("amount"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),)),
       ],
     )
     );
@@ -229,7 +231,7 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
                               rating: entry.rating,
                               size: ScreenUtil().setSp(12),),
                             SizedBox(width: 5.w,),
-                            Text("${entry.numReviews} votes", maxLines: 1,
+                            Text("${entry.numReviews} ${tr.translate("votes")}", maxLines: 1,
                                 style: GoogleFonts.niramit(textStyle: TextStyle(
                                   color: Color.fromRGBO(0, 0, 0, 1),
                                   letterSpacing: .3,
@@ -306,7 +308,7 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
     if(DBServiceUser.userF.inOrder == null){
       try {
         code = await FlutterBarcodeScanner.scanBarcode(
-            "#FF6E75", "Cancel", true, ScanMode.QR);
+            "#FF6E75", tr.translate("cancel"), true, ScanMode.QR);
       } on PlatformException {
         code = null;
       }
@@ -342,6 +344,7 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
     print(DBServiceUser.userF.inOrder);
      */
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    tr = AppLocalizations.of(context);
     _controller = Provider.of<PersistentTabController>(context);
     if(CommonData.actualCode != null){
       code = CommonData.actualCode;
@@ -434,7 +437,7 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
                                     offset: Offset(0, 3),
                                   ),
                                   ],),
-                                child: Center(child: Text("Exit", maxLines: 1,
+                                child: Center(child: Text(tr.translate("exit"), maxLines: 1,
                                     textAlign: TextAlign.center,
                                     style: GoogleFonts.niramit(
                                       textStyle: TextStyle(color: Colors.black,
@@ -444,7 +447,7 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
                               ),
                             ),
                             SizedBox(width: 40.w,),
-                            Text("Total cost: ", maxLines: 1,
+                            Text("${tr.translate("totalcost")}: ", maxLines: 1,
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.niramit(textStyle: TextStyle(
                                   color: Colors.black,
@@ -483,7 +486,7 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
                         GestureDetector(
                           onTap: () async {
                             if(!(RealTimeOrders.items.where((element) => !element.send).length == 0))
-                              if (await Alerts.confirmation("If you send the order you won't be able to change it back, are you sure?", context)) {
+                              if (await Alerts.confirmation(tr.translate("msg5"), context)) {
                                 setState(() {
                                   RealTimeOrders.items.where((element) =>
                                   !element.send).forEach((order) {
@@ -510,9 +513,9 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
                                       restaurant_id: restaurant.restaurant_id,
                                       user_id: owner.user_id,
                                       type: "Order",
-                                      body: "Order sent On restaurant: ${restaurant.name}"
+                                      body: "${tr.translate("ordersent")}: ${restaurant.name}"
                                   ));
-                                  PushNotificationService.sendNotification("Order sent", "On restaurant: ${restaurant.name}", restaurant.restaurant_id, "order", owner.token);
+                                  PushNotificationService.sendNotification(tr.translate("ordersent"), "${tr.translate("onrest")}: ${restaurant.name}", restaurant.restaurant_id, "order", owner.token);
                                 }
                               }
                           },
@@ -524,7 +527,7 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
                                 borderRadius: BorderRadius.all(
                                     Radius.circular(12))
                             ),
-                            child: Center(child: Text("Send order", maxLines: 1,
+                            child: Center(child: Text(tr.translate("sendorder"), maxLines: 1,
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.niramit(
                                   textStyle: TextStyle(color: Colors.white,
@@ -555,7 +558,7 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
                                 border: Border.all(
                                   color: Color.fromRGBO(255, 110, 117, 0.9),)
                             ),
-                            child: Center(child: Text("Add more", maxLines: 1,
+                            child: Center(child: Text(tr.translate("addmore"), maxLines: 1,
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.niramit(
                                   textStyle: TextStyle(color: Colors.black,
@@ -587,6 +590,7 @@ class _AddMoreOrderState extends State<AddMoreOrder> {
   @override
   Widget build(BuildContext context) {
     restaurant = ModalRoute.of(context).settings.arguments;
+    AppLocalizations tr = AppLocalizations.of(context);
     return Scaffold(
       body: ListView(
         children: [
@@ -596,7 +600,7 @@ class _AddMoreOrderState extends State<AddMoreOrder> {
             decoration: BoxDecoration(
               color: Color.fromRGBO(255, 110, 117, 0.9),
             ),
-            child: Align( alignment: AlignmentDirectional.topCenter, child: Text("Add more to the order", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
+            child: Align( alignment: AlignmentDirectional.topCenter, child: Text(tr.translate("addmoreorder"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
           ),
           Provider.value(value: true, child: Provider.value(value: restaurant, child: Menu()))
         ],

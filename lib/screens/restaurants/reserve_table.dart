@@ -9,6 +9,7 @@ import 'package:lookinmeal/models/owner.dart';
 import 'package:lookinmeal/models/reservation.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/table.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/push_notifications.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -119,6 +120,7 @@ class _TableReservationState extends State<TableReservation> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     restaurant = ModalRoute.of(context).settings.arguments;
     getExcluded();
     if(restaurant.excludeddays == null)
@@ -239,9 +241,9 @@ class _TableReservationState extends State<TableReservation> {
             ),
             SizedBox(height: 20.h,),
             Center(child: Text(
-              pos == 0? "Day" :
-              pos == 1? "Number of people" :
-              pos == 2? "Hour" : "Confirm"
+              pos == 0? tr.translate("day") :
+              pos == 1? tr.translate("numberpeople") :
+              pos == 2? tr.translate("hour") : tr.translate("confirm")
             , maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(24),),))),
             SizedBox(height: 10.h,),
             pos != 0 || noSchedule ? Container() : CalendarDatePicker(initialDate: dateSelected, firstDate: DateTime.now(), lastDate: DateTime.now().add(Duration(days: 30)), onDateChanged: (date) async{
@@ -293,7 +295,7 @@ class _TableReservationState extends State<TableReservation> {
                 ),
               ),
             ),*/
-            pos != 2 ? Container() : available == null? Loading() : available.keys.length == 0? Center(child: Text("No hours available this day for that number of people", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.redAccent, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(21),),))) :  Expanded(
+            pos != 2 ? Container() : available == null? Loading() : available.keys.length == 0? Center(child: Text(tr.translate("nohours"), maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.redAccent, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(21),),))) :  Expanded(
               child: GridView.count(crossAxisCount: 4, padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
                 children: (available.keys).map((hour) => Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 32.h),
@@ -334,7 +336,7 @@ class _TableReservationState extends State<TableReservation> {
                       SizedBox(height: 20.h,),
                       Text(hour.toString().substring(0,2) + ":" + hour.toString().substring(2), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)),
                       SizedBox(height: 20.h,),
-                      Text(people.toString() + " people", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(22),),)),
+                      Text(people.toString() + " ${tr.translate("people").toLowerCase()}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(22),),)),
                       SizedBox(height: 20.h,),
                     ],
                   ),
@@ -363,22 +365,22 @@ class _TableReservationState extends State<TableReservation> {
                         user_id: DBServiceUser.userF.uid,
                         username: DBServiceUser.userF.name
                       ));
-                      Alerts.toast("Table reserved!");
+                      Alerts.toast(tr.translate("reserved"));
                       for(Owner owner in await DBServiceUser.dbServiceUser.getOwners(restaurant.restaurant_id)){
                         DBServiceUser.dbServiceUser.addNotification(PersonalNotification(
                             restaurant_name: restaurant.name,
                             restaurant_id: restaurant.restaurant_id,
                             user_id: owner.user_id,
                             type: "Reserv",
-                            body: "Reservation on date: ${dateSelected.toString().substring(0,10)}"
+                            body: "${tr.translate("msg4")}: ${dateSelected.toString().substring(0,10)}"
                         ));
-                        PushNotificationService.sendNotification("Reservation", "On date: ${dateSelected.toString().substring(0,10)}", restaurant.restaurant_id, "reservation", owner.token);
+                        PushNotificationService.sendNotification(tr.translate("reservations"), "${tr.translate("ondate")}: ${dateSelected.toString().substring(0,10)}", restaurant.restaurant_id, "reservation", owner.token);
                       }
                       Navigator.pop(context);
                     }
                     else{
                       pos = 1;
-                      Alerts.dialog("Error on reservation, try again.", context);
+                      Alerts.dialog(tr.translate("reservationerror"), context);
                     }
                     setState(() {
                       loading = false;

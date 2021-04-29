@@ -6,6 +6,7 @@ import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/entry.dart';
 import 'package:lookinmeal/screens/restaurants/info.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/translator.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -33,6 +34,7 @@ class _MenuTileState extends State<MenuTile> with TickerProviderStateMixin {
     restaurant = Provider.of<Restaurant>(context);
     order = Provider.of<bool>(context);
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     return FadeIn(
       child: GestureDetector(
         child: Padding(
@@ -58,7 +60,7 @@ class _MenuTileState extends State<MenuTile> with TickerProviderStateMixin {
                           //SmoothStarRating(rating: entry.rating, spacing: -3, isReadOnly: true, allowHalfRating: true, color: Color.fromRGBO(250, 201, 53, 1), borderColor: Color.fromRGBO(250, 201, 53, 1), size: ScreenUtil().setSp(21),),
                           StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: entry.rating, size: ScreenUtil().setSp(15),),
                           SizedBox(width: 10.w,),
-                          Text("${entry.numReviews} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                          Text("${entry.numReviews} ${tr.translate("votes")}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                           SizedBox(width: 34.w,),
                           entry.price == 0.0 || daily? Container(width: 70.w,) : Container(
                             width: 70.w,

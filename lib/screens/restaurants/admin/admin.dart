@@ -14,6 +14,7 @@ import 'package:lookinmeal/screens/restaurants/admin/payments.dart';
 import 'package:lookinmeal/screens/restaurants/admin/premium.dart';
 import 'package:lookinmeal/screens/restaurants/admin/sponsor.dart';
 import 'package:lookinmeal/screens/restaurants/admin/statistics.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
@@ -33,6 +34,7 @@ class _AdminPageState extends State<AdminPage> {
   Widget build(BuildContext context) {
     restaurant = ModalRoute.of(context).settings.arguments;
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -41,7 +43,7 @@ class _AdminPageState extends State<AdminPage> {
             children: [
               Row( mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Administration", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(28),),)),
+                  Text(tr.translate("admin"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(28),),)),
                 ],
               ),
               SizedBox(height: 70.h,),
@@ -50,7 +52,7 @@ class _AdminPageState extends State<AdminPage> {
                   children: [
                     Icon(Icons.settings, size: ScreenUtil().setSp(32),),
                     SizedBox(width: 30.w,),
-                    Text("Edit restaurant information", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                    Text(tr.translate("editrest"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                   ],
                 ),
                 onTap: ()async{
@@ -74,7 +76,7 @@ class _AdminPageState extends State<AdminPage> {
                         child: SvgPicture.asset("assets/menu.svg")
                     ),
                     SizedBox(width: 30.w,),
-                    Text("Edit menu", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                    Text(tr.translate("editmenu"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                   ],
                 ),
                 onTap: ()async{
@@ -94,7 +96,7 @@ class _AdminPageState extends State<AdminPage> {
                   children: [
                     Icon(Icons.restaurant, size: ScreenUtil().setSp(32),),
                     SizedBox(width: 30.w,),
-                    Text("Edit daily menu", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                    Text(tr.translate("editdaily"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                   ],
                 ),
                 onTap: ()async{
@@ -114,7 +116,7 @@ class _AdminPageState extends State<AdminPage> {
                   children: [
                     Icon(Icons.image_outlined, size: ScreenUtil().setSp(32),),
                     SizedBox(width: 30.w,),
-                    Text("Edit gallery", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                    Text(tr.translate("editgallery"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                   ],
                 ),
                 onTap:()async{
@@ -129,7 +131,7 @@ class _AdminPageState extends State<AdminPage> {
                   children: [
                     Icon(FontAwesomeIcons.calendarAlt, size: ScreenUtil().setSp(32),),
                     SizedBox(width: 30.w,),
-                    Text("Edit tables and reservation", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                    Text(tr.translate("edittables"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                   ],
                 ),
                 onTap:()async{
@@ -167,7 +169,7 @@ class _AdminPageState extends State<AdminPage> {
                   children: [
                     Icon(FontAwesomeIcons.qrcode, size: ScreenUtil().setSp(32),),
                     SizedBox(width: 30.w,),
-                    Text("Edit order codes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                    Text(tr.translate("editcodes"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                   ],
                 ),
                 onTap:()async{
@@ -187,7 +189,7 @@ class _AdminPageState extends State<AdminPage> {
                   children: [
                     Icon(Icons.people, size: ScreenUtil().setSp(32),),
                     SizedBox(width: 30.w,),
-                    Text("Manage admins", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                    Text(tr.translate("editadmins"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                   ],
                 ),
                 onTap:()async{
@@ -206,7 +208,7 @@ class _AdminPageState extends State<AdminPage> {
                   children: [
                     Icon(Icons.verified_outlined, size: ScreenUtil().setSp(32),),
                     SizedBox(width: 30.w,),
-                    Text("Premium", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                    Text(tr.translate("premium"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                   ],
                 ),
                 onTap:()async{
@@ -225,7 +227,7 @@ class _AdminPageState extends State<AdminPage> {
                   children: [
                     Icon(Icons.shopping_cart, size: ScreenUtil().setSp(32),),
                     SizedBox(width: 30.w,),
-                    Text("Sponsor", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                    Text(tr.translate("sponsor"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                   ],
                 ),
                 onTap:()async{
@@ -244,7 +246,7 @@ class _AdminPageState extends State<AdminPage> {
                   children: [
                     Icon(Icons.payment, size: ScreenUtil().setSp(32),),
                     SizedBox(width: 30.w,),
-                    Text("Payments", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                    Text(tr.translate("payments"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                   ],
                 ),
                 onTap:()async{
@@ -263,7 +265,7 @@ class _AdminPageState extends State<AdminPage> {
                   children: [
                     Icon(Icons.stacked_bar_chart, size: ScreenUtil().setSp(32),),
                     SizedBox(width: 30.w,),
-                    Text("Statistics", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                    Text(tr.translate("stats"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                   ],
                 ),
                 onTap:()async{
@@ -282,11 +284,11 @@ class _AdminPageState extends State<AdminPage> {
                   children: [
                     Icon(Icons.live_help_rounded, size: ScreenUtil().setSp(32),),
                     SizedBox(width: 30.w,),
-                    Text("Download Manual", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
+                    Text(tr.translate("manual"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)),
                   ],
                 ),
                 onTap:()async{
-                  Alerts.toast("Descargando manual...");
+                  Alerts.toast(tr.translate("manualdown"));
                 },
               ),
             ],
