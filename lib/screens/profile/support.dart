@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,11 +17,12 @@ class _SupportMenuState extends State<SupportMenu> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     return Scaffold(
       body: Column( crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(height: 40.h,),
-          Text("Support and help", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+          Text(tr.translate("helpsupport"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
           SizedBox(height: 80.h,),
           GestureDetector(
             onTap:(){
@@ -40,7 +42,7 @@ class _SupportMenuState extends State<SupportMenu> {
                   SizedBox(width: 20.w,),
                   Icon(Icons.support_agent, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),),
                   SizedBox(width: 30.w,),
-                  Container(width: 250.w, child: Text("Send a ticket", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                  Container(width: 250.w, child: Text(tr.translate("sendticket"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                   Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                 ],
               ),
@@ -59,7 +61,7 @@ class _SupportMenuState extends State<SupportMenu> {
                   SizedBox(width: 20.w,),
                   Icon(Icons.find_in_page_sharp, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),),
                   SizedBox(width: 30.w,),
-                  Container(width: 250.w, child: Text("Read terms of service", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                  Container(width: 250.w, child: Text(tr.translate("readterms"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                   Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                 ],
               ),
@@ -80,11 +82,12 @@ class _TicketMenuState extends State<TicketMenu> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     return Scaffold(
       body: Column( crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(height: 40.h,),
-          Text("Ticket issue", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+          Text(tr.translate("ticketissue"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
           SizedBox(height: 80.h,),
           GestureDetector(
             onTap:(){
@@ -104,7 +107,7 @@ class _TicketMenuState extends State<TicketMenu> {
                   SizedBox(width: 20.w,),
                   Icon(Icons.mark_chat_read, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),),
                   SizedBox(width: 30.w,),
-                  Container(width: 250.w, child: Text("Suggestion or question", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                  Container(width: 250.w, child: Text(tr.translate("suggestionorquestion"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                   Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                 ],
               ),
@@ -129,7 +132,7 @@ class _TicketMenuState extends State<TicketMenu> {
                   SizedBox(width: 20.w,),
                   Icon(Icons.payments_outlined, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),),
                   SizedBox(width: 30.w,),
-                  Container(width: 250.w, child: Text("Payment problem", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                  Container(width: 250.w, child: Text(tr.translate("paymentproblem"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                   Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                 ],
               ),
@@ -154,7 +157,7 @@ class _TicketMenuState extends State<TicketMenu> {
                   SizedBox(width: 20.w,),
                   Icon(Icons.warning_sharp, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),),
                   SizedBox(width: 30.w,),
-                  Container(width: 250.w, child: Text("Report a misuse of a local's profile", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                  Container(width: 250.w, child: Text(tr.translate("misuse"), maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                   Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                 ],
               ),
@@ -179,7 +182,7 @@ class _TicketMenuState extends State<TicketMenu> {
                   SizedBox(width: 20.w,),
                   Icon(Icons.bug_report, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),),
                   SizedBox(width: 30.w,),
-                  Container(width: 250.w, height: 80.h, child: Text("I have found an error or a malfunction in some part of the app", maxLines: 3, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                  Container(width: 250.w, height: 80.h, child: Text(tr.translate("malfunction"), maxLines: 3, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                   Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                 ],
               ),
@@ -203,6 +206,7 @@ class _SendTicketState extends State<SendTicket> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     type =  ModalRoute.of(context).settings.arguments;
     return Scaffold(
       body: Padding(
@@ -210,7 +214,7 @@ class _SendTicketState extends State<SendTicket> {
         child: ListView(
           children: [
             SizedBox(height: 40.h,),
-            Text("Please explain your problem with details", maxLines: 3, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+            Text(tr.translate("explain"), maxLines: 3, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
             SizedBox(height: 80.h,),
             TextField(
               onChanged: (value){
@@ -242,11 +246,11 @@ class _SendTicketState extends State<SendTicket> {
             GestureDetector(
               onTap: () async {
                 if(ticket == null || ticket.length == 0){
-                  Alerts.dialog("Please write something", context);
+                  Alerts.dialog(tr.translate("plswrite"), context);
                 }
                 else{
                   await DBServiceUser.dbServiceUser.createTicket(ticket, type);
-                  Alerts.toast("Ticket created! We will contact you soon");
+                  Alerts.dialog(tr.translate("ticketcreated"), context);
                   Navigator.pop(context);
                 }
               },
@@ -257,7 +261,7 @@ class _SendTicketState extends State<SendTicket> {
                     color: Color.fromRGBO(255, 110, 117, 0.9),
                     borderRadius: BorderRadius.all(Radius.circular(12))
                 ),
-                child: Center(child: Text("Send", maxLines: 1,
+                child: Center(child: Text(tr.translate("send"), maxLines: 1,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white,
                       letterSpacing: .3,

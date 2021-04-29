@@ -60,7 +60,7 @@ class _UserReservationsState extends State<UserReservations> {
               decoration: BoxDecoration(
                 color: Color.fromRGBO(255, 110, 117, 0.9),
               ),
-              child:Text("Reservations", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+              child:Text(tr.translate("reservations"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
             ),
             SizedBox(height: 10.h,),
             DBServiceUser.userF.reservations == null? Loading() : Expanded(child: ListView(
@@ -91,13 +91,13 @@ class _UserReservationsState extends State<UserReservations> {
                         SizedBox(width: 10.w,),
                         Column( crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("People: " + reservation.people.toString(), maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                            Text("${tr.translate("people")}: " + reservation.people.toString(), maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                             Text(Functions.formatDate(reservation.reservationdate.substring(0,10)) + " - " + reservation.reservationtime, maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                             Container(
                               height: 34.h,
                               width: 160.w,
                               child: IconButton(icon: Icon(Icons.delete,  size: ScreenUtil().setSp(33), color: Color.fromRGBO(255, 110, 117, 0.7),), onPressed: ()async{
-                                if(await Alerts.confirmation("Remove reservation, are you sure?", context)){
+                                if(await Alerts.confirmation(tr.translate("removereserv"), context)){
                                   DBServiceUser.userF.reservations.remove(reservation);
                                   DBServiceReservation.dbServiceReservation.deleteReservation(reservation.table_id, reservation.reservationdate.substring(0,10), reservation.reservationtime);
                                   setState(() {

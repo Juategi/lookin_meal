@@ -6,6 +6,7 @@ import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/rating.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/entry.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/strings.dart';
@@ -20,6 +21,7 @@ class RatingTile extends StatefulWidget {
 class _RatingTileState extends State<RatingTile> {
   @override
   Widget build(BuildContext context) {
+    AppLocalizations tr = AppLocalizations.of(context);
     Restaurant restaurant = Provider.of<Restaurant>(context);
     Rating rating = Provider.of<Rating>(context);
     MenuEntry entry;
@@ -62,13 +64,13 @@ class _RatingTileState extends State<RatingTile> {
                   ),
                   Row( mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text("Rated with ", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(13),),)),
+                      Text(tr.translate("ratedwith"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(13),),)),
                       StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: entry.rating, size: ScreenUtil().setSp(13),),
                     ],
                   ),
                   Row( mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text("on ${Functions.formatDate(rating.date)}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(13),),)),
+                      Text("${tr.translate("on")} ${Functions.formatDate(rating.date)}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(13),),)),
                     ],
                   ),
                   SizedBox(height: 7.h,),

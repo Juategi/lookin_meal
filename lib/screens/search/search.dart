@@ -289,15 +289,15 @@ class _SearchState extends State<Search> {
                           child: DropdownButton<String>(
                             value: searchType,
                             style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),)),
-                            items: isRestaurant?  <String>[ tr.translate("sortrelevance"), tr.translate("sortdistance")].map((String value) {
+                            items: isRestaurant?  <String>['Sort by relevance', 'Sort by distance'].map((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
-                                child: Text(value, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                                child: Text(tr.translate(value), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                               );
-                            }).toList() : <String>[tr.translate("sortrelevance"), tr.translate("sortprice"), tr.translate("sortdistance")].map((String value) {
+                            }).toList() : <String>['Sort by relevance', 'Sort by price lower first', 'Sort by distance'].map((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
-                                child: Text(value, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                                child: Text(tr.translate(value), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 65, 112, 0.6), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                               );
                             }).toList(),
                             onChanged: (val) async{
@@ -363,7 +363,7 @@ class _SearchState extends State<Search> {
                       onTap: (){
                         setState(() {
                           isRestaurant = true;
-                          searchType = tr.translate("sortrelevance");
+                          searchType = 'Sort by relevance';
                         });
                       },
                       child: Container(
@@ -380,7 +380,7 @@ class _SearchState extends State<Search> {
                       onTap: (){
                         setState(() {
                           isRestaurant = false;
-                          searchType = tr.translate("sortrelevance");
+                          searchType = 'Sort by relevance';
                         });
                       },
                       child: Container(

@@ -43,7 +43,7 @@ class _UserNotificationsState extends State<UserNotifications> {
               decoration: BoxDecoration(
                 color: Color.fromRGBO(255, 110, 117, 0.9),
               ),
-              child:Text("My notifications", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+              child:Text(tr.translate("mynot"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
             ),
             SizedBox(height: 10.h,),
             DBServiceUser.userF.notifications == null? Loading() : Expanded(child: ListView(

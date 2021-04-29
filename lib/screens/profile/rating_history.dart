@@ -5,6 +5,7 @@ import 'package:lookinmeal/database/entryDB.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/profile/ratings_tile.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
@@ -17,6 +18,7 @@ class RatingHistory extends StatefulWidget {
 }
 
 class _RatingHistoryState extends State<RatingHistory> {
+  AppLocalizations tr;
   bool loading = false;
   bool init = true;
   int offset = 0;
@@ -72,7 +74,7 @@ class _RatingHistoryState extends State<RatingHistory> {
          height: 50.h,
          width: 50.w,
          color: Color.fromRGBO(255, 110, 117, 0.9),
-         child: Center(child: Text("Show more", maxLines: 1,
+         child: Center(child: Text(tr.translate("showmore"), maxLines: 1,
              textAlign: TextAlign.center,
              style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white,
                letterSpacing: .3,
@@ -87,6 +89,7 @@ class _RatingHistoryState extends State<RatingHistory> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    tr = AppLocalizations.of(context);
     user = ModalRoute.of(context).settings.arguments;
     if(init){
       _timer();
@@ -105,7 +108,7 @@ class _RatingHistoryState extends State<RatingHistory> {
               decoration: BoxDecoration(
                 color: Color.fromRGBO(255, 110, 117, 0.9),
               ),
-              child:Text("Rating History", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+              child:Text(tr.translate("ratinghistory"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
             ),
             SizedBox(height: 10.h,),
             user.history == null? Loading() : Expanded(child: ListView(

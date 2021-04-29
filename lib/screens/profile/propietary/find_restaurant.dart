@@ -7,6 +7,7 @@ import 'package:lookinmeal/database/requestDB.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/search.dart';
 import 'package:lookinmeal/services/storage.dart';
@@ -38,6 +39,7 @@ class _FindRestaurantState extends State<FindRestaurant> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -84,7 +86,7 @@ class _FindRestaurantState extends State<FindRestaurant> {
                                 color: Colors.black54,
                               ),
                               decoration: InputDecoration(
-                                  hintText:"   Press search",
+                                  hintText: tr.translate("presssearch"),
                                   hintStyle: TextStyle(color: Colors.black45),
                                   counterText: "",
                                   border: InputBorder.none
@@ -168,7 +170,7 @@ class _FindRestaurantState extends State<FindRestaurant> {
                             Column(
                               children: <Widget>[
                                 SizedBox(height: 2.h,),
-                                Text("${Functions.getVotes(restaurant)} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+                                Text("${Functions.getVotes(restaurant)} ${tr.translate("votes")}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
                               ],
                             ),
                           ],
@@ -218,11 +220,12 @@ class _ConfirmationMenuState extends State<ConfirmationMenu> {
   Widget build(BuildContext context) {
     restaurant = ModalRoute.of(context).settings.arguments;
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     return Scaffold(
       body: Column( crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(height: 40.h,),
-          Text("Select confirmation method", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+          Text(tr.translate("selectmethod"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
           SizedBox(height: 80.h,),
           restaurant.email == null || restaurant.email == "" ? Container() : GestureDetector(
             onTap:(){
@@ -242,7 +245,7 @@ class _ConfirmationMenuState extends State<ConfirmationMenu> {
                   SizedBox(width: 20.w,),
                   Icon(Icons.email, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),),
                   SizedBox(width: 30.w,),
-                  Container(width: 250.w, child: Text("Confirmation by email", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                  Container(width: 250.w, child: Text(tr.translate("confirmationemail"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                 ],
               ),
             ),
@@ -267,7 +270,7 @@ class _ConfirmationMenuState extends State<ConfirmationMenu> {
                   SizedBox(width: 20.w,),
                   Icon(Icons.message_outlined, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),),
                   SizedBox(width: 30.w,),
-                  Container(width: 250.w, child: Text("Confirmation by SMS", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                  Container(width: 250.w, child: Text(tr.translate("confirmationsms"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                 ],
               ),
             ),
@@ -292,7 +295,7 @@ class _ConfirmationMenuState extends State<ConfirmationMenu> {
                   SizedBox(width: 20.w,),
                   Icon(Icons.warning_sharp, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),),
                   SizedBox(width: 30.w,),
-                  Container(width: 250.w, child: Text("There is no email or phone available or it is outdated", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                  Container(width: 250.w, child: Text(tr.translate("noemailsms"), maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                 ],
               ),
             ),
@@ -318,6 +321,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
   String relation = "Dueño";
   @override
   Widget build(BuildContext context) {
+    AppLocalizations tr = AppLocalizations.of(context);
     List aux = ModalRoute.of(context).settings.arguments;
     restaurant = aux.first;
     mode = aux.last;
@@ -336,7 +340,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
           child: !sent ? Column( crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("Please introduce the code we sent to you", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+              Text(tr.translate("introducecode"), maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
               SizedBox(height: 80.h,),
               Center(
                 child: TextField(
@@ -350,7 +354,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
                   style: TextStyle(
                     color: Colors.black54,
                   ),
-                  decoration: textInputDeco.copyWith(hintText: "Code here"),
+                  decoration: textInputDeco.copyWith(hintText: tr.translate("codehere")),
                 ),
               ),
               SizedBox(height: 10.h,),
@@ -359,17 +363,17 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
                   if(mode == "email") {
                     DBServiceRequest.dbServiceRequest.reSendConfirmationCode(
                         localcode, restaurant.email);
-                    Alerts.toast("Code sent to your email!");
+                    Alerts.toast(tr.translate("codeemail"));
                   }
                   else if(mode == "sms"){
                     DBServiceRequest.dbServiceRequest.reSendConfirmationSms(
                         localcode, restaurant.phone);
-                    Alerts.toast("Code sent to your phone!");
+                    Alerts.toast(tr.translate("codesms"));
                   }
                 },
-                  child: Text("Resend", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.redAccent, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(18),),))),
+                  child: Text(tr.translate("resend"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.redAccent, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(18),),))),
               SizedBox(height: 40.h,),
-              Container(width: 200.w, child: Text("Relation with the place", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+              Container(width: 200.w, child: Text(tr.translate("relation"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
               SizedBox(height: 10.h,),
               DropdownButton<String>(
                 items: CommonData.typesRelation.map((type) => DropdownMenuItem<String>(
@@ -396,7 +400,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
                   FocusScope.of(context).unfocus();
                   bool result = await DBServiceRequest.dbServiceRequest.confirmCodes(code, localcode);
                   if(!result){
-                    Alerts.toast("WRONG CODE!");
+                    Alerts.toast(tr.translate("wrongcode").toUpperCase());
                   }
                   else{
                     bool result = await DBServiceRequest.dbServiceRequest.createRequest(restaurant.restaurant_id, DBServiceUser.userF.uid, relation, mode, "", "");
@@ -406,7 +410,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
                       });
                     }
                     else
-                      Alerts.dialog("Error, already requested", context);
+                      Alerts.dialog(tr.translate("alreadyreq"), context);
                   }
                 },
                 child: Container(
@@ -416,14 +420,14 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
                       color: Color.fromRGBO(255, 110, 117, 0.8),
                       borderRadius: BorderRadius.all(Radius.circular(30)),
                     ),
-                    child: Center(child: Text("Send", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),)))
+                    child: Center(child: Text(tr.translate("send"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),)))
                 ),
               ),
             ],
           ) : Column(
             children: [
               SizedBox(height: 50.h,),
-              Text("Thank you, our team will review your application and will contact you soon.", maxLines: 5, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+              Text(tr.translate("thanksreview"), maxLines: 5, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
             ],
           ),
         ),
@@ -448,13 +452,14 @@ class _IdRequestState extends State<IdRequest> {
   Widget build(BuildContext context) {
     restaurant = ModalRoute.of(context).settings.arguments;
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     return SafeArea(
       child: Scaffold(
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
           child: !sent ? Column( crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("Please take a photo of your ID on both sides so we can confirm your identity.", maxLines: 3, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+              Text(tr.translate("idphoto"), maxLines: 3, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
               SizedBox(height: 50.h,),
               GestureDetector(
                 onTap: () async{
@@ -477,7 +482,7 @@ class _IdRequestState extends State<IdRequest> {
                     child: Column(
                       children: [
                         Icon(Icons.camera_alt, size: ScreenUtil().setSp(55), color: Color.fromRGBO(255, 110, 117, 0.7),),
-                        Text("Front", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.7), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
+                        Text(tr.translate("front"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.7), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                       ],
                     )
                   ),
@@ -505,14 +510,14 @@ class _IdRequestState extends State<IdRequest> {
                       child: Column(
                         children: [
                           Icon(Icons.camera_alt, size: ScreenUtil().setSp(55), color: Color.fromRGBO(255, 110, 117, 0.7),),
-                          Text("Back", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.7), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
+                          Text(tr.translate("back"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.7), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                         ],
                       )
                   ),
                 ),
               ),
               SizedBox(height: 20.h,),
-              Container(width: 200.w, child: Text("Relation with the place", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+              Container(width: 200.w, child: Text(tr.translate("relation"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
               SizedBox(height: 10.h,),
               DropdownButton<String>(
                 items: CommonData.typesRelation.map((type) => DropdownMenuItem<String>(
@@ -537,7 +542,7 @@ class _IdRequestState extends State<IdRequest> {
               GestureDetector(
                 onTap: () async{
                   if(idfront == null || idback == null){
-                    Alerts.dialog("Please upload your id", context);
+                    Alerts.dialog(tr.translate("plsid"), context);
                     return;
                   }
                   bool result = await DBServiceRequest.dbServiceRequest.createRequest(restaurant.restaurant_id, DBServiceUser.userF.uid, relation, 'id', idfront, idback);
@@ -547,7 +552,7 @@ class _IdRequestState extends State<IdRequest> {
                     });
                   }
                   else
-                    Alerts.dialog("Error, already requested", context);
+                    Alerts.dialog(tr.translate("alreadyreq"), context);
                 },
                 child: Container(
                     width: 170.w,
@@ -556,14 +561,14 @@ class _IdRequestState extends State<IdRequest> {
                       color: Color.fromRGBO(255, 110, 117, 0.8),
                       borderRadius: BorderRadius.all(Radius.circular(30)),
                     ),
-                    child: Center(child: Text("Send", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),)))
+                    child: Center(child: Text(tr.translate("send"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),)))
                 ),
               ),
             ],
           ) : Column(
             children: [
               SizedBox(height: 50.h,),
-              Text("Thank you, our team will review your application and will contact you soon.", maxLines: 5, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+              Text(tr.translate("thanksreview"), maxLines: 5, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
             ],
           ),
         ),

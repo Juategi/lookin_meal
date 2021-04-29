@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/entryDB.dart';
 import 'package:lookinmeal/models/user.dart';
 import 'package:lookinmeal/screens/profile/rating_history.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
@@ -37,6 +38,7 @@ class _CheckProfileState extends State<CheckProfile> {
       loadInfo();
       init = false;
     }
+    AppLocalizations tr = AppLocalizations.of(context);
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return Scaffold(
       body: Column(
@@ -152,10 +154,10 @@ class _CheckProfileState extends State<CheckProfile> {
             child: Row(
                 children: [
                   Text(user.numFollowers.toString(), maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(19),),)),
-                  Text(" followers", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
+                  Text(tr.translate("follower"), maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
                   Spacer(),
                   Text(user.numFollowing.toString(), maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(19),),)),
-                  Text(" following", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
+                  Text(tr.translate("following"), maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(19),),)),
                 ]
             ),
           ),
@@ -199,7 +201,7 @@ class _CheckProfileState extends State<CheckProfile> {
                     Column(
                       children: [
                         SizedBox(height: 4.h,),
-                        Text(DBServiceUser.userF.following.contains(user.uid) ? "Stop following" : "   Follow", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(23),),)),
+                        Text(DBServiceUser.userF.following.contains(user.uid) ? tr.translate("following") : "   ${tr.translate("follow")}", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(23),),)),
                       ],
                     ),
                   ],
@@ -217,7 +219,7 @@ class _CheckProfileState extends State<CheckProfile> {
             ),
           ),
           Center(
-            child: Text("Favorite Lists", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),))
+            child: Text(tr.translate("favlists"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),))
           ),
           SizedBox(height: 15.h,),
           Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -249,7 +251,7 @@ class _CheckProfileState extends State<CheckProfile> {
                           image: new AssetImage("assets/rest_button.png")
                       )
                   ),
-                  child:Center(child: Text("Restaurants", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(19),),))),
+                  child:Center(child: Text(tr.translate("restaurants"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(19),),))),
                 ),
               ),
               GestureDetector(
@@ -279,7 +281,7 @@ class _CheckProfileState extends State<CheckProfile> {
                           image: new AssetImage("assets/platos_button.png")
                       )
                   ),
-                  child:Center(child: Text("Dishes", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(19),),))),
+                  child:Center(child: Text(tr.translate("dishes"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(19),),))),
                 ),
               ),
             ],
@@ -305,7 +307,7 @@ class _CheckProfileState extends State<CheckProfile> {
                   SizedBox(width: 20.w,),
                   SvgPicture.asset("assets/ratings.svg", width: 37.w, height: 37.h,),
                   SizedBox(width: 30.w,),
-                  Container(width: 250.w, child: Text("Rating history", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                  Container(width: 250.w, child: Text(tr.translate("ratinghistory"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                   Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                 ],
               ),

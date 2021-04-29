@@ -7,6 +7,7 @@ import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/screens/profile/propietary/create_restaurant.dart';
 import 'file:///C:/D/lookin_meal/lib/screens/profile/propietary/find_restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/loading.dart';
@@ -17,12 +18,13 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 class OwnerMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    AppLocalizations tr = AppLocalizations.of(context);
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return Scaffold(
       body: Column( crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(height: 40.h,),
-          Text("Are you an owner?", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+          Text(tr.translate("areupropietary"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
           SizedBox(height: 80.h,),
           GestureDetector(
             onTap:(){
@@ -42,7 +44,7 @@ class OwnerMenu extends StatelessWidget {
                   SizedBox(width: 20.w,),
                   Icon(Icons.edit_location_rounded, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),),
                   SizedBox(width: 30.w,),
-                  Container(width: 250.w, child: Text("Register", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                  Container(width: 250.w, child: Text(tr.translate("register"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                   Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                 ],
               ),
@@ -67,7 +69,7 @@ class OwnerMenu extends StatelessWidget {
                   SizedBox(width: 20.w,),
                   SvgPicture.asset("assets/propietario.svg", width: 37.w, height: 37.h,),
                   SizedBox(width: 30.w,),
-                  Container(width: 250.w, child: Text("Your restaurants", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                  Container(width: 250.w, child: Text(tr.translate("yourrest"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                   Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                 ],
               ),
@@ -99,7 +101,7 @@ class _OwnedState extends State<Owned> {
 
   @override
   Widget build(BuildContext context) {
-    print(DBServiceUser.userF.uid);
+    AppLocalizations tr = AppLocalizations.of(context);
     return Scaffold(
       body: DBServiceUser.userF.owned == null? Loading() : Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
@@ -156,7 +158,7 @@ class _OwnedState extends State<Owned> {
                           Column(
                             children: <Widget>[
                               SizedBox(height: 2.h,),
-                              Text("${Functions.getVotes(restaurant)} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+                              Text("${Functions.getVotes(restaurant)} ${tr.translate("votes")}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
                             ],
                           ),
                         ],
@@ -197,11 +199,12 @@ class RegisterRestaurantMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     return Scaffold(
       body: Column( crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(height: 40.h,),
-          Text("Register restaurant", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+          Text(tr.translate("registerrest"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
           SizedBox(height: 80.h,),
           GestureDetector(
             onTap:(){
@@ -221,7 +224,7 @@ class RegisterRestaurantMenu extends StatelessWidget {
                   SizedBox(width: 20.w,),
                   Icon(Icons.find_in_page, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),),
                   SizedBox(width: 30.w,),
-                  Container(width: 250.w, child: Text("Does your restaurant already exist? Find it and take control", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(16),),))),
+                  Container(width: 250.w, child: Text(tr.translate("exists"), maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(16),),))),
                   Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                 ],
               ),
@@ -246,7 +249,7 @@ class RegisterRestaurantMenu extends StatelessWidget {
                   SizedBox(width: 20.w,),
                   Icon(Icons.create, size: ScreenUtil().setSp(35), color: Color.fromRGBO(70, 70, 70, 1),),
                   SizedBox(width: 30.w,),
-                  Container(width: 250.w, child: Text("Create new", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                  Container(width: 250.w, child: Text(tr.translate("createnew"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                   Text(">", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                 ],
               ),

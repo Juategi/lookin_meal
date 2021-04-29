@@ -80,7 +80,7 @@ class _EditProfileState extends State<EditProfile> {
                   decoration: BoxDecoration(
                     color: Color.fromRGBO(255, 110, 117, 0.9),
                   ),
-                  child:Text("Edit Profile", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+                  child:Text(tr.translate("editprofile"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
                 ),
                 Container(
                   height: 190.h,
@@ -155,7 +155,7 @@ class _EditProfileState extends State<EditProfile> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Username", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                      Text(tr.translate("username"), maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                       SizedBox(height: 5,),
                       TextFormField(
                         onChanged: (value){
@@ -168,7 +168,7 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                       Text(error, maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.red, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
                       SizedBox(height: 16,),
-                      Text("Name", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                      Text(tr.translate("name"), maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                       SizedBox(height: 5,),
                       TextFormField(
                         onChanged: (value){
@@ -180,7 +180,7 @@ class _EditProfileState extends State<EditProfile> {
                         initialValue: user.name,
                       ),
                       SizedBox(height: 20,),
-                      Text("Country", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                      Text(tr.translate("country"), maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                       SizedBox(height: 5,),
                       Container(
                         padding: EdgeInsets.only(left: 10.w),
@@ -203,7 +203,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ),
                       SizedBox(height: 20,),
-                      Text("About yourself", maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
+                      Text(tr.translate("about"), maxLines: 1, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(16),),)),
                       SizedBox(height: 5,),
                       TextFormField(
                         onChanged: (value){
@@ -230,12 +230,12 @@ class _EditProfileState extends State<EditProfile> {
                                 user.country = country;
                                 user.picture = image;
                                 user. about = about;
-                                Alerts.toast("User saved!");
+                                Alerts.toast(tr.translate("usersaved"));
                                 Navigator.pop(context);
                               }
                               else{
                                 setState(() {
-                                  error = "Username taken";
+                                  error = tr.translate("usernametaken");
                                 });
                               }
                             }

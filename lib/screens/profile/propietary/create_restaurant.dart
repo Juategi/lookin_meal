@@ -12,6 +12,8 @@ import 'package:lookinmeal/database/requestDB.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'file:///C:/D/lookin_meal/lib/screens/profile/propietary/find_restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/profile_restaurant.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
+import 'package:lookinmeal/services/enviroment.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/alert.dart';
@@ -32,15 +34,29 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
   String relation = "Dueño";
   String currency = "€";
   String error = "";
-  String name, website, phone, address, city, country, image, email;
+  String code, name, website, phone, address, city, country, image, email;
   List<String> types;
   double latitude, longitude;
   bool sent = false;
   final StorageService _storageService = StorageService();
   final _formKey = GlobalKey<FormState>();
+
+  Future getCode() async{
+    code = await Enviroment.getApi();
+    setState(() {
+    });
+  }
+
+  @override
+  void initState() {
+    getCode();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -48,7 +64,7 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
           child: sent? Column(
             children: [
               SizedBox(height: 50.h,),
-              Text("Thank you, our team will review your application and will contact you soon.", maxLines: 5, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+              Text(tr.translate("thanksreview"), maxLines: 5, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
             ],
           ) :  Form(
             key: _formKey,
@@ -77,7 +93,7 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                   ),
                 ),
                 SizedBox(height: 20.h,),
-                Text("Name", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(20),),)),
+                Text(tr.translate("name"), maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(20),),)),
                 SizedBox(height: 10.h,),
                 Center(
                   child: TextFormField(
@@ -92,11 +108,11 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                       color: Colors.black54,
                     ),
                     //validator: (val) => val.length == 0 ? "Write the name" : null,
-                    decoration: textInputDeco.copyWith(hintText: "Name here"),
+                    decoration: textInputDeco.copyWith(hintText: tr.translate("namehere")),
                   ),
                 ),
                 SizedBox(height: 20.h,),
-                Text("Location", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(20),),)),
+                Text(tr.translate("location"), maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(20),),)),
                 SizedBox(height: 10.h,),
                 Container(
                     width: 400.w,
@@ -106,7 +122,7 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                       border: Border.all(color: Colors.black)
                     ),
-                    child: Center(child: Text(address ?? "Address..", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)))
+                    child: Center(child: Text(address ?? "${tr.translate("address")}...", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)))
                 ),
                 SizedBox(height: 20.h,),
                 GestureDetector(
@@ -115,11 +131,11 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => PlacePicker(
-                          apiKey: "AIzaSyAIIK4P68Ge26Yc0HkQ6uChj_NEqF2VeCU",
+                          apiKey: code,
                           autocompleteLanguage: "es",
                           desiredLocationAccuracy: LocationAccuracy.high,
-                          hintText: "Buscar",
-                          searchingText: "Buscando..",
+                          hintText: tr.translate("search"),
+                          searchingText: tr.translate("searching"),
                           onPlacePicked: (result) async {
                             print(result.formattedAddress);
                             address = result.formattedAddress;
@@ -153,7 +169,7 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                 ),
                 Text(error, maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.redAccent, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(17),),)),
                 SizedBox(height: 30.h,),
-                Text("Website", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(20),),)),
+                Text(tr.translate("website"), maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(20),),)),
                 SizedBox(height: 10.h,),
                 Center(
                   child: TextField(
@@ -167,11 +183,11 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                     style: TextStyle(
                       color: Colors.black54,
                     ),
-                    decoration: textInputDeco.copyWith(hintText: "Website here"),
+                    decoration: textInputDeco.copyWith(hintText: tr.translate("webhere")),
                   ),
                 ),
                 SizedBox(height: 20.h,),
-                Text("Email", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(20),),)),
+                Text(tr.translate("email"), maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(20),),)),
                 SizedBox(height: 10.h,),
                 Center(
                   child: TextField(
@@ -185,11 +201,11 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                     style: TextStyle(
                       color: Colors.black54,
                     ),
-                    decoration: textInputDeco.copyWith(hintText: "Email here"),
+                    decoration: textInputDeco.copyWith(hintText: tr.translate("emailhere")),
                   ),
                 ),
                 SizedBox(height: 20.h,),
-                Text("Phone", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(20),),)),
+                Text(tr.translate("phone"), maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(20),),)),
                 SizedBox(height: 10.h,),
                 Center(
                   child: TextField(
@@ -203,13 +219,13 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                     style: TextStyle(
                       color: Colors.black54,
                     ),
-                    decoration: textInputDeco.copyWith(hintText: "Phone here"),
+                    decoration: textInputDeco.copyWith(hintText: tr.translate("phonehere")),
                   ),
                 ),
                 SizedBox(height: 20.h,),
                 Container(child: MultiSelect(
                   //autovalidate: false,
-                  titleText: "Restaurant types",
+                  titleText: tr.translate("restypes"),
                   /*validator: (value) {
                                   if (value == null) {
                                     return 'Please select one or more option(s)';
@@ -231,7 +247,7 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                   },
                 ),),
                 SizedBox(height: 20,),
-                Text("Currency", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(20),),)),
+                Text(tr.translate("currency"), maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(20),),)),
                 SizedBox(height: 10,),
                 DropdownButton(
                   value: currency,
@@ -281,7 +297,7 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                   },
                 ),
                 SizedBox(height: 30,),
-                Text("Relation with the place", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(20),),)),
+                Text(tr.translate("relation"), maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(20),),)),
                 SizedBox(height: 10.h,),
                 DropdownButton<String>(
                   items: CommonData.typesRelation.map((type) => DropdownMenuItem<String>(
@@ -306,7 +322,7 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                 GestureDetector(
                   onTap: (){
                     if(address == null || name == null || image == null || image == ""){
-                      Alerts.dialog("Please select a location, a name and an image", context);
+                      Alerts.dialog(tr.translate("plsselectlocation"), context);
                     }
                     else {
                         DBServiceRequest.dbServiceRequest.createRequestRestaurant(DBServiceUser.userF.uid, relation, name, phone, website, address, email, city, country, latitude, longitude, image, types, currency);
@@ -322,7 +338,7 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                         color: Color.fromRGBO(255, 110, 117, 0.8),
                         borderRadius: BorderRadius.all(Radius.circular(30)),
                       ),
-                      child: Center(child: Text("Send", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),)))
+                      child: Center(child: Text(tr.translate("send"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18),),)))
                   ),
                 ),
               ],
