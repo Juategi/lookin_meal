@@ -70,7 +70,7 @@ class _SocialScreenState extends State<SocialScreen> {
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-            child: feed == null? Loading() : Column( crossAxisAlignment: CrossAxisAlignment.start,
+            child: usersFeed == null? Loading() : Column( crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: <Widget>[
