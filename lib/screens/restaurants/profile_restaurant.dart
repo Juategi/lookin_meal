@@ -95,13 +95,13 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 				}
 			}
 			if(three >= 6){
-				for(MenuEntry entry in _getTop(6)){
+				for(MenuEntry entry in _getTop(three)){
 					list.add(Provider<Restaurant>.value(
 							value: restaurant, child: Provider<MenuEntry>.value(value: entry, child: TopDishesTile())));
 				}
 			}
 			else{
-				for(MenuEntry entry in _getTop(3)){
+				for(MenuEntry entry in _getTop(three)){
 					if(entry != null)
 						list.add(Provider<Restaurant>.value(
 								value: restaurant, child: Provider<MenuEntry>.value(value: entry, child: TopDishesTile()))
@@ -130,8 +130,11 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 			}
 		}
 		restaurant.menu.sort((e1, e2) =>(e2.rating*0.5 + (e2.numReviews*5/max)*0.5 - (e1.hide ? 9999999 : 0)).compareTo((e1.rating*0.5 + (e1.numReviews*5/max)*0.5 - (e2.hide ? 9999999 : 0))));
-		if(index == 3){
-			return restaurant.menu.sublist(0,3);
+		if(index < 6){
+			if(restaurant.menu.length >= 3)
+				return restaurant.menu.sublist(0,3);
+			else
+				return restaurant.menu.sublist(0,restaurant.menu.length);
 		}
 		else{
 			return restaurant.menu.sublist(0,6);

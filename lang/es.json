@@ -200,5 +200,13 @@
   "payments" : "Facturas",
   "stats" : "Estadísticas",
   "manual" : "Descargar manual",
-  "manualdown" : "Descargando manual..."
+  "manualdown" : "Descargando manual...",
+  "ordersconf" : "Configuración de pedidos",
+  "table" : "Mesa",
+  "downloadqr" : "Descargar QR",
+  "qrdownloaded" : "QR descargado!",
+  "deletedqr" : "QR eliminado!",
+  "newqr" : "Nuevo código QR",
+  "codeunique" : "Nombre del código, ha de ser único",
+  "nameno" : "Nombre vacío o ya elegido"
 }

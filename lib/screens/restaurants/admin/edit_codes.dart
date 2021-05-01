@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/realtime_orders.dart';
 import 'package:permission/permission.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,7 @@ class _EditCodesState extends State<EditCodes> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     restaurant = ModalRoute.of(context).settings.arguments;
     if(init){
       _getCodes();
@@ -46,7 +48,7 @@ class _EditCodesState extends State<EditCodes> {
         body: Column(
           children: [
             SizedBox(height: 32.h,),
-            Center(child: Text("Orders configuration", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24),),))),
+            Center(child: Text(tr.translate("ordersconf"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24),),))),
             SizedBox(height: 32.h,),
             Container(
               height: 400.h,
@@ -69,7 +71,7 @@ class _EditCodesState extends State<EditCodes> {
                         padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
                         child: Row(
                           children: [
-                            Container(width: 140.w, child: Text("Table: " + code.code_id, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                            Container(width: 140.w, child: Text("${tr.translate("table")}: " + code.code_id, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
                             GestureDetector(
                               onTap: () async{
                                 await Permission.requestPermissions([PermissionName.Storage]);
@@ -128,7 +130,7 @@ class _EditCodesState extends State<EditCodes> {
                                                             //color: PdfColor.fromHex("FFFFFF"),
                                                             width: 170,
                                                             child: pw.Center(
-                                                              child: pw.Text("Table: " + code.code_id, maxLines: 1,  textAlign: pw.TextAlign.center, style: pw.TextStyle(color: PdfColor.fromHex("FFFFFF"), letterSpacing: .3, fontWeight: pw.FontWeight.normal, fontSize: ScreenUtil().setSp(15))),
+                                                              child: pw.Text("${tr.translate("table")}: " + code.code_id, maxLines: 1,  textAlign: pw.TextAlign.center, style: pw.TextStyle(color: PdfColor.fromHex("FFFFFF"), letterSpacing: .3, fontWeight: pw.FontWeight.normal, fontSize: ScreenUtil().setSp(15))),
                                                             )
                                                           ),
                                                           top: 80,
@@ -145,11 +147,11 @@ class _EditCodesState extends State<EditCodes> {
                                 final file = File("${output2.path}/${code.code_id}.pdf");
                                 await file.writeAsBytes(await pdf.save());
                                 print(output2.path);
-                                Alerts.toast("QR downloaded!");
+                                Alerts.toast(tr.translate("qrdownloaded"));
                               },
                               child: Row(
                                 children: [
-                                  Text("Download QR  ", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),)),
+                                  Text("${tr.translate("downloadqr")}  ", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),)),
                                   Icon(FontAwesomeIcons.qrcode, size: ScreenUtil().setSp(25),),
                                 ],
                               ),
@@ -161,7 +163,7 @@ class _EditCodesState extends State<EditCodes> {
                               restaurant.codes.remove(code);
                               setState(() {
                               });
-                              Alerts.toast("QR deleted!");
+                              Alerts.toast(tr.translate("deletedqr"));
                             })
                           ],
                         ),
@@ -175,7 +177,7 @@ class _EditCodesState extends State<EditCodes> {
               onTap: () async{
                 pushNewScreenWithRouteSettings(
                   context,
-                  settings: RouteSettings(name: "/ewcode", arguments: restaurant),
+                  settings: RouteSettings(name: "/newcode", arguments: restaurant),
                   screen: NewQRCode(),
                   withNavBar: true,
                   pageTransitionAnimation: PageTransitionAnimation.slideUp,
@@ -218,14 +220,15 @@ class _NewQRCodeState extends State<NewQRCode> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+    AppLocalizations tr = AppLocalizations.of(context);
     restaurant = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       body: ListView(
         children: [
           SizedBox(height: 32.h,),
-          Center(child: Text("New QR Code", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24),),))),
+          Center(child: Text(tr.translate("newqr"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24),),))),
           SizedBox(height: 50.h,),
-          Text("Name of the code, it has to be unique", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(16),),)),
+          Text(tr.translate("codeunique"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w500, fontSize: ScreenUtil().setSp(16),),)),
           SizedBox(height: 5.h,),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -269,7 +272,7 @@ class _NewQRCodeState extends State<NewQRCode> {
                   Navigator.pop(context);
                 }
                 else{
-                  Alerts.dialog("Name empty or already taken!", context);
+                  Alerts.dialog(tr.translate("nameno"), context);
                 }
               },
               child: Container(
@@ -284,7 +287,7 @@ class _NewQRCodeState extends State<NewQRCode> {
                     blurRadius: 3,
                     offset: Offset(0, 3),
                   ),],),
-                child: Center(child: Text("Save", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(22),),))),
+                child: Center(child: Text(tr.translate("save"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(22),),))),
               ),
             ),
           )
