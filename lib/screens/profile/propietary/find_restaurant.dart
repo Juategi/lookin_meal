@@ -38,7 +38,7 @@ class _FindRestaurantState extends State<FindRestaurant> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     AppLocalizations tr = AppLocalizations.of(context);
     return SafeArea(
       child: Scaffold(
@@ -219,7 +219,7 @@ class _ConfirmationMenuState extends State<ConfirmationMenu> {
   @override
   Widget build(BuildContext context) {
     restaurant = ModalRoute.of(context).settings.arguments;
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     AppLocalizations tr = AppLocalizations.of(context);
     return Scaffold(
       body: Column( crossAxisAlignment: CrossAxisAlignment.center,
@@ -333,7 +333,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
         DBServiceRequest.dbServiceRequest.sendConfirmationSms(localcode, restaurant.phone); //cambiar a email del restaurante
       init = false;
     }
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -451,7 +451,7 @@ class _IdRequestState extends State<IdRequest> {
   @override
   Widget build(BuildContext context) {
     restaurant = ModalRoute.of(context).settings.arguments;
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     AppLocalizations tr = AppLocalizations.of(context);
     return SafeArea(
       child: Scaffold(

@@ -33,7 +33,7 @@ class _MenuTileState extends State<MenuTile> with TickerProviderStateMixin {
     entry = Provider.of<MenuEntry>(context);
     restaurant = Provider.of<Restaurant>(context);
     order = Provider.of<bool>(context);
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     AppLocalizations tr = AppLocalizations.of(context);
     return FadeIn(
       child: GestureDetector(

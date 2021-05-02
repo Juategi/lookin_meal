@@ -31,7 +31,7 @@ class _RatingTileState extends State<RatingTile> {
     }catch(e){
       print(e);
     }
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     return entry != null? GestureDetector(
       onTap: () async{
         await showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){

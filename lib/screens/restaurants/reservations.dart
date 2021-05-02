@@ -48,7 +48,7 @@ class _ReservationsCheckerState extends State<ReservationsChecker> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     AppLocalizations tr = AppLocalizations.of(context);
     restaurant = ModalRoute.of(context).settings.arguments;
     if(init){

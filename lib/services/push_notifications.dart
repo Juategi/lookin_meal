@@ -15,9 +15,15 @@ import 'package:lookinmeal/shared/strings.dart';
 class PushNotificationService {
 
   static Future initialise(BuildContext context) async {
-    final FirebaseMessaging _fcm = FirebaseMessaging();
+    final FirebaseMessaging _fcm = FirebaseMessaging.instance;
     if (Platform.isIOS) {
-      _fcm.requestNotificationPermissions(IosNotificationSettings());
+      _fcm.requestPermission(alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true);
     }
     _fcm.setAutoInitEnabled(false);
 
@@ -27,7 +33,22 @@ class PushNotificationService {
     String token = await _fcm.getToken();
     print("FirebaseMessaging token: $token");
     DBServiceUser.dbServiceUser.updateToken(token, DBServiceUser.userF.uid);
-    _fcm.configure(
+    FirebaseMessaging.onMessage.listen((event) {
+      if (Platform.isAndroid) {
+        PushNotificationMessage notification = PushNotificationMessage(
+          title: event.data['notification']['title'],
+          body: event.data['notification']['body'],
+        );
+        Alerts.confirmation(notification.title + '  ' + notification.body, context);
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((event) async{
+      print("onLaunch: ${event.notification.body}");
+      List<Restaurant> aux = await DBServiceRestaurant.dbServiceRestaurant.getRestaurantsById([event.data['data']['restaurant_id']], GeolocationService.myPos.latitude, GeolocationService.myPos.longitude);
+      DBServiceRestaurant.dbServiceRestaurant.updateRecently(aux.first);
+      Navigator.pushNamed(context, "/restaurant",arguments: aux.first);
+    });
+    /*_fcm.configure(
         onMessage: (Map<String, dynamic> message) async {
           print("onMessage: $message");
           PushNotificationMessage notification;
@@ -52,16 +73,22 @@ class PushNotificationService {
         Navigator.pushNamed(context, "/restaurant",arguments: aux.first);
       },
     );
+
+     */
   }
 
   static Future<Map<String, dynamic>>sendNotification(String title, String body, String restaurant_id, String type, String token) async{
     final String serverToken = 'AAAAuKZsomY:APA91bFrOQ5dK5nZlrPdbXHHIr19OF1yvVKAwve9xNpR9b_bTL3ZLjpnI2JvvGxHcs7pLHqD-RN2i-fWtutB-WYBk_QF7lZ8MjV-EueMKtyT01JLQP-dlxiYYEkSl5u3IsI_-WYC1dGI';
-    final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-    await firebaseMessaging.requestNotificationPermissions(
-      const IosNotificationSettings(sound: true, badge: true, alert: true, provisional: false),
-    );
+    final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+    await firebaseMessaging.requestPermission(alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true);
     await http.post(
-      'https://fcm.googleapis.com/fcm/send',
+        Uri(path:'https://fcm.googleapis.com/fcm/send'),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Authorization': 'key=$serverToken',
@@ -89,11 +116,17 @@ class PushNotificationService {
     final Completer<Map<String, dynamic>> completer =
     Completer<Map<String, dynamic>>();
 
-    firebaseMessaging.configure(
+    /*firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         completer.complete(message);
       },
     );
+
+     */
+
+    FirebaseMessaging.onMessage.listen((event) {
+      completer.complete(event.data);
+    });
 
     return completer.future;
   }

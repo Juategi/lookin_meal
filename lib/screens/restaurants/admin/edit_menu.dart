@@ -706,7 +706,7 @@ class _EditMenuState extends State<EditMenu> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     restaurant = ModalRoute.of(context).settings.arguments;
     if(!init){
       _copyLists();

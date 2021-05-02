@@ -55,7 +55,7 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     AppLocalizations tr = AppLocalizations.of(context);
     return SafeArea(
       child: Scaffold(

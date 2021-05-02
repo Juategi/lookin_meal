@@ -343,7 +343,7 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
     print(RealTimeOrders.sent);
     print(DBServiceUser.userF.inOrder);
      */
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     tr = AppLocalizations.of(context);
     _controller = Provider.of<PersistentTabController>(context);
     if(CommonData.actualCode != null){

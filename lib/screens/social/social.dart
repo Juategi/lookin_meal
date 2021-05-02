@@ -61,12 +61,12 @@ class _SocialScreenState extends State<SocialScreen> {
       _loadUsers();
       init = false;
     }
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     return SafeArea(child:
       Scaffold(
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
-         resizeToAvoidBottomPadding: false,
+         //resizeToAvoidBottomPadding: false,
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),

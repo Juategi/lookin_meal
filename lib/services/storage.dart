@@ -23,7 +23,6 @@ class StorageService{
      File file;
      String fileName = "";
      String url, filePath;
-     ScreenUtil.init(context, height: StaticStrings.screenHeight, width: StaticStrings.screenWidth, allowFontScaling: true);
      try{
        await showDialog(
            context: context,
@@ -72,7 +71,7 @@ class StorageService{
                            ),
                            GestureDetector(
                              onTap: ()async{
-                               file = await FilePicker.getFile(type: FileType.image);
+                               file = File((await FilePicker.platform.pickFiles(type: FileType.image)).files.single.path);
                                if(file != null){
                                  setState((){
                                    loading = true;
@@ -138,16 +137,16 @@ class StorageService{
 
 
    Future<String> _uploadImage(File file, String filename, String folder) async {
-     StorageReference storageReference = FirebaseStorage.instance.ref().child("$folder/$filename");
-     final StorageUploadTask uploadTask = storageReference.putFile(file);
-     final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+     Reference storageReference = FirebaseStorage.instance.ref().child("$folder/$filename");
+     final UploadTask uploadTask = storageReference.putFile(file);
+     final TaskSnapshot downloadUrl = (await uploadTask.whenComplete(() => null));
      final String url = (await downloadUrl.ref.getDownloadURL());
      return url;
    }
 
 
    Future removeFile(String url) async {
-     StorageReference storageReference = await FirebaseStorage.instance.getReferenceFromUrl(url);
+     Reference storageReference = await FirebaseStorage.instance.refFromURL(url);
      storageReference.delete();
      print("removed $url");
    }
@@ -156,9 +155,6 @@ class StorageService{
       File file;
       String fileName = "";
       String url, filePath;
-      ScreenUtil.init(context, height: StaticStrings.screenHeight,
-          width: StaticStrings.screenWidth,
-          allowFontScaling: true);
       try {
         await showDialog(
             context: context,
@@ -210,8 +206,7 @@ class StorageService{
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  file = await FilePicker.getFile(
-                                      type: FileType.image);
+                                  file =  File((await FilePicker.platform.pickFiles(type: FileType.image)).files.single.path);
                                   if (file != null) {
                                     setState(() {
                                       loading = true;
@@ -242,8 +237,7 @@ class StorageService{
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  file = await FilePicker.getFile(
-                                      type: FileType.custom, allowedExtensions: ['pdf'],);
+                                  file = File((await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions:['pdf'])).files.single.path);
                                   if (file != null) {
                                     setState(() {
                                       loading = true;
@@ -309,12 +303,12 @@ class StorageService{
     }
 
    Future<bool> sendNanonets(String restaurant_id, String user_id, Uint8List file) async{
-     StorageReference storageReference = FirebaseStorage.instance.ref().child("$restaurant_id-$user_id-");
-     final StorageUploadTask uploadTask = storageReference.putData(file);
-     final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+     Reference storageReference = FirebaseStorage.instance.ref().child("$restaurant_id-$user_id-");
+     final UploadTask uploadTask = storageReference.putData(file);
+     final TaskSnapshot downloadUrl = (await uploadTask.whenComplete(() => null));
      final String url = (await downloadUrl.ref.getDownloadURL());
      print(url);
-     var response = await http.post("${StaticStrings.api}/nanonets", body: {"restaurant_id": restaurant_id, "user_id": user_id, "file": url});
+     var response = await http.post(Uri.http(StaticStrings.api, "/nanonets"), body: {"restaurant_id": restaurant_id, "user_id": user_id, "file": url});
      print(response.body);
      removeFile(url);
      if(response.body == "OK"){

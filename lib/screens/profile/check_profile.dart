@@ -39,7 +39,7 @@ class _CheckProfileState extends State<CheckProfile> {
       init = false;
     }
     AppLocalizations tr = AppLocalizations.of(context);
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     return Scaffold(
       body: Column(
         children: [

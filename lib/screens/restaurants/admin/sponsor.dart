@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -86,9 +85,6 @@ class _SponsorState extends State<Sponsor> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight,
-        width: CommonData.screenWidth,
-        allowFontScaling: true);
     restaurant = ModalRoute
         .of(context)
         .settings

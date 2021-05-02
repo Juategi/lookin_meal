@@ -88,7 +88,7 @@ class _RatingHistoryState extends State<RatingHistory> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     tr = AppLocalizations.of(context);
     user = ModalRoute.of(context).settings.arguments;
     if(init){

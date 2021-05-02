@@ -33,7 +33,7 @@ class Favorites extends StatefulWidget {
 class _FavoritesState extends State<Favorites> {
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     AppLocalizations tr = AppLocalizations.of(context);
     return SafeArea(
       child: Scaffold(
@@ -234,7 +234,7 @@ class _FavoriteListsState extends State<FavoriteLists> {
     List aux = ModalRoute.of(context).settings.arguments;
     type = aux.first;
     user = aux.last;
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -274,7 +274,7 @@ class _CreateListState extends State<CreateList> {
   @override
   Widget build(BuildContext context) {
     type = ModalRoute.of(context).settings.arguments;
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -432,7 +432,7 @@ class _ListDisplayState extends State<ListDisplay> {
       _updateLists();
       init = false;
     }
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     return SafeArea(
       child: Scaffold(
         body: Column(

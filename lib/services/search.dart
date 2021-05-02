@@ -30,7 +30,7 @@ class SearchService{
     }
     String finalTypes = newTypes.toString().replaceAll("[", "{").replaceAll("]", "}");
     var response = await http.get(
-        "${StaticStrings.api}/search",
+        Uri.http(StaticStrings.api, "/search"),
         headers: {"query": query, "distance" : maxDistance.toString(), "latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": searchType, "offset" :offset.toString(), "types":finalTypes});
     List<Restaurant> parsed = await DBServiceRestaurant.dbServiceRestaurant.parseResponse(response);
     if(parsed.length == 0 || (parsed.length < 10 && offset < 20)){
@@ -44,7 +44,7 @@ class SearchService{
       }
       query = aux.join(" ");
       var response = await http.get(
-          "${StaticStrings.api}/search",
+          Uri.http(StaticStrings.api, "/search"),
           headers: {"query": query, "distance" : maxDistance.toString(), "latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": searchType, "offset" :offset.toString(), "types":finalTypes});
       for(Restaurant restaurant in await DBServiceRestaurant.dbServiceRestaurant.parseResponse(response)){
         if(!parsed.contains(restaurant))
@@ -79,7 +79,7 @@ class SearchService{
     Map<Restaurant, List<String>> finalMap;
     if(queries.length == 3){
       response = await http.get(
-          "${StaticStrings.api}/searchentry",
+          Uri.http(StaticStrings.api, "/searchentry"),
           headers: {
             "latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": valoration,
             "query1": textQueries.first, "query2": textQueries.first[1], "query3": textQueries.last,
@@ -102,7 +102,7 @@ class SearchService{
     }
     else if(queries.length == 2){
       response = await http.get(
-          "${StaticStrings.api}/searchentry",
+          Uri.http(StaticStrings.api, "/searchentry"),
           headers: {
             "latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": valoration,
             "query1": textQueries.first, "query2": textQueries[1], "query3": "",
@@ -124,7 +124,7 @@ class SearchService{
     }
     else{
       response = await http.get(
-          "${StaticStrings.api}/searchentry",
+          Uri.http(StaticStrings.api, "/searchentry"),
           headers: {
             "latitude": latitude.toString(), "longitude": longitude.toString(), "valoration": valoration,
             "query1": textQueries.first, "query2": "", "query3": "",

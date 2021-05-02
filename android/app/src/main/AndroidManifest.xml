@@ -22,9 +22,10 @@
     <application
     android:name=".Application"
     android:label="FindEat"
+    android:usesCleartextTraffic="true"
     android:icon="@mipmap/launcher_icon"
         tools:replace="android:theme"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/LaunchTheme" >
 
     <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyAIIK4P68Ge26Yc0HkQ6uChj_NEqF2VeCU"/>
     <meta-data android:name="com.facebook.sdk.ApplicationId"

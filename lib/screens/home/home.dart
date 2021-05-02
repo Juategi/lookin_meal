@@ -255,7 +255,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	  user = Provider.of<User>(context);
 	  AppLocalizations tr = AppLocalizations.of(context);
 	  initDynamicLinks(context);
-		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
 	  if(popular != null && user != null) {
 			PushNotificationService.initialise(context);
 			return PersistentTabView(
@@ -278,32 +278,32 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 						PersistentBottomNavBarItem(
 							icon: Icon(FontAwesomeIcons.compass, size: ScreenUtil().setSp(22), ),
 							title: (tr.translate("home")),
-							activeColor: selectedItemColor,
-							inactiveColor: unselectedItemColor,
+							activeColorPrimary: selectedItemColor,
+							inactiveColorPrimary: unselectedItemColor,
 						),
 						PersistentBottomNavBarItem(
 							icon: Icon(FontAwesomeIcons.mapMarkedAlt, size: ScreenUtil().setSp(22),),
 							title: (tr.translate("map")),
-							activeColor: selectedItemColor,
-							inactiveColor: unselectedItemColor,
+							activeColorPrimary: selectedItemColor,
+							inactiveColorPrimary: unselectedItemColor,
 						),
 						PersistentBottomNavBarItem(
 							icon: Icon(DBServiceUser.userF.inOrder == null? Icons.camera : FontAwesomeIcons.shoppingCart, size: ScreenUtil().setSp(22)),
 							title: (tr.translate("order")),
-							activeColor: selectedItemColor,
-							inactiveColor: unselectedItemColor,
+							activeColorPrimary: selectedItemColor,
+							inactiveColorPrimary: unselectedItemColor,
 						),
 						PersistentBottomNavBarItem(
 							icon: Icon(Icons.people_alt_sharp, size: ScreenUtil().setSp(25),),
 							title: (tr.translate("social")),
-							activeColor: selectedItemColor,
-							inactiveColor: unselectedItemColor,
+							activeColorPrimary: selectedItemColor,
+							inactiveColorPrimary: unselectedItemColor,
 						),
 						PersistentBottomNavBarItem(
 							icon: Icon(Icons.person, size: ScreenUtil().setSp(25),),
 							title: (tr.translate("profile")),
-							activeColor: selectedItemColor,
-							inactiveColor: unselectedItemColor,
+							activeColorPrimary: selectedItemColor,
+							inactiveColorPrimary: unselectedItemColor,
 						),
 					],
 					confineInSafeArea: true,

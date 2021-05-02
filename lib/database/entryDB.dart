@@ -29,7 +29,7 @@ class DBServiceEntry{
       "allergens": allergens.toString().replaceAll("[", "{").replaceAll("]", "}")
     };
     var response = await http.post(
-        "${StaticStrings.api}/menus", body: body);
+        Uri.http(StaticStrings.api, "/menus"), body: body);
     List<dynamic> result = json.decode(response.body);
     return result.first["entry_id"].toString();
   }
@@ -37,7 +37,7 @@ class DBServiceEntry{
   Future<List<MenuEntry>> getMenu(String restaurant_id) async {
     List<MenuEntry> menu = List<MenuEntry>();
     var response = await http.get(
-        "${StaticStrings.api}/menus",
+        Uri.http(StaticStrings.api, "/menus"),
         headers: {"restaurant_id": restaurant_id});
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
@@ -63,14 +63,14 @@ class DBServiceEntry{
 
   Future addSection(String restaurant_id, String section) async{
     var response = await http.post(
-        "${StaticStrings.api}/sections", body: {"restaurant_id" : restaurant_id, "sections" : section});
+        Uri.http(StaticStrings.api, "/sections"), body: {"restaurant_id" : restaurant_id, "sections" : section});
     print(response.body);
   }
 
 
   Future<List<String>> getSections(String restaurant_id) async{
     var response = await http.get(
-        "${StaticStrings.api}/sections", headers: {"restaurant_id" : restaurant_id});
+        Uri.http(StaticStrings.api, "/sections"), headers: {"restaurant_id" : restaurant_id});
     List<dynamic> result = json.decode(response.body);
     List<String> sections =  List<String>.from(result.first['sections']);
     print(sections);
@@ -81,7 +81,7 @@ class DBServiceEntry{
   Future<List<Rating>> getAllRating(String user_id) async{
     List<Rating> ratings = List<Rating>();
     var response = await http.get(
-        "${StaticStrings.api}/allrating", headers: {"user_id" : user_id});
+        Uri.http(StaticStrings.api, "/allrating"), headers: {"user_id" : user_id});
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
       ratings.add(Rating(
@@ -97,14 +97,14 @@ class DBServiceEntry{
 
   Future deleteRate(String user_id, String entry_id) async{
     var response = await http.delete(
-        "${StaticStrings.api}/rating", headers: {"user_id" : user_id, "entry_id" : entry_id});
+        Uri.http(StaticStrings.api, "/rating"), headers: {"user_id" : user_id, "entry_id" : entry_id});
     print(response.body);
   }
 
   Future addRate(String user_id, String entry_id, num rating, String comment) async{
     final formatter = new DateFormat('yyyy-MM-dd');
     var response = await http.post(
-        "${StaticStrings.api}/rating", body: {"user_id" : user_id, "entry_id" : entry_id, "rating" : rating.toString(), "ratedate" : formatter.format(DateTime.now()), "comment": comment});
+        Uri.http(StaticStrings.api, "/rating"), body: {"user_id" : user_id, "entry_id" : entry_id, "rating" : rating.toString(), "ratedate" : formatter.format(DateTime.now()), "comment": comment});
     print(response.body);
   }
 
@@ -115,7 +115,7 @@ class DBServiceEntry{
       notNews.add(entryR.id);
       //print(entryR.allergens);
     }
-    var response = await http.put("${StaticStrings.api}/sections", body: {"restaurant_id": restaurant.restaurant_id, "sections":sections.toString().replaceAll("[", "").replaceAll("]", "")});
+    var response = await http.put(Uri.http(StaticStrings.api, "/sections"), body: {"restaurant_id": restaurant.restaurant_id, "sections":sections.toString().replaceAll("[", "").replaceAll("]", "")});
     //print(response.body);
     for(MenuEntry entry in menu){
       if(!notNews.contains(entry.id)){
@@ -125,7 +125,7 @@ class DBServiceEntry{
         for(MenuEntry entryR in restaurant.menu){
           if(entry.id == entryR.id) {
             if (!(entry.price == entryR.price && entry.name == entryR.name && entry.section == entryR.section && entry.image == entryR.image && entry.hide == entryR.hide && entry.description == entryR.description && Functions.compareList(entry.allergens, entryR.allergens))) {
-              var response = await http.put("${StaticStrings.api}/menus",
+              var response = await http.put(Uri.http(StaticStrings.api, "/menus"),
                   body: {
                     "entry_id": entry.id,
                     "name": entry.name,
@@ -146,7 +146,7 @@ class DBServiceEntry{
     }
     for(MenuEntry entryR in restaurant.menu){
       if(!checkDeletes.contains(entryR.id)){
-        var response = await http.delete("${StaticStrings.api}/menus", headers: {"entry_id": entryR.id});
+        var response = await http.delete(Uri.http(StaticStrings.api, "/menus"), headers: {"entry_id": entryR.id});
         print(response.body);
       }
     }
@@ -155,12 +155,12 @@ class DBServiceEntry{
   }
 
   Future updateDailyMenu(String restaurant_id, List<String> dailyMenu) async{
-    var response = await http.put("${StaticStrings.api}/daily", body: {"restaurant_id": restaurant_id, "dailymenu":dailyMenu.toString().replaceAll("[", "").replaceAll("]", "")});
+    var response = await http.put(Uri.http(StaticStrings.api, "/daily"), body: {"restaurant_id": restaurant_id, "dailymenu":dailyMenu.toString().replaceAll("[", "").replaceAll("]", "")});
     print(response.body);
   }
 
   Future<Map<String,Restaurant>> getRatingsHistory(String id, List<String> ratings, int offset, int limit) async {
-    var response = await http.get("${StaticStrings.api}/ratingshistory", headers: {
+    var response = await http.get(Uri.http(StaticStrings.api, "/ratingshistory"), headers: {
       "user_id" : id,
       "ratings": ratings.toString().replaceAll("[", "{").replaceAll("]", "}"),
       "limit": limit.toString(),
@@ -179,7 +179,7 @@ class DBServiceEntry{
   }
 
   Future<Map<String,Restaurant>> getEntriesById(List<String> ids) async {
-    var response = await http.get("${StaticStrings.api}/entriesbyid", headers: {
+    var response = await http.get(Uri.http(StaticStrings.api, "/entriesbyid"), headers: {
       "ids": ids.toString().replaceAll("[", "{").replaceAll("]", "}"),
       "latitude": GeolocationService.myPos.latitude.toString(),
       "longitude": GeolocationService.myPos.longitude.toString()
@@ -197,7 +197,7 @@ class DBServiceEntry{
   Future<Map<Rating, User>> getEntryRatings(String entry_id) async{
     Map<Rating, User> ratings = {};
     var response = await http.get(
-        "${StaticStrings.api}/comments", headers: {"entry_id" : entry_id});
+        Uri.http(StaticStrings.api, "/comments"), headers: {"entry_id" : entry_id});
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
       Rating rating = Rating(

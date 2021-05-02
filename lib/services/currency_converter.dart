@@ -1,4 +1,4 @@
-import 'package:flutter_currency_converter/flutter_currency_converter.dart';
+/*import 'package:flutter_currency_converter/flutter_currency_converter.dart';
 import 'package:flutter_currency_converter/Currency.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
@@ -59,3 +59,5 @@ class CurrencyConverter{
   }
 
 }
+
+ */

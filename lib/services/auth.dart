@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart' as f;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:lookinmeal/models/user.dart' as u;
@@ -19,20 +20,20 @@ class AuthService{
 
 	final FirebaseAuth _auth = FirebaseAuth.instance;
 
-	u.User _userFromFirebaseUser(FirebaseUser user){
+	u.User _userFromFirebaseUser(f.User user){
 		return user != null ? u.User(uid: user.uid, email: user.email) : null;
 	}
 
 	Stream<String> get user {
-		return _auth.onAuthStateChanged.map((user){
+		return _auth.authStateChanges().map((user){
 			return user != null ? user.uid : null;
 		});
 	}
 
 	Future signInEP(String email, String password) async{
 		try{
-			AuthResult result =	await _auth.signInWithEmailAndPassword(email: email, password: password);
-			FirebaseUser user = result.user;
+			f.UserCredential result =	await _auth.signInWithEmailAndPassword(email: email, password: password);
+			f.User user = result.user;
 			return _userFromFirebaseUser(user);
 		} catch(e){
 			print(e);
@@ -42,8 +43,8 @@ class AuthService{
 
 	Future registerEP(String email, String password, String name, String country, String username) async{
 		try{
-			AuthResult result =	await _auth.createUserWithEmailAndPassword(email: email, password: password);
-			FirebaseUser user = result.user;
+			f.UserCredential result =	await _auth.createUserWithEmailAndPassword(email: email, password: password);
+			f.User user = result.user;
 			await DBServiceUser.dbServiceUser.createUser(user.uid,email,name,StaticStrings.defaultImage,"EP", country, username);
 			return _userFromFirebaseUser(user);
 		} catch(e){
@@ -70,9 +71,9 @@ class AuthService{
 
 		final token = result.accessToken.token;
 		final graphResponse = await http.get(
-			'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=$token');
+				Uri(path:'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=$token'));
 		final profile = json.decode(graphResponse.body);
-		final facebookAuthCred = FacebookAuthProvider.getCredential(accessToken: token);
+		final facebookAuthCred = FacebookAuthProvider.credential(token);
 		final credential = await _auth.signInWithCredential(facebookAuthCred);
 		String picture = profile["picture"]["data"]["url"];
 		u.User finalUser = await DBServiceUser.dbServiceUser.getUserDataChecker(credential.user.uid);
@@ -106,16 +107,16 @@ class AuthService{
 		final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
 		final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
 
-		final AuthCredential credential = GoogleAuthProvider.getCredential(
+		final AuthCredential credential = GoogleAuthProvider.credential(
 			accessToken: googleSignInAuthentication.accessToken,
 			idToken: googleSignInAuthentication.idToken,
 		);
 
-		final AuthResult authResult = await _auth.signInWithCredential(credential);
-		final FirebaseUser user = authResult.user;
+		final f.UserCredential authResult = await _auth.signInWithCredential(credential);
+		final f.User user = authResult.user;
 		assert(!user.isAnonymous);
 		assert(await user.getIdToken() != null);
-		final FirebaseUser currentUser = await _auth.currentUser();
+		final f.User currentUser = await _auth.currentUser;
 		assert(user.uid == currentUser.uid);
 		u.User finalUser = await DBServiceUser.dbServiceUser.getUserDataChecker(user.uid);
 		if(finalUser == null) {

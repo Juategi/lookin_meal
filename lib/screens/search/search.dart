@@ -165,7 +165,7 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     tr = AppLocalizations.of(context);
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

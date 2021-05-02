@@ -19,7 +19,7 @@ class DBServiceRestaurant{
   Future deleteFromUserFavorites(String userId,
       Restaurant restaurant) async {
     var response = await http.delete(
-        "${StaticStrings.api}/userfavs", headers: {"user_id": userId,
+        Uri.http(StaticStrings.api, "/userfavs"), headers: {"user_id": userId,
       "restaurant_id": restaurant.restaurant_id});
     print(response.body);
 
@@ -28,42 +28,42 @@ class DBServiceRestaurant{
   Future addToUserFavorites(String userId,
       Restaurant restaurant) async{
     var response = await http.post(
-        "${StaticStrings.api}/userfavs",
+        Uri.http(StaticStrings.api, "/userfavs"),
         body: {"user_id": userId, "restaurant_id": restaurant.restaurant_id});
     print(response.body);
   }
 
   Future<List<Restaurant>> getUserFavorites(String id, latitude, longitude) async {
     var response = await http.get(
-        "${StaticStrings.api}/userfavs",
+        Uri.http(StaticStrings.api, "/userfavs"),
         headers: {"latitude": latitude.toString(), "longitude": longitude.toString(),"id": id});
     return parseResponse(response);
   }
 
   Future<List<Restaurant>> getRecently(String id) async {
-    var response = await http.get("${StaticStrings.api}/recently", headers: {"user_id" : id, "latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
+    var response = await http.get(Uri.http(StaticStrings.api, "/recently"), headers: {"user_id" : id, "latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
     return parseResponse(response);
   }
 
   Future<List<Restaurant>> getOwned(String id) async {
-    var response = await http.get("${StaticStrings.api}/owned", headers: {"user_id" : id, "latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
+    var response = await http.get(Uri.http(StaticStrings.api, "/owned"), headers: {"user_id" : id, "latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
     return parseResponse(response);
   }
 
   Future<List<Restaurant>> getRestaurantsById(List<String> ids, latitude, longitude) async {
     var response = await http.get(
-        "${StaticStrings.api}/restbyid",
+        Uri.http(StaticStrings.api, "/restbyid"),
         headers: {"ids": ids.toString().replaceAll("[", "{").replaceAll("]", "}"), "latitude": latitude.toString(), "longitude": longitude.toString()});
     return parseResponse(response);
   }
 
   Future<List<Restaurant>> getSponsored(int quantity) async {
-    var response = await http.get("${StaticStrings.api}/sponsored", headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString(), "quantity":quantity.toString() });
+    var response = await http.get(Uri.http(StaticStrings.api, "/sponsored"), headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString(), "quantity":quantity.toString() });
     return parseResponse(response);
   }
 
   Future<bool> checkRequestStatus(String restaurant_id) async {
-    var response = await http.get("${StaticStrings.api}/nanonets", headers: {"restaurant_id" : restaurant_id, "user_id" : DBServiceUser.userF.uid});
+    var response = await http.get(Uri.http(StaticStrings.api, "/nanonets"), headers: {"restaurant_id" : restaurant_id, "user_id" : DBServiceUser.userF.uid});
     List<dynamic> result = json.decode(response.body);
     print(response.body);
     if(result.length > 0)
@@ -88,46 +88,46 @@ class DBServiceRestaurant{
       "recently": DBServiceUser.userF.recently.map((r) => r.restaurant_id).toList().toString().replaceAll("[", "{").replaceAll("]", "}")
     };
     var response = await http.put(
-        "${StaticStrings.api}/recently", body: body);
+        Uri.http(StaticStrings.api, "/recently"), body: body);
     print(response.body);
   }
 
   Future<Map<MenuEntry,Restaurant>> getPopular() async {
-    var response = await http.get("${StaticStrings.api}/popular", headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
+    var response = await http.get(Uri.http(StaticStrings.api, "/popular"), headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
     return parseResponseEntry(response);
   }
 
   Future<Map<MenuEntry,Restaurant>> getTopEntries() async {
-    var response = await http.get("${StaticStrings.api}/topentry", headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
+    var response = await http.get(Uri.http(StaticStrings.api, "/topentry"), headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
     return parseResponseEntry(response);
   }
 
   Future<List<Restaurant>> getTopRestaurants() async {
-    var response = await http.get("${StaticStrings.api}/toprestaurant", headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
+    var response = await http.get(Uri.http(StaticStrings.api, "/toprestaurant"), headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
     return parseResponse(response);
   }
 
   Future<List<Restaurant>> getRecommended(String id) async {
-    var response = await http.get("${StaticStrings.api}/recommended", headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString(), "user_id" : id});
+    var response = await http.get(Uri.http(StaticStrings.api, "/recommended"), headers: {"latitude": GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString(), "user_id" : id});
     return parseResponse(response);
   }
 
   Future<List<Restaurant>> getAllRestaurants() async {
     var response = await http.get(
-        "${StaticStrings.api}/allrestaurants");
+        Uri.http(StaticStrings.api, "/allrestaurants"));
     return parseResponse(response);
   }
 
   Future<List<Restaurant>> getNearRestaurants(double latitude, double longitude, int quantity) async {
     var response = await http.get(
-        "${StaticStrings.api}/restaurants",
+        Uri.http(StaticStrings.api, "/restaurants"),
         headers: {"latitude": latitude.toString(), "longitude": longitude.toString(), "quantity": quantity.toString()});
     return parseResponse(response);
   }
 
   Future<List<Restaurant>> getRestaurantsSquare(double latitude, double longitude, double la1, double la2, double lo1, double lo2) async {
     var response = await http.get(
-        "${StaticStrings.api}/square",
+        Uri.http(StaticStrings.api, "/square"),
         headers: {
           "latitude": latitude.toString(),
           "longitude": longitude.toString(),
@@ -168,7 +168,7 @@ class DBServiceRestaurant{
           List<String>().toString(),
     };
     var response = await http.post(
-        "${StaticStrings.api}/restaurants", body: body);
+        Uri.http(StaticStrings.api, "/restaurants"), body: body);
     print(response.body);
   }
 
@@ -196,26 +196,26 @@ class DBServiceRestaurant{
     };
     print(body);
     var response = await http.put(
-        "${StaticStrings.api}/restaurant", body: body);
+        Uri.http(StaticStrings.api, "/restaurant"), body: body);
     print(response.body);
   }
 
   updateRestaurantMealTime(String restaurant_id, num mealtime) async{
     var response = await http.put(
-        "${StaticStrings.api}/restaurantmeal", body: {"id" : restaurant_id, "mealtime": mealtime.toString()});
+        Uri.http(StaticStrings.api, "/restaurantmeal"), body: {"id" : restaurant_id, "mealtime": mealtime.toString()});
     print(response.body);
   }
 
   updateRestaurantImages(String restaurant_id, List<String> images) async{
     var response = await http.put(
-        "${StaticStrings.api}/restaurantimages", body: {"id" : restaurant_id, "images": images.toString().replaceAll("[", "{").replaceAll("]", "}") ?? List<String>().toString()});
+        Uri.http(StaticStrings.api, "/restaurantimages"), body: {"id" : restaurant_id, "images": images.toString().replaceAll("[", "{").replaceAll("]", "}") ?? List<String>().toString()});
     print(response.body);
   }
 
   Future<List<List<Object>>> getFeed(String user_id, int offset) async{
     List<List<Object>> ratings = [];
     var response = await http.get(
-        "${StaticStrings.api}/feed", headers: {"user_id" : user_id, "offset" : offset.toString()});
+        Uri.http(StaticStrings.api, "/feed"), headers: {"user_id" : user_id, "offset" : offset.toString()});
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
       Rating rating = Rating(

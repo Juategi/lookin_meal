@@ -4,43 +4,39 @@ class RealTimeOrders{
 
   RealTimeOrders();
 
-  final CollectionReference orders = Firestore.instance.collection('orders');
+  final CollectionReference orders = FirebaseFirestore.instance.collection('orders');
   static List<Order> items;
   static String actualTable;
   static bool sent = false;
 
   Future createOrder(String restaurant_id, String table_id) async{
-    orders.document(restaurant_id).collection(table_id).document("closed").setData({
+    orders.doc(restaurant_id).collection(table_id).doc("closed").set({
       "closed" : false
     });
   }
 
   Future deleteOrder(String restaurant_id, String table_id) async{
-    orders.document(restaurant_id).collection(table_id).getDocuments().then((snapshot) {
-        for (DocumentSnapshot ds in snapshot.documents) {
-          ds.reference.delete();
-        }
+    (await orders.doc(restaurant_id).collection(table_id).get()).docs.map((doc) {
+      doc.reference.delete();
     });
   }
 
   Future closeOrder(String restaurant_id, String table_id) async{
-    await orders.document(restaurant_id).collection(table_id).getDocuments().then((snapshot) {
-      for (DocumentSnapshot ds in snapshot.documents) {
-        if(ds.documentID != "closed")
-          ds.reference.delete();
-        else
-          ds.reference.setData({'closed' : true});
-      }
+    (await orders.doc(restaurant_id).collection(table_id).get()).docs.map((doc) {
+      if(doc.id != "closed")
+        doc.reference.delete();
+      else
+        doc.reference.set({'closed' : true});
     });
     openOrder(restaurant_id, table_id);
   }
 
   Future openOrder(String restaurant_id, String table_id) async{
-    orders.document(restaurant_id).collection(table_id).document("closed").setData({'closed' : false});
+    orders.doc(restaurant_id).collection(table_id).doc("closed").set({'closed' : false});
   }
 
   Future createOrderData(String restaurant_id, Order order) async {
-    DocumentReference ref = orders.document(restaurant_id).collection(actualTable).document();
+    DocumentReference ref = orders.doc(restaurant_id).collection(actualTable).doc();
     bool found = false;
     items.where((element) => !element.send).forEach((o) {
       if(o.entry_id == order.entry_id){
@@ -51,21 +47,21 @@ class RealTimeOrders{
       }
     });
     if(!found) {
-      await ref.setData({
+      await ref.set({
         'amount': order.amount,
         'entry_id': order.entry_id,
         'send': order.send,
         'note': order.note,
          'check': order.check
       });
-      order.order_id = ref.documentID;
+      order.order_id = ref.id;
     }
     //items.add(order);
   }
 
   Future updateOrderData(String restaurant_id, String table_id, Order order) async {
-    DocumentReference ref = orders.document(restaurant_id).collection(table_id).document(order.order_id);
-    await ref.setData({
+    DocumentReference ref = orders.doc(restaurant_id).collection(table_id).doc(order.order_id);
+    await ref.set({
       'amount': order.amount,
       'entry_id': order.entry_id,
       'send': order.send,
@@ -75,18 +71,18 @@ class RealTimeOrders{
   }
 
   Future deleteOrderData(String restaurant_id, String table_id, Order order) async{
-    orders.document(restaurant_id).collection(table_id).document(order.order_id).delete();
+    orders.doc(restaurant_id).collection(table_id).doc(order.order_id).delete();
   }
 
   Stream<List<Order>> getOrder(String restaurant_id, String table_id) {
-    return orders.document(restaurant_id).collection(table_id).snapshots().map((event) => event.documents.where((element) => element.documentID != "closed").map((s) {
+    return orders.doc(restaurant_id).collection(table_id).snapshots().map((event) => event.docs.where((element) => element.id != "closed").map((s) {
         return Order(
-            order_id: s.documentID,
-            amount: s.data['amount'],
-            entry_id: s.data['entry_id'],
-            send: s.data['send'],
-           note: s.data['note'],
-          check: s.data['check']
+            order_id: s.id,
+            amount: s.data()['amount'],
+            entry_id: s.data()['entry_id'],
+            send: s.data()['send'],
+           note: s.data()['note'],
+          check: s.data()['check']
         );
     }).toList());
   }
@@ -95,8 +91,8 @@ class RealTimeOrders{
     if(restaurant_id == ""){
       return null;
     }
-    return orders.document(restaurant_id).collection(table_id).document("closed").snapshots().map((s){
-      bool closed =  s.data['closed'];
+    return orders.doc(restaurant_id).collection(table_id).doc("closed").snapshots().map((s){
+      bool closed =  s.data()['closed'];
       return closed;
     });
   }

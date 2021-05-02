@@ -119,7 +119,7 @@ class _TableReservationState extends State<TableReservation> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     AppLocalizations tr = AppLocalizations.of(context);
     restaurant = ModalRoute.of(context).settings.arguments;
     getExcluded();

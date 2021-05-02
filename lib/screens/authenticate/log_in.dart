@@ -23,7 +23,7 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
 	  AppLocalizations tr = AppLocalizations.of(context);
-		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
 		return Scaffold(
 		  body: GestureDetector(
 				onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
@@ -121,7 +121,8 @@ class _LogInState extends State<LogIn> {
 									SizedBox(height: 100.h,),
 									Row(
 									  children: <Widget>[
-									    Text( tr.translate("donthaveaccount"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(17),),)),
+									    Text( tr.translate("donthaveaccount"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(15),),)),
+											SizedBox(width: 2.w,),
 											GestureDetector(
 												onTap: () => pushNewScreenWithRouteSettings(
 													context,
@@ -129,9 +130,9 @@ class _LogInState extends State<LogIn> {
 													screen: SignIn(),
 													withNavBar: false,
 													pageTransitionAnimation: PageTransitionAnimation.cupertino,
-												),
-														//Navigator.pushNamed(context, "/signin"),
-													child: Text(tr.translate("signupnow"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(17),),))),
+												), //Navigator.pushNamed(context, "/signin"),
+													child: Text(tr.translate("signupnow"), style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(16),),))
+											),
 										],
 									),
 									SizedBox(height: 30.h,),

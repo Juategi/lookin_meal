@@ -32,7 +32,7 @@ class _RestaurantTileState extends State<RestaurantTile> {
   Widget build(BuildContext context) {
     restaurant = Provider.of<Restaurant>(context);
     sponsored = Provider.of<bool>(context);
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     AppLocalizations tr = AppLocalizations.of(context);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10.w),

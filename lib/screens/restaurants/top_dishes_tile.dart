@@ -25,7 +25,7 @@ class _TopDishesTileState extends State<TopDishesTile> with TickerProviderStateM
   Widget build(BuildContext context) {
     entry = Provider.of<MenuEntry>(context);
     restaurant = Provider.of<Restaurant>(context);
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     AppLocalizations tr = AppLocalizations.of(context);
     return GestureDetector(
       child: Padding(

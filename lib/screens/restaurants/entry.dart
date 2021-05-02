@@ -112,7 +112,7 @@ class _EntryRatingState extends State<EntryRating> {
       }
       init = false;
     }
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: true,

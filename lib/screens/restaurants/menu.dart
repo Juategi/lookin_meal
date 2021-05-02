@@ -66,7 +66,7 @@ class _MenuState extends State<Menu> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     restaurant = Provider.of<Restaurant>(context);
     order = Provider.of<bool>(context);
     if(init){

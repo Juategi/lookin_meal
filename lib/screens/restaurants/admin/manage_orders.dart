@@ -25,7 +25,7 @@ class _ManageOrdersState extends State<ManageOrders> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     restaurant = ModalRoute.of(context).settings.arguments;
     return SafeArea(
       child: Scaffold(
@@ -117,7 +117,7 @@ class _OrderDetailState extends State<OrderDetail> {
   String code_id;
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     List arg = ModalRoute.of(context).settings.arguments;
     restaurant = arg.first;
     code_id = arg.last;

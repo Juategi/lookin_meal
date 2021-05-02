@@ -180,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
 			first = false;
 		}
 		initRating();
-		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
 		return !search? SafeArea(
 		  child: UpgradeAlert(
 		    child: Scaffold(

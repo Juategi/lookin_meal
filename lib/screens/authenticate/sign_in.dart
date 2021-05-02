@@ -36,7 +36,7 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
 	  AppLocalizations tr = AppLocalizations.of(context);
-		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
 		return Scaffold(
 		  body: GestureDetector(
 				onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),

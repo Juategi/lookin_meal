@@ -59,7 +59,7 @@ class _DailyMenuState extends State<DailyMenu> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     if(restaurant.sections != null){
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),

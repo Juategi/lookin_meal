@@ -22,7 +22,7 @@ import 'package:lookinmeal/shared/loading.dart';
 import 'package:lookinmeal/shared/strings.dart';
 import 'package:lookinmeal/shared/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:fluster/fluster.dart';
+//import 'package:fluster/fluster.dart';
 import 'dart:math' as math;
 
 class MapSample extends StatefulWidget {
@@ -45,15 +45,15 @@ class MapSampleState extends State<MapSample> {
 	Map<String,BitmapDescriptor> pinLocationIcons = {};
 	BitmapDescriptor basic;
 	List<Restaurant> _restaurants = [];
-	List<RestaurantMarker> _markers = List<RestaurantMarker>();
+	//List<RestaurantMarker> _markers = List<RestaurantMarker>();
 	CameraPosition _cameraPosition;
-	Fluster<RestaurantMarker> fluster;
+	//Fluster<RestaurantMarker> fluster;
 	List<Marker> googleMarkers;
 	List<Marker> _markersNoCluster = [];
 
 
 	void _timer() {
-		if(_cameraPosition == null && _markers == null) {
+		if(_cameraPosition == null ) {
 			Future.delayed(Duration(seconds: 2)).then((_) {
 				setState(() {
 					print("Loading map...");
@@ -64,7 +64,7 @@ class MapSampleState extends State<MapSample> {
 	}
 
 	int calculateMarkerSize(){
-		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
 		if(_cameraPosition.zoom > ScreenUtil().setSp(14)){
 			return (_cameraPosition.zoom * ScreenUtil().setSp(4.5)).toInt();
 		}
@@ -112,7 +112,7 @@ class MapSampleState extends State<MapSample> {
 		//_loadMarkers();
 		_timer();
 		super.initState();
-		fluster = Fluster<RestaurantMarker>(
+		/*fluster = Fluster<RestaurantMarker>(
 			minZoom: 14, // The min zoom at clusters will show
 			maxZoom: 30, // The max zoom at clusters will show
 			radius: 150, // Cluster radius in pixels
@@ -133,7 +133,7 @@ class MapSampleState extends State<MapSample> {
 				childMarkerId: cluster.childMarkerId,
 			),
 		);
-		googleMarkers = fluster.clusters([-180, -85, 180, 85], 10).map((cluster) => cluster.toMarker()).toList();
+		googleMarkers = fluster.clusters([-180, -85, 180, 85], 10).map((cluster) => cluster.toMarker()).toList();*/
 	}
 
 	void _getUserLocation() async{
@@ -146,7 +146,7 @@ class MapSampleState extends State<MapSample> {
 		});
 	}
 
-	Future _loadMarkers() async {
+	/*Future _loadMarkers() async {
 		_restaurants = await DBServiceRestaurant.dbServiceRestaurant.getRestaurantsSquare(pos.latitude, pos.longitude, latFrom, latTo, longFrom, longTo);
 		for(Restaurant restaurant in _restaurants){
 			_markers.add(RestaurantMarker(
@@ -168,6 +168,8 @@ class MapSampleState extends State<MapSample> {
 		}
 		googleMarkers = fluster.clusters([-180, -85, 180, 85], 10).map((cluster) => cluster.toMarker()).toList();
 	}
+
+	 */
 
 	Future _loadMarkersNoCluster() async {
 		setState(() {
@@ -363,7 +365,7 @@ class MapSampleState extends State<MapSample> {
 	}
 }
 
-class RestaurantMarker extends Clusterable {
+/*class RestaurantMarker extends Clusterable {
 	final String id;
 	final LatLng position;
 	final BitmapDescriptor icon;
@@ -396,4 +398,6 @@ class RestaurantMarker extends Clusterable {
 		infoWindow: infoWindow
 	);
 }
+
+ */
 

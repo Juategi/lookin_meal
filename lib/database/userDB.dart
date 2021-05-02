@@ -21,11 +21,11 @@ class DBServiceUser {
     await GeolocationService().getLocation();
     if(userF == null){
       var response = await http.get(
-          "${StaticStrings.api}/users", headers: {"id": id});
+          Uri.http(StaticStrings.api, "/users"), headers: {"id": id});
       while(response.body == "[]"){
         Future.delayed(const Duration(milliseconds: 900), () {});
         response = await http.get(
-            "${StaticStrings.api}/users", headers: {"id": id});
+            Uri.http(StaticStrings.api, "/users"), headers: {"id": id});
       }
       if(response.body != "[]") {
         List<dynamic> result = json.decode(response.body);
@@ -57,7 +57,7 @@ class DBServiceUser {
           owner = "false";
         else
           owner = "true";
-        AnalyticsService().setUserProperties(user.uid, user.username, owner);
+        //AnalyticsService().setUserProperties(user.uid, user.username, owner);
         return user;
       }
     }
@@ -68,7 +68,7 @@ class DBServiceUser {
 
   Future<User> getUserDataChecker(String id) async{
     var response = await http.get(
-        "${StaticStrings.api}/users", headers: {"id": id});
+        Uri.http(StaticStrings.api, "/users"), headers: {"id": id});
     if(response.body != "[]") {
       List<dynamic> result = json.decode(response.body);
       User user = User(
@@ -88,7 +88,7 @@ class DBServiceUser {
 
   Future<User> getUserDataUsername(String username) async{
     var response = await http.get(
-        "${StaticStrings.api}/username", headers: {"username": username});
+        Uri.http(StaticStrings.api, "/username"), headers: {"username": username});
     if(response.body != "[]") {
       List<dynamic> result = json.decode(response.body);
       User user = User(
@@ -118,7 +118,7 @@ class DBServiceUser {
       "username": username
     };
     var response = await http.post(
-        "${StaticStrings.api}/users", body: body);
+        Uri.http(StaticStrings.api, "/users"), body: body);
     print(response.body);
     await DBServiceUser.dbServiceUser.createList(id, "favorites", StaticStrings.defaultEntry, "R");
     await DBServiceUser.dbServiceUser.createList(id, "favorites", StaticStrings.defaultEntry, "E");
@@ -126,7 +126,7 @@ class DBServiceUser {
 
   Future<bool> checkUsername(String username) async{
     String us;
-    var response = await http.get("${StaticStrings.api}/checkuser", headers: {"username": username});
+    var response = await http.get(Uri.http(StaticStrings.api, "/checkuser"), headers: {"username": username});
     print(response.body);
     try {
       var aux = json.decode(response.body);
@@ -141,9 +141,9 @@ class DBServiceUser {
   Future<String> checkUsernameEmail(String username, String email) async{
     String em, us;
     String result = "";
-    var response = await http.get("${StaticStrings.api}/checkmail", headers: {"email": email});
+    var response = await http.get(Uri.http(StaticStrings.api, "/checkmail"), headers: {"email": email});
     print(response.body);
-    var response2 = await http.get("${StaticStrings.api}/checkuser", headers: {"username": username});
+    var response2 = await http.get(Uri.http(StaticStrings.api, "/checkuser"), headers: {"username": username});
     print(response2.body);
     try {
       var aux = json.decode(response.body);
@@ -173,13 +173,13 @@ class DBServiceUser {
     };
     print(body);
     var response = await http.put(
-        "${StaticStrings.api}/users", body: body);
+        Uri.http(StaticStrings.api, "/users"), body: body);
     print(response.body);
   }
 
 
   Future<FavoriteList> createList(String user, String name, String image, String type) async{
-    var response = await http.post("${StaticStrings.api}/lists", body: {
+    var response = await http.post(Uri.http(StaticStrings.api, "/lists"), body: {
       "user_id" : user,
       "name": name,
       "image": image,
@@ -190,7 +190,7 @@ class DBServiceUser {
   }
 
   Future<List<FavoriteList>> getLists() async{
-    var response = await http.get("${StaticStrings.api}/lists", headers: {
+    var response = await http.get(Uri.http(StaticStrings.api, "/lists"), headers: {
       "user_id" : userF.uid,
     });
     List<dynamic> result = json.decode(response.body);
@@ -209,7 +209,7 @@ class DBServiceUser {
   }
 
   Future updateList (FavoriteList list) async{
-    var response = await http.put("${StaticStrings.api}/lists", body: {
+    var response = await http.put(Uri.http(StaticStrings.api, "/lists"), body: {
       "id" : list.id,
       "name": list.name,
       "image": list.image,
@@ -219,7 +219,7 @@ class DBServiceUser {
   }
 
   Future deleteList(String id) async{
-    var response = await http.delete("${StaticStrings.api}/lists", headers: {
+    var response = await http.delete(Uri.http(StaticStrings.api, "/lists"), headers: {
       "id" : id
     });
     print(response.body);
@@ -232,14 +232,14 @@ class DBServiceUser {
       "type": owner.type
     };
     var response = await http.post(
-        "${StaticStrings.api}/owner", body: body);
+        Uri.http(StaticStrings.api, "/owner"), body: body);
     print(response.body);
   }
 
   Future<List<Owner>> getOwners(String restaurant_id) async {
     List<Owner> owners = [];
     var response = await http.get(
-        "${StaticStrings.api}/ownerres",
+        Uri.http(StaticStrings.api, "/ownerres"),
         headers: {"restaurant_id":restaurant_id});
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
@@ -257,12 +257,12 @@ class DBServiceUser {
 
   Future deleteOwner(Owner owner) async{
     var response = await http.delete(
-        "${StaticStrings.api}/owner", headers: {"user_id" : owner.user_id, "restaurant_id" : owner.restaurant_id});
+        Uri.http(StaticStrings.api, "/owner"), headers: {"user_id" : owner.user_id, "restaurant_id" : owner.restaurant_id});
     print(response.body);
   }
 
   Future updateOwner(Owner owner) async{
-    var response = await http.put("${StaticStrings.api}/owner", body: {
+    var response = await http.put(Uri.http(StaticStrings.api, "/owner"), body: {
       "user_id" : owner.user_id,
       "type": owner.type,
       "restaurant_id": owner.restaurant_id,
@@ -271,29 +271,29 @@ class DBServiceUser {
   }
 
   Future addFollower(String followerid)async{
-    var response = await http.post("${StaticStrings.api}/follower", body: {"userid": userF.uid, "followerid":followerid});
+    var response = await http.post(Uri.http(StaticStrings.api, "/follower"), body: {"userid": userF.uid, "followerid":followerid});
     print(response.body);
   }
 
   Future deleteFollower(String userid, String followerid)async{
-    var response = await http.delete("${StaticStrings.api}/follower", headers: {"userid":userid, "followerid":followerid});
+    var response = await http.delete(Uri.http(StaticStrings.api, "/follower"), headers: {"userid":userid, "followerid":followerid});
     print(response.body);
   }
 
   Future<int> getNumFollowers(String userid) async{
-    var response = await http.get("${StaticStrings.api}/numfollowers", headers: {"userid":userid});
+    var response = await http.get(Uri.http(StaticStrings.api, "/numfollowers"), headers: {"userid":userid});
     List result = json.decode(response.body);
     return int.parse(result.first['num']);
   }
 
   Future<int> getNumFollowing(String userid) async{
-    var response = await http.get("${StaticStrings.api}/numfollowing", headers: {"userid":userid});
+    var response = await http.get(Uri.http(StaticStrings.api, "/numfollowing"), headers: {"userid":userid});
     List result = json.decode(response.body);
     return int.parse(result.first['num']);
   }
 
   Future<List<String>> getFollowers(String userid) async{
-    var response = await http.get("${StaticStrings.api}/followers", headers: {"userid":userid});
+    var response = await http.get(Uri.http(StaticStrings.api, "/followers"), headers: {"userid":userid});
     List<String> follows = [];
     List result = json.decode(response.body);
     for(var element in result){
@@ -303,7 +303,7 @@ class DBServiceUser {
   }
 
   Future<List<String>> getFollowing(String userid) async{
-    var response = await http.get("${StaticStrings.api}/following", headers: {"userid":userid});
+    var response = await http.get(Uri.http(StaticStrings.api, "/following"), headers: {"userid":userid});
     List<String> follows = [];
     List result = json.decode(response.body);
     for(var element in result){
@@ -313,7 +313,7 @@ class DBServiceUser {
   }
 
   Future createTicket(String ticket, String type)async{
-    var response = await http.post("${StaticStrings.api}/ticket", body: {"userid":userF.uid, "ticket":ticket, "type":type});
+    var response = await http.post(Uri.http(StaticStrings.api, "/ticket"), body: {"userid":userF.uid, "ticket":ticket, "type":type});
     print(response.body);
   }
 
@@ -325,14 +325,14 @@ class DBServiceUser {
       "type": notification.type
     };
     var response = await http.post(
-        "${StaticStrings.api}/notifications", body: body);
+        Uri.http(StaticStrings.api, "/notifications"), body: body);
     print(response.body);
   }
 
   Future<List<PersonalNotification>> getNotifications(String user_id) async {
     List<PersonalNotification> notifications = [];
     var response = await http.get(
-        "${StaticStrings.api}/notifications",
+        Uri.http(StaticStrings.api, "/notifications"),
         headers: {"user_id" : user_id});
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
@@ -351,12 +351,12 @@ class DBServiceUser {
 
   Future deleteNotification(String id) async{
     var response = await http.delete(
-        "${StaticStrings.api}/notifications", headers: {"id" : id});
+        Uri.http(StaticStrings.api, "/notifications"), headers: {"id" : id});
     print(response.body);
   }
 
   Future updateToken(String token, String user_id) async{
-    var response = await http.put("${StaticStrings.api}/token", body: {
+    var response = await http.put(Uri.http(StaticStrings.api, "/token"), body: {
       "user_id" : user_id,
       "token": token,
     });
@@ -366,7 +366,7 @@ class DBServiceUser {
   Future<List<User>> getUsersFeed() async{
     List<User> users = [];
     var response = await http.get(
-        "${StaticStrings.api}/usersfeed", headers: {"user_id": userF.uid, "latitude" : GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
+        Uri.http(StaticStrings.api, "/usersfeed"), headers: {"user_id": userF.uid, "latitude" : GeolocationService.myPos.latitude.toString(), "longitude": GeolocationService.myPos.longitude.toString() });
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
       User user = User(
@@ -395,7 +395,7 @@ class DBServiceUser {
     query = aux.join(" ");
     List<User> users = [];
     var response = await http.get(
-        "${StaticStrings.api}/userssearch", headers: {"user_id": userF.uid, "query": query});
+        Uri.http(StaticStrings.api, "/userssearch"), headers: {"user_id": userF.uid, "query": query});
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
       User user = User(

@@ -1,4 +1,3 @@
-import 'package:flutter_screenutil/screenutil.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:photo_view/photo_view.dart';
@@ -19,7 +18,7 @@ class _GalleryState extends State<Gallery> {
   @override
   Widget build(BuildContext context) {
     restaurant = ModalRoute.of(context).settings.arguments;
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,

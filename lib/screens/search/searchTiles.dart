@@ -48,7 +48,7 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
       top = _getTop();
       init = false;
     }
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     return GestureDetector(
       onTap: (){
         if(sponsored){
@@ -236,7 +236,7 @@ class _SearchEntryTileState extends State<SearchEntryTile> {
     AppLocalizations tr = AppLocalizations.of(context);
     restaurant = Provider.of<Restaurant>(context);
     entry = Provider.of<MenuEntry>(context);
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     return GestureDetector(
       onTap: () async{
         await showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext bc){

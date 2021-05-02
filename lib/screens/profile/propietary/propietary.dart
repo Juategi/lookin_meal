@@ -19,7 +19,7 @@ class OwnerMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppLocalizations tr = AppLocalizations.of(context);
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     return Scaffold(
       body: Column( crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -198,7 +198,7 @@ class _OwnedState extends State<Owned> {
 class RegisterRestaurantMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     AppLocalizations tr = AppLocalizations.of(context);
     return Scaffold(
       body: Column( crossAxisAlignment: CrossAxisAlignment.center,

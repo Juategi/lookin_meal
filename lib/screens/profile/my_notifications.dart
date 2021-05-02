@@ -30,7 +30,7 @@ class _UserNotificationsState extends State<UserNotifications> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     AppLocalizations tr = AppLocalizations.of(context);
     _getNotifications();
     return SafeArea(

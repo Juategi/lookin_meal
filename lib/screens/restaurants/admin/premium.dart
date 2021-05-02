@@ -19,7 +19,7 @@ class _PremiumState extends State<Premium> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     restaurant = ModalRoute.of(context).settings.arguments;
     return SafeArea(child:
     Scaffold(

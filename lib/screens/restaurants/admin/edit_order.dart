@@ -147,7 +147,7 @@ class _EditOrderState extends State<EditOrder> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     List<Object> result = ModalRoute.of(context).settings.arguments;
     originalSections = result.first;
     originalMenu = result.last;

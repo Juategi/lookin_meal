@@ -21,7 +21,7 @@ class DBServiceRequest{
       "localcode" : localcode.toString(),
     };
     var response = await http.post(
-        "${StaticStrings.api}/smssend", body: body);
+        Uri.http(StaticStrings.api, "/smssend"), body: body);
     print(response.body);
   }
 
@@ -31,7 +31,7 @@ class DBServiceRequest{
       "localcode" : localcode.toString(),
     };
     var response = await http.put(
-        "${StaticStrings.api}/smsresend", body: body);
+        Uri.http(StaticStrings.api, "/smsresend"), body: body);
     print(response.body);
   }
 
@@ -41,7 +41,7 @@ class DBServiceRequest{
       "localcode" : localcode.toString(),
     };
     var response = await http.post(
-        "${StaticStrings.api}/emailsend", body: body);
+        Uri.http(StaticStrings.api, "/emailsend"), body: body);
     print(response.body);
   }
 
@@ -51,7 +51,7 @@ class DBServiceRequest{
       "localcode" : localcode.toString(),
     };
     var response = await http.put(
-        "${StaticStrings.api}/emailresend", body: body);
+        Uri.http(StaticStrings.api, "/emailresend"), body: body);
     print(response.body);
   }
 
@@ -61,7 +61,7 @@ class DBServiceRequest{
       "localcode" : localcode.toString(),
     };
     var response = await http.post(
-        "${StaticStrings.api}/confirmcodes", body: body);
+        Uri.http(StaticStrings.api, "/confirmcodes"), body: body);
     print(response.body);
     if(response.body == 'match')
       return true;
@@ -80,7 +80,7 @@ class DBServiceRequest{
     };
     try {
       var response = await http.post(
-          "${StaticStrings.api}/request", body: body);
+          Uri.http(StaticStrings.api, "/request"), body: body);
       print(response.body);
       if(response.body == 'Request created')
         return true;
@@ -106,7 +106,7 @@ class DBServiceRequest{
       "types": types == null? "{}" : types.toString().replaceAll("[", "{").replaceAll("]", "}"),
       "currency": currency,
     };
-    var response = await http.post("${StaticStrings.api}/requestrestaurant", body: body);
+    var response = await http.post(Uri.http(StaticStrings.api, "/requestrestaurant"), body: body);
     print(response.body);
   }
 }

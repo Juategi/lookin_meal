@@ -42,7 +42,6 @@ class StarRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
     return Row(
         mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(starCount, (index) => buildStar(context, index))

@@ -29,7 +29,7 @@ class _EmailPasswordState extends State<EmailPassword> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations tr = AppLocalizations.of(context);
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     user = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       body: GestureDetector(

@@ -16,7 +16,7 @@ class SupportMenu extends StatefulWidget {
 class _SupportMenuState extends State<SupportMenu> {
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     AppLocalizations tr = AppLocalizations.of(context);
     return Scaffold(
       body: Column( crossAxisAlignment: CrossAxisAlignment.center,
@@ -81,7 +81,7 @@ class TicketMenu extends StatefulWidget {
 class _TicketMenuState extends State<TicketMenu> {
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     AppLocalizations tr = AppLocalizations.of(context);
     return Scaffold(
       body: Column( crossAxisAlignment: CrossAxisAlignment.center,
@@ -205,7 +205,7 @@ class _SendTicketState extends State<SendTicket> {
   String type, ticket;
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     AppLocalizations tr = AppLocalizations.of(context);
     type =  ModalRoute.of(context).settings.arguments;
     return Scaffold(

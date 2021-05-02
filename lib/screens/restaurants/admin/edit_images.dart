@@ -88,7 +88,7 @@ class _EditImagesState extends State<EditImages> {
   }
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     return Column(children: <Widget>[
       SizedBox(height: 45.h,),
       Expanded(child:

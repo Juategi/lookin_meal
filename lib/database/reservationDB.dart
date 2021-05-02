@@ -21,7 +21,7 @@ class DBServiceReservation{
       "amount": table.amount.toString()
     };
     var response = await http.post(
-        "${StaticStrings.api}/table", body: body);
+        Uri.http(StaticStrings.api, "/table"), body: body);
     List<dynamic> result = json.decode(response.body);
     print("table created" + result.first["table_id"].toString());
     return result.first["table_id"].toString();
@@ -30,7 +30,7 @@ class DBServiceReservation{
   Future<List<RestaurantTable>> getTables(String restaurant_id) async {
     List<RestaurantTable> tables = [];
     var response = await http.get(
-        "${StaticStrings.api}/tables",
+        Uri.http(StaticStrings.api, "/tables"),
         headers: {"restaurant_id":restaurant_id});
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
@@ -55,13 +55,13 @@ class DBServiceReservation{
       "amount": table.amount.toString()
     };
     var response = await http.put(
-        "${StaticStrings.api}/table", body: body);
+        Uri.http(StaticStrings.api, "/table"), body: body);
     print(response.body);
   }
 
   Future deleteTable(String table_id) async{
     var response = await http.delete(
-        "${StaticStrings.api}/table", headers: {"id" : table_id});
+        Uri.http(StaticStrings.api, "/table"), headers: {"id" : table_id});
     print(response.body);
   }
 
@@ -78,14 +78,14 @@ class DBServiceReservation{
       "reservationtime": reservation.reservationtime
     };
     var response = await http.post(
-        "${StaticStrings.api}/reservation", body: body);
+        Uri.http(StaticStrings.api, "/reservation"), body: body);
     print(response.body);
   }
 
   Future<List<Reservation>> getReservationsDay(String restaurant_id, String reservationdate) async {
     List<Reservation> reservations = [];
     var response = await http.get(
-        "${StaticStrings.api}/reservationsday",
+        Uri.http(StaticStrings.api, "/reservationsday"),
         headers: {"restaurant_id":restaurant_id, "reservationdate" : reservationdate});
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
@@ -106,7 +106,7 @@ class DBServiceReservation{
   Future<List<Reservation>> getReservationsUser(String user_id, String reservationdate) async {
     List<Reservation> reservations = [];
     var response = await http.get(
-        "${StaticStrings.api}/reservationsuser",
+        Uri.http(StaticStrings.api, "/reservationsuser"),
         headers: {"user_id": user_id, "reservationdate" : reservationdate});
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
@@ -127,7 +127,7 @@ class DBServiceReservation{
 
   Future deleteReservation(String table_id, String reservationdate, String reservationtime) async{
     var response = await http.delete(
-        "${StaticStrings.api}/reservation", headers: {"table_id" : table_id, "reservationdate" : reservationdate, "reservationtime" : reservationtime});
+        Uri.http(StaticStrings.api, "/reservation"), headers: {"table_id" : table_id, "reservationdate" : reservationdate, "reservationtime" : reservationtime});
     print(response.body);
   }
 
@@ -141,14 +141,14 @@ class DBServiceReservation{
       "link" : code.link
     };
     var response = await http.post(
-        "${StaticStrings.api}/codes", body: body);
+        Uri.http(StaticStrings.api, "/codes"), body: body);
     print(response.body);
   }
 
   Future<List<Code>> getCodes(String restaurant_id) async {
     List<Code> codes = [];
     var response = await http.get(
-        "${StaticStrings.api}/codes",
+        Uri.http(StaticStrings.api, "/codes"),
         headers: {"restaurant_id":restaurant_id});
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
@@ -164,7 +164,7 @@ class DBServiceReservation{
 
   Future deleteCode(String code_id, String restaurant_id) async{
     var response = await http.delete(
-        "${StaticStrings.api}/codes", headers: {"restaurant_id" : restaurant_id, "code_id" : code_id});
+        Uri.http(StaticStrings.api, "/codes"), headers: {"restaurant_id" : restaurant_id, "code_id" : code_id});
     print(response.body);
   }
 
@@ -176,7 +176,7 @@ class DBServiceReservation{
       "excludeddate" : excludeddate,
     };
     var response = await http.post(
-        "${StaticStrings.api}/excluded", body: body);
+        Uri.http(StaticStrings.api, "/excluded"), body: body);
     print(response.body);
   }
 
@@ -184,7 +184,7 @@ class DBServiceReservation{
   Future<List<String>> getExcluded(String restaurant_id) async {
     List<String> days = [];
     var response = await http.get(
-        "${StaticStrings.api}/excluded",
+        Uri.http(StaticStrings.api, "/excluded"),
         headers: {"restaurant_id": restaurant_id,});
     List<dynamic> result = json.decode(response.body);
     for(var element in result){
@@ -195,7 +195,7 @@ class DBServiceReservation{
 
   Future deleteExcluded(String excludeddate, String restaurant_id) async{
     var response = await http.delete(
-        "${StaticStrings.api}/excluded", headers: {"restaurant_id": restaurant_id, "excludeddate" : excludeddate,});
+        Uri.http(StaticStrings.api, "/excluded"), headers: {"restaurant_id": restaurant_id, "excludeddate" : excludeddate,});
     print(response.body);
   }
 

@@ -256,7 +256,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 		}
   	//if(restaurant.menu == null)
   		//_loadMenu();
-		ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     return SafeArea(
       child: Scaffold(
 			//backgroundColor: CommonData.backgroundColor,

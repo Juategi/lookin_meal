@@ -36,7 +36,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
   @override
   Widget build(BuildContext context) {
     restaurant = ModalRoute.of(context).settings.arguments;
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     AppLocalizations tr = AppLocalizations.of(context);
     return SafeArea(
       child: Scaffold(

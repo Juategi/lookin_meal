@@ -65,7 +65,7 @@ class _EditProfileState extends State<EditProfile> {
             borderRadius: BorderRadius.circular(20)
         )
     );
-    ScreenUtil.init(context, height: CommonData.screenHeight, width: CommonData.screenWidth, allowFontScaling: true);
+
     return SafeArea(
       child: Scaffold(
         //backgroundColor: CommonData().getColor(),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/strings.dart';
 import 'package:stripe_payment/stripe_payment.dart';
@@ -41,7 +41,7 @@ class StripeService {
   Future<void> processPaymentAsDirectCharge(BuildContext context, PaymentMethod paymentMethod, double amount) async {
     PaymentIntentResult paymentIntent;
     var response = await http.post(
-        "${StaticStrings.api}/stripe", body: {"amount":1000.toString()});
+        Uri.http(StaticStrings.api, "/stripe", body: {"amount":1000.toString()});
     Map aux = json.decode(response.body);
     String _paymentIntentClientSecret = aux['client_secret'];
     await StripePayment.confirmPaymentIntent(
@@ -60,3 +60,5 @@ class StripeService {
   }
 
 }
+
+ */
