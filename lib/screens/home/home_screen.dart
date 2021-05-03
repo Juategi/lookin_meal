@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
 			preferencesPrefix: 'rateMyApp_',
 			minDays: 0,
 			minLaunches: 0,
-			remindDays: 0,
+			remindDays: 1,
 			remindLaunches: 1,
 			googlePlayIdentifier: 'com.wt.lookinmeal',
 			//appStoreIdentifier: '1491556149',
@@ -228,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
 		    										});
 		    									},
 		    								),
-		    								SizedBox(width: 40.w,),
+		    								SizedBox(width: 20.w,),
 		    								IconButton(
 		    										icon: Icon(Icons.my_location,
 		    											color: Color.fromRGBO(255, 110, 117, 0.61),

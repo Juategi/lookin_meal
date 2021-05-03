@@ -20,7 +20,6 @@ import 'package:lookinmeal/screens/top/top.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:lookinmeal/services/geolocation.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:lookinmeal/services/push_notifications.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
@@ -87,82 +86,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 		});
 	}
 
-	Future<void> scanQR() async {
-		if(DBServiceUser.userF.inOrder == null){
-			String barcodeScanRes;
-			// Platform messages may fail, so we use a try/catch PlatformException.
-			try {
-				barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-						"#FF6E75", "Cancel", true, ScanMode.QR);
-				print(barcodeScanRes);
-			} on PlatformException {
-				barcodeScanRes = 'Failed to get platform version.';
-			}
-			// If the widget was removed from the tree while the asynchronous platform
-			// message was in flight, we want to discard the reply rather than calling
-			// setState to update our non-existent appearance.
-			if (!mounted) return;
-
-			if(barcodeScanRes != "-1")
-				if(RegExp(r'[a-zA-Z0-9]+/+[a-zA-Z0-9]').hasMatch(barcodeScanRes))
-					pushNewScreenWithRouteSettings(
-						context,
-						settings: RouteSettings(name: "/order", arguments: barcodeScanRes),
-						screen: OrderScreen(),
-						withNavBar: true,
-						pageTransitionAnimation: PageTransitionAnimation.slideUp,
-					).then((value) => setState(() {}));
-					//Navigator.pushNamed(context, "/order",arguments: barcodeScanRes).then((value) => setState(() {}));
-				else
-					setState(() {
-						_controller.jumpToTab(0);
-					});
-		}
-		else{
-			pushNewScreenWithRouteSettings(
-				context,
-				settings: RouteSettings(name: "/order", arguments: DBServiceUser.userF.inOrder),
-				screen: OrderScreen(),
-				withNavBar: true,
-				pageTransitionAnimation: PageTransitionAnimation.slideUp,
-			).then((value) => setState(() {}));
-			//Navigator.pushNamed(context, "/order",arguments: DBServiceUser.userF.inOrder).then((value) => setState(() {}));
-		}
-	}
-
-	BottomNavigationBar getBar(){
-		AppLocalizations tr = AppLocalizations.of(context);
-		return BottomNavigationBar(
-			backgroundColor: Colors.white,
-			type: BottomNavigationBarType.fixed,
-			items: <BottomNavigationBarItem>[
-				BottomNavigationBarItem(
-					icon: Icon(FontAwesomeIcons.compass, size: ScreenUtil().setSp(22), ),
-					title: Text(tr.translate("home")),
-				),
-				BottomNavigationBarItem(
-					icon: Icon(FontAwesomeIcons.mapMarkedAlt, size: ScreenUtil().setSp(22),),
-					title: Text(tr.translate("map")),
-				),
-				BottomNavigationBarItem(
-					icon: GestureDetector(onTap: scanQR, child: Icon(DBServiceUser.userF.inOrder == null? Icons.camera : FontAwesomeIcons.shoppingCart, size: ScreenUtil().setSp(22),)),
-					title: GestureDetector(onTap: scanQR, child: Text("Order")),
-				),
-				BottomNavigationBarItem(
-					icon: Icon(Icons.star, size: ScreenUtil().setSp(25),),
-					title: Text("Top"),
-				),
-				BottomNavigationBarItem(
-					icon: Icon(Icons.person, size: ScreenUtil().setSp(25),),
-					title: Text(tr.translate("profile")),
-				),
-			],
-			currentIndex: CommonData.selectedIndex,
-			selectedItemColor: Color.fromRGBO(255, 110, 117, 0.61),
-			unselectedItemColor: Color.fromRGBO(130, 130, 130, 1),
-			onTap: onItemTapped,
-		);
-	}
 
 	Future<void> initDynamicLinks(BuildContext context) async {
 		//https://findeat.page.link/?link=https://findeat.page.link/restaurant?id=833&apn=com.wt.lookinmeal
