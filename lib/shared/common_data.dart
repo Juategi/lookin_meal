@@ -23,7 +23,7 @@ class CommonData{
     {"value": "Argentinean"},
     {"value": "Asian"},
     {"value": "Bar"},
-    {"value": "Barbeque"},
+    {"value": "Barbecue"},
     {"value": "Bistro"},
     {"value": "Brazilian"},
     {"value": "British"},

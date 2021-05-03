@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/paymentDB.dart';
 import 'package:lookinmeal/models/payment.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
@@ -35,7 +36,7 @@ class _PaymentListState extends State<PaymentList> {
 
   @override
   Widget build(BuildContext context) {
-
+    AppLocalizations tr = AppLocalizations.of(context);
     restaurant = ModalRoute.of(context).settings.arguments;
     getPayments();
     return SafeArea(child:
@@ -43,7 +44,7 @@ class _PaymentListState extends State<PaymentList> {
         body: Column(
           children: [
             SizedBox(height: 32.h,),
-            Center(child: Text("Payments", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24),),))),
+            Center(child: Text(tr.translate("payments"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24),),))),
             SizedBox(height: 25.h,),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -124,7 +125,7 @@ class _PaymentListState extends State<PaymentList> {
                                             ),
                                             pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start,
                                               children: [
-                                                pw.Text("Factura", style: pw.TextStyle(color: PdfColors.black,
+                                                pw.Text(tr.translate("payment"), style: pw.TextStyle(color: PdfColors.black,
                                                   letterSpacing: .3,
                                                   fontWeight: pw.FontWeight.bold,
                                                   fontSize: ScreenUtil().setSp(16),))
@@ -133,7 +134,7 @@ class _PaymentListState extends State<PaymentList> {
                                             pw.SizedBox(height: 20),
                                             pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start,
                                                 children: [
-                                                  pw.Text("Fecha ${Functions.formatDate(payment.paymentdate.substring(0,10))}", style: pw.TextStyle(color: PdfColors.black,
+                                                  pw.Text("${tr.translate("date")}: ${Functions.formatDate(payment.paymentdate.substring(0,10))}", style: pw.TextStyle(color: PdfColors.black,
                                                     letterSpacing: .3,
                                                     fontWeight: pw.FontWeight.normal,
                                                     fontSize: ScreenUtil().setSp(13),))
@@ -142,7 +143,7 @@ class _PaymentListState extends State<PaymentList> {
                                             pw.SizedBox(height: 5),
                                             pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start,
                                                 children: [
-                                                  pw.Text("Número de factura: ${payment.id}", style: pw.TextStyle(color: PdfColors.black,
+                                                  pw.Text("${tr.translate("date")}: ${payment.id}", style: pw.TextStyle(color: PdfColors.black,
                                                     letterSpacing: .3,
                                                     fontWeight: pw.FontWeight.normal,
                                                     fontSize: ScreenUtil().setSp(13),))
@@ -151,7 +152,7 @@ class _PaymentListState extends State<PaymentList> {
                                             pw.SizedBox(height: 5),
                                             pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start,
                                                 children: [
-                                                  pw.Text("ID de usuario: ${payment.user_id}", style: pw.TextStyle(color: PdfColors.black,
+                                                  pw.Text("${tr.translate("userid")}: ${payment.user_id}", style: pw.TextStyle(color: PdfColors.black,
                                                     letterSpacing: .3,
                                                     fontWeight: pw.FontWeight.normal,
                                                     fontSize: ScreenUtil().setSp(13),))
@@ -160,7 +161,7 @@ class _PaymentListState extends State<PaymentList> {
                                             pw.SizedBox(height: 5),
                                             pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start,
                                                 children: [
-                                                  pw.Text("ID del local: ${payment.restaurant_id}", style: pw.TextStyle(color: PdfColors.black,
+                                                  pw.Text("${tr.translate("placeid")}: ${payment.restaurant_id}", style: pw.TextStyle(color: PdfColors.black,
                                                     letterSpacing: .3,
                                                     fontWeight: pw.FontWeight.normal,
                                                     fontSize: ScreenUtil().setSp(13),))
@@ -169,7 +170,7 @@ class _PaymentListState extends State<PaymentList> {
                                             pw.SizedBox(height: 5),
                                             pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start,
                                                 children: [
-                                                  pw.Text("Nombre del local: ${restaurant.name}", style: pw.TextStyle(color: PdfColors.black,
+                                                  pw.Text("${tr.translate("placename")}: ${restaurant.name}", style: pw.TextStyle(color: PdfColors.black,
                                                     letterSpacing: .3,
                                                     fontWeight: pw.FontWeight.normal,
                                                     fontSize: ScreenUtil().setSp(13),))
@@ -184,15 +185,15 @@ class _PaymentListState extends State<PaymentList> {
                                             pw.SizedBox(height: 20),
                                             pw.Row(mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  pw.Text("Servicio", style: pw.TextStyle(color: PdfColors.black,
+                                                  pw.Text(tr.translate("service"), style: pw.TextStyle(color: PdfColors.black,
                                                     letterSpacing: .3,
                                                     fontWeight: pw.FontWeight.bold,
                                                     fontSize: ScreenUtil().setSp(13),)),
-                                                  pw.Text("Descripción", style: pw.TextStyle(color: PdfColors.black,
+                                                  pw.Text(tr.translate("description"), style: pw.TextStyle(color: PdfColors.black,
                                                     letterSpacing: .3,
                                                     fontWeight: pw.FontWeight.bold,
                                                     fontSize: ScreenUtil().setSp(13),)),
-                                                  pw.Text("Precio", style: pw.TextStyle(color: PdfColors.black,
+                                                  pw.Text(tr.translate("price"), style: pw.TextStyle(color: PdfColors.black,
                                                     letterSpacing: .3,
                                                     fontWeight: pw.FontWeight.bold,
                                                     fontSize: ScreenUtil().setSp(13),)),
@@ -222,7 +223,7 @@ class _PaymentListState extends State<PaymentList> {
                                             pw.SizedBox(height: 60),
                                             pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start,
                                                 children: [
-                                                  pw.Text("Incluye 10% de IVA ${payment.price/10} EUR", style: pw.TextStyle(color: PdfColors.black,
+                                                  pw.Text("${tr.translate("iva")} ${payment.price/10} EUR", style: pw.TextStyle(color: PdfColors.black,
                                                     letterSpacing: .3,
                                                     fontWeight: pw.FontWeight.normal,
                                                     fontSize: ScreenUtil().setSp(13),))
@@ -231,7 +232,7 @@ class _PaymentListState extends State<PaymentList> {
                                             pw.SizedBox(height: 10),
                                             pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start,
                                                 children: [
-                                                  pw.Text("Factura emitida por FindEat", style: pw.TextStyle(color: PdfColors.black,
+                                                  pw.Text(tr.translate("paymendfe"), style: pw.TextStyle(color: PdfColors.black,
                                                     letterSpacing: .3,
                                                     fontWeight: pw.FontWeight.normal,
                                                     fontSize: ScreenUtil().setSp(13),))
@@ -251,7 +252,7 @@ class _PaymentListState extends State<PaymentList> {
                               final file = File("${output2.path}/${payment.id}.pdf");
                               await file.writeAsBytes(await pdf.save());
                               print(output2.path);
-                              Alerts.toast("Payment downloaded!");
+                              Alerts.toast(tr.translate("paymentdownloaded"));
                             })
                           ],
                         ),

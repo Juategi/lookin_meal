@@ -6,6 +6,7 @@ import 'package:lookinmeal/database/reservationDB.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/table.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
 
@@ -22,16 +23,6 @@ class _EditTablesState extends State<EditTables> {
     return false;
   }
 
-  void _timer() {
-    if(restaurant.tables == null) {
-      Future.delayed(Duration(seconds: 2)).then((_) {
-        setState(() {
-          print("Loading..");
-        });
-        _timer();
-      });
-    }
-  }
 
   Future _updateTables() async{
     for(RestaurantTable table in restaurant.tables){
@@ -48,6 +39,8 @@ class _EditTablesState extends State<EditTables> {
 
   Future _getTables() async{
     restaurant.tables = await DBServiceReservation.dbServiceReservation.getTables(restaurant.restaurant_id);
+    setState(() {
+    });
   }
 
   @override
@@ -64,11 +57,10 @@ class _EditTablesState extends State<EditTables> {
 
   @override
   Widget build(BuildContext context) {
-
+    AppLocalizations tr = AppLocalizations.of(context);
     restaurant = ModalRoute.of(context).settings.arguments;
     if(restaurant.tables == null){
       _getTables();
-      _timer();
     }
     if(restaurant.mealtime == null)
       restaurant.mealtime = 1;
@@ -79,11 +71,11 @@ class _EditTablesState extends State<EditTables> {
           child: Column(
             children: [
               SizedBox(height: 32.h,),
-              Center(child: Text("Reservations configuration", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24),),))),
+              Center(child: Text(tr.translate("reservconf"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24),),))),
               SizedBox(height: 32.h,),
               Row( mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text("Reservation time aprox:   ", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+                  Text("${tr.translate("reservtime")}:   ", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
                   DropdownButton(items: <num>[0.5, 1.0, 1.5, 2.0, 2.5, 3.0].map((n) => DropdownMenuItem(value: n, child:
                   Text(n.toString() + "h", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                   )).toList(), onChanged: (s){
@@ -120,9 +112,9 @@ class _EditTablesState extends State<EditTables> {
                                   children: [
                                     Row( mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
-                                        Text("Minimum capacity:   ", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+                                        Text("${tr.translate("mincapacity")}:   ", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
                                         DropdownButton(items: List<int>.generate(50, (i) => i + 1).map((n) => DropdownMenuItem(value: n, child:
-                                        Text(n.toString() + " people", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),)),
+                                        Text(n.toString() + " ${tr.translate("people")}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),)),
                                         )).toList(), onChanged: (s){
                                           setState(() {
                                             table.capmin = s;
@@ -133,9 +125,9 @@ class _EditTablesState extends State<EditTables> {
                                     ),
                                     Row( mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
-                                        Text("Maximum capacity:   ", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+                                        Text("${tr.translate("mincapacity")}:   ", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
                                         DropdownButton(items: List<int>.generate(50, (i) => i + 1).map((n) => DropdownMenuItem(value: n, child:
-                                        Text(n.toString() + " people", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),)),
+                                        Text(n.toString() + " ${tr.translate("people")}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),)),
                                         )).toList(), onChanged: (s){
                                           setState(() {
                                             table.capmax = s;
@@ -150,7 +142,7 @@ class _EditTablesState extends State<EditTables> {
                                 Column(
                                   children: [
                                     SizedBox(height: 15.h,),
-                                    Text("Cuantity", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
+                                    Text(tr.translate("amount"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),)),
                                     DropdownButton(items: <num>[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map((n) => DropdownMenuItem(value: n, child:
                                     Text(n.toString(), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(14),),)),
                                     )).toList(), onChanged: (s){

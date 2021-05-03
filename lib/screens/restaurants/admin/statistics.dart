@@ -7,6 +7,7 @@ import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/database/statisticDB.dart';
 import 'package:lookinmeal/models/payment.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'package:lookinmeal/shared/loading.dart';
@@ -85,7 +86,7 @@ class _StatisticsState extends State<Statistics> {
 
   @override
   Widget build(BuildContext context) {
-
+    AppLocalizations tr = AppLocalizations.of(context);
     restaurant = ModalRoute.of(context).settings.arguments;
     if(init){
       _loadStats();
@@ -103,7 +104,7 @@ class _StatisticsState extends State<Statistics> {
               ),
               child: Row( mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("Statistics", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+                  Text(tr.translate("stats"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
                   //Spacer(),
                 ],
               ),
@@ -125,7 +126,7 @@ class _StatisticsState extends State<Statistics> {
                       canTapOnHeader: true,
                       isExpanded: _isOpen[0],
                       headerBuilder: (context, isOpen){
-                        return  Center(child: Text("Visits per month", textAlign: TextAlign.center,  maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.7), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)));
+                        return  Center(child: Text(tr.translate("visitsmonth"), textAlign: TextAlign.center,  maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.7), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)));
                       },
                       body: Column(
                         children: [
@@ -166,8 +167,8 @@ class _StatisticsState extends State<Statistics> {
                                       xValueMapper: (String key, _) => key,
                                       yValueMapper: (String key, _) => visits[key],
                                       dataLabelSettings: DataLabelSettings(isVisible: true),
-                                      xAxisName: "months",
-                                      yAxisName: "visits"
+                                      xAxisName: tr.translate("months"),
+                                      yAxisName: tr.translate("visits")
                                   )
                                 ]
                             ),
@@ -179,7 +180,7 @@ class _StatisticsState extends State<Statistics> {
                       canTapOnHeader: true,
                       isExpanded: _isOpen[1],
                       headerBuilder: (context, isOpen){
-                        return  Center(child: Text("Rates per month", textAlign: TextAlign.center,  maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.7), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)));
+                        return  Center(child: Text(tr.translate("ratesmonth"), textAlign: TextAlign.center,  maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.7), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)));
                       },
                       body: Column(
                         children: [
@@ -220,8 +221,8 @@ class _StatisticsState extends State<Statistics> {
                                       xValueMapper: (String key, _) => key,
                                       yValueMapper: (String key, _) => rates[key],
                                       dataLabelSettings: DataLabelSettings(isVisible: true),
-                                      xAxisName: "months",
-                                      yAxisName: "rates"
+                                      xAxisName: tr.translate("months"),
+                                      yAxisName: tr.translate("ratings").toLowerCase()
                                   )
                                 ]
                             ),
@@ -233,7 +234,7 @@ class _StatisticsState extends State<Statistics> {
                       canTapOnHeader: true,
                       isExpanded: _isOpen[2],
                       headerBuilder: (context, isOpen){
-                        return  Center(child: Text("Types near", textAlign: TextAlign.center,  maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.7), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)));
+                        return  Center(child: Text(tr.translate("typesnear"), textAlign: TextAlign.center,  maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(255, 110, 117, 0.7), letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22),),)));
                       },
                       body: Container(
                         child: SfCartesianChart(
@@ -253,8 +254,8 @@ class _StatisticsState extends State<Statistics> {
                                   xValueMapper: (String key, _) => key,
                                   yValueMapper: (String key, _) => typesNearly[key],
                                   dataLabelSettings: DataLabelSettings(isVisible: true),
-                                  xAxisName: "types",
-                                  yAxisName: "quantity"
+                                  xAxisName: tr.translate("types"),
+                                  yAxisName: tr.translate("amount").toLowerCase()
                               )
                             ]
                         ),

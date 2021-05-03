@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/alert.dart';
@@ -26,7 +27,7 @@ class _EditImagesState extends State<EditImages> {
   @override
   void initState() {
     loading = false;
-    images = List<String>();
+    images = [];
     for(String image in restaurant.images){
       images.add(image);
       print(image);
@@ -88,7 +89,7 @@ class _EditImagesState extends State<EditImages> {
   }
   @override
   Widget build(BuildContext context) {
-
+    AppLocalizations tr = AppLocalizations.of(context);
     return Column(children: <Widget>[
       SizedBox(height: 45.h,),
       Expanded(child:
@@ -116,7 +117,7 @@ class _EditImagesState extends State<EditImages> {
             });
             restaurant.images = images;
             await DBServiceRestaurant.dbServiceRestaurant.updateRestaurantImages(restaurant.restaurant_id,restaurant.images);
-            Alerts.toast("images updated!");
+            Alerts.toast(tr.translate("imagesupdated"));
             Navigator.pop(context);
           },
         ),

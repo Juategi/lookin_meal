@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -41,6 +43,55 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
   final RealTimeOrders controller = RealTimeOrders();
   PersistentTabController _controller;
   AppLocalizations tr;
+  QRViewController qrController;
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+
+  void _onQRViewCreated(QRViewController controller) {
+    qrController = controller;
+    controller.scannedDataStream.listen((scanData) {
+        Barcode result = scanData;
+        if(result.code != null && result.code != "-1") {
+          try {
+            code = result.code
+                .split("order?id=")
+                .last
+                .split("&apn=")
+                .first;
+          } catch(e){
+            print(e);
+            Alerts.toast("Invalid");
+          }
+          if(code != null){
+            if (!RegExp(r'[a-zA-Z0-9]+/+[a-zA-Z0-9]').hasMatch(code))
+              setState(() {
+                _controller.jumpToTab(0);
+              });
+            else {
+              setState(() {
+                init = true;
+                _controller.notifyListeners();
+              });
+            }
+          }
+        }
+    });
+  }
+
+  @override
+  void dispose() {
+    qrController?.dispose();
+    super.dispose();
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      qrController.pauseCamera();
+    } else if (Platform.isIOS) {
+      qrController.resumeCamera();
+    }
+  }
 
   Future getRestaurant() async{
     print(restaurant_id);
@@ -357,9 +408,13 @@ class _OrderScreenState extends State<OrderScreen> with ChangeNotifier{
     if(code == null || code == "-1")
       return SafeArea(child: Scaffold(
         body: Center(
-          child: GestureDetector(
+          /*child: GestureDetector(
             onTap: scanQR,
             child: Icon(Icons.camera , size: ScreenUtil().setSp(60)),
+          ),*/
+          child: QRView(
+            key: qrKey,
+            onQRViewCreated: _onQRViewCreated,
           ),
         ),
       ));

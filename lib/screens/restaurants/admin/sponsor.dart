@@ -6,6 +6,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:lookinmeal/database/paymentDB.dart';
 import 'package:lookinmeal/models/payment.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
@@ -85,6 +86,7 @@ class _SponsorState extends State<Sponsor> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations tr = AppLocalizations.of(context);
     restaurant = ModalRoute
         .of(context)
         .settings
@@ -101,7 +103,7 @@ class _SponsorState extends State<Sponsor> {
             ),
             child: Row(mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text("Sponsor", maxLines: 1,
+                Text(tr.translate("sponsor"), maxLines: 1,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.niramit(textStyle: TextStyle(
                       color: Colors.white,
@@ -123,7 +125,7 @@ class _SponsorState extends State<Sponsor> {
               child: Column(mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                      "Aumenta las visitas a tu local uniendote a nuestro programa de patrocinados, compra un pack de visitas y aparecerás al principio de las búsquedas y el feed de los usuarios. Tu saldo de visitas solo se restará si el usuario entra al perfil de tu local y nunca caducan. ¿A que esperas? Da una publicidad a tu local como nunca antes y a un precio excepcional!",
+                      tr.translate("sponsortext"),
                       maxLines: 15,
                       textAlign: TextAlign.start,
                       style: GoogleFonts.niramit(textStyle: TextStyle(
@@ -134,7 +136,7 @@ class _SponsorState extends State<Sponsor> {
                   SizedBox(height: 25.h,),
                   Row(mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Mas información en el manual  ", maxLines: 1,
+                      Text(tr.translate("manualinfo"), maxLines: 1,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.niramit(textStyle: TextStyle(
                             color: Colors.black,
@@ -149,7 +151,7 @@ class _SponsorState extends State<Sponsor> {
             ),
           ),
           SizedBox(height: 10.h,),
-          Text("Número de visitas restantes contratadas:", maxLines: 1,
+          Text(tr.translate("numvisits"), maxLines: 1,
               textAlign: TextAlign.center,
               style: GoogleFonts.niramit(textStyle: TextStyle(
                 color: Colors.black45,
@@ -165,7 +167,7 @@ class _SponsorState extends State<Sponsor> {
                 fontWeight: FontWeight.bold,
                 fontSize: ScreenUtil().setSp(22),),)),
           SizedBox(height: 10.h,),
-          Text("Compra un nuevo pack:", maxLines: 1,
+          Text(tr.translate("buypack"), maxLines: 1,
               textAlign: TextAlign.start,
               style: GoogleFonts.niramit(textStyle: TextStyle(
                 color: Colors.black,
@@ -234,7 +236,7 @@ class _SponsorState extends State<Sponsor> {
                         padding: EdgeInsets.symmetric(horizontal: 10.w),
                         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("${price.quantity} visitas", maxLines: 1,
+                            Text("${price.quantity} ${"visits"}", maxLines: 1,
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.niramit(textStyle: TextStyle(
                                   color: Colors.black,
@@ -248,7 +250,7 @@ class _SponsorState extends State<Sponsor> {
                                   letterSpacing: .3,
                                   fontWeight: FontWeight.normal,
                                   fontSize: ScreenUtil().setSp(20),),)),
-                            Text("(${price.price*100/price.quantity} cents/visita)", maxLines: 1,
+                            Text("(${price.price*100/price.quantity} cents/${"visits"})", maxLines: 1,
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.niramit(textStyle: TextStyle(
                                   color: Colors.black45,

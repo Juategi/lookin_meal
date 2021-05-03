@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 
@@ -15,13 +16,13 @@ class _EditOrderState extends State<EditOrder> {
   List<String> sections,originalSections;
   bool init = false;
   List<Widget> elements;
-
+  AppLocalizations tr;
   void _copyLists(){
-    menu = List<MenuEntry>();
-    sections = List<String>();
+    menu = [];
+    sections = [];
     if(originalSections == null){
-      originalSections = List<String>();
-      originalMenu = List<MenuEntry>();
+      originalSections = [];
+      originalMenu = [];
     }
     else{
       for (String section in originalSections) {
@@ -49,7 +50,7 @@ class _EditOrderState extends State<EditOrder> {
   }
 
   List<Widget> _init(){
-    List<Widget> entries = new List<Widget>();
+    List<Widget> entries = [];
     for(String section in sections){
       entries.add(Card(color: Color.fromRGBO(255, 110, 117, 0.3), key: ValueKey(section) ,child: ListTile(title: Text(section,), trailing: Icon(Icons.menu),),));
       for(MenuEntry entry in menu){
@@ -69,7 +70,7 @@ class _EditOrderState extends State<EditOrder> {
       String key = _keyToString(elements.elementAt(oldIndex).key);
       if(!sections.contains(key)){ //Its an entry
         if(newIndex == 0){
-          Alerts.dialog('You can not have en entry without section', context);
+          Alerts.dialog(tr.translate("entrynosection"), context);
           return;
         }
         else{
@@ -91,11 +92,11 @@ class _EditOrderState extends State<EditOrder> {
       }
       else{ //Its a section
         if(newIndex == 1 && !sections.contains(elements.elementAt(0).key.toString())){
-          Alerts.dialog('You can not have en entry without section', context);
+          Alerts.dialog(tr.translate("entrynosection"), context);
         }
         else{
           String section;
-          List<String> sectionsAux = List<String>();
+          List<String> sectionsAux = [];
           Widget element = elements.removeAt(oldIndex);
           elements.insert(newIndex, element);
           for(int i = 0; i < elements.length; i++){
@@ -147,7 +148,7 @@ class _EditOrderState extends State<EditOrder> {
 
   @override
   Widget build(BuildContext context) {
-
+    tr = AppLocalizations.of(context);
     List<Object> result = ModalRoute.of(context).settings.arguments;
     originalSections = result.first;
     originalMenu = result.last;
@@ -170,7 +171,7 @@ class _EditOrderState extends State<EditOrder> {
                   child: RaisedButton(
                     elevation: 0,
                     color: Color.fromRGBO(255, 110, 117, 0.9),
-                    child: Text("Guardar", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
+                    child: Text(tr.translate("save"), style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
                     onPressed: () async{
                       Navigator.pop(context, [sections, menu]);
                     },
@@ -191,7 +192,7 @@ class _EditOrderState extends State<EditOrder> {
               ),
               child: Row( mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Align( alignment: AlignmentDirectional.topCenter, child: Text("Editar orden", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
+                  Align( alignment: AlignmentDirectional.topCenter, child: Text(tr.translate("editorder"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
                 ],
               ),
             ),

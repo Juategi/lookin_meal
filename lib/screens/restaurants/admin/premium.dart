@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/paymentDB.dart';
 import 'package:lookinmeal/models/payment.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
@@ -19,7 +20,7 @@ class _PremiumState extends State<Premium> {
 
   @override
   Widget build(BuildContext context) {
-
+    AppLocalizations tr = AppLocalizations.of(context);
     restaurant = ModalRoute.of(context).settings.arguments;
     return SafeArea(child:
     Scaffold(
@@ -33,7 +34,7 @@ class _PremiumState extends State<Premium> {
             ),
             child: Row( mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text("Premium", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+                Text(tr.translate("premium"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
                 //Spacer(),
               ],
             ),
@@ -48,12 +49,12 @@ class _PremiumState extends State<Premium> {
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
               child: Column( mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text("Suscríbete al sistema premium de locales para poder obtar a las funcionalidades mas avanzadas de FindEat en tu local:\n  •  Sistema de reserva de mesas.\n  •  Sistema de pedidos desde la app a través de códigos QR.\n  •  Estadísticas sobre tu local.\n\nLa suscripción se renueva automaticámente cada mes, pero puedes cancelarla siempre que quieras y cuando se termine tu periodo contratado no se te hará ningún cargo más.",
+                  Text(tr.translate("premiumtext"),
                       maxLines: 18, textAlign: TextAlign.start, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black45, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),)),
                   SizedBox(height: 10.h,),
                   Row( mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Mas información en el manual  ", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),)),
+                      Text(tr.translate("manualinfo"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),)),
                       Icon(Icons.info, size: ScreenUtil().setSp(22),),
                     ],
                   ),
@@ -62,11 +63,11 @@ class _PremiumState extends State<Premium> {
             ),
           ),
           SizedBox(height: 20.h,),
-          Text("Suscríbete por solo ${CommonData.prices.firstWhere((element) => element.type == "premium").price}€ al mes", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),)),
+          Text("${tr.translate("subonly")} ${CommonData.prices.firstWhere((element) => element.type == "premium").price}€ ${tr.translate("formonth")}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),)),
           Container(
             height: 70.h,
             width: 300.w,
-            child: Text(restaurant.premium == false && restaurant.premiumtime != null? "Suscripción cancelada, válida hasta el dia ${Functions.formatDate(restaurant.premiumtime)}" : "", maxLines: 2, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black45, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+            child: Text(restaurant.premium == false && restaurant.premiumtime != null? "${tr.translate("subcancel")} ${Functions.formatDate(restaurant.premiumtime)}" : "", maxLines: 2, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black45, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
           ),
           GestureDetector(
             onTap: (){
@@ -107,8 +108,8 @@ class _PremiumState extends State<Premium> {
                   offset: Offset(1, 1), // changes position of shadow
                 ),],
               ),
-              child: restaurant.premium == false? Center(child: Text("Suscribirse", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.greenAccent, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),))):
-              Center(child: Text("Cancelar", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),)))
+              child: restaurant.premium == false? Center(child: Text(tr.translate("sub"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.greenAccent, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),))):
+              Center(child: Text(tr.translate("cancel"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),)))
             ),
           ),
         ],

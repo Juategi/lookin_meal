@@ -89,19 +89,19 @@ class _RestaurantTileState extends State<RestaurantTile> {
               Row( crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(width: 5.w,),
-                  Container(width: 145.w, child: Text(restaurant.name,  maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(12),),))),
+                  Container(width: 145.w, child: Text(restaurant.name,  maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.52), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(10),),))),
                   //SizedBox(width: 1.w,),
                   Column(
                     children: <Widget>[
                       SizedBox(height: 4.h,),
-                      StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: Functions.getRating(restaurant), size: ScreenUtil().setSp(8),),
+                      StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: Functions.getRating(restaurant), size: ScreenUtil().setSp(11),),
                     ],
                   ),
                   SizedBox(width: 3.w,),
                   Column(
                     children: <Widget>[
                       SizedBox(height: 2.h,),
-                      Text("${Functions.getVotes(restaurant)} ${tr.translate("votes")}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(8),),)),
+                      Text("(${Functions.getVotes(restaurant)})", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),)),
                     ],
                   ),
                 ],

@@ -16,9 +16,11 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'app_localizations.dart';
+
 class StorageService{
    final _uuid = Uuid();
-
+   AppLocalizations tr;
    Future<String> uploadImage(BuildContext context, String folder) async{
      File file;
      String fileName = "";
@@ -29,7 +31,9 @@ class StorageService{
            builder: (BuildContext context) {
              bool loading = false;
              return StatefulBuilder(
-                 builder: (context, setState) { return SimpleDialog(
+                 builder: (context, setState) {
+                   tr = AppLocalizations.of(context);
+                   return SimpleDialog(
                    //title: Container( alignment: Alignment.center,child: Text("Seleccionar una foto", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(22),),)),
                    children: <Widget>[
                      Container(
@@ -65,7 +69,7 @@ class StorageService{
                                    ),
                                  ),
                                  SizedBox(width: 20.w,),
-                                 Text("Hacer foto", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(17),),)
+                                 Text(tr.translate("takepic"), style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(17),),)
                                ],
                              ),
                            ),
@@ -97,7 +101,7 @@ class StorageService{
                                    ),
                                  ),
                                  SizedBox(width: 20.w,),
-                                 Text("Seleccionar desde galería", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(17),),)
+                                 Text(tr.translate("fromgallery"), style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(17),),)
                                ],
                              ),
                            )
@@ -162,6 +166,7 @@ class StorageService{
               bool loading = false;
               return StatefulBuilder(
                   builder: (context, setState) {
+                    tr = AppLocalizations.of(context);
                     return SimpleDialog(
                       //title: Container( alignment: Alignment.center,child: Text("Seleccionar una foto", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(22),),)),
                       children: <Widget>[
@@ -197,7 +202,7 @@ class StorageService{
                                       ),
                                     ),
                                     SizedBox(width: 20.w,),
-                                    Text("Hacer foto", style: TextStyle(
+                                    Text(tr.translate("takepic"), style: TextStyle(
                                       fontWeight: FontWeight.normal,
                                       color: Colors.black,
                                       fontSize: ScreenUtil().setSp(17),),)
@@ -227,7 +232,7 @@ class StorageService{
                                       ),
                                     ),
                                     SizedBox(width: 20.w,),
-                                    Text("Seleccionar desde galería",
+                                    Text(tr.translate("fromgallery"),
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         color: Colors.black,
@@ -259,7 +264,7 @@ class StorageService{
                                       ),
                                     ),
                                     SizedBox(width: 20.w,),
-                                    Text("Seleccionar PDF",
+                                    Text(tr.translate("pickpdf"),
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         color: Colors.black,

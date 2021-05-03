@@ -5,6 +5,7 @@ import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/owner.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/models/user.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/loading.dart';
@@ -28,7 +29,7 @@ class _ManageAdminsState extends State<ManageAdmins> {
 
   @override
   Widget build(BuildContext context) {
-
+    AppLocalizations tr = AppLocalizations.of(context);
     restaurant = ModalRoute.of(context).settings.arguments;
     if(init){
       loadUsers();
@@ -42,11 +43,11 @@ class _ManageAdminsState extends State<ManageAdmins> {
               children: <Widget>[
                 Row( mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Manage Admins", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(28),),)),
+                    Text(tr.translate("manageadmins"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(28),),)),
                   ]
                 ),
                 SizedBox(height: 10.h,),
-                Text("Mark the check for the user to have permission to manage other admin", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+                Text(tr.translate("adminsnote"), maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
                 SizedBox(height: 20.h,),
               ] + (owners == null? [Loading()] : owners.map((user) =>
                   user.user_id == DBServiceUser.userF.uid ? Container() : Padding(
@@ -103,7 +104,7 @@ class _ManageAdminsState extends State<ManageAdmins> {
                     width: 160.w,
                     child: RaisedButton(elevation: 0,
                       color: Color.fromRGBO(255, 110, 117, 0.9),
-                      child: Text("Add new", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
+                      child: Text(tr.translate("addnew"), style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
                       onPressed: ()async{
                         await showModalBottomSheet(
                             context: context,
@@ -141,13 +142,13 @@ class _ManageAdminsState extends State<ManageAdmins> {
                                     padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
                                     child: Column(
                                       children: [
-                                        Text("Add new admin", style: TextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(18)),),
+                                        Text(tr.translate("addnewadmin"), style: TextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(18)),),
                                         SizedBox(height: 30.h,),
                                         TextField(
                                           onChanged: (val){
                                             username = val;
                                           },
-                                          decoration: input.copyWith(hintText: "Username..."),
+                                          decoration: input.copyWith(hintText: tr.translate("username")),
                                         ),
                                         SizedBox(height: 10.h,),
                                         Container(
@@ -155,12 +156,12 @@ class _ManageAdminsState extends State<ManageAdmins> {
                                           width: 160.w,
                                           child: RaisedButton(elevation: 0,
                                             color: Color.fromRGBO(255, 110, 117, 0.9),
-                                            child: Text("Add", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
+                                            child: Text(tr.translate("add"), style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
                                             onPressed: () async{
                                               User user = await DBServiceUser.dbServiceUser.getUserDataUsername(username);
                                               print(user);
                                               if(user == null){
-                                                Alerts.toast("User not found!");
+                                                Alerts.toast(tr.translate("usernotfound"));
                                               }
                                               else{
                                                 if(owners.firstWhere((o) => o.username == user.username, orElse: () => Owner()).username == null){
@@ -176,7 +177,7 @@ class _ManageAdminsState extends State<ManageAdmins> {
                                                   Navigator.pop(context);
                                                 }
                                                 else{
-                                                  Alerts.toast("User is already an admin!");
+                                                  Alerts.toast(tr.translate("useralready"));
                                                 }
                                               }
                                             }, ),

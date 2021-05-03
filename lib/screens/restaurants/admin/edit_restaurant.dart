@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'file:///C:/D/lookin_meal/lib/screens/restaurants/admin/edit_images.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/storage.dart';
@@ -35,12 +36,12 @@ class _EditRestaurantState extends State<EditRestaurant> {
   void initState() {
     init = false;
     loading = false;
-    schedule = {'1': new List<String>()..add("-1")..add("-1")..add("-1")..add("-1"), '2': new List<String>()..add("-1")..add("-1")..add("-1")..add("-1"), '3': new List<String>()..add("-1")..add("-1")..add("-1")..add("-1"), '4': new List<String>()..add("-1")..add("-1")..add("-1")..add("-1"), '5': new List<String>()..add("-1")..add("-1")..add("-1")..add("-1"), '6': new List<String>()..add("-1")..add("-1")..add("-1")..add("-1"), '0': new List<String>()..add("-1")..add("-1")..add("-1")..add("-1")};
+    schedule = {'1': []..add("-1")..add("-1")..add("-1")..add("-1"), '2': []..add("-1")..add("-1")..add("-1")..add("-1"), '3': []..add("-1")..add("-1")..add("-1")..add("-1"), '4': []..add("-1")..add("-1")..add("-1")..add("-1"), '5': []..add("-1")..add("-1")..add("-1")..add("-1"), '6': []..add("-1")..add("-1")..add("-1")..add("-1"), '0': []..add("-1")..add("-1")..add("-1")..add("-1")};
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
-
+    AppLocalizations tr = AppLocalizations.of(context);
     restaurant = ModalRoute.of(context).settings.arguments;
     if(!init){
       name = restaurant.name;
@@ -75,7 +76,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                     child: loading? CircularLoading() : RaisedButton(
                       elevation: 0,
                       color: Color.fromRGBO(255, 110, 117, 0.9),
-                      child: Text("Guardar", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
+                      child: Text(tr.translate("save"), style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
                       onPressed: () async{
                         if(_formKey.currentState.validate()){
                           setState(() {
@@ -118,7 +119,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                 ),
                 child: Row( mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Align( alignment: AlignmentDirectional.topCenter, child: Text("Editar restaurante", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
+                    Align( alignment: AlignmentDirectional.topCenter, child: Text(tr.translate("editrest"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
                   ],
                 ),
               ),
@@ -129,62 +130,62 @@ class _EditRestaurantState extends State<EditRestaurant> {
                       key: _formKey,
                       child: Column( crossAxisAlignment:CrossAxisAlignment.start, children: <Widget>[
                         SizedBox(height: 20,),
-                        Text("Nombre", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
+                        Text(tr.translate("name"), style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
                         SizedBox(height: 10,),
                         TextFormField(
                           onChanged: (value){
                             name = value;
                           },
                           controller: TextEditingController()..text = name..selection = TextSelection.fromPosition(TextPosition(offset: name.length)),
-                          validator: (val) => val.length < 4 || val.length > 120 ? "Mínimo 4 carácteres y menos de 120" : null,
-                          decoration: textInputDeco.copyWith(hintText: "Nombre del restaurant"),
+                          validator: (val) => val.length < 4 || val.length > 120 ? "4 - 120" : null,
+                          decoration: textInputDeco.copyWith(hintText: ""),
                         ),
                         SizedBox(height: 20,),
-                        Text("Email", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
+                        Text(tr.translate("email"), style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
                         SizedBox(height: 10,),
                         TextFormField(
                           onChanged: (value){
                             email = value;
                           },
                           controller: TextEditingController()..text = email..selection = TextSelection.fromPosition(TextPosition(offset: email.length)),
-                          validator: (val) => !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val) ? "Introduce un email válido" : null,
-                          decoration: textInputDeco.copyWith(hintText: "Email"),
+                          validator: (val) => !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val) ? tr.translate("validmail") : null,
+                          decoration: textInputDeco.copyWith(hintText: ""),
                         ),
                         SizedBox(height: 20,),
-                        Text("Web", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
+                        Text(tr.translate("website"), style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
                         SizedBox(height: 10,),
                         TextFormField(
                           onChanged: (value){
                             web = value;
                           },
                           controller: TextEditingController()..text = web..selection = TextSelection.fromPosition(TextPosition(offset: web.length)),
-                          validator: (val) => val.length < 4 || val.length > 149 ? "Mínimo 4 carácteres y menos de 150" : null,
-                          decoration: textInputDeco.copyWith(hintText: "Web del restaurant"),
+                          validator: (val) => val.length < 4 || val.length > 149 ? "4- 150" : null,
+                          decoration: textInputDeco.copyWith(hintText: ""),
                         ),
                         SizedBox(height: 20,),
-                        Text("Teléfono", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
+                        Text(tr.translate("phone"), style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
                         SizedBox(height: 10,),
                         TextFormField(
                           onChanged: (value){
                             phone = value;
                           },
                           controller: TextEditingController()..text = phone..selection = TextSelection.fromPosition(TextPosition(offset: phone.length)),
-                          validator: (val) => val.length < 6 || val.length > 49 ? "Mínimo 6 carácteres y menos de 50" : null,
-                          decoration: textInputDeco.copyWith(hintText: "Teléfono del restaurant"),
+                          validator: (val) => val.length < 6 || val.length > 49 ? "6 - 50" : null,
+                          decoration: textInputDeco.copyWith(hintText: ""),
                         ),
                         SizedBox(height: 20,),
-                        Text("Dirección", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
+                        Text(tr.translate("address"), style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
                         SizedBox(height: 10,),
                         TextFormField(
                           onChanged: (value){
                             address = value;
                           },
                           controller: TextEditingController()..text = address..selection = TextSelection.fromPosition(TextPosition(offset: address.length)),
-                          validator: (val) => val.length < 4 || val.length > 149 ? "Mínimo 4 carácteres y menos de 150" : null,
-                          decoration: textInputDeco.copyWith(hintText: "Dirección del restaurant"),
+                          validator: (val) => val.length < 4 || val.length > 149 ? "4 - 150" : null,
+                          decoration: textInputDeco.copyWith(hintText: ""),
                         ),
                         SizedBox(height: 20,),
-                        Text("Moneda", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
+                        Text(tr.translate("currency"), style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
                         SizedBox(height: 10,),
                         DropdownButton(
                           value: currency,
@@ -234,7 +235,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                           },
                         ),
                         SizedBox(height: 20,),
-                        Text("A domicilio", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
+                        Text(tr.translate("takeaway"), style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
                         SizedBox(height: 20,),
                         Row(
                           children: <Widget>[
@@ -328,33 +329,33 @@ class _EditRestaurantState extends State<EditRestaurant> {
                           ],
                         ),
                         SizedBox(height: 20,),
-                        Text("Horario", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
+                        Text(tr.translate("schedule"), style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: ScreenUtil().setSp(15)),),
                         SizedBox(height: 20,),
-                        Text("Lunes:"),
+                        Text(tr.translate("monday")),
                         SizedBox(height: 5,),
                         Row(children: scheduleTree[1],),
                         SizedBox(height: 25,),
-                        Text("Martes:"),
+                        Text(tr.translate("tuesday")),
                         SizedBox(height: 5,),
                         Row(children: scheduleTree[2],),
                         SizedBox(height: 25,),
-                        Text("Miercoles:"),
+                        Text(tr.translate("wednesday")),
                         SizedBox(height: 5,),
                         Row(children: scheduleTree[3],),
                         SizedBox(height: 25,),
-                        Text("Jueves:"),
+                        Text(tr.translate("thursday")),
                         SizedBox(height: 5,),
                         Row(children: scheduleTree[4],),
                         SizedBox(height: 25,),
-                        Text("Viernes:"),
+                        Text(tr.translate("friday")),
                         SizedBox(height: 5,),
                         Row(children: scheduleTree[5]),
                         SizedBox(height: 25,),
-                        Text("Sábado:"),
+                        Text(tr.translate("saturday")),
                         SizedBox(height: 5,),
                         Row(children: scheduleTree[6]),
                         SizedBox(height: 25,),
-                        Text("Domingo:"),
+                        Text(tr.translate("sunday")),
                         SizedBox(height: 5,),
                         Row(children: scheduleTree[0]),
                         SizedBox(height: 25,),
@@ -365,7 +366,7 @@ class _EditRestaurantState extends State<EditRestaurant> {
                     padding: EdgeInsets.symmetric(horizontal: 15.w),
                     child: Container(child: MultiSelect(
                       //autovalidate: false,
-                      titleText: "Tipo de restaurante",
+                      titleText: tr.translate("restypes"),
                       /*validator: (value) {
                                 if (value == null) {
                                   return 'Please select one or more option(s)';

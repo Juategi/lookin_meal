@@ -166,7 +166,7 @@ class _TableReservationState extends State<TableReservation> {
         body: Column(
           children: [
             Container(
-            height: 150.h,
+            height: 146.h,
             width: 400.w,
             decoration: BoxDecoration(
               image: DecorationImage(

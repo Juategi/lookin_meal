@@ -10,6 +10,7 @@ import 'package:lookinmeal/database/restaurantDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/screens/restaurants/admin/edit_order.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/alert.dart';
@@ -32,14 +33,15 @@ class _EditMenuState extends State<EditMenu> {
   bool indicator = false;
   ScrollController _scrollController =  ScrollController();
   final StorageService _storageService = StorageService();
+  AppLocalizations tr;
 
   void _copyLists(){
-    menu = List<MenuEntry>();
-    sections = List<String>();
-    ids = List<int>();
+    menu = [];
+    sections = [];
+    ids = [];
     if(restaurant.sections == null){
-      restaurant.sections = List<String>();
-      restaurant.menu = List<MenuEntry>();
+      restaurant.sections = [];
+      restaurant.menu = [];
     }
     else{
       for (String section in restaurant.sections) {
@@ -73,8 +75,8 @@ class _EditMenuState extends State<EditMenu> {
   }
   List<Widget> _initMenu(){
     menu.sort((f,s)=> f.pos.compareTo(s.pos));
-    List<Widget> entries = new List<Widget>();
-    entries.add(Text("Nota: dejar precio a 0 o 0.0 para que el plato no tenga precio", maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)));
+    List<Widget> entries = [];
+    entries.add(Text(tr.translate("menunote"), maxLines: 2, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)));
     entries.add(SizedBox(height: 30.h,));
     for (int i = 0; i < sections.length; i++) {
       String section = sections.elementAt(i);
@@ -95,7 +97,7 @@ class _EditMenuState extends State<EditMenu> {
             bool flag = false;
             for(MenuEntry entry in menu){
               if(entry.section == section){
-                Alerts.dialog('You can not delete a section with entries', context);
+                Alerts.dialog(tr.translate("deletesection"), context);
                 flag = true;
                 break;
               }
@@ -161,7 +163,7 @@ class _EditMenuState extends State<EditMenu> {
                                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 50.h),
                                 child: ListView(
                                   children: <Widget>[
-                                    Text("Alérgenos", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: ScreenUtil().setSp(25),),),
+                                    Text(tr.translate("allergens"), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: ScreenUtil().setSp(25),),),
                                     SizedBox(height: 30.h,),
                                     Row(
                                       children: <Widget>[
@@ -186,7 +188,7 @@ class _EditMenuState extends State<EditMenu> {
                                                 print(entry.allergens);
                                               });
                                             },
-                                            title: Text("Cacahuetes", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                            title: Text(tr.translate("cacahuetes"), style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
                                           ),
                                         )
                                       ],
@@ -215,7 +217,7 @@ class _EditMenuState extends State<EditMenu> {
                                                 print(entry.allergens);
                                               });
                                             },
-                                            title: Text("Altramuces", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                            title: Text(tr.translate("altramuces"), style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
                                           ),
                                         )
                                       ],
@@ -244,7 +246,7 @@ class _EditMenuState extends State<EditMenu> {
                                                 print(entry.allergens);
                                               });
                                             },
-                                            title: Text("Apio", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                            title: Text(tr.translate("apio"), style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
                                           ),
                                         )
                                       ],
@@ -273,7 +275,7 @@ class _EditMenuState extends State<EditMenu> {
                                                 print(entry.allergens);
                                               });
                                             },
-                                            title: Text("Crustaceos", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                            title: Text(tr.translate("crustaceos"), style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
                                           ),
                                         )
                                       ],
@@ -302,7 +304,7 @@ class _EditMenuState extends State<EditMenu> {
                                                 print(entry.allergens);
                                               });
                                             },
-                                            title: Text("Frutos con cascara", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                            title: Text(tr.translate("frustoscascara"), style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
                                           ),
                                         )
                                       ],
@@ -331,7 +333,7 @@ class _EditMenuState extends State<EditMenu> {
                                                 print(entry.allergens);
                                               });
                                             },
-                                            title: Text("Gluten", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                            title: Text(tr.translate("gluten"), style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
                                           ),
                                         )
                                       ],
@@ -360,7 +362,7 @@ class _EditMenuState extends State<EditMenu> {
                                                 print(entry.allergens);
                                               });
                                             },
-                                            title: Text("Huevos", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                            title: Text(tr.translate("huevos"), style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
                                           ),
                                         )
                                       ],
@@ -389,7 +391,7 @@ class _EditMenuState extends State<EditMenu> {
                                                 print(entry.allergens);
                                               });
                                             },
-                                            title: Text("Leche", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                            title: Text(tr.translate("leche"), style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
                                           ),
                                         )
                                       ],
@@ -418,7 +420,7 @@ class _EditMenuState extends State<EditMenu> {
                                                 print(entry.allergens);
                                               });
                                             },
-                                            title: Text("Moluscos", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                            title: Text(tr.translate("moluscos"), style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
                                           ),
                                         )
                                       ],
@@ -447,7 +449,7 @@ class _EditMenuState extends State<EditMenu> {
                                                 print(entry.allergens);
                                               });
                                             },
-                                            title: Text("Mostaza", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                            title: Text(tr.translate("mostaza"), style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
                                           ),
                                         )
                                       ],
@@ -476,7 +478,7 @@ class _EditMenuState extends State<EditMenu> {
                                                 print(entry.allergens);
                                               });
                                             },
-                                            title: Text("Pescado", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                            title: Text(tr.translate("pescado"), style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
                                           ),
                                         )
                                       ],
@@ -505,7 +507,7 @@ class _EditMenuState extends State<EditMenu> {
                                                 print(entry.allergens);
                                               });
                                             },
-                                            title: Text("Sesamo", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                            title: Text(tr.translate("sesamo"), style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
                                           ),
                                         )
                                       ],
@@ -534,7 +536,7 @@ class _EditMenuState extends State<EditMenu> {
                                                 print(entry.allergens);
                                               });
                                             },
-                                            title: Text("Soja", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                            title: Text(tr.translate("soja"), style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
                                           ),
                                         )
                                       ],
@@ -563,7 +565,7 @@ class _EditMenuState extends State<EditMenu> {
                                                 print(entry.allergens);
                                               });
                                             },
-                                            title: Text("Sulfitos", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                            title: Text(tr.translate("sulfitos"), style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
                                           ),
                                         )
                                       ],
@@ -592,7 +594,7 @@ class _EditMenuState extends State<EditMenu> {
                                                 print(entry.allergens);
                                               });
                                             },
-                                            title: Text("Picante", style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                                            title: Text(tr.translate("picante"), style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
                                           ),
                                         )
                                       ],
@@ -614,7 +616,7 @@ class _EditMenuState extends State<EditMenu> {
                           child: Column(
                             children: <Widget>[
                               SizedBox(height: 20.h,),
-                              Text("Añade una descripción al plato", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
+                              Text(tr.translate("adddesc"), textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: ScreenUtil().setSp(20),),),
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: TextField(
@@ -662,7 +664,7 @@ class _EditMenuState extends State<EditMenu> {
                 id: (1).toString(),
                 section: section,
                 restaurant_id: restaurant.restaurant_id,
-                name: "New",
+                name: tr.translate("new"),
                 price: 0,
                 rating: 0,
                 numReviews: 0,
@@ -678,7 +680,7 @@ class _EditMenuState extends State<EditMenu> {
                 id: (ids.last + 1).toString(),
                 section: section,
                 restaurant_id: restaurant.restaurant_id,
-                name: "New",
+                name: tr.translate("new"),
                 price: 0,
                 rating: 0,
                 numReviews: 0,
@@ -691,14 +693,14 @@ class _EditMenuState extends State<EditMenu> {
           }
           setState(() {});
         },),
-        Text("Añadir plato", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))
+        Text(tr.translate("adddish"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))
       ],));
       entries.add(SizedBox(height: 30.h,));
     }
     entries.add(Row(children: <Widget>[IconButton(icon: Icon(Icons.add_circle_outline, size: ScreenUtil().setSp(30),), onPressed: (){
-      sections.add("New");
+      sections.add(tr.translate("new"));
       setState(() {});
-      },), Text("Añadir seccion", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),))],));
+      },), Text(tr.translate("addsection"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),))],));
 
     this.setState((){});
     return entries;
@@ -706,7 +708,7 @@ class _EditMenuState extends State<EditMenu> {
 
   @override
   Widget build(BuildContext context) {
-
+    tr = AppLocalizations.of(context);
     restaurant = ModalRoute.of(context).settings.arguments;
     if(!init){
       _copyLists();
@@ -737,7 +739,7 @@ class _EditMenuState extends State<EditMenu> {
                         );
                       });
                     }),
-                    Align( alignment: AlignmentDirectional.topCenter, child: Text("Editar carta", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
+                    Align( alignment: AlignmentDirectional.topCenter, child: Text(tr.translate("editmenu"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
                     IconButton(icon: Icon(Icons.arrow_upward, color: Colors.white54,), onPressed: (){
                       SchedulerBinding.instance.addPostFrameCallback((_) {
                         _scrollController.animateTo(
@@ -778,7 +780,7 @@ class _EditMenuState extends State<EditMenu> {
                   width: 160.w,
                   child: RaisedButton(elevation: 0,
                     color: Color.fromRGBO(255, 110, 117, 0.9),
-                    child: Text("Editar orden", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
+                    child: Text(tr.translate("editorder"), style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
                     onPressed: () async{
                       dynamic result = await pushNewScreenWithRouteSettings(
                         context,
@@ -806,12 +808,12 @@ class _EditMenuState extends State<EditMenu> {
                     onPressed: ()async{
                     List temp = sections.toSet().toList();
                     if(temp.length < sections.length){
-                      Alerts.dialog('You can not have sections with the same name', context);
+                      Alerts.dialog(tr.translate("samename"), context);
                       return;
                     }
                     for(String section in sections){
                       if(int.tryParse(section) != null){
-                        Alerts.dialog('You can not have sections with just numbers', context);
+                        Alerts.dialog(tr.translate("sectionnumber"), context);
                         return;
                       }
                     }
@@ -823,7 +825,7 @@ class _EditMenuState extends State<EditMenu> {
                       //print("${entry.section} / ${entry.name} / ${entry.price}/ ${entry.allergens}");
                     }
                     await DBServiceEntry.dbServiceEntry.uploadMenu(sections, menu, restaurant);
-                    Alerts.toast("Menu saved");
+                    Alerts.toast(tr.translate("menusaved"));
                     setState(() {
                     });
                     Navigator.pop(context);

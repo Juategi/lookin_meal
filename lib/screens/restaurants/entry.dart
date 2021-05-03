@@ -253,7 +253,7 @@ class _EntryRatingState extends State<EntryRating> {
                                                     ),
                                                   ),
                                                   SizedBox(width: 10.w,),
-                                                  Text("${allergen[0].toUpperCase()}${allergen.substring(1)}", style: TextStyle(fontWeight: entry.allergens.contains(allergen)? FontWeight.bold :FontWeight.normal, color: entry.allergens.contains(allergen)? Colors.black :  Colors.grey[500], fontSize: ScreenUtil().setSp(13),),),
+                                                  Text(tr.translate(allergen), style: TextStyle(fontWeight: entry.allergens.contains(allergen)? FontWeight.bold :FontWeight.normal, color: entry.allergens.contains(allergen)? Colors.black :  Colors.grey[500], fontSize: ScreenUtil().setSp(13),),),
                                                 ],
                                               )).toList(),
                                             ),

@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/entryDB.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:lookinmeal/services/storage.dart';
 import 'package:lookinmeal/shared/alert.dart';
@@ -25,6 +26,7 @@ class _EditDailyState extends State<EditDaily> {
   String description;
   double price;
   bool init = false;
+  AppLocalizations tr;
   
   void _copyMenu(){
     dailyMenu = [];
@@ -43,7 +45,7 @@ class _EditDailyState extends State<EditDaily> {
 
   List<Widget> _initList(){
     List<Widget> items = [];
-    items.add(Text("Añade una descripción", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)));
+    items.add(Text(tr.translate("adddesc"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)));
     items.add(SizedBox(height: 30.h,));
     items.add(Container(
       color: Color.fromRGBO(255, 110, 117, 0.1),
@@ -55,7 +57,7 @@ class _EditDailyState extends State<EditDaily> {
       },),
     ));
     items.add(SizedBox(height: 30.h,));
-    items.add(Text("Añade un precio", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)));
+    items.add(Text(tr.translate("addprice"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)));
     items.add(SizedBox(height: 30.h,));
     items.add(Container(
       color: Color.fromRGBO(255, 110, 117, 0.1),
@@ -67,7 +69,7 @@ class _EditDailyState extends State<EditDaily> {
       },),
     ));
     items.add(SizedBox(height: 30.h,));
-    items.add(Text("Crea el menú", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)));
+    items.add(Text(tr.translate("createmenu"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),)));
     items.add(SizedBox(height: 30.h,));
     for(int i = 0; i < dailyMenu.length; i++){
       if(_isNumeric(dailyMenu[i])){
@@ -118,16 +120,16 @@ class _EditDailyState extends State<EditDaily> {
             withNavBar: true,
             pageTransitionAnimation: PageTransitionAnimation.cupertino,
           );
-          },), Text("Añadir plato", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))
+          },), Text(tr.translate("adddish"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))
         ],));
         items.add(SizedBox(height: 10,));
       }
     }
 
     items.add(Row(children: <Widget>[IconButton(icon: Icon(Icons.add_circle_outline, size: 30,), onPressed: (){
-        dailyMenu.add("New");
+        dailyMenu.add(tr.translate("new"));
         setState(() {});
-      },),Text("Añadir seccion", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),))
+      },),Text(tr.translate("addsection"), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(20),),))
     ],));
 
     return items;
@@ -142,7 +144,7 @@ class _EditDailyState extends State<EditDaily> {
 
   @override
   Widget build(BuildContext context) {
-
+    tr = AppLocalizations.of(context);
     restaurant = ModalRoute.of(context).settings.arguments;
     if(!init) {
       _copyMenu();
@@ -165,7 +167,7 @@ class _EditDailyState extends State<EditDaily> {
                 ),
                 child: Row( mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Align( alignment: AlignmentDirectional.topCenter, child: Text("Editar menú del dia", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
+                    Align( alignment: AlignmentDirectional.topCenter, child: Text(tr.translate("editdaily"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),))),
                   ],
                 ),
               ),
@@ -191,14 +193,14 @@ class _EditDailyState extends State<EditDaily> {
                   child: RaisedButton(
                     elevation: 0,
                     color: Color.fromRGBO(255, 110, 117, 0.9),
-                    child: Text("Guardar", style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
+                    child: Text(tr.translate("save"), style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)),),
                     onPressed: ()async{
                       restaurant.dailymenu = [];
                       restaurant.dailymenu.add(description);
                       restaurant.dailymenu.add(price.toString());
                       restaurant.dailymenu.addAll(dailyMenu);
                       await DBServiceEntry.dbServiceEntry.updateDailyMenu(restaurant.restaurant_id, restaurant.dailymenu);
-                      Alerts.toast("Menu saved");
+                      Alerts.toast(tr.translate("menusaved"));
                       Navigator.pop(context);
                     },
                   ),
@@ -225,6 +227,7 @@ class _SearchDishDailyState extends State<SearchDishDaily> {
   bool init = true;
   @override
   Widget build(BuildContext context) {
+    AppLocalizations tr = AppLocalizations.of(context);
     List<Object> aux = ModalRoute.of(context).settings.arguments;
     restaurant = aux.first;
     dailyMenu = aux[1];
@@ -249,7 +252,7 @@ class _SearchDishDailyState extends State<SearchDishDaily> {
                   },
                   decoration: InputDecoration(
                       filled: true,
-                      hintText: "Search..",
+                      hintText: tr.translate("search"),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.black, width: 1),
                           borderRadius: BorderRadius.circular(20)

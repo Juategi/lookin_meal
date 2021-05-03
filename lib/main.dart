@@ -107,7 +107,7 @@ class MyApp extends StatelessWidget {
                   "/checkprofile": (context) => CheckProfile()
                 },
                 home: SplashScreen(
-                    seconds: 2,
+                    seconds: 1,
                     navigateAfterSeconds: Wrapper(),
                     title: Text.rich(
                       TextSpan(
@@ -161,7 +161,7 @@ class MyApp extends StatelessWidget {
           }
         return MaterialApp(
           home: SplashScreen(
-              seconds: 2,
+              seconds: 1,
               navigateAfterSeconds: Wrapper(),
               title: Text.rich(
                 TextSpan(

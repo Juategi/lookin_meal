@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/models/menu_entry.dart';
 import 'package:lookinmeal/models/order.dart';
 import 'package:lookinmeal/models/restaurant.dart';
+import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:lookinmeal/services/realtime_orders.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -25,13 +26,13 @@ class _ManageOrdersState extends State<ManageOrders> {
 
   @override
   Widget build(BuildContext context) {
-
+    AppLocalizations tr = AppLocalizations.of(context);
     restaurant = ModalRoute.of(context).settings.arguments;
     return SafeArea(
       child: Scaffold(
         body: ListView(
           children: [
-            Text("Orders online", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+            Text(tr.translate("ordersonline"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
             SizedBox(height: 10.h,),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -83,8 +84,8 @@ class _ManageOrdersState extends State<ManageOrders> {
                                           ),],),
                                         child: Row(
                                           children: [
-                                            Container(width: 150.w, child: Text("Table: ${code.code_id}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
-                                            Container(width: 150.w, child: Text("Total: $bill  ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                                            Container(width: 150.w, child: Text("${tr.translate("table")}: ${code.code_id}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
+                                            Container(width: 150.w, child: Text("${tr.translate("total")}: $bill  ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),))),
                                             SizedBox(width: 10.w,),
                                             items.every((element) => element.check) ? Container() : Icon(Icons.add_alert_rounded, size: ScreenUtil().setSp(28), color: Colors.redAccent,)
                                           ],
@@ -117,7 +118,7 @@ class _OrderDetailState extends State<OrderDetail> {
   String code_id;
   @override
   Widget build(BuildContext context) {
-
+    AppLocalizations tr = AppLocalizations.of(context);
     List arg = ModalRoute.of(context).settings.arguments;
     restaurant = arg.first;
     code_id = arg.last;
@@ -136,15 +137,15 @@ class _OrderDetailState extends State<OrderDetail> {
             child: Scaffold(
               body: Column(
                 children: [
-                  Text("Table: $code_id", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+                  Text("${tr.translate("table")}: $code_id", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
                   SizedBox(height: 30.h,),
-                  Text("Total: $bill  ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
+                  Text("${tr.translate("totalordersonline")} $bill  ${restaurant.currency}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25),),)),
                   SizedBox(height: 30.h,),
                   Row( mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text("Price", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),)),
+                      Text(tr.translate("price"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),)),
                       SizedBox(width: 15.w,),
-                      Text("Amount", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),)),
+                      Text(tr.translate("amount"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),)),
                       SizedBox(width: 10.w,),
                     ],
                   ),
@@ -152,7 +153,7 @@ class _OrderDetailState extends State<OrderDetail> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.w),
                     child: Container(
-                      height: 490.h,
+                      height: 485.h,
                       //color: Colors.blue,
                       child: ListView(
                                 children: items.where((element) => element.send).map((order) =>
@@ -220,7 +221,7 @@ class _OrderDetailState extends State<OrderDetail> {
                   SizedBox(height: 20.h,),
                   GestureDetector(
                     onTap: () async{
-                      if(await Alerts.confirmation("You will lose all the data, are you sure?", context)){
+                      if(await Alerts.confirmation(tr.translate("losedata"), context)){
                         RealTimeOrders().closeOrder(restaurant.restaurant_id, code_id);
                         Navigator.pop(context);
                       }
@@ -234,7 +235,7 @@ class _OrderDetailState extends State<OrderDetail> {
                           border: Border.all(color: Colors.black, width: 1)
                       ),
                       child: Center(
-                        child: Text("Close order", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
+                        child: Text(tr.translate("closeorder"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18),),)),
                       ),
                     ),
                   )

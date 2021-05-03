@@ -47,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
 	}
 
 	bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+		print(info.ifRouteChanged(context));
 		if (info.ifRouteChanged(context)) return false;
 		if(!search) return false;
 		setState(() {
