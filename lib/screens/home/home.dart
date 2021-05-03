@@ -19,6 +19,7 @@ import 'package:lookinmeal/screens/social/social.dart';
 import 'package:lookinmeal/screens/top/top.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
 import 'package:flutter/services.dart';
+import 'package:lookinmeal/services/enviroment.dart';
 import 'package:lookinmeal/services/geolocation.dart';
 import 'package:lookinmeal/services/push_notifications.dart';
 import 'package:lookinmeal/shared/common_data.dart';
@@ -178,7 +179,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 	  user = Provider.of<User>(context);
 	  AppLocalizations tr = AppLocalizations.of(context);
 	  initDynamicLinks(context);
-
 	  if(popular != null && user != null) {
 			PushNotificationService.initialise(context);
 			return PersistentTabView(

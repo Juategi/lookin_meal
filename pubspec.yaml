@@ -11,7 +11,7 @@ description: Flutter aplication for searching menus
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.0.0+2
+version: 2.0.1+3
 
 environment:
   sdk: ">=2.9.0 <3.0.0"
@@ -91,12 +91,10 @@ dependencies:
   upgrader: ^3.2.1
   animate_do: ^2.0.0
   badges: ^1.2.0
-  hive: ^2.0.4
-  hive_flutter: ^1.0.0
-  firebase_core: ^1.1.0
+  #firebase_core: ^1.1.0
+  flutter_dotenv: ^3.1.0
 
 dev_dependencies:
-  hive_generator: ^1.1.0
   build_runner: ^2.0.1
   flutter_test:
     sdk: flutter
@@ -127,6 +125,7 @@ flutter:
     - dbjson/
     - assets/allergens/
     - assets/food/
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

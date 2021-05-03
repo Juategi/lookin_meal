@@ -1,17 +1,11 @@
-import 'package:path_provider/path_provider.dart' as path_provider;
-import 'package:hive/hive.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
 class Enviroment{
-
-  static Future setApi(String api) async{
-    Hive.init((await path_provider.getApplicationDocumentsDirectory()).path);
-    await Hive.openBox('api');
-    Hive.box('api').put('value', api);
+  static String getApi() {
+    return DotEnv.env['GOOGLE_API'];
   }
 
-  static Future<String> getApi() async{
-    Hive.init((await path_provider.getApplicationDocumentsDirectory()).path);
-    await Hive.openBox('api');
-    return Hive.box('api').get('value');
+  static Future init() async{
+    await DotEnv.load(fileName: ".env");
   }
 }

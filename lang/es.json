@@ -22,7 +22,6 @@
   "loginemail" : "Inicia sesión con email",
   "confirmpass" : "Confirmar contraseña",
   "matchpass" : "Las contraseñas no coinciden",
-  "confirm": "Confirmar",
   "emailtaken" : "Email no disponible",
   "terms" : "Registrándote aceptas nuestros términos y condiciones de uso.",
   "donthaveaccount" : "¿No tienes una cuenta?",
@@ -87,7 +86,6 @@
   "mynot" : "Mis notificaciones",
   "reservations" : "Reservas",
   "people" : "Personas",
-  "removereserv" : "Cancelar la reserva, ¿está seguro?",
   "ratings" : "Valoraciones",
   "edituser" : "Editar usuario",
   "areupropietary" : "¿Eres propietario?",
@@ -189,8 +187,6 @@
   "addmoreorder" : "Añadir más al pedido",
   "admin" : "Administración",
   "editrest" : "Editar información",
-  "editmenu": "Editar menú",
-  "editdaily" : "Editar menú del día",
   "editgallery" : "Editar galería",
   "edittables" : "Editar mesas y reservas",
   "editcodes" : "Editar códigos para pedidos",
@@ -283,6 +279,6 @@
   "visitsmonth" : "Visitas por mes",
   "months" : "meses",
   "ratesmonth" : "Valoraciones por mes",
-  "typesnear" : "Tipos cocina cercanos"
-
+  "typesnear" : "Tipos cocina cercanos",
+  "purchasedsuc" : "Compra realizada correctamente"
 }
