@@ -31,7 +31,7 @@ class CreateRestaurant extends StatefulWidget {
 }
 
 class _CreateRestaurantState extends State<CreateRestaurant> {
-  String relation = "Dueño";
+  String relation;
   String currency = "€";
   String error = "";
   String code, name, website, phone, address, city, country, image, email;
@@ -40,7 +40,7 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
   bool sent = false;
   final StorageService _storageService = StorageService();
   final _formKey = GlobalKey<FormState>();
-
+  AppLocalizations tr;
   Future getCode() async{
     code = await Enviroment.getApi();
     setState(() {
@@ -55,8 +55,8 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
 
   @override
   Widget build(BuildContext context) {
-
-    AppLocalizations tr = AppLocalizations.of(context);
+    tr = AppLocalizations.of(context);
+    relation = tr.translate("dueño");
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -304,7 +304,7 @@ class _CreateRestaurantState extends State<CreateRestaurant> {
                       value: type,
                       child: Row( mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Container(width: 140.w, child: Text(type, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
+                          Container(width: 140.w, child: Text(tr.translate(type), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
                         ],
                       )
                   )).toList(),

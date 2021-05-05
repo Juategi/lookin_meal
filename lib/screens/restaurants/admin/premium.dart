@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/paymentDB.dart';
 import 'package:lookinmeal/models/payment.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
+import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Premium extends StatefulWidget {
   @override
@@ -15,13 +19,61 @@ class Premium extends StatefulWidget {
 }
 
 class _PremiumState extends State<Premium> {
-
   Restaurant restaurant;
+
+  Future initPlatformState() async {
+    await Purchases.setDebugLogsEnabled(true);
+    await Purchases.setup("UDNbeRhooFwbsXgUbczLSKynlYDnrnQV", appUserId: restaurant.restaurant_id);
+  }
+
+  void prueba() async{
+    try {
+      Offerings offerings = await Purchases.getOfferings();
+      if (offerings.current != null && offerings.current.monthly != null) {
+        Product product = offerings.current.monthly.product;
+        print(product.title);
+        PurchaserInfo info = await Purchases.purchaseProduct(product.identifier);
+        if (info.entitlements.all["premium"].isActive) {
+          print(info.originalAppUserId);
+        }
+      }
+    } on PlatformException catch (e) {
+      print(e);
+    }
+  }
+
+  void deliverProduct(){
+    String today = DateTime.now().toString().substring(0,10);
+    if(restaurant.premiumtime == null){
+      DBServicePayment.dbServicePayment.createPayment(Payment(
+        restaurant_id: restaurant.restaurant_id,
+        service: "premium",
+        paymentdate: today,
+        price: CommonData.prices.firstWhere((element) => element.type == "premium").price,
+        user_id: DBServiceUser.userF.uid,
+        description: "Premium suscription",
+      ));
+      DBServicePayment.dbServicePayment.createPremium(restaurant.restaurant_id, today);
+      restaurant.premium = true;
+      restaurant.premiumtime = today;
+    }
+    else if(restaurant.premium){
+      DBServicePayment.dbServicePayment.updatePremium(restaurant.restaurant_id, restaurant.premiumtime, false);
+      restaurant.premium = false;
+    }
+    else{
+      DBServicePayment.dbServicePayment.updatePremium(restaurant.restaurant_id, restaurant.premiumtime, true);
+      restaurant.premium = true;
+    }
+    setState(() {});
+  }
+
 
   @override
   Widget build(BuildContext context) {
     AppLocalizations tr = AppLocalizations.of(context);
     restaurant = ModalRoute.of(context).settings.arguments;
+    initPlatformState();
     return SafeArea(child:
     Scaffold(
       body: Column(
@@ -70,30 +122,8 @@ class _PremiumState extends State<Premium> {
             child: Text(restaurant.premium == false && restaurant.premiumtime != null? "${tr.translate("subcancel")} ${Functions.formatDate(restaurant.premiumtime)}" : "", maxLines: 2, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black45, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
           ),
           GestureDetector(
-            onTap: (){
-              String today = DateTime.now().toString().substring(0,10);
-              if(restaurant.premiumtime == null){
-                DBServicePayment.dbServicePayment.createPayment(Payment(
-                  restaurant_id: restaurant.restaurant_id,
-                  service: "premium",
-                  paymentdate: today,
-                  price: CommonData.prices.firstWhere((element) => element.type == "premium").price,
-                  user_id: DBServiceUser.userF.uid,
-                  description: "Premium suscription",
-                ));
-                DBServicePayment.dbServicePayment.createPremium(restaurant.restaurant_id, today);
-                restaurant.premium = true;
-                restaurant.premiumtime = today;
-              }
-              else if(restaurant.premium){
-                DBServicePayment.dbServicePayment.updatePremium(restaurant.restaurant_id, restaurant.premiumtime, false);
-                restaurant.premium = false;
-              }
-              else{
-                DBServicePayment.dbServicePayment.updatePremium(restaurant.restaurant_id, restaurant.premiumtime, true);
-                restaurant.premium = true;
-              }
-              setState(() {});
+            onTap: () async{
+              prueba();
             },
             child: Container(
               width: 200.w,

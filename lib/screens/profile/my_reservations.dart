@@ -22,17 +22,6 @@ class UserReservations extends StatefulWidget {
 
 class _UserReservationsState extends State<UserReservations> {
 
-  void _timer() {
-    if(DBServiceUser.userF.reservations == null) {
-      Future.delayed(Duration(seconds: 2)).then((_) {
-        setState(() {
-          print("Loading..");
-        });
-        _timer();
-      });
-    }
-  }
-  
   Future _getReservations() async{
     DBServiceUser.userF.reservations = await DBServiceReservation.dbServiceReservation.getReservationsUser(DBServiceUser.userF.uid, DateTime.now().toString().substring(0,10));
     setState(() {
@@ -42,12 +31,10 @@ class _UserReservationsState extends State<UserReservations> {
   @override
   void initState() {
     super.initState();
-    _timer();
   }
   
   @override
   Widget build(BuildContext context) {
-
     AppLocalizations tr = AppLocalizations.of(context);
     _getReservations();
     return SafeArea(

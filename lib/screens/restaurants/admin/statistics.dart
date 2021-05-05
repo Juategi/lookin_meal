@@ -164,7 +164,7 @@ class _StatisticsState extends State<Statistics> {
                                   ColumnSeries<String, String>(
                                     // Bind data source
                                       dataSource:  visits.keys.toList(),
-                                      xValueMapper: (String key, _) => key,
+                                      xValueMapper: (String key, _) => tr.translate(key),
                                       yValueMapper: (String key, _) => visits[key],
                                       dataLabelSettings: DataLabelSettings(isVisible: true),
                                       xAxisName: tr.translate("months"),
@@ -218,7 +218,7 @@ class _StatisticsState extends State<Statistics> {
                                   ColumnSeries<String, String>(
                                     // Bind data source
                                       dataSource:  rates.keys.toList(),
-                                      xValueMapper: (String key, _) => key,
+                                      xValueMapper: (String key, _) => tr.translate(key),
                                       yValueMapper: (String key, _) => rates[key],
                                       dataLabelSettings: DataLabelSettings(isVisible: true),
                                       xAxisName: tr.translate("months"),
@@ -251,7 +251,7 @@ class _StatisticsState extends State<Statistics> {
                               ColumnSeries<String, String>(
                                 // Bind data source
                                   dataSource:  typesNearly.keys.toList(),
-                                  xValueMapper: (String key, _) => key,
+                                  xValueMapper: (String key, _) => tr.translate(key),
                                   yValueMapper: (String key, _) => typesNearly[key],
                                   dataLabelSettings: DataLabelSettings(isVisible: true),
                                   xAxisName: tr.translate("types"),

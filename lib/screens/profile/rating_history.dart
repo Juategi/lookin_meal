@@ -24,16 +24,7 @@ class _RatingHistoryState extends State<RatingHistory> {
   int offset = 0;
   int limit = 15;
   User user;
-  void _timer() {
-    if(user.history == null) {
-      Future.delayed(Duration(seconds: 2)).then((_) {
-        setState(() {
-          print("Loading..");
-        });
-        _timer();
-      });
-    }
-  }
+
 
   void _update(int offset, int limit)async{
     if(user.history == null){
@@ -42,6 +33,8 @@ class _RatingHistoryState extends State<RatingHistory> {
     else{
       user.history.addAll(await DBServiceEntry.dbServiceEntry.getRatingsHistory(user.uid, user.ratings.map((r) => r.entry_id).toList(), offset, limit));
     }
+    setState(() {
+    });
   }
 
 
@@ -88,11 +81,9 @@ class _RatingHistoryState extends State<RatingHistory> {
 
   @override
   Widget build(BuildContext context) {
-
     tr = AppLocalizations.of(context);
     user = ModalRoute.of(context).settings.arguments;
     if(init){
-      _timer();
       _update(offset, limit);
       init = false;
     }

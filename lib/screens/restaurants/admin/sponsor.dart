@@ -40,34 +40,39 @@ class _SponsorState extends State<Sponsor> {
             //_handleInvalidPurchase(purchaseDetails);
             return;
           }*/
-          String today = DateTime.now().toString().substring(0,10);
-          if(restaurant.clicks == 0) {
-            try{
-              await DBServicePayment.dbServicePayment.createSponsor(
-                  restaurant.restaurant_id);
-            }catch(e){
-              print(e);
-            }
-          }
-          await DBServicePayment.dbServicePayment.updateSponsor(restaurant.restaurant_id, actual.quantity);
-          DBServicePayment.dbServicePayment.createPayment(Payment(
-            restaurant_id: restaurant.restaurant_id,
-            service: "clicks",
-            paymentdate: today,
-            price: actual.price,
-            user_id: DBServiceUser.userF.uid,
-            description: "${actual.quantity} Sponsor visits " ,
-          ));
-          restaurant.clicks += actual.quantity;
-          Alerts.dialog(tr.translate("purchasedsuc"), context);
-          setState(() {
-          });
+          deliverProduct();
         }
         if (purchaseDetails.pendingCompletePurchase) {
           await InAppPurchaseConnection.instance
               .completePurchase(purchaseDetails);
+          print("COMPLETED PURCHASE");
         }
       }
+    });
+  }
+
+  void deliverProduct() async{
+    String today = DateTime.now().toString().substring(0,10);
+    if(restaurant.clicks == 0) {
+      try{
+        await DBServicePayment.dbServicePayment.createSponsor(
+            restaurant.restaurant_id);
+      }catch(e){
+        print(e);
+      }
+    }
+    await DBServicePayment.dbServicePayment.updateSponsor(restaurant.restaurant_id, actual.quantity);
+    DBServicePayment.dbServicePayment.createPayment(Payment(
+      restaurant_id: restaurant.restaurant_id,
+      service: "clicks",
+      paymentdate: today,
+      price: actual.price,
+      user_id: DBServiceUser.userF.uid,
+      description: "${actual.quantity} Sponsor visits " ,
+    ));
+    restaurant.clicks += actual.quantity;
+    Alerts.dialog(tr.translate("purchasedsuc"), context);
+    setState(() {
     });
   }
 
@@ -221,6 +226,8 @@ class _SponsorState extends State<Sponsor> {
                         final PurchaseParam purchaseParam = PurchaseParam(productDetails: productDetails);
                         InAppPurchaseConnection.instance.buyConsumable(purchaseParam: purchaseParam);
                       }
+                      else
+                        Alerts.dialog("Error loading items", context);
                     },
                     child: Container(
                       width: 345.w,

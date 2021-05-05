@@ -52,16 +52,6 @@ class MapSampleState extends State<MapSample> {
 	List<Marker> _markersNoCluster = [];
 
 
-	void _timer() {
-		if(_cameraPosition == null ) {
-			Future.delayed(Duration(seconds: 2)).then((_) {
-				setState(() {
-					print("Loading map...");
-				});
-				_timer();
-			});
-		}
-	}
 
 	int calculateMarkerSize(){
 
@@ -110,7 +100,6 @@ class MapSampleState extends State<MapSample> {
 		}
 		_getUserLocation();
 		//_loadMarkers();
-		_timer();
 		super.initState();
 		/*fluster = Fluster<RestaurantMarker>(
 			minZoom: 14, // The min zoom at clusters will show
@@ -210,7 +199,6 @@ class MapSampleState extends State<MapSample> {
 	Widget build(BuildContext context){
 		AppLocalizations tr = AppLocalizations.of(context);
 		user = Provider.of<User>(context);
-		_timer();
 		if(first){
 			CommonData.tabContext = context;
 			first = false;
@@ -341,7 +329,7 @@ class MapSampleState extends State<MapSample> {
 							  							children: [
 							  								SizedBox(height: 10.w,),
 							  								Container(width: 170.w,child: Text(selected.name, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(15),),))),
-																Container(width: 170.w,child: Text(selected.types.length == 0 ? "" : selected.types.length > 1 ? "${selected.types[0]}, ${selected.types[1]}" : "${selected.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.8), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
+																Container(width: 170.w,child: Text(selected.types.length == 0 ? "" : selected.types.length > 1 ? "${tr.translate(selected.types[0])}, ${tr.translate(selected.types[1])}" : "${tr.translate(selected.types[0])}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.8), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
 							  								SizedBox(height: 4.h,),
 							  								Row(
 							  								  children: [

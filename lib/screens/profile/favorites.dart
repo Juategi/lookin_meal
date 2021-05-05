@@ -124,7 +124,7 @@ class FavoriteLists extends StatefulWidget {
 class _FavoriteListsState extends State<FavoriteLists> {
   String type;
   User user;
-
+  AppLocalizations tr;
   List<Widget> _loadLists(){
     List<Widget> items = [];
     items.addAll(DBServiceUser.userF.lists.map((list) => list.type != type? Container() : Padding(
@@ -177,7 +177,7 @@ class _FavoriteListsState extends State<FavoriteLists> {
                   SizedBox(height: 15.h,),
                   DBServiceUser.userF != user ? Container() : GestureDetector(
                       onTap: () async{
-                        bool delete = await Alerts.confirmation("Are you sure you want to delete this list?", context);
+                        bool delete = await Alerts.confirmation(tr.translate("deletelist"), context);
                         if(delete){
                           await DBServiceUser.dbServiceUser.deleteList(list.id);
                           DBServiceUser.userF.lists.remove(list);
@@ -231,10 +231,10 @@ class _FavoriteListsState extends State<FavoriteLists> {
 
   @override
   Widget build(BuildContext context) {
+    tr = AppLocalizations.of(context);
     List aux = ModalRoute.of(context).settings.arguments;
     type = aux.first;
     user = aux.last;
-
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -274,7 +274,7 @@ class _CreateListState extends State<CreateList> {
   @override
   Widget build(BuildContext context) {
     type = ModalRoute.of(context).settings.arguments;
-
+    AppLocalizations tr = AppLocalizations.of(context);
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -285,10 +285,10 @@ class _CreateListState extends State<CreateList> {
               decoration: BoxDecoration(
                 color: Color.fromRGBO(255, 110, 117, 0.9),
               ),
-              child:Text("Favorite ${type == 'R'? 'restaurants' : 'dishes'}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
+              child:Text("${type == 'R'? tr.translate("favrestaurants") : tr.translate("favdishes")}", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24),),)),
             ),
             SizedBox(height: 30.h,),
-            Text("Add image", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30),),)),
+            Text(tr.translate("addimage"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30),),)),
             SizedBox(height: 20.h,),
             GestureDetector(
               onTap: ()async{
@@ -311,7 +311,7 @@ class _CreateListState extends State<CreateList> {
                 child: _icon
             ),
             SizedBox(height: 50.h,),
-            Text("Name of the list", maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30),),)),
+            Text(tr.translate("namelist"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30),),)),
             SizedBox(height: 20.h,),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -328,7 +328,7 @@ class _CreateListState extends State<CreateList> {
             GestureDetector(
               onTap: ()async{
                 if(name == null || name == ""){
-                  Alerts.toast("Write a name");
+                  Alerts.toast(tr.translate("writename"));
                 }
                 else{
                   FavoriteList list = await DBServiceUser.dbServiceUser.createList(DBServiceUser.userF.uid, name, StaticStrings.defaultEntry, type);
@@ -343,7 +343,7 @@ class _CreateListState extends State<CreateList> {
                     color: Color.fromRGBO(255, 110, 117, 0.9),
                     borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
-                child: Center(child: Text("Save", maxLines: 1,
+                child: Center(child: Text(tr.translate("save"), maxLines: 1,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white,
                       letterSpacing: .3,
@@ -372,29 +372,6 @@ class _ListDisplayState extends State<ListDisplay> {
   bool init = true;
   User user;
 
-  void _timer() {
-    if(type == 'R'){
-      if(restaurants == null) {
-        Future.delayed(Duration(seconds: 2)).then((_) {
-          setState(() {
-            print("Loading..");
-          });
-          _timer();
-        });
-      }
-    }
-    else{
-      if(restaurants == null || entries == null) {
-        Future.delayed(Duration(seconds: 2)).then((_) {
-          setState(() {
-            print("Loading..");
-          });
-          _timer();
-        });
-      }
-    }
-  }
-
   void _updateLists() async{
     List<String> aux = [];
     if(type == 'R'){
@@ -416,11 +393,13 @@ class _ListDisplayState extends State<ListDisplay> {
       entries = await DBServiceEntry.dbServiceEntry.getEntriesById(list.items);
       print(entries);
     }
+    setState(() {});
   }
 
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations tr = AppLocalizations.of(context);
     List args = ModalRoute.of(context).settings.arguments;
     String aux = args.first;
     user = args.last;
@@ -428,11 +407,9 @@ class _ListDisplayState extends State<ListDisplay> {
     id = aux.substring(1);
     list = user.lists.singleWhere((element) => element.id == id);
     if(init){
-      _timer();
       _updateLists();
       init = false;
     }
-
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -497,11 +474,11 @@ class _ListDisplayState extends State<ListDisplay> {
                                           icon:  Icon(Icons.delete, color: Colors.black,),
                                           iconSize: ScreenUtil().setSp(32),
                                           onPressed: ()async{
-                                            bool delete = await Alerts.confirmation("Are you sure you want to delete this restaurant?", context);
+                                            bool delete = await Alerts.confirmation(tr.translate("deleterestaurant"), context);
                                             if(delete){
                                               list.items.remove(restaurant.restaurant_id);
                                               restaurants.remove(restaurant);
-                                              Alerts.toast("${restaurant.name} removed from ${list.name}");
+                                              Alerts.toast("${restaurant.name} ${tr.translate("removedfrom")} ${list.name}");
                                               await DBServiceUser.dbServiceUser.updateList(list);
                                               setState(() {
                                               });
@@ -527,7 +504,7 @@ class _ListDisplayState extends State<ListDisplay> {
                                       Column(
                                         children: <Widget>[
                                           SizedBox(height: 2.h,),
-                                          Text("${Functions.getVotes(restaurant)} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),)),
+                                          Text("${Functions.getVotes(restaurant)} ${tr.translate("votes")}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(11),),)),
                                         ],
                                       ),
                                     ],
@@ -541,10 +518,10 @@ class _ListDisplayState extends State<ListDisplay> {
                                           width: 15.w,
                                           decoration: BoxDecoration(
                                               image: DecorationImage(
-                                                  image: Image.asset("assets/food/${CommonData.typesImage[restaurant.types[0]]}.png").image))
+                                                  image: Image.asset("assets/food/${CommonData.typesImage[tr.translate(restaurant.types[0])]}.png").image))
                                       ),
                                       SizedBox(width: 5.w,),
-                                      Container(width: 155.w, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : "${restaurant.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
+                                      Container(width: 155.w, child: Text(restaurant.types.length > 1 ? "${tr.translate(restaurant.types[0])}, ${tr.translate(restaurant.types[1])}" : "${restaurant.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(12),),))),
                                       SizedBox(width: 35.w,),
                                       Container(
                                         child: SvgPicture.asset("assets/markerMini.svg"),
@@ -607,11 +584,11 @@ class _ListDisplayState extends State<ListDisplay> {
                                                   icon:  Icon(Icons.delete, color: Colors.black,),
                                                   iconSize: ScreenUtil().setSp(32),
                                                   onPressed: ()async{
-                                                    bool delete = await Alerts.confirmation("Are you sure you want to delete this dish?", context);
+                                                    bool delete = await Alerts.confirmation(tr.translate("deletedish"), context);
                                                     if(delete){
                                                       list.items.remove(entry.id);
                                                       entries.remove(entryId);
-                                                      Alerts.toast("${entry.name} removed from ${list.name}");
+                                                      Alerts.toast("${entry.name} ${tr.translate("removedfrom")} ${list.name}");
                                                       await DBServiceUser.dbServiceUser.updateList(list);
                                                       setState(() {
                                                       });
@@ -652,7 +629,7 @@ class _ListDisplayState extends State<ListDisplay> {
                                         children: <Widget>[
                                           //SmoothStarRating(rating: entry.rating, spacing: -3, isReadOnly: true, allowHalfRating: true, color: Color.fromRGBO(250, 201, 53, 1), borderColor: Color.fromRGBO(250, 201, 53, 1), size: ScreenUtil().setSp(10),),
                                           StarRating(color: Color.fromRGBO(250, 201, 53, 1), rating: entry.rating, size: ScreenUtil().setSp(7),),
-                                          Text("${entry.numReviews} votes", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(9),),)),
+                                          Text("${entry.numReviews} ${tr.translate("votes")}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(9),),)),
                                         ],
                                       ),
                                       SizedBox(width: 5.w,),

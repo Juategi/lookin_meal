@@ -187,7 +187,7 @@ class _FindRestaurantState extends State<FindRestaurant> {
                                         image: Image.asset("assets/food/${CommonData.typesImage[restaurant.types[0]]}.png").image))
                             ),
                             SizedBox(width: 5.w,),
-                            restaurant.types.length == 0? Container(width: 214.w) : Container(width: 214.w, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : "${restaurant.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                            restaurant.types.length == 0? Container(width: 214.w) : Container(width: 214.w, child: Text(restaurant.types.length > 1 ? "${tr.translate(restaurant.types[0])}, ${tr.translate(restaurant.types[1])}" : "${tr.translate(restaurant.types[0])}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
                             SizedBox(width: 55.w,),
                             Container(
                               child: SvgPicture.asset("assets/markerMini.svg", height: 25.h, width: 25.w,),
@@ -380,7 +380,7 @@ class _ConfirmationCodeState extends State<ConfirmationCode> {
                     value: type,
                     child: Row( mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Container(width: 140.w, child: Text(type, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
+                        Container(width: 140.w, child: Text(tr.translate(type), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
                       ],
                     )
                 )).toList(),
@@ -524,7 +524,7 @@ class _IdRequestState extends State<IdRequest> {
                     value: type,
                     child: Row( mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Container(width: 140.w, child: Text(type, maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
+                        Container(width: 140.w, child: Text(tr.translate(type), maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),))),
                       ],
                     )
                 )).toList(),

@@ -129,7 +129,7 @@ class _SearchRestaurantTileState extends State<SearchRestaurantTile> {
                             image: Image.asset("assets/food/${CommonData.typesImage[restaurant.types[0]]}.png").image))
                 ),
                 SizedBox(width: 5.w,),
-                restaurant.types.length == 0? Container(width: 214.w) : Container(width: 214.w, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : "${restaurant.types[0]}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                restaurant.types.length == 0? Container(width: 214.w) : Container(width: 214.w, child: Text(restaurant.types.length > 1 ? "${tr.translate(restaurant.types[0])}, ${tr.translate(restaurant.types[1])}" : "${tr.translate(restaurant.types[0])}", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
                 SizedBox(width: 55.w,),
                 Container(
                   child: SvgPicture.asset("assets/markerMini.svg", height: 25.h, width: 25.w,),

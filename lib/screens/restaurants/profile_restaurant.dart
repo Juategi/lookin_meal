@@ -228,6 +228,8 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   	restaurant = ModalRoute.of(context).settings.arguments;
 		tr = AppLocalizations.of(context);
 		print(restaurant.restaurant_id);
+		print(restaurant.types[0]);
+		print(restaurant.types[1]);
 		if(first){
 			_loadData();
 			_loadOwners();
@@ -501,7 +503,7 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
 												  ),
 												),
 										    SizedBox(width: 5.w,),
-										    Container(width: 180.w, height: 25.h, child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : restaurant.types.length > 0 ? "${restaurant.types[0]}" : "", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(17),),))),
+										    Container(width: 180.w, height: 25.h, child: Text(restaurant.types.length > 1 ? "${tr.translate(restaurant.types[0])}, ${tr.translate(restaurant.types[1])}" : restaurant.types.length > 0 ? "${restaurant.types[0]}" : "", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(17),),))),
 										  ],
 										),
 										Row(

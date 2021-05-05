@@ -85,7 +85,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
                                   image: Image.asset("assets/food/${CommonData.typesImage[restaurant.types[0]]}.png").image))
                       ),
                       SizedBox(width: 5.w,),
-                      Container(width: 340.w, height: 25.h,  child: Text(restaurant.types.length > 1 ? "${restaurant.types[0]}, ${restaurant.types[1]}" : restaurant.types.length > 0 ? "${restaurant.types[0]}" : "", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
+                      Container(width: 340.w, height: 25.h,  child: Text(restaurant.types.length > 1 ? "${tr.translate(restaurant.types[0])}, ${tr.translate(restaurant.types[1])}" : restaurant.types.length > 0 ? "${tr.translate(restaurant.types[0])}" : "", maxLines: 1, style: GoogleFonts.niramit(textStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 1), letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(14),),))),
                     ],
                   ),
                   SizedBox(height: 18.h,),
