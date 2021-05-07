@@ -32,6 +32,7 @@ import 'package:lookinmeal/screens/restaurants/reservations.dart';
 import 'package:lookinmeal/screens/restaurants/reserve_table.dart';
 import 'package:lookinmeal/services/analytics.dart';
 import 'package:lookinmeal/services/enviroment.dart';
+import 'package:lookinmeal/services/payment.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:splashscreen/splashscreen.dart';
@@ -47,6 +48,7 @@ void main() {
   Provider.debugCheckInvalidValueType = null;
   InAppPurchaseConnection.enablePendingPurchases();
   Enviroment.init();
+  InAppPurchasesService.initPlatformState();
   runApp(MyApp());
 }
 

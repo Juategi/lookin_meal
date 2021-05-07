@@ -21,27 +21,6 @@ class Premium extends StatefulWidget {
 class _PremiumState extends State<Premium> {
   Restaurant restaurant;
 
-  Future initPlatformState() async {
-    await Purchases.setDebugLogsEnabled(true);
-    await Purchases.setup("UDNbeRhooFwbsXgUbczLSKynlYDnrnQV", appUserId: restaurant.restaurant_id);
-  }
-
-  void prueba() async{
-    try {
-      Offerings offerings = await Purchases.getOfferings();
-      if (offerings.current != null && offerings.current.monthly != null) {
-        Product product = offerings.current.monthly.product;
-        print(product.title);
-        PurchaserInfo info = await Purchases.purchaseProduct(product.identifier);
-        if (info.entitlements.all["premium"].isActive) {
-          print(info.originalAppUserId);
-        }
-      }
-    } on PlatformException catch (e) {
-      print(e);
-    }
-  }
-
   void deliverProduct(){
     String today = DateTime.now().toString().substring(0,10);
     if(restaurant.premiumtime == null){
@@ -73,7 +52,6 @@ class _PremiumState extends State<Premium> {
   Widget build(BuildContext context) {
     AppLocalizations tr = AppLocalizations.of(context);
     restaurant = ModalRoute.of(context).settings.arguments;
-    initPlatformState();
     return SafeArea(child:
     Scaffold(
       body: Column(
@@ -123,7 +101,7 @@ class _PremiumState extends State<Premium> {
           ),
           GestureDetector(
             onTap: () async{
-              prueba();
+
             },
             child: Container(
               width: 200.w,
