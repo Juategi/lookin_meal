@@ -6,6 +6,7 @@ import 'package:lookinmeal/database/paymentDB.dart';
 import 'package:lookinmeal/models/payment.dart';
 import 'package:lookinmeal/models/restaurant.dart';
 import 'package:lookinmeal/services/app_localizations.dart';
+import 'package:lookinmeal/services/payment.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
@@ -20,32 +21,6 @@ class Premium extends StatefulWidget {
 
 class _PremiumState extends State<Premium> {
   Restaurant restaurant;
-
-  void deliverProduct(){
-    String today = DateTime.now().toString().substring(0,10);
-    if(restaurant.premiumtime == null){
-      DBServicePayment.dbServicePayment.createPayment(Payment(
-        restaurant_id: restaurant.restaurant_id,
-        service: "premium",
-        paymentdate: today,
-        price: CommonData.prices.firstWhere((element) => element.type == "premium").price,
-        user_id: DBServiceUser.userF.uid,
-        description: "Premium suscription",
-      ));
-      DBServicePayment.dbServicePayment.createPremium(restaurant.restaurant_id, today);
-      restaurant.premium = true;
-      restaurant.premiumtime = today;
-    }
-    else if(restaurant.premium){
-      DBServicePayment.dbServicePayment.updatePremium(restaurant.restaurant_id, restaurant.premiumtime, false);
-      restaurant.premium = false;
-    }
-    else{
-      DBServicePayment.dbServicePayment.updatePremium(restaurant.restaurant_id, restaurant.premiumtime, true);
-      restaurant.premium = true;
-    }
-    setState(() {});
-  }
 
 
   @override
@@ -101,7 +76,13 @@ class _PremiumState extends State<Premium> {
           ),
           GestureDetector(
             onTap: () async{
-
+              //Checkear el email si ya existe en premium en db
+              bool result =await InAppPurchasesService().createPaymentMethodCard(context, amount, cardNumber, cardHolderName, cvvCode, expiryDate, email, init);
+              if(result){
+                InAppPurchasesService().deliverSubscription(restaurant);
+              }
+              setState(() {
+              });
             },
             child: Container(
               width: 200.w,

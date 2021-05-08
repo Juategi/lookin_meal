@@ -25,30 +25,7 @@ class _SponsorState extends State<Sponsor> {
   StreamSubscription<List<PurchaseDetails>> _subscription;
   AppLocalizations tr;
 
-  void deliverProduct() async{
-    String today = DateTime.now().toString().substring(0,10);
-    if(restaurant.clicks == 0) {
-      try{
-        await DBServicePayment.dbServicePayment.createSponsor(
-            restaurant.restaurant_id);
-      }catch(e){
-        print(e);
-      }
-    }
-    await DBServicePayment.dbServicePayment.updateSponsor(restaurant.restaurant_id, actual.quantity);
-    DBServicePayment.dbServicePayment.createPayment(Payment(
-      restaurant_id: restaurant.restaurant_id,
-      service: "clicks",
-      paymentdate: today,
-      price: actual.price,
-      user_id: DBServiceUser.userF.uid,
-      description: "${actual.quantity} Sponsor visits " ,
-    ));
-    restaurant.clicks += actual.quantity;
-    Alerts.dialog(tr.translate("purchasedsuc"), context);
-    setState(() {
-    });
-  }
+
   /*
   void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
     purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
@@ -239,7 +216,10 @@ class _SponsorState extends State<Sponsor> {
                       actual = price;
                       bool result = await InAppPurchasesService().buyProduct('visits${price.quantity}');
                       if(result){
-                        deliverProduct();
+                        InAppPurchasesService().deliverProduct(restaurant, actual);
+                        Alerts.dialog(tr.translate("purchasedsuc"), context);
+                        setState(() {
+                        });
                       }
                     },
                     child: Container(

@@ -70,9 +70,9 @@ class DBServicePayment{
     print(response.body);
   }
 
-  Future createPremium(String restaurant_id, String date) async{
+  Future createPremium(String restaurant_id, String date, String email) async{
     var response = await http.post(
-        Uri.http(StaticStrings.api, "/premium"), body: {"restaurant_id":restaurant_id, "date" : date});
+        Uri.http(StaticStrings.api, "/premium"), body: {"restaurant_id":restaurant_id, "date" : date, "email" : email});
     print(response.body);
   }
 
