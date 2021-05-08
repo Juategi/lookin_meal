@@ -41,7 +41,7 @@ class InAppPurchasesService{
     }
   }
 
-  Future<bool> createPaymentMethodCard(BuildContext context, double amount, String cardNumber, String cardHolderName, String cvvCode, String expiryDate, String email, bool init) async {
+  Future<bool> createPaymentMethodCard(BuildContext context, int amount, String cardNumber, String cardHolderName, String cvvCode, String expiryDate, String email, bool init) async {
     StripePayment.setStripeAccount(null);
     PaymentMethod paymentMethod = PaymentMethod();
     final CreditCard testCard = CreditCard(
@@ -60,15 +60,15 @@ class InAppPurchasesService{
     }).catchError((e) {
       print('Errore Card: ${e.toString()}');
     });  if(paymentMethod != null)
-          return await _processPaymentAsDirectCharge(context, paymentMethod, amount, email, init)
+          return await _processPaymentAsDirectCharge(context, paymentMethod, amount, email, init);
         else {
       Alerts.dialog("It is not possible to pay with this card.", context);
       return false;
     }
   }
 
-  Future<bool> _processPaymentAsDirectCharge(BuildContext context, PaymentMethod paymentMethod, double amount, String email, bool init) async {
-    PaymentIntentResult paymentIntent;
+  Future<bool> _processPaymentAsDirectCharge(BuildContext context, PaymentMethod paymentMethod, int amount, String email, bool init) async {
+    PaymentIntentResult _paymentIntent;
     var response = await http.post(
         Uri.http(StaticStrings.api, "/intent"), body: {"amount":amount.toString()});
         Map aux = json.decode(response.body);
@@ -79,38 +79,43 @@ class InAppPurchasesService{
         paymentMethodId: paymentMethod.id,
       ),
     ).then((paymentIntent) {
-      paymentIntent = paymentIntent;
+      _paymentIntent = paymentIntent;
       print(paymentIntent.status);
+      print(_paymentIntent.paymentIntentId);
     });
-    if(paymentIntent.status == "succeeded") {
+    if(_paymentIntent.status == "succeeded") {
       if(init){
         var response = await http.post(
-            Uri.http(StaticStrings.api, "/customer"), body: {"email":email});
+            Uri.http(StaticStrings.api, "/customer"), body: {"email":email, "payment_intent_id" : _paymentIntent.paymentIntentId});
         Map aux = json.decode(response.body);
         String customerId = aux['customer'];
+        print(customerId);
         response = await http.post(
-            Uri.http(StaticStrings.api, "/subscription"), body: {"customerId":customerId});
+            Uri.http(StaticStrings.api, "/subscription"), body: {"customerId":customerId, "payment_intent_id" : _paymentIntent.paymentIntentId});
         aux = json.decode(response.body);
         String subscriptionId = aux['subscriptionId'];
+        print(subscriptionId);
       }
       else{
         var response = await http.get(
             Uri.http(StaticStrings.api, "/customer"), headers: {"email":email});
         Map aux = json.decode(response.body);
         String customerId = aux['customer'];
+        print(customerId);
         response = await http.post(
-            Uri.http(StaticStrings.api, "/subscription"), body: {"customerId":customerId});
+            Uri.http(StaticStrings.api, "/subscription"), body: {"customerId":customerId, "payment_intent_id" : _paymentIntent.paymentIntentId});
         aux = json.decode(response.body);
         String subscriptionId = aux['subscriptionId'];
-        return true;
+        print(subscriptionId);
       }
+      return true;
     }
     else {
       return false;
     }
   }
 
-  void deliverSubscription(Restaurant restaurant){
+  void deliverSubscription(Restaurant restaurant, String email){
     String today = DateTime.now().toString().substring(0,10);
     if(restaurant.premiumtime == null){
       DBServicePayment.dbServicePayment.createPayment(Payment(
@@ -121,7 +126,7 @@ class InAppPurchasesService{
         user_id: DBServiceUser.userF.uid,
         description: "Premium suscription",
       ));
-      DBServicePayment.dbServicePayment.createPremium(restaurant.restaurant_id, today, "juantg1994@gmail.com");
+      DBServicePayment.dbServicePayment.createPremium(restaurant.restaurant_id, today, email);
       restaurant.premium = true;
       restaurant.premiumtime = today;
     }

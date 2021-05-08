@@ -77,9 +77,9 @@ class _PremiumState extends State<Premium> {
           GestureDetector(
             onTap: () async{
               //Checkear el email si ya existe en premium en db
-              bool result =await InAppPurchasesService().createPaymentMethodCard(context, amount, cardNumber, cardHolderName, cvvCode, expiryDate, email, init);
+              bool result = await InAppPurchasesService().createPaymentMethodCard(context, 1500, "4242424242424242", "cardHolderName", "777", "11/24", "juantg1994@gmail.com", true);
               if(result){
-                InAppPurchasesService().deliverSubscription(restaurant);
+                InAppPurchasesService().deliverSubscription(restaurant, "juantg1994@gmail.com");
               }
               setState(() {
               });

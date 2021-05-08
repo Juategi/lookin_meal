@@ -227,9 +227,6 @@ class _ProfileRestaurantState extends State<ProfileRestaurant> {
   Widget build(BuildContext context) {
   	restaurant = ModalRoute.of(context).settings.arguments;
 		tr = AppLocalizations.of(context);
-		print(restaurant.restaurant_id);
-		print(restaurant.types[0]);
-		print(restaurant.types[1]);
 		if(first){
 			_loadData();
 			_loadOwners();
