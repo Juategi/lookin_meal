@@ -56,6 +56,9 @@ class DBServicePayment{
       var response = await http.get(
           Uri.http(StaticStrings.api, "/subscription"), headers: {"subscriptionId" : subscriptionId});
       Map aux = json.decode(response.body);
+      restaurant.subscriptionId = subscriptionId;
+      restaurant.customerId = result.first['customerid'];
+      restaurant.paymentId = result.first['paymentid'];
       aux = aux["subscription"];
       var current_period_start = new DateTime.fromMillisecondsSinceEpoch(aux["current_period_start"]*1000);
       var current_period_end = new DateTime.fromMillisecondsSinceEpoch(aux["current_period_end"]*1000);
@@ -79,15 +82,15 @@ class DBServicePayment{
     print(restaurant.premium);
   }
 
-  Future updatePremium(String restaurant_id, String subscriptionId) async{
+  Future updatePremium(String restaurant_id, String subscriptionId, String paymentId) async{
     var response = await http.put(
-        Uri.http(StaticStrings.api, "/premium"), body: {"restaurant_id":restaurant_id, "subscriptionId" : subscriptionId});
+        Uri.http(StaticStrings.api, "/premium"), body: {"restaurant_id":restaurant_id, "subscriptionId" : subscriptionId, "paymentId" : paymentId});
     print(response.body);
   }
 
-  Future createPremium(String restaurant_id,  String subscriptionId) async{
+  Future createPremium(String restaurant_id,  String subscriptionId, String customerId, String paymentId) async{
     var response = await http.post(
-        Uri.http(StaticStrings.api, "/premium"), body: {"restaurant_id":restaurant_id, "subscriptionId" : subscriptionId});
+        Uri.http(StaticStrings.api, "/premium"), body: {"restaurant_id":restaurant_id, "subscriptionId" : subscriptionId, "customerId" : customerId, "paymentId" : paymentId});
     print(response.body);
   }
 

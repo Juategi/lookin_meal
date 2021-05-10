@@ -76,6 +76,7 @@ class _PremiumState extends State<Premium> {
           ),
           GestureDetector(
             onTap: () async{
+              //Loading, coger precio en db, sistema tarjeta
               if(restaurant.premium){
                   bool sure = await Alerts.confirmation(tr.translate("surecancelsub"), context);
                   if(sure){
@@ -83,15 +84,16 @@ class _PremiumState extends State<Premium> {
                   }
               }
               else if(restaurant.premiumtime == null){
-                String result = await InAppPurchasesService().createPaymentMethodCard(context, 1500, "4242424242424242", "cardHolderName", "777", "11/24", "juantg1994@gmail.com", true);
+                //Check email, guardar customer y payment
+                List<String> result = await InAppPurchasesService().createPaymentMethodCard(context, 1500, "4242424242424242", "cardHolderName", "777", "11/24", "juantg1994@gmail.com", true, restaurant);
                 if(result != null){
-                  await InAppPurchasesService().deliverSubscription(restaurant, result);
+                  await InAppPurchasesService().deliverSubscription(restaurant, result[0], result[1], result[2]);
                 }
               }
               else{
-                String result = await InAppPurchasesService().createPaymentMethodCard(context, 1500, "4242424242424242", "cardHolderName", "777", "11/24", "juantg1994@gmail.com", false);
+                List<String> result = await InAppPurchasesService().createPaymentMethodCard(context, 1500, "4242424242424242", "cardHolderName", "777", "11/24", "juantg1994@gmail.com", false, restaurant);
                 if(result != null){
-                  await InAppPurchasesService().deliverSubscription(restaurant, result);
+                  await InAppPurchasesService().deliverSubscription(restaurant, result[1], result[2], result[3]);
                 }
               }
               setState(() {
