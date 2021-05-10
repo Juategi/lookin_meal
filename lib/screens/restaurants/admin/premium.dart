@@ -10,6 +10,7 @@ import 'package:lookinmeal/services/payment.dart';
 import 'package:lookinmeal/shared/alert.dart';
 import 'package:lookinmeal/shared/common_data.dart';
 import 'package:lookinmeal/shared/functions.dart';
+import 'package:lookinmeal/shared/loading.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'file:///C:/D/lookin_meal/lib/database/userDB.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,7 +22,7 @@ class Premium extends StatefulWidget {
 
 class _PremiumState extends State<Premium> {
   Restaurant restaurant;
-
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +77,10 @@ class _PremiumState extends State<Premium> {
           ),
           GestureDetector(
             onTap: () async{
-              //Loading, coger precio en db, sistema tarjeta
+              setState(() {
+                loading = true;
+              });
+              // sistema tarjeta
               if(restaurant.premium){
                   bool sure = await Alerts.confirmation(tr.translate("surecancelsub"), context);
                   if(sure){
@@ -84,19 +88,19 @@ class _PremiumState extends State<Premium> {
                   }
               }
               else if(restaurant.premiumtime == null){
-                //Check email
-                List<String> result = await InAppPurchasesService().createPaymentMethodCard(context, 1500, "4242424242424242", "cardHolderName", "777", "11/24", "juantg1994@gmail.com", true, restaurant);
+                List<String> result = await InAppPurchasesService().createPaymentMethodCard(context, CommonData.prices.firstWhere((p) => p.type == "premium").price.toInt()*100, "4242424242424242", "cardHolderName", "777", "11/24", "juantg1994@gmail.com", true, restaurant);
                 if(result != null){
                   await InAppPurchasesService().deliverSubscription(restaurant, result[0], result[1], result[2]);
                 }
               }
               else{
-                List<String> result = await InAppPurchasesService().createPaymentMethodCard(context, 1500, "4242424242424242", "cardHolderName", "777", "11/24", "juantg1994@gmail.com", false, restaurant);
+                List<String> result = await InAppPurchasesService().createPaymentMethodCard(context, CommonData.prices.firstWhere((p) => p.type == "premium").price.toInt()*100, "4242424242424242", "cardHolderName", "777", "11/24", "juantg1994@gmail.com", false, restaurant);
                 if(result != null){
                   await InAppPurchasesService().deliverSubscription(restaurant, result[0], result[1], result[2]);
                 }
               }
               setState(() {
+                loading = false;
               });
             },
             child: Container(
@@ -112,7 +116,7 @@ class _PremiumState extends State<Premium> {
                   offset: Offset(1, 1), // changes position of shadow
                 ),],
               ),
-              child: restaurant.premium == false? Center(child: Text(tr.translate("sub"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.greenAccent, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),))):
+              child: loading? Loading() : restaurant.premium == false? Center(child: Text(tr.translate("sub"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.greenAccent, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),))):
               Center(child: Text(tr.translate("cancel"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.white, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),)))
             ),
           ),
