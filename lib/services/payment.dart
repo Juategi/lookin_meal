@@ -98,6 +98,10 @@ class InAppPurchasesService{
         print(subscriptionId);
       }
       else{
+        print(restaurant.customerId);
+        var response = await http.put(
+            Uri.http(StaticStrings.api, "/customer"), body: {"customerId" : restaurant.customerId, "payment_intent_id" : _paymentIntent.paymentIntentId});
+        print(response.body);
         response = await http.post(
             Uri.http(StaticStrings.api, "/subscription"), body: {"customerId" : restaurant.customerId, "payment_intent_id" : _paymentIntent.paymentIntentId, "billing_cycle_anchor" : "${((DateTime.now().add(Duration(days: 30))).millisecondsSinceEpoch/1000).toInt()}"});
         aux = json.decode(response.body);
@@ -125,6 +129,12 @@ class InAppPurchasesService{
     Map aux = json.decode(response.body);
     print(aux);
     restaurant.premium = false;
+    response = await http.get(
+        Uri.http(StaticStrings.api, "/subscription"), headers: {"subscriptionId" : subscriptionId});
+    aux = json.decode(response.body);
+    aux = aux["subscription"];
+    var current_period_end = new DateTime.fromMillisecondsSinceEpoch(aux["current_period_end"]*1000);
+    restaurant.premiumtime = current_period_end.toString();
   }
 
   /*

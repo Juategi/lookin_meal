@@ -59,6 +59,7 @@ class DBServicePayment{
       restaurant.subscriptionId = subscriptionId;
       restaurant.customerId = result.first['customerid'];
       restaurant.paymentId = result.first['paymentid'];
+      print(result);
       aux = aux["subscription"];
       var current_period_start = new DateTime.fromMillisecondsSinceEpoch(aux["current_period_start"]*1000);
       var current_period_end = new DateTime.fromMillisecondsSinceEpoch(aux["current_period_end"]*1000);

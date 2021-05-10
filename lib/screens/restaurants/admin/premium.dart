@@ -84,7 +84,7 @@ class _PremiumState extends State<Premium> {
                   }
               }
               else if(restaurant.premiumtime == null){
-                //Check email, guardar customer y payment
+                //Check email
                 List<String> result = await InAppPurchasesService().createPaymentMethodCard(context, 1500, "4242424242424242", "cardHolderName", "777", "11/24", "juantg1994@gmail.com", true, restaurant);
                 if(result != null){
                   await InAppPurchasesService().deliverSubscription(restaurant, result[0], result[1], result[2]);
@@ -93,7 +93,7 @@ class _PremiumState extends State<Premium> {
               else{
                 List<String> result = await InAppPurchasesService().createPaymentMethodCard(context, 1500, "4242424242424242", "cardHolderName", "777", "11/24", "juantg1994@gmail.com", false, restaurant);
                 if(result != null){
-                  await InAppPurchasesService().deliverSubscription(restaurant, result[1], result[2], result[3]);
+                  await InAppPurchasesService().deliverSubscription(restaurant, result[0], result[1], result[2]);
                 }
               }
               setState(() {
