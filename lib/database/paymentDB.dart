@@ -51,28 +51,43 @@ class DBServicePayment{
         Uri.http(StaticStrings.api, "/premium"),
         headers: {"restaurant_id":restaurant.restaurant_id});
     List<dynamic> result = json.decode(response.body);
-    print(result);
     if(result.length > 0) {
-      restaurant.premiumtime = result.first['premiumtime'].toString().substring(0,10);
-      if(restaurant.premium = result.first['ispremium'] == null)
+      String subscriptionId  = result.first['subscriptionid'];
+      var response = await http.get(
+          Uri.http(StaticStrings.api, "/subscription"), headers: {"subscriptionId" : subscriptionId});
+      Map aux = json.decode(response.body);
+      aux = aux["subscription"];
+      var current_period_start = new DateTime.fromMillisecondsSinceEpoch(aux["current_period_start"]*1000);
+      var current_period_end = new DateTime.fromMillisecondsSinceEpoch(aux["current_period_end"]*1000);
+      print(aux["status"]);
+      if(aux["status"] != "canceled"){
+        restaurant.premium = true;
+        restaurant.premiumtime = current_period_end.toString();
+      }
+      else if(current_period_end.isAfter(DateTime.now())) {
         restaurant.premium = false;
-      else
-        restaurant.premium = result.first['ispremium'];
+        restaurant.premiumtime = current_period_end.toString();
+      }
+      else{
+        restaurant.premium = false;
+      }
     }
     else{
       restaurant.premium = false;
     }
+    print(restaurant.premiumtime);
+    print(restaurant.premium);
   }
 
-  Future updatePremium(String restaurant_id, String date, bool premium) async{
+  Future updatePremium(String restaurant_id, String subscriptionId) async{
     var response = await http.put(
-        Uri.http(StaticStrings.api, "/premium"), body: {"restaurant_id":restaurant_id, "date" : date, "premium" : premium.toString()});
+        Uri.http(StaticStrings.api, "/premium"), body: {"restaurant_id":restaurant_id, "subscriptionId" : subscriptionId});
     print(response.body);
   }
 
-  Future createPremium(String restaurant_id, String date, String email) async{
+  Future createPremium(String restaurant_id,  String subscriptionId) async{
     var response = await http.post(
-        Uri.http(StaticStrings.api, "/premium"), body: {"restaurant_id":restaurant_id, "date" : date, "email" : email});
+        Uri.http(StaticStrings.api, "/premium"), body: {"restaurant_id":restaurant_id, "subscriptionId" : subscriptionId});
     print(response.body);
   }
 

@@ -41,7 +41,7 @@ class InAppPurchasesService{
     }
   }
 
-  Future<bool> createPaymentMethodCard(BuildContext context, int amount, String cardNumber, String cardHolderName, String cvvCode, String expiryDate, String email, bool init) async {
+  Future<String> createPaymentMethodCard(BuildContext context, int amount, String cardNumber, String cardHolderName, String cvvCode, String expiryDate, String email, bool init) async {
     StripePayment.setStripeAccount(null);
     PaymentMethod paymentMethod = PaymentMethod();
     final CreditCard testCard = CreditCard(
@@ -63,11 +63,11 @@ class InAppPurchasesService{
           return await _processPaymentAsDirectCharge(context, paymentMethod, amount, email, init);
         else {
       Alerts.dialog("It is not possible to pay with this card.", context);
-      return false;
+      return null;
     }
   }
 
-  Future<bool> _processPaymentAsDirectCharge(BuildContext context, PaymentMethod paymentMethod, int amount, String email, bool init) async {
+  Future<String> _processPaymentAsDirectCharge(BuildContext context, PaymentMethod paymentMethod, int amount, String email, bool init) async {
     PaymentIntentResult _paymentIntent;
     var response = await http.post(
         Uri.http(StaticStrings.api, "/intent"), body: {"amount":amount.toString()});
@@ -84,6 +84,7 @@ class InAppPurchasesService{
       print(_paymentIntent.paymentIntentId);
     });
     if(_paymentIntent.status == "succeeded") {
+      String subscriptionId;
       if(init){
         var response = await http.post(
             Uri.http(StaticStrings.api, "/customer"), body: {"email":email, "payment_intent_id" : _paymentIntent.paymentIntentId});
@@ -93,54 +94,95 @@ class InAppPurchasesService{
         response = await http.post(
             Uri.http(StaticStrings.api, "/subscription"), body: {"customerId":customerId, "payment_intent_id" : _paymentIntent.paymentIntentId});
         aux = json.decode(response.body);
-        String subscriptionId = aux['subscriptionId'];
+        subscriptionId = aux['subscriptionId'];
         print(subscriptionId);
       }
       else{
-        var response = await http.get(
-            Uri.http(StaticStrings.api, "/customer"), headers: {"email":email});
+        var response = await http.post(
+            Uri.http(StaticStrings.api, "/customer"), body: {"email":email, "payment_intent_id" : _paymentIntent.paymentIntentId, "billing_cycle_anchor" : "-1"});
         Map aux = json.decode(response.body);
         String customerId = aux['customer'];
         print(customerId);
         response = await http.post(
-            Uri.http(StaticStrings.api, "/subscription"), body: {"customerId":customerId, "payment_intent_id" : _paymentIntent.paymentIntentId});
+            Uri.http(StaticStrings.api, "/subscription"), body: {"customerId":customerId, "payment_intent_id" : _paymentIntent.paymentIntentId, "billing_cycle_anchor" : "${DateTime.now().add(Duration(days: 30)).millisecondsSinceEpoch}"});
         aux = json.decode(response.body);
-        String subscriptionId = aux['subscriptionId'];
+        print(new DateTime.fromMillisecondsSinceEpoch((DateTime.now().add(Duration(days: 30)).millisecondsSinceEpoch).toInt()));
+        subscriptionId = aux['subscriptionId'];
         print(subscriptionId);
       }
-      return true;
+      StripePayment.completeNativePayRequest();
+      return subscriptionId;
     }
     else {
-      return false;
+      StripePayment.cancelNativePayRequest();
+      return null;
     }
   }
 
-  void deliverSubscription(Restaurant restaurant, String email){
+  Future cancelSubscription(Restaurant restaurant) async{
+    var response = await http.get(
+        Uri.http(StaticStrings.api, "/premium"),
+        headers: {"restaurant_id": restaurant.restaurant_id});
+    List<dynamic> result = json.decode(response.body);
+    String subscriptionId  = result.first['subscriptionid'];
+    response = await http.post(
+        Uri.http(StaticStrings.api, "/cancel"), body: {"subscriptionId" : subscriptionId});
+    Map aux = json.decode(response.body);
+    print(aux);
+    restaurant.premium = false;
+  }
+
+  /*
+  void updateSubscription(String restaurant_id) async{
+    var response = await http.get(
+        Uri.http(StaticStrings.api, "/premium"),
+        headers: {"restaurant_id": restaurant_id});
+    List<dynamic> result = json.decode(response.body);
+    String subscriptionId  = result.first['subscriptionid'];
+    print(subscriptionId);
+    var response2 = await http.put(
+        Uri.http(StaticStrings.api, "/subscription"), body: {"subscriptionId" : subscriptionId});
+    print(response2.body);
+    Map aux = json.decode(response2.body);
+  }
+
+   */
+
+  Future deliverSubscription(Restaurant restaurant, String subscriptionId) async{
     String today = DateTime.now().toString().substring(0,10);
-    if(restaurant.premiumtime == null){
-      DBServicePayment.dbServicePayment.createPayment(Payment(
+    var response = await http.get(
+        Uri.http(StaticStrings.api, "/premium"),
+        headers: {"restaurant_id":restaurant.restaurant_id});
+    List<dynamic> result = json.decode(response.body);
+    if(result.length == 0){
+      /*DBServicePayment.dbServicePayment.createPayment(Payment(
         restaurant_id: restaurant.restaurant_id,
         service: "premium",
         paymentdate: today,
         price: CommonData.prices.firstWhere((element) => element.type == "premium").price,
         user_id: DBServiceUser.userF.uid,
         description: "Premium suscription",
-      ));
-      DBServicePayment.dbServicePayment.createPremium(restaurant.restaurant_id, today, email);
+      ));*/
+      DBServicePayment.dbServicePayment.createPremium(restaurant.restaurant_id, subscriptionId);
       restaurant.premium = true;
       restaurant.premiumtime = today;
     }
-    else if(restaurant.premium){
-      DBServicePayment.dbServicePayment.updatePremium(restaurant.restaurant_id, restaurant.premiumtime, false);
-      restaurant.premium = false;
-    }
     else{
-      DBServicePayment.dbServicePayment.updatePremium(restaurant.restaurant_id, restaurant.premiumtime, true);
+      /*DBServicePayment.dbServicePayment.createPayment(Payment(
+        restaurant_id: restaurant.restaurant_id,
+        service: "premium",
+        paymentdate: today,
+        price: CommonData.prices.firstWhere((element) => element.type == "premium").price,
+        user_id: DBServiceUser.userF.uid,
+        description: "Premium suscription",
+      ));*/
+      DBServicePayment.dbServicePayment.updatePremium(restaurant.restaurant_id, subscriptionId);
       restaurant.premium = true;
+      restaurant.premiumtime = today;
     }
   }
 
-  void deliverProduct(Restaurant restaurant, Price actual) async{
+  Future deliverProduct(Restaurant restaurant, Price actual) async{
     String today = DateTime.now().toString().substring(0,10);
     if(restaurant.clicks == 0) {
       try{

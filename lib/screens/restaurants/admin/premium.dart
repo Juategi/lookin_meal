@@ -72,14 +72,27 @@ class _PremiumState extends State<Premium> {
           Container(
             height: 70.h,
             width: 300.w,
-            child: Text(restaurant.premium == false && restaurant.premiumtime != null? "${tr.translate("subcancel")} ${Functions.formatDate(restaurant.premiumtime)}" : "", maxLines: 2, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black45, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
+            child: Text(restaurant.premium == false && restaurant.premiumtime != null? "${tr.translate("subcancel")} ${Functions.formatDate(restaurant.premiumtime.substring(0,10))}" : "", maxLines: 2, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.black45, letterSpacing: .3, fontWeight: FontWeight.normal, fontSize: ScreenUtil().setSp(18),),)),
           ),
           GestureDetector(
             onTap: () async{
-              //Checkear el email si ya existe en premium en db
-              bool result = await InAppPurchasesService().createPaymentMethodCard(context, 1500, "4242424242424242", "cardHolderName", "777", "11/24", "juantg1994@gmail.com", true);
-              if(result){
-                InAppPurchasesService().deliverSubscription(restaurant, "juantg1994@gmail.com");
+              if(restaurant.premium){
+                  bool sure = await Alerts.confirmation(tr.translate("surecancelsub"), context);
+                  if(sure){
+                    await InAppPurchasesService().cancelSubscription(restaurant);
+                  }
+              }
+              else if(restaurant.premiumtime == null){
+                String result = await InAppPurchasesService().createPaymentMethodCard(context, 1500, "4242424242424242", "cardHolderName", "777", "11/24", "juantg1994@gmail.com", true);
+                if(result != null){
+                  await InAppPurchasesService().deliverSubscription(restaurant, result);
+                }
+              }
+              else{
+                String result = await InAppPurchasesService().createPaymentMethodCard(context, 1500, "4242424242424242", "cardHolderName", "777", "11/24", "juantg1994@gmail.com", false);
+                if(result != null){
+                  await InAppPurchasesService().deliverSubscription(restaurant, result);
+                }
               }
               setState(() {
               });

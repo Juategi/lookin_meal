@@ -352,5 +352,6 @@
   "Responsable" : "Responsable",
   "Trabajador" : "Trabajador",
   "Otro" : "Otro",
-  "exists" : "Existente"
+  "exists" : "Existente",
+  "surecancelsub" : "¿Seguro que quieres cancelar la subscripción?"
 }
