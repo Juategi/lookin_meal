@@ -59,11 +59,10 @@ class DBServicePayment{
       restaurant.subscriptionId = subscriptionId;
       restaurant.customerId = result.first['customerid'];
       restaurant.paymentId = result.first['paymentid'];
-      print(result);
       aux = aux["subscription"];
-      var current_period_start = new DateTime.fromMillisecondsSinceEpoch(aux["current_period_start"]*1000);
-      var current_period_end = new DateTime.fromMillisecondsSinceEpoch(aux["current_period_end"]*1000);
-      print(aux["status"]);
+      var current_period_start = DateTime.fromMillisecondsSinceEpoch(aux["current_period_start"]*1000);
+      var current_period_end = DateTime.fromMillisecondsSinceEpoch(aux["current_period_end"]*1000);
+      print(current_period_start);
       if(aux["status"] != "canceled"){
         restaurant.premium = true;
         restaurant.premiumtime = current_period_end.toString();
@@ -71,6 +70,11 @@ class DBServicePayment{
       else if(current_period_end.isAfter(DateTime.now())) {
         restaurant.premium = false;
         restaurant.premiumtime = current_period_end.toString();
+        if(aux["trial_end"] != null) {
+          var trial_end = DateTime.fromMillisecondsSinceEpoch(aux["trial_end"] * 1000);
+          restaurant.premiumtimetrial = trial_end;
+          print(trial_end);
+        }
       }
       else{
         restaurant.premium = false;
@@ -79,8 +83,6 @@ class DBServicePayment{
     else{
       restaurant.premium = false;
     }
-    print(restaurant.premiumtime);
-    print(restaurant.premium);
   }
 
   Future updatePremium(String restaurant_id, String subscriptionId, String paymentId) async{

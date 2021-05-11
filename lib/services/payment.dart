@@ -102,8 +102,12 @@ class InAppPurchasesService{
         var response = await http.put(
             Uri.http(StaticStrings.api, "/customer"), body: {"customerId" : restaurant.customerId, "payment_intent_id" : _paymentIntent.paymentIntentId});
         print(response.body);
-        response = await http.post(
-            Uri.http(StaticStrings.api, "/subscription"), body: {"customerId" : restaurant.customerId, "payment_intent_id" : _paymentIntent.paymentIntentId, "billing_cycle_anchor" : "${((DateTime.now().add(Duration(days: 30))).millisecondsSinceEpoch/1000).toInt()}"});
+        if(restaurant.premiumtimetrial == null)
+          response = await http.post(
+              Uri.http(StaticStrings.api, "/subscription"), body: {"customerId" : restaurant.customerId, "payment_intent_id" : _paymentIntent.paymentIntentId, "billing_cycle_anchor" : "${((DateTime.now().add(Duration(days: 30))).millisecondsSinceEpoch/1000).toInt()}"});
+        else
+          response = await http.post(
+              Uri.http(StaticStrings.api, "/subscription"), body: {"customerId" : restaurant.customerId, "payment_intent_id" : _paymentIntent.paymentIntentId, "billing_cycle_anchor" : "${((restaurant.premiumtimetrial.add(Duration(days: 30))).millisecondsSinceEpoch/1000).toInt()}"});
         aux = json.decode(response.body);
         print(new DateTime.fromMillisecondsSinceEpoch((DateTime.now().add(Duration(days: 30)).millisecondsSinceEpoch).toInt()));
         subscriptionId = aux['subscriptionId'];

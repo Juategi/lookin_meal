@@ -114,7 +114,7 @@ class _PremiumState extends State<Premium> {
             SizedBox(height: 30.h,),
             GestureDetector(
               onTap: (){
-                if(formKey.currentState.validate())
+                //if(formKey.currentState.validate())
                 setState(() {
                   card = false;
                 });

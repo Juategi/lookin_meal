@@ -17,6 +17,7 @@ class Restaurant{
 	List<RestaurantTable> tables;
 	Map<String, List<Reservation>> reservations;
 	List<Code> codes;
+	DateTime premiumtimetrial;
 
-	Restaurant({this.restaurant_id, this.premium, this.excludeddays, this.clicks, this.subscriptionId, this.paymentId, this.customerId, this.codes, this.premiumtime, this.mealtime, this.reservations, this.tables, this.dailymenu, this.ta_id,this.name,this.phone,this.website,this.webUrl,this.address,this.email,this.city,this.country,this.latitude,this.longitude,this.distance,this.rating,this.numrevta,this.images,this.types,this.schedule, this.currency,this.sections, this.menu, this.delivery});
+	Restaurant({this.restaurant_id, this.premium, this.premiumtimetrial, this.excludeddays, this.clicks, this.subscriptionId, this.paymentId, this.customerId, this.codes, this.premiumtime, this.mealtime, this.reservations, this.tables, this.dailymenu, this.ta_id,this.name,this.phone,this.website,this.webUrl,this.address,this.email,this.city,this.country,this.latitude,this.longitude,this.distance,this.rating,this.numrevta,this.images,this.types,this.schedule, this.currency,this.sections, this.menu, this.delivery});
 }
