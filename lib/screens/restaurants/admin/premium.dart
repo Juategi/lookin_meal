@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_credit_card/credit_card_form.dart';
+import 'package:flutter_credit_card/credit_card_model.dart';
+import 'package:flutter_credit_card/credit_card_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lookinmeal/database/paymentDB.dart';
@@ -23,6 +26,27 @@ class Premium extends StatefulWidget {
 class _PremiumState extends State<Premium> {
   Restaurant restaurant;
   bool loading = false;
+  bool card = false;
+  bool cvvFocus = false;
+  bool init;
+  String cardName = "cardHolderName";
+  String cardNumber = "4242424242424242";
+  String cvv = "777";
+  String date = "11/24";
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  Future pay() async{
+    setState(() {
+      loading = true;
+    });
+    List<String> result = await InAppPurchasesService().createPaymentMethodCard(context, CommonData.prices.firstWhere((p) => p.type == "premium").price.toInt()*100, cardNumber, cardName, cvv, date, restaurant.email, init, restaurant);
+    if(result != null){
+      await InAppPurchasesService().deliverSubscription(restaurant, result[0], result[1], result[2]);
+    }
+    setState(() {
+      loading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +54,91 @@ class _PremiumState extends State<Premium> {
     restaurant = ModalRoute.of(context).settings.arguments;
     return SafeArea(child:
     Scaffold(
-      body: Column(
+      body: card ? Padding(
+        padding: EdgeInsets.all(10.0),
+        child: ListView(
+          children: [
+            CreditCardWidget(
+              cardNumber: cardNumber,
+              expiryDate: date,
+              cardHolderName: cardName,
+              cvvCode: cvv,
+              showBackView: cvvFocus,
+              obscureCardNumber: true,
+              obscureCardCvv: true,
+              height: 175.h,
+              textStyle: TextStyle(color: Colors.yellowAccent),
+              width: MediaQuery.of(context).size.width,
+              animationDuration: Duration(milliseconds: 1000),
+              labelCardHolder: tr.translate("name"),
+            ),
+            SizedBox(height: 10.h,),
+            CreditCardForm(
+              formKey: formKey, // Required
+              onCreditCardModelChange: (CreditCardModel data) {
+                setState(() {
+                  cardName = data.cardHolderName ?? "";
+                  cardNumber = data.cardNumber ?? "";
+                  date = data.expiryDate ?? "";
+                  cvv = data.cvvCode ?? "";
+                  cvvFocus = data.isCvvFocused ?? false;
+                });
+              }, // Required
+              themeColor: Colors.red,
+              obscureCvv: true,
+              obscureNumber: true,
+              cardHolderName: cardName,
+              cardNumber: cardNumber,
+              cvvCode: cvv,
+              expiryDate: date,
+              cardNumberDecoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: tr.translate("number"),
+                hintText: 'XXXX XXXX XXXX XXXX',
+              ),
+              expiryDateDecoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: tr.translate("expirydate"),
+                hintText: 'XX/XX',
+              ),
+              cvvCodeDecoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'CVV',
+                hintText: 'XXX',
+              ),
+              cardHolderDecoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: tr.translate("name"),
+              ),
+            ),
+            SizedBox(height: 30.h,),
+            GestureDetector(
+              onTap: (){
+                if(formKey.currentState.validate())
+                setState(() {
+                  card = false;
+                });
+                pay();
+              },
+              child: Container(
+                  width: 200.w,
+                  height: 45.h,
+                  decoration: BoxDecoration(
+                    color: restaurant.premium == true? Color.fromRGBO(255, 110, 117, 0.7) : Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    boxShadow: [BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 3,
+                      offset: Offset(1, 1), // changes position of shadow
+                    ),],
+                  ),
+                  child: Center(child: Text(tr.translate("pay"), maxLines: 1, textAlign: TextAlign.center, style: GoogleFonts.niramit(textStyle: TextStyle(color: Colors.greenAccent, letterSpacing: .3, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(20),),)))
+              ),
+            ),
+          ],
+        ),
+      ) : Column(
         children: [
           Container(
             height: 42.h,
@@ -77,31 +185,30 @@ class _PremiumState extends State<Premium> {
           ),
           GestureDetector(
             onTap: () async{
-              setState(() {
-                loading = true;
-              });
-              // sistema tarjeta
               if(restaurant.premium){
                   bool sure = await Alerts.confirmation(tr.translate("surecancelsub"), context);
                   if(sure){
+                    setState(() {
+                      loading = true;
+                    });
                     await InAppPurchasesService().cancelSubscription(restaurant);
                   }
+                  setState(() {
+                    loading = false;
+                  });
               }
               else if(restaurant.premiumtime == null){
-                List<String> result = await InAppPurchasesService().createPaymentMethodCard(context, CommonData.prices.firstWhere((p) => p.type == "premium").price.toInt()*100, "4242424242424242", "cardHolderName", "777", "11/24", "juantg1994@gmail.com", true, restaurant);
-                if(result != null){
-                  await InAppPurchasesService().deliverSubscription(restaurant, result[0], result[1], result[2]);
-                }
+                setState(() {
+                  card = true;
+                  init = true;
+                });
               }
               else{
-                List<String> result = await InAppPurchasesService().createPaymentMethodCard(context, CommonData.prices.firstWhere((p) => p.type == "premium").price.toInt()*100, "4242424242424242", "cardHolderName", "777", "11/24", "juantg1994@gmail.com", false, restaurant);
-                if(result != null){
-                  await InAppPurchasesService().deliverSubscription(restaurant, result[0], result[1], result[2]);
-                }
+                setState(() {
+                  card = true;
+                  init = false;
+                });
               }
-              setState(() {
-                loading = false;
-              });
             },
             child: Container(
               width: 200.w,

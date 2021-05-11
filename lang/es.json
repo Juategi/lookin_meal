@@ -353,5 +353,8 @@
   "Trabajador" : "Trabajador",
   "Otro" : "Otro",
   "exists" : "Existente",
-  "surecancelsub" : "¿Seguro que quieres cancelar la subscripción?"
+  "surecancelsub" : "¿Seguro que quieres cancelar la subscripción?",
+  "pay" : "Pagar",
+  "number" : "Número",
+  "expirydate" : "Fecha de expiración"
 }
