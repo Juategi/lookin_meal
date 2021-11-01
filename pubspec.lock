@@ -232,6 +232,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.1"
+  dcdg:
+    dependency: "direct main"
+    description:
+      name: dcdg
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.1.1"
   device_info:
     dependency: transitive
     description:

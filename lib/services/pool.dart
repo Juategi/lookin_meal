@@ -1,7 +1,7 @@
 import 'package:lookinmeal/models/restaurant.dart';
 
 class Pool{
-  static List<Restaurant> restaurants = List<Restaurant>();
+  static List<Restaurant> restaurants = [];
   //static List<String> ids = List<String>();
 
   static Restaurant getRestaurant(String id){

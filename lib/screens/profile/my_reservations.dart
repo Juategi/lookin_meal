@@ -24,15 +24,9 @@ class _UserReservationsState extends State<UserReservations> {
 
   Future _getReservations() async{
     DBServiceUser.userF.reservations = await DBServiceReservation.dbServiceReservation.getReservationsUser(DBServiceUser.userF.uid, DateTime.now().toString().substring(0,10));
-    setState(() {
-    });
+    setState(() {});
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
-  
   @override
   Widget build(BuildContext context) {
     AppLocalizations tr = AppLocalizations.of(context);

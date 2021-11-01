@@ -30,7 +30,6 @@ class _UserNotificationsState extends State<UserNotifications> {
 
   @override
   Widget build(BuildContext context) {
-
     AppLocalizations tr = AppLocalizations.of(context);
     _getNotifications();
     return SafeArea(

@@ -1,0 +1,205 @@
+class "Code" {
+  +String code_id
+  +String restaurant_id
+  +String link
+}
+
+class "DishQuery" {
+  +String query
+  +double price
+  +double rating
+  +List<String> allergens
+}
+
+class "FavoriteList" {
+  +String name
+  +String type
+  +String image
+  +String id
+  +List<String> items
+}
+
+class "MenuEntry" {
+  +int numReviews
+  +int pos
+  +dynamic name
+  +dynamic section
+  +dynamic id
+  +dynamic restaurant_id
+  +dynamic image
+  +dynamic description
+  +bool hide
+  +double rating
+  +double price
+  +List allergens
+  +double rate
+  +int reviews
+}
+
+class "PushNotificationMessage" {
+  +String title
+  +String body
+}
+
+class "PersonalNotification" {
+  +String user_id
+  +String restaurant_id
+  +String body
+  +String type
+  +String id
+  +String restaurant_name
+}
+
+class "Order" {
+  +String order_id
+  +String entry_id
+  +String note
+  +bool send
+  +bool check
+  +num amount
+}
+
+class "Owner" {
+  +String user_id
+  +String restaurant_id
+  +String token
+  +String type
+  +String username
+}
+
+class "Payment" {
+  +String id
+  +String restaurant_id
+  +String user_id
+  +String paymentdate
+  +String service
+  +String description
+  +double price
+}
+
+class "Price" {
+  +String type
+  +int quantity
+  +double price
+}
+
+class "Rating" {
+  +double rating
+  +String date
+  +String entry_id
+  +String comment
+}
+
+class "Reservation" {
+  +String restaurant_id
+  +String user_id
+  +String table_id
+  +String reservationtime
+  +String reservationdate
+  +String username
+  +String restaurant_name
+  +int people
+}
+
+class "Restaurant" {
+  +String restaurant_id
+  +String ta_id
+  +String name
+  +String phone
+  +String website
+  +String webUrl
+  +String address
+  +String email
+  +String city
+  +String country
+  +String currency
+  +String premiumtime
+  +String subscriptionId
+  +String customerId
+  +String paymentId
+  +double latitude
+  +double longitude
+  +double rating
+  +double distance
+  +num mealtime
+  +bool premium
+  +int numrevta
+  +int clicks
+  +List<String> types
+  +List<String> images
+  +List<String> sections
+  +List<String> dailymenu
+  +List<String> delivery
+  +List<String> excludeddays
+  +Map<String, List<String>> schedule
+  +List<MenuEntry> menu
+  +List<Translate> english
+  +List<Translate> italian
+  +List<Translate> german
+  +List<Translate> french
+  +List<Translate> spanish
+  +List<Translate> original
+  +List<RestaurantTable> tables
+  +Map<String, List<Reservation>> reservations
+  +List<Code> codes
+  +DateTime premiumtimetrial
+}
+
+class "RestaurantTable" {
+  +String restaurant_id
+  +String table_id
+  +int amount
+  +int capmax
+  +int capmin
+  +bool edited
+}
+
+class "Translate" {
+  +String id
+  +String name
+  +String description
+}
+
+class "User" {
+  +dynamic name
+  +dynamic email
+  +dynamic picture
+  +dynamic country
+  +dynamic username
+  +dynamic about
+  +dynamic token
+  +dynamic uid
+  +dynamic service
+  +List<Restaurant> favorites
+  +List<Restaurant> recently
+  +List<Restaurant> owned
+  +bool checked
+  +List<Rating> ratings
+  +List<MenuEntry> favoriteEntry
+  +Map<dynamic, Restaurant> history
+  +List<FavoriteList> lists
+  +List<Reservation> reservations
+  +dynamic inOrder
+  +int numFollowers
+  +int numFollowing
+  +List followers
+  +List following
+  +List<PersonalNotification> notifications
+  +List<Restaurant> recent
+}
+
+"Restaurant" "1" -- "*" "Code"
+"Restaurant" "*" -- "*" "User"
+("User", "MenuEntry") . "Rating"
+"MenuEntry" "*" -- "*" "User"
+"FavoriteList" "*" -- "0" "User"
+"PersonalNotification" "*" -- "1" "User"
+"Translate" "*" -- "0" "Restaurant"
+"Restaurant" "1" -- "*" "Reservation"
+"User" "1" -- "*" "Reservation"
+"RestaurantTable" "1" -- "*" "Reservation"
+"RestaurantTable" "*" -- "1" "Restaurant"
+("User", "Restaurant") . "Owner"
+"Payment" "*" -- "1" "User"
+"Payment" "*" -- "1" "Restaurant"
+"Order" "*" -- "1" "MenuEntry"
